@@ -1,6 +1,6 @@
-context("helpers")
+context("Helpers")
 
-test_that("add time variables", {
+test_that("add_time_variables", {
   toydata = data.frame(timestamp = c(1531393277, 915152461,-631144492))
   toydata2 = toydata
   toydata2$timestamp = toydata2$timestamp * 1000
@@ -10,31 +10,31 @@ test_that("add time variables", {
 
   #check addWeekday
   x = addWeekday(toydata)
-  assertFactor(x$weekday)
-  assertTRUE(all.equal(as.character(x$weekday), c("Thu", "Fri", "Sun")))
+  expect_factor(x$weekday)
+  expect_equal(as.character(x$weekday), c("Thu", "Fri", "Sun"))
 
   x2 = addWeekday(toydata2, unit = "ms")
-  assertFactor(x2$weekday)
-  assertTRUE(all.equal(as.character(x2$weekday), c("Thu", "Fri", "Sun")))
+  expect_factor(x2$weekday)
+  expect_equal(as.character(x2$weekday), c("Thu", "Fri", "Sun"))
 
 
   #check addTime
   x = addTime(toydata)
-  assertCharacter(x$time)
-  assertTRUE(all.equal(as.character(x$time), c("11:01:17", "01:01:01", "02:05:08")))
+  expect_character(x$time)
+  expect_equal(as.character(x$time), c("11:01:17", "01:01:01", "02:05:08"))
 
   x2 = addTime(toydata2, unit = "ms")
-  assertCharacter(x2$time)
-  assertTRUE(all.equal(as.character(x2$time), c("11:01:17", "01:01:01", "02:05:08")))
+  expect_character(x2$time)
+  expect_equal(as.character(x2$time), c("11:01:17", "01:01:01", "02:05:08"))
 
 
   #check addDateTime
   x = addDateTime(toydata)
-  assertTRUE(all.equal(as.character(x$date_time),
-    c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")))
+  expect_equal(as.character(x$date_time),
+    c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08"))
 
   x2 = addDateTime(toydata2, unit = "ms")
-  assertTRUE(all.equal(as.character(x2$date_time),
-    c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")))
+  expect_equal(as.character(x2$date_time),
+    c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08"))
 
 })
