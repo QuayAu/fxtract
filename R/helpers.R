@@ -146,8 +146,8 @@ checkCols = function(columnnames, loggingdata) {
 
 #' Adds column 'weekday' to a dataframe containing a timestamp variable.
 #'
-#' @param data dataframe containing column named 'timestamp'
-#' @param tz timezone. Defaults to using UTC
+#' @param data dataframe containing column named 'timestamp'.
+#' @param tz timezone. Defaults to using UTC.
 #' @param unit unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).
 #' @param week_start day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default).
 #' @param locale locale to use for day names. Default to 'English_United States.1252'.
@@ -157,9 +157,30 @@ checkCols = function(columnnames, loggingdata) {
 #' @export
 addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "English_United States.1252") {
   checkCols("timestamp", data)
-  dt = lubridate::as_datetime(data$timestamp, tz = tz)
-  data$weekday = wday(dt, label = TRUE, week_start = week_start, locale = locale)
+  if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  conv = ifelse(unit == "s", 1, 1000)
+  dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
+
+  data$weekday = lubridate::wday(dt, label = TRUE, week_start = week_start, locale = locale)
   return(data)
 }
 
+#' Adds column 'time' to a dataframe containing a timestamp variable.
+#'
+#' @param data dataframe containing column named 'timestamp'.
+#' @param tz timezone. Defaults to using UTC.
+#' @param unit unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).
+#' @family helper functions
+#' @return dataframe with added variable 'time'.
+#' @import lubridate
+#' @export
+addTime = function(data, tz = "UTC", unit = "s") {
+  checkCols("timestamp", data)
+  if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  conv = ifelse(unit == "s", 1, 1000)
+  dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
+
+  data$time = strftime(dt, "%H:%M:%S", tz = tz)
+  return(data)
+}
 
