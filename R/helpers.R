@@ -184,6 +184,25 @@ addTime = function(data, tz = "UTC", unit = "s") {
   return(data)
 }
 
+#' Adds column 'date' to a dataframe containing a timestamp variable.
+#'
+#' @param data dataframe containing column named 'timestamp'.
+#' @param tz timezone. Defaults to using UTC.
+#' @param unit unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).
+#' @family helper functions
+#' @return dataframe with added variable 'date'.
+#' @import lubridate
+#' @export
+addDate = function(data, tz = "UTC", unit = "s") {
+  checkCols("timestamp", data)
+  if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  conv = ifelse(unit == "s", 1, 1000)
+  dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
+
+  data$date = lubridate::as_date(dt)
+  return(data)
+}
+
 #' Adds column 'date_time' to a dataframe containing a timestamp variable.
 #'
 #' @param data dataframe containing column named 'timestamp'.
@@ -202,3 +221,45 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
   data$date_time = dt
   return(data)
 }
+
+
+#' Adds column 'studyDay' to a dataframe containing a timestamp variable.
+#'
+#' @param data dataframe containing column named 'timestamp'.
+#' @family helper functions
+#' @return dataframe with added ordered factor variable 'studyDay'. The first day for each userId will be 'day1'.
+#' @import lubridate
+#' @export
+addStudyDay = function(data) {
+
+}
+
+
+
+#
+# #add factor variable day1 < day2 < day3 < day4 .....
+# numberDays = 10000
+# dayx = paste0("day", 1:numberDays)
+#
+# library(dplyr)
+# phonedata = phonedata = phonedata %>% group_by(userId) %>% arrange(userId, timestamp)
+#
+# addStudyDay = function(id, loggingdata = phonedata, study.begin = loggingdata[loggingdata$source == "DEVICEINFO", c("userId", "date")]) {
+#   x = dplyr::filter(phonedata, userId == id)
+#   if (!all.equal(x, x[order(x$timestamp), ])) stop()
+#   uniquedays = unique(x$date)
+#   day1 = study.begin[study.begin$userId == id, "date"][1]
+#   alldays = x$date #x$date = as_date(x$timestamp)
+#
+#   daysId = character(length(alldays))
+#
+#   daysId[which(alldays == day1)] = "day1"
+#
+#   if (length(uniquedays) > 1) {
+#     diffToDay1 = difftime(uniquedays[-1], day1, units = "days")
+#     for (i in 1:length(diffToDay1)) {
+#       if (diffToDay1[i] > 0) daysId[which(alldays == uniquedays[-1][i])] = paste0("day", diffToDay1[i] + 1)
+#     }
+#   }
+#   daysId
+# }

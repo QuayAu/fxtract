@@ -33,4 +33,12 @@ test_that("add_time_variables", {
   expect_equal(as.character(x2$date_time),
     c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08"))
 
+  #check addDate
+  x = addDate(toydata)
+  expect_equal(as.character(x$date),
+    c("2018-07-12", "1999-01-01", "1950-01-01"))
+
+  x2 = addDate(toydata2, unit = "ms")
+  expect_equal(as.character(x2$date),
+    c("2018-07-12", "1999-01-01", "1950-01-01"))
 })
