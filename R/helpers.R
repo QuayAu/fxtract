@@ -158,6 +158,10 @@ checkCols = function(columnnames, loggingdata) {
 addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "English_United States.1252") {
   checkCols("timestamp", data)
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  if (is.character(data$timestamp)) {
+    data$timestamp = as.numeric(data$timestamp)
+    message("timestamp was converted from character to numeric")
+  }
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
@@ -177,6 +181,10 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
 addTime = function(data, tz = "UTC", unit = "s") {
   checkCols("timestamp", data)
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  if (is.character(data$timestamp)) {
+    data$timestamp = as.numeric(data$timestamp)
+    message("timestamp was converted from character to numeric")
+  }
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
@@ -196,6 +204,10 @@ addTime = function(data, tz = "UTC", unit = "s") {
 addDate = function(data, tz = "UTC", unit = "s") {
   checkCols("timestamp", data)
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  if (is.character(data$timestamp)) {
+    data$timestamp = as.numeric(data$timestamp)
+    message("timestamp was converted from character to numeric")
+  }
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
@@ -215,6 +227,10 @@ addDate = function(data, tz = "UTC", unit = "s") {
 addDateTime = function(data, tz = "UTC", unit = "s") {
   checkCols("timestamp", data)
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  if (is.character(data$timestamp)) {
+    data$timestamp = as.numeric(data$timestamp)
+    message("timestamp was converted from character to numeric")
+  }
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 

@@ -8,10 +8,6 @@ addStudyDay(data)
 }
 \arguments{
 \item{data}{dataframe containing column named 'timestamp'.}
-
-\item{tz}{timezone. Defaults to using UTC.}
-
-\item{unit}{unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).}
 }
 \value{
 dataframe with added ordered factor variable 'studyDay'. The first day for each userId will be 'day1'.
