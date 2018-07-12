@@ -184,3 +184,21 @@ addTime = function(data, tz = "UTC", unit = "s") {
   return(data)
 }
 
+#' Adds column 'date_time' to a dataframe containing a timestamp variable.
+#'
+#' @param data dataframe containing column named 'timestamp'.
+#' @param tz timezone. Defaults to using UTC.
+#' @param unit unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).
+#' @family helper functions
+#' @return dataframe with added variable 'date_time'.
+#' @import lubridate
+#' @export
+addDateTime = function(data, tz = "UTC", unit = "s") {
+  checkCols("timestamp", data)
+  if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  conv = ifelse(unit == "s", 1, 1000)
+  dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
+
+  data$date_time = dt
+  return(data)
+}
