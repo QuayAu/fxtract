@@ -15,7 +15,8 @@ LazyData: true
 RoxygenNote: 6.0.1.9000
 Imports: dplyr,
   magrittr,
-  checkmate
+  checkmate,
+  lubridate
 Suggests: testthat,
   knitr
 VignetteBuilder: knitr
