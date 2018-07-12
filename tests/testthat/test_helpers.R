@@ -10,21 +10,17 @@ test_that("add_time_variables", {
 
   #check addWeekday
   x = addWeekday(toydata)
-  expect_factor(x$weekday)
   expect_equal(as.character(x$weekday), c("Thu", "Fri", "Sun"))
 
   x2 = addWeekday(toydata2, unit = "ms")
-  expect_factor(x2$weekday)
   expect_equal(as.character(x2$weekday), c("Thu", "Fri", "Sun"))
 
 
   #check addTime
   x = addTime(toydata)
-  expect_character(x$time)
   expect_equal(as.character(x$time), c("11:01:17", "01:01:01", "02:05:08"))
 
   x2 = addTime(toydata2, unit = "ms")
-  expect_character(x2$time)
   expect_equal(as.character(x2$time), c("11:01:17", "01:01:01", "02:05:08"))
 
 
