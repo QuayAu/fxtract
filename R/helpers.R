@@ -245,12 +245,27 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
 #' @family helper functions
 #' @return dataframe with added ordered factor variable 'studyDay'. The first day for each userId will be 'day1'.
 #' @import lubridate
+#' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @export
 addStudyDay = function(data) {
+  checkCols(c("timestamp", "userId"), data)
 
+  # all_days = paste0("day", 1:max_number_days)
+
+  data = addDate(data)
 }
 
+#' @import dplyr
+#' @importFrom magrittr "%>%"
+addStudyDayHelper = function(data) {
+  userId = timestamp = NULL
+  data2 = data
+  data2$uniqueIdentifier = 1:nrow(data2)
+  data2 = data2 %>% dplyr::group_by(userId) %>% arrange(userId, timestamp) #arrange by userId and timestamp
 
+
+}
 
 #
 # #add factor variable day1 < day2 < day3 < day4 .....
