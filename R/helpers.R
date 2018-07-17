@@ -27,6 +27,8 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
     data$timestamp = as.numeric(data$timestamp)
     message("timestamp was converted from character to numeric")
   }
+  if (locale != "English_United States.1252") message("locale was changed. Use at own risk.")
+
 
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
