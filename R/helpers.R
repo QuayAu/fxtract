@@ -16,12 +16,18 @@ checkCols = function(columnnames, loggingdata) {
 #' @importFrom lubridate wday as_datetime
 #' @export
 addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "English_United States.1252") {
+  checkmate::assertDataFrame(data)
+  checkmate::assertCharacter(tz)
+  checkmate::assertCharacter(unit)
+  checkmate::assertCharacter(locale)
+  checkmate::assertNumeric(week_start)
   checkCols("timestamp", data)
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
     message("timestamp was converted from character to numeric")
   }
+
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
@@ -39,6 +45,9 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
 #' @importFrom lubridate as_datetime
 #' @export
 addTime = function(data, tz = "UTC", unit = "s") {
+  checkmate::assertDataFrame(data)
+  checkmate::assertCharacter(tz)
+  checkmate::assertCharacter(unit)
   checkCols("timestamp", data)
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
   if (is.character(data$timestamp)) {
@@ -62,6 +71,9 @@ addTime = function(data, tz = "UTC", unit = "s") {
 #' @importFrom lubridate as_datetime as_date
 #' @export
 addDate = function(data, tz = "UTC", unit = "s") {
+  checkmate::assertDataFrame(data)
+  checkmate::assertCharacter(tz)
+  checkmate::assertCharacter(unit)
   checkCols("timestamp", data)
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
   if (is.character(data$timestamp)) {
@@ -85,6 +97,9 @@ addDate = function(data, tz = "UTC", unit = "s") {
 #' @importFrom lubridate as_datetime
 #' @export
 addDateTime = function(data, tz = "UTC", unit = "s") {
+  checkmate::assertDataFrame(data)
+  checkmate::assertCharacter(tz)
+  checkmate::assertCharacter(unit)
   checkCols("timestamp", data)
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
   if (is.character(data$timestamp)) {
@@ -108,7 +123,9 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
 #' @importFrom magrittr "%>%"
 #' @export
 calcStudyDay = function(data) {
+  checkmate::assertDataFrame(data)
   timestamp = date = NULL
+
   alldays = data$date
   daysId = character(length(alldays))
   uniquedays = unique(alldays)

@@ -1,5 +1,39 @@
 context("Helpers")
 
+test_that("test_wrong_inputs", {
+  toydata = data.frame(timestamp = c(1, 2, 3))
+  #data
+  expect_error(addWeekday(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(addTime(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(addDate(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(addDateTime(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(calcStudyDay(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+
+  #tz
+  expect_error(addWeekday(data = toydata, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
+  expect_error(addTime(data = toydata, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
+  expect_error(addDate(data = toydata, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
+  expect_error(addDateTime(data = toydata, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
+
+  #unit
+  expect_error(addWeekday(data = toydata, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
+  expect_error(addTime(data = toydata, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
+  expect_error(addDate(data = toydata, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
+  expect_error(addDateTime(data = toydata, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
+
+  expect_error(addWeekday(data = toydata, unit = "S"), regexp = "unit must be 's' or 'ms")
+  expect_error(addTime(data = toydata, unit = "S"), regexp = "unit must be 's' or 'ms")
+  expect_error(addDate(data = toydata, unit = "S"), regexp = "unit must be 's' or 'ms")
+  expect_error(addDateTime(data = toydata, unit = "S"), regexp = "unit must be 's' or 'ms")
+
+  #addWeekday
+  expect_error(addWeekday(data = toydata, week_start = "Mon"), regexp = "Assertion on 'week_start' failed: Must be of type 'numeric', not 'character'.")
+  expect_error(addWeekday(data = toydata, locale = "123456"))
+
+
+})
+
+
 test_that("add_time_variables", {
   toydata = data.frame(timestamp = c(1531393277, 915152461,-631144492))
   toydata2 = toydata
