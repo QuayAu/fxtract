@@ -124,6 +124,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
 #' @export
 calcStudyDay = function(data) {
   checkmate::assertDataFrame(data)
+  if (!"date" %in% colnames(data)) stop("data needs a column named 'date'. Consider adding 'date' by using addDate().")
   timestamp = date = NULL
 
   alldays = data$date
