@@ -13,7 +13,7 @@ checkCols = function(columnnames, loggingdata) {
 #' @param locale locale to use for day names. Default to 'English_United States.1252'. See \code{\link[lubridate]{wday}}.
 #' @family helper functions
 #' @return dataframe with added ordered factor variable 'weekday'.
-#' @import lubridate
+#' @importFrom lubridate wday as_datetime
 #' @export
 addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "English_United States.1252") {
   checkCols("timestamp", data)
@@ -36,7 +36,7 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
 #' @template param_unit
 #' @family helper functions
 #' @return dataframe with added variable 'time'.
-#' @import lubridate
+#' @importFrom lubridate as_datetime
 #' @export
 addTime = function(data, tz = "UTC", unit = "s") {
   checkCols("timestamp", data)
@@ -59,7 +59,7 @@ addTime = function(data, tz = "UTC", unit = "s") {
 #' @template param_unit
 #' @family helper functions
 #' @return dataframe with added variable 'date'.
-#' @import lubridate
+#' @importFrom lubridate as_datetime as_date
 #' @export
 addDate = function(data, tz = "UTC", unit = "s") {
   checkCols("timestamp", data)
@@ -82,7 +82,7 @@ addDate = function(data, tz = "UTC", unit = "s") {
 #' @template param_unit
 #' @family helper functions
 #' @return dataframe with added variable 'date_time'.
-#' @import lubridate
+#' @importFrom lubridate as_datetime
 #' @export
 addDateTime = function(data, tz = "UTC", unit = "s") {
   checkCols("timestamp", data)
@@ -104,8 +104,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
 #' @template param_data
 #' @family helper functions
 #' @return dataframe with added ordered factor variable 'studyDay'. The first day for will be 'day1'.
-#' @import lubridate
-#' @import dplyr
+#' @importFrom dplyr slice pull
 #' @importFrom magrittr "%>%"
 #' @export
 addStudyDay = function(data) {
