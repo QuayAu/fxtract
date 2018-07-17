@@ -55,8 +55,8 @@ test_that("add_time_variables", {
   expect_equal(as.character(x2$weekday), c("Thu", "Fri", "Sun"))
 
   ##change locale
-  # expect_equal(as.character(addWeekday(data = td, locale = "Deu")$weekday), c("Do", "Fr", "So"))
-  # expect_equal(as.character(addWeekday(data = td, locale = "Esp")$weekday), c("jue", "vie", "dom"))
+  expect_message(addWeekday(data = td, locale = "Deu"), regexp = "locale was changed. Use at own risk.")
+  expect_message(addWeekday(data = td, locale = "Esp"), regexp = "locale was changed. Use at own risk.")
 
   #check addTime
   x = addTime(td)
