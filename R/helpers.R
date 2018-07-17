@@ -115,12 +115,10 @@ addStudyDay = function(data) {
   day1 = data %>% slice(which.min(timestamp)) %>% pull(date)
 
   daysId[which(alldays == day1)] = "day1"
-
-  if (length(uniquedays) > 1) {
-    diffToDay1 = difftime(uniquedays[-1], day1, units = "days")
-    for (i in 1:length(diffToDay1)) {
-      if (diffToDay1[i] > 0) daysId[which(alldays == uniquedays[-1][i])] = paste0("day", diffToDay1[i] + 1)
-    }
+  j = which(uniquedays == day1)
+  diffToDay1 = difftime(uniquedays[-j], day1, units = "days")
+  for (i in 1:length(diffToDay1)) {
+    if (diffToDay1[i] > 0) daysId[which(alldays == uniquedays[-j][i])] = paste0("day", diffToDay1[i] + 1)
   }
   daysId
 }

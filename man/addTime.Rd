@@ -20,8 +20,8 @@ dataframe with added variable 'time'.
 Adds column 'time' to a dataframe containing a timestamp variable.
 }
 \seealso{
-Other helper functions: \code{\link{addDateTime}},
-  \code{\link{addDate}}, \code{\link{addStudyDay}},
-  \code{\link{addWeekday}}
+Other helper functions: \code{\link{addColumnByUserId}},
+  \code{\link{addDateTime}}, \code{\link{addDate}},
+  \code{\link{addStudyDay}}, \code{\link{addWeekday}}
 }
 \concept{helper functions}

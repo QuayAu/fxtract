@@ -16,8 +16,8 @@ dataframe with added ordered factor variable 'studyDay'. The first day for will 
 Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 }
 \seealso{
-Other helper functions: \code{\link{addDateTime}},
-  \code{\link{addDate}}, \code{\link{addTime}},
-  \code{\link{addWeekday}}
+Other helper functions: \code{\link{addColumnByUserId}},
+  \code{\link{addDateTime}}, \code{\link{addDate}},
+  \code{\link{addTime}}, \code{\link{addWeekday}}
 }
 \concept{helper functions}
