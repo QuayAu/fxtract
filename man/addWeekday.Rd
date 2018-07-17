@@ -10,13 +10,13 @@ addWeekday(data, tz = "UTC", unit = "s", week_start = 1,
 \arguments{
 \item{data}{dataframe containing column named 'timestamp'.}
 
-\item{tz}{timezone. Defaults to using UTC.}
+\item{tz}{timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
 
 \item{unit}{unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).}
 
-\item{week_start}{day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default).}
+\item{week_start}{day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default). See \code{\link[lubridate]{wday}}.}
 
-\item{locale}{locale to use for day names. Default to 'English_United States.1252'.}
+\item{locale}{locale to use for day names. Default to 'English_United States.1252'. See \code{\link[lubridate]{wday}}.}
 }
 \value{
 dataframe with added ordered factor variable 'weekday'.

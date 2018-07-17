@@ -9,7 +9,7 @@ addDateTime(data, tz = "UTC", unit = "s")
 \arguments{
 \item{data}{dataframe containing column named 'timestamp'.}
 
-\item{tz}{timezone. Defaults to using UTC.}
+\item{tz}{timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
 
 \item{unit}{unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).}
 }

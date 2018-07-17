@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{addStudyDay}
 \alias{addStudyDay}
-\title{Adds column 'studyDay' to a dataframe containing a timestamp variable.}
+\title{Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.}
 \usage{
 addStudyDay(data)
 }
@@ -10,10 +10,10 @@ addStudyDay(data)
 \item{data}{dataframe containing column named 'timestamp'.}
 }
 \value{
-dataframe with added ordered factor variable 'studyDay'. The first day for each userId will be 'day1'.
+dataframe with added ordered factor variable 'studyDay'. The first day for will be 'day1'.
 }
 \description{
-Adds column 'studyDay' to a dataframe containing a timestamp variable.
+Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 }
 \seealso{
 Other helper functions: \code{\link{addDateTime}},
