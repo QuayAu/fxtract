@@ -16,7 +16,7 @@ addWeekday(data, tz = "UTC", unit = "s", week_start = 1,
 
 \item{week_start}{day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default). See \code{\link[lubridate]{wday}}.}
 
-\item{locale}{locale to use for day names. Default to 'English_United States.1252'. See \code{\link[lubridate]{wday}}.}
+\item{locale}{locale to use for day names. Defaults to 'English_United States.1252'. See \code{\link[lubridate]{wday}}.}
 }
 \value{
 dataframe with added ordered factor variable 'weekday'.
