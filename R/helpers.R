@@ -107,7 +107,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
 #' @importFrom dplyr slice pull
 #' @importFrom magrittr "%>%"
 #' @export
-addStudyDay = function(data) {
+calcStudyDay = function(data) {
   timestamp = date = NULL
   alldays = data$date
   daysId = character(length(alldays))

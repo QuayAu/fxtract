@@ -4,12 +4,14 @@
 \alias{addColumnByUserId}
 \title{Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.}
 \usage{
-addColumnByUserId(data, fun)
+addColumnByUserId(data, fun, colname)
 }
 \arguments{
 \item{data}{dataframe containing column named 'userId', which should be the unique identifier for each ID.}
 
-\item{fun}{function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.}
+\item{fun}{character. Must be the name of a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.}
+
+\item{colname}{character. Column name of the new column.}
 }
 \value{
 dataframe with added column
@@ -19,7 +21,7 @@ Helper function. Takes the mininum of timestamp as first day and labels oncoming
 }
 \seealso{
 Other helper functions: \code{\link{addDateTime}},
-  \code{\link{addDate}}, \code{\link{addStudyDay}},
-  \code{\link{addTime}}, \code{\link{addWeekday}}
+  \code{\link{addDate}}, \code{\link{addTime}},
+  \code{\link{addWeekday}}, \code{\link{calcStudyDay}}
 }
 \concept{helper functions}
