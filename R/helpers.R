@@ -7,6 +7,28 @@ checkCols = function(colname, data) {
     stop(paste0("Your data set needs a column named '", colname[i], "'"))
 }
 
+#' Helper function. Checks if character has correct time format 'hh:mm:ss'.
+#' @param x character vector.
+checkTimeFormat = function(x) {
+  for (i in 1:length(x)) {
+    if (substr(x, 1, 2) == "24") stop("hours cannot exceed 23.")
+    if (!grepl(pattern = "[012][[:digit:]]:[012345][[:digit:]]:[012345][[:digit:]]", x = x[i])) stop("character must be a time format like '15:21:30'")
+  }
+}
+
+#' Helper function. Converts "hh:mm:ss" into number of seconds.
+#' @param x character vector.
+#' @return numeric. Number of seconds.
+#' @export
+timeToSec = function(x) {
+  checkTimeFormat(x)
+  y = strsplit(x, ":")
+  y = lapply(y, as.numeric)
+  f = function(z) 3600*z[1] + 60*z[2] + z[3]
+  res = unlist(lapply(y, f))
+  return(res)
+}
+
 #' Adds column 'weekday' to a dataframe containing a timestamp variable.
 #'
 #' @template param_data
@@ -31,11 +53,11 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
     message("timestamp was converted from character to numeric")
   }
   if (locale != "English_United States.1252") message("locale was changed. Use at own risk.")
-
-
+  
+  
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
-
+  
   data$weekday = lubridate::wday(dt, label = TRUE, week_start = week_start, locale = locale)
   return(data)
 }
@@ -61,7 +83,7 @@ addTime = function(data, tz = "UTC", unit = "s") {
   }
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
-
+  
   data$time = strftime(dt, "%H:%M:%S", tz = tz)
   return(data)
 }
@@ -87,7 +109,7 @@ addDate = function(data, tz = "UTC", unit = "s") {
   }
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
-
+  
   data$date = lubridate::as_date(dt)
   return(data)
 }
@@ -113,7 +135,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
   }
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
-
+  
   data$date_time = dt
   return(data)
 }
@@ -131,12 +153,12 @@ calcStudyDay = function(data) {
   checkmate::assertDataFrame(data)
   if (!"date" %in% colnames(data)) stop("data needs a column named 'date'. Consider adding 'date' by using addDate().")
   timestamp = date = NULL
-
+  
   alldays = data$date
   daysId = character(length(alldays))
   uniquedays = unique(alldays)
   day1 = data %>% slice(which.min(timestamp)) %>% pull(date)
-
+  
   daysId[which(alldays == day1)] = "day1"
   j = which(uniquedays == day1)
   diffToDay1 = difftime(uniquedays[-j], day1, units = "days")
