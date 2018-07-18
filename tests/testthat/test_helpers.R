@@ -1,5 +1,11 @@
 context("Helpers")
 
+test_that("not_exported", {
+  td = data.frame(x = 1:3, y = 4:6)
+  expect_error(checkCols("z", td), regexp = "Your data set needs a column named 'z'")
+})
+
+
 test_that("test_wrong_inputs", {
   td = data.frame(timestamp = c(1, 2, 3))
   #data

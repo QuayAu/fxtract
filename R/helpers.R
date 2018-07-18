@@ -1,7 +1,10 @@
-checkCols = function(columnnames, loggingdata) {
-  ld = colnames(loggingdata)
-  for (i in 1:length(columnnames)) if (!any(ld %in% columnnames[i]))
-    stop(paste0("Your data set needs a column named '", columnnames[i], "'"))
+#' Helper function. Checks if data contains column names.
+#' @param colname character. It will be checked, if the dataframe contains these column names.
+#' @param data dataframe.
+checkCols = function(colname, data) {
+  ld = colnames(data)
+  for (i in 1:length(colname)) if (!any(ld %in% colname[i]))
+    stop(paste0("Your data set needs a column named '", colname[i], "'"))
 }
 
 #' Adds column 'weekday' to a dataframe containing a timestamp variable.
