@@ -9,12 +9,15 @@
 #' @importFrom magrittr "%>%"
 #' @export
 #' @examples
-#' myFun = function(data) nrow(data %>% filter(RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome")) # 
+#' myFun = function(data) {
+#'   nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
+#' }
 #' calcFeaturePerUserId(data = studentlife.small, fun = myFun, colname = "number_uses_chrome")
 calcFeaturePerUserId = function(data, fun, colname) {
+  userId = . = NULL
   checkmate::assertDataFrame(data)
   if (length(do.call(fun, list(data))) != 1) stop("fun must return a vector of length 1")
-  userId = . = NULL
+  
   res = data %>% group_by(userId) %>% do(do.call(fun, list(.)) %>% data.frame())
   colnames(res)[2] = colname
   return(res)
