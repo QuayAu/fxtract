@@ -24,4 +24,3 @@ Other helper functions: \code{\link{addColumnByUserId}},
   \code{\link{addDateTime}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}}
 }
-\concept{helper functions}

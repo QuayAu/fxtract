@@ -12,6 +12,7 @@
 #' @importFrom magrittr "%>%"
 #' @export
 filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_day = "Sun", until_time = "23:59:59") {
+  weekday = timeInSec = NULL
   # check inputs
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(from_day)
@@ -45,7 +46,7 @@ filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_d
   df_res$timeInSec = timeToSec(df_res$time)
 
   # filter dataset according to from_time and until_time
-  df_res = df_res %>% dplyr::filter(timeInSec >= ft | weekday != from_day, timeInSec <= ut | weekday != until_day) %>% select(-timeInSec)
+  df_res = df_res %>% dplyr::filter(timeInSec >= ft | weekday != from_day, timeInSec <= ut | weekday != until_day) %>% dplyr::select(-timeInSec)
 
   if (nrow(df_res) == 0) stop("there are no dataset entries within the chosen time interval")
 

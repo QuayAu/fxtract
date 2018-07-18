@@ -29,4 +29,3 @@ Other helper functions: \code{\link{addColumnByUserId}},
   \code{\link{addDateTime}}, \code{\link{addDate}},
   \code{\link{addTime}}, \code{\link{calcStudyDay}}
 }
-\concept{helper functions}

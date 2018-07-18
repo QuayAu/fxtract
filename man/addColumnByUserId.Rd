@@ -24,4 +24,3 @@ Other helper functions: \code{\link{addDateTime}},
   \code{\link{addDate}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}}
 }
-\concept{helper functions}
