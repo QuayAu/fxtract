@@ -28,9 +28,9 @@ filterDaytime = function(data, from_time = "07:00:00", until_time = "18:00:00") 
   res$time_in_sec = timeToSec(res$time)
 
   if (ft <= ut) {
-    res = res %>% filter(time_in_sec >= ft & time_in_sec <= ut)
+    res = res %>% filter(time_in_sec >= ft & time_in_sec <= ut) %>% select(-time_in_sec)
   } else {
-    res = res %>% filter(time_in_sec >= ft | time_in_sec <= ut)
+    res = res %>% filter(time_in_sec >= ft | time_in_sec <= ut) %>% select(-time_in_sec)
   }
   res
 }
