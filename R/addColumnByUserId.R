@@ -1,8 +1,8 @@
 #' Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 #'
-#' @param data dataframe containing column named 'userId', which should be the unique identifier for each ID.
-#' @param fun function. Must be a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.
-#' @param colname character. Column name of the new column.
+#' @template param_data_uid
+#' @template param_fun_n
+#' @template param_colname
 #' @family helper functions
 #' @return dataframe with added column
 #' @importFrom dplyr group_by do

@@ -1,7 +1,7 @@
 #' Calculates a given function for each userId
 #'
-#' @param data dataframe containing column named 'userId', which should be the unique identifier for each ID.
-#' @param fun function. Must be a function, which has a dataframe as input and a vector of length 1 as output.
+#' @template param_data_uid
+#' @template param_fun_1
 #' @param colname character. Desired column name.
 #' @family feature functions
 #' @return dataframe with columns userId and \code{colname}.

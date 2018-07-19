@@ -7,7 +7,7 @@
 addColumnByUserId(data, fun, colname)
 }
 \arguments{
-\item{data}{dataframe containing column named 'userId', which should be the unique identifier for each ID.}
+\item{data}{dataframe. dataframe containing column named 'userId', which should be the unique identifier for each ID.}
 
 \item{fun}{function. Must be a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.}
 

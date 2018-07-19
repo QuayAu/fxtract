@@ -11,7 +11,7 @@ checkCols = function(colname, data) {
 #' @param x character vector.
 checkTimeFormat = function(x) {
   for (i in 1:length(x)) {
-    if (substr(x[i], 1, 2) == "24") stop("hours cannot exceed 23.")
+    if (substr(x, 1, 2) == "24") stop("hours cannot exceed 23.")
     if (!grepl(pattern = "[012][[:digit:]]:[012345][[:digit:]]:[012345][[:digit:]]", x = x[i])) stop("character must be a time format like '15:21:30'")
   }
 }
