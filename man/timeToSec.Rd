@@ -10,7 +10,7 @@ timeToSec(x)
 \item{x}{character vector.}
 }
 \value{
-numeric. Number of seconds.
+numeric vector. Number of seconds.
 }
 \description{
 Helper function. Converts "hh:mm:ss" into number of seconds.

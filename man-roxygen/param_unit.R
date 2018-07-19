@@ -1,1 +1,1 @@
-#' @param unit unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).
+#' @param unit unit of timezone. Can be 's' or 'ms'. Defaults to 's' (seconds).

@@ -11,14 +11,14 @@ checkCols = function(colname, data) {
 #' @param x character vector.
 checkTimeFormat = function(x) {
   for (i in 1:length(x)) {
-    if (substr(x, 1, 2) == "24") stop("hours cannot exceed 23.")
+    if (substr(x[i], 1, 2) == "24") stop("hours cannot exceed 23.")
     if (!grepl(pattern = "[012][[:digit:]]:[012345][[:digit:]]:[012345][[:digit:]]", x = x[i])) stop("character must be a time format like '15:21:30'")
   }
 }
 
 #' Helper function. Converts "hh:mm:ss" into number of seconds.
 #' @param x character vector.
-#' @return numeric. Number of seconds.
+#' @return numeric vector. Number of seconds.
 #' @export
 timeToSec = function(x) {
   checkTimeFormat(x)
@@ -31,7 +31,7 @@ timeToSec = function(x) {
 
 #' Adds column 'weekday' to a dataframe containing a timestamp variable.
 #'
-#' @template param_data
+#' @template param_data_ts
 #' @template param_tz
 #' @template param_unit
 #' @param week_start day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default). See \code{\link[lubridate]{wday}}.
@@ -64,7 +64,7 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
 
 #' Adds column 'time' to a dataframe containing a timestamp variable.
 #'
-#' @template param_data
+#' @template param_data_ts
 #' @template param_tz
 #' @template param_unit
 #' @family helper functions
@@ -90,7 +90,7 @@ addTime = function(data, tz = "UTC", unit = "s") {
 
 #' Adds column 'date' to a dataframe containing a timestamp variable.
 #'
-#' @template param_data
+#' @template param_data_ts
 #' @template param_tz
 #' @template param_unit
 #' @family helper functions
@@ -116,7 +116,7 @@ addDate = function(data, tz = "UTC", unit = "s") {
 
 #' Adds column 'date_time' to a dataframe containing a timestamp variable.
 #'
-#' @template param_data
+#' @template param_data_ts
 #' @template param_tz
 #' @template param_unit
 #' @family helper functions
@@ -143,7 +143,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
 
 #' Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 #'
-#' @template param_data
+#' @template param_data_ts
 #' @family helper functions
 #' @return dataframe with added ordered factor variable 'studyDay'. The first day for will be 'day1'.
 #' @importFrom dplyr slice pull

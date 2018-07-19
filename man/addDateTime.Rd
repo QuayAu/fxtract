@@ -11,7 +11,7 @@ addDateTime(data, tz = "UTC", unit = "s")
 
 \item{tz}{timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
 
-\item{unit}{unit of timezone. Can be 's' or 'ms'. Defaults to s (seconds).}
+\item{unit}{unit of timezone. Can be 's' or 'ms'. Defaults to 's' (seconds).}
 }
 \value{
 dataframe with added variable 'date_time'.

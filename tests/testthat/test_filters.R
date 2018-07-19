@@ -27,9 +27,9 @@ test_that("filterWeekday for weekdays and time specification", {
   
   time1_in_sec = timeToSec(time1)
   time2_in_sec = timeToSec(time2)
-  df1$TimeInSec = timeToSec(df1$time)
-  expect_true(min(df1$TimeInSec[df1$weekday == "Mon"]) >= time1_in_sec)
-  expect_true(max(df1$TimeInSec[df1$weekday == "Wed"]) <= time2_in_sec)
+  df1$time_in_sec = timeToSec(df1$time)
+  expect_true(min(df1$time_in_sec[df1$weekday == "Mon"]) >= time1_in_sec)
+  expect_true(max(df1$time_in_sec[df1$weekday == "Wed"]) <= time2_in_sec)
   
   # test wrong format for from_time and until_time
   expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:0a:00", until_day = "Sun",
