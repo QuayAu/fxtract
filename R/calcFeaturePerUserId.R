@@ -18,7 +18,7 @@ calcFeaturePerUserId = function(data, fun, colname) {
   checkmate::assertDataFrame(data)
   if (length(do.call(fun, list(data))) != 1) stop("fun must return a vector of length 1")
   
-  res = data %>% group_by(userId) %>% do(do.call(fun, list(.)) %>% data.frame())
+  res = data %>% dplyr::group_by(userId) %>% dplyr::do(do.call(fun, list(.)) %>% data.frame())
   colnames(res)[2] = colname
   return(res)
 }

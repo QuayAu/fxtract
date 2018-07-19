@@ -22,5 +22,6 @@ Helper function. Takes the mininum of timestamp as first day and labels oncoming
 \seealso{
 Other helper functions: \code{\link{addDateTime}},
   \code{\link{addDate}}, \code{\link{addTime}},
-  \code{\link{addWeekday}}, \code{\link{calcStudyDay}}
+  \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
+  \code{\link{slidingWindow}}
 }

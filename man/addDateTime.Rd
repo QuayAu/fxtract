@@ -22,5 +22,6 @@ Adds column 'date_time' to a dataframe containing a timestamp variable.
 \seealso{
 Other helper functions: \code{\link{addColumnByUserId}},
   \code{\link{addDate}}, \code{\link{addTime}},
-  \code{\link{addWeekday}}, \code{\link{calcStudyDay}}
+  \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
+  \code{\link{slidingWindow}}
 }
