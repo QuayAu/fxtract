@@ -4,7 +4,7 @@
 \alias{slidingWindow}
 \title{FIXME: add documentation}
 \usage{
-slidingWindow(data, fun, steps, time_in_seconds, colname)
+slidingWindow(data, fun, steps, time_in_sec, colname)
 }
 \arguments{
 \item{data}{dataframe. dataframe containing column named 'userId', which should be the unique identifier for each ID.}
@@ -13,7 +13,7 @@ slidingWindow(data, fun, steps, time_in_seconds, colname)
 
 \item{steps}{integer. Number of steps which the sliding window should go back.}
 
-\item{time_in_seconds}{integer. Number of seconds which the sliding window should go back.}
+\item{time_in_sec}{integer. Number of seconds which the sliding window should go back.}
 
 \item{colname}{character. Column name of the new column.}
 }
