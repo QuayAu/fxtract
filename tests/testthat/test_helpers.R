@@ -133,3 +133,19 @@ test_that("addColumnByUserId", {
   expect_equal(addColumnByUserId(data = td, fun = calcStudyDay, colname = "studyDay")$studyDay, res)
 })
 
+test_that("slidingWindow", {
+  td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
+  fun = function(data) sum(data$x)
+
+  #test steps
+  x = slidingWindow(td, fun, steps = 3)$new_feature
+  expect_equal(x[1:3], c(NA_integer_, NA_integer_, NA_integer_))
+  expect_equal(x[4:21], c(6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57))
+
+  #test time in seconds
+  td = addDateTime(td)
+  x = slidingWindow(td, fun, time_in_sec = 3)$new_feature
+
+  expect_equal(x, c(NA_integer_, 1, 3, 5, 7, 9, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
+})
+

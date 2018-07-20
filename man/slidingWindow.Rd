@@ -2,18 +2,20 @@
 % Please edit documentation in R/slidingWindow.R
 \name{slidingWindow}
 \alias{slidingWindow}
-\title{FIXME: add documentation}
+\title{Adds a variable to a dataset by a sliding window approach.}
 \usage{
-slidingWindow(data, fun, steps, time_in_sec, colname)
+slidingWindow(data, fun, steps, time_in_sec, colname = "new_feature")
 }
 \arguments{
 \item{data}{dataframe. dataframe containing column named 'userId', which should be the unique identifier for each ID.}
 
 \item{fun}{function. Must be a function, which has a dataframe as input and a vector of length 1 as output.}
 
-\item{steps}{integer. Number of steps which the sliding window should go back.}
+\item{steps}{integer. Number of steps which the sliding window should go back.
+Use this for data with fixed sample rate.}
 
-\item{time_in_sec}{integer. Number of seconds which the sliding window should go back.}
+\item{time_in_sec}{integer. Number of seconds which the sliding window should go back.
+Use this for data with variable sample rate.}
 
 \item{colname}{character. Column name of the new column.}
 }
@@ -21,7 +23,12 @@ slidingWindow(data, fun, steps, time_in_sec, colname)
 dataframe with added column
 }
 \description{
-FIXME: add documentation
+Adds a variable to a dataset by a sliding window approach.
+}
+\examples{
+fun = function(x) mean(x$accuracy, na.rm = TRUE)
+data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
+slidingWindow(data, fun = fun, time_in_sec = 60 * 60) #mean accuracy of last hour
 }
 \seealso{
 Other helper functions: \code{\link{addColumnByUserId}},
