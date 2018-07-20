@@ -108,6 +108,12 @@ test_that("calcStudyDay", {
   #day1, day1, day1, day2, day2, day3, day3, day3, day5
   td = addDate(td)
   expect_equal(as.character(calcStudyDay(td)), c("day1", "day1", "day1", "day2", "day2", "day3", "day3", "day3", "day5"))
+
+  #check only one day
+  d1 = 123456789
+  td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2))
+  td = addDate(td)
+  expect_equal(as.character(calcStudyDay(td)), c("day1", "day1", "day1"))
 })
 
 
@@ -147,5 +153,40 @@ test_that("slidingWindow", {
   x = slidingWindow(td, fun, time_in_sec = 3)$new_feature
 
   expect_equal(x, c(NA_integer_, 1, 3, 5, 7, 9, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
+})
+
+test_that("addStudyDay", {
+  #check dataframe without 'date' variable
+  td = data.frame(timestamp = c(1531393277, 915152461, -631144492))
+  expect_error(calcStudyDay(td), regexp = "data needs a column named 'date'. Consider adding 'date' by using addDate().")
+  #check equality
+  td = addDate(td)
+  expect_equal(as.character(addStudyDay(td, ordered = FALSE)$studyDay), c("day25030", "day17898", "day1"))
+  expect_equal(levels(addStudyDay(td, ordered = TRUE)$studyDay), paste0("day", 1:25030))
+  #check filters
+  td = addStudyDay(td, ordered = TRUE)
+  studyDay = NULL
+  td2 = td %>% dplyr::filter(studyDay <= "day20000")
+  expect_equal(as.character(unique(td2$studyDay)), c("day17898", "day1"))
+  td2 = td %>% dplyr::filter(studyDay >= "day2")
+  expect_equal(as.character(unique(td2$studyDay)), c("day25030", "day17898"))
+})
+
+test_that("addStudyDayPerUserId", {
+  d1 = 123456789
+  td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
+  td$userId = userId = c(rep("1", 4), rep("2", 5))
+  td = addDate(td)
+  res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
+  #check equality
+  expect_equal(as.character(addStudyDayPerUserId(data = td, ordered = FALSE)$studyDay), res)
+  expect_equal(levels(addStudyDayPerUserId(td, ordered = TRUE)$studyDay), paste0("day", 1:4))
+  #check filters
+  td = addStudyDayPerUserId(td, ordered = TRUE)
+  studyDay = NULL
+  td2 = td %>% dplyr::filter(studyDay <= "day2")
+  expect_equal(as.character(unique(td2$studyDay)), c("day1", "day2"))
+  td2 = td %>% dplyr::filter(studyDay >= "day2")
+  expect_equal(as.character(unique(td2$studyDay)), c("day2", "day4"))
 })
 

@@ -8,7 +8,7 @@ addWeekday(data, tz = "UTC", unit = "s", week_start = 1,
   locale = "English_United States.1252")
 }
 \arguments{
-\item{data}{dataframe containing column named 'timestamp'.}
+\item{data}{dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).}
 
 \item{tz}{timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
 
@@ -26,7 +26,9 @@ Adds column 'weekday' to a dataframe containing a timestamp variable.
 }
 \seealso{
 Other helper functions: \code{\link{addColumnByUserId}},
-  \code{\link{addDateTime}}, \code{\link{addDate}},
-  \code{\link{addTime}}, \code{\link{calcStudyDay}},
-  \code{\link{slidingWindow}}
+  \code{\link{addColumn}}, \code{\link{addDateTime}},
+  \code{\link{addDate}},
+  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addStudyDay}}, \code{\link{addTime}},
+  \code{\link{calcStudyDay}}, \code{\link{slidingWindow}}
 }

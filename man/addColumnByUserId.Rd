@@ -2,26 +2,30 @@
 % Please edit documentation in R/addColumnByUserId.R
 \name{addColumnByUserId}
 \alias{addColumnByUserId}
-\title{Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.}
+\title{Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
+This function will be evaluated grouped by the column 'userId'.}
 \usage{
 addColumnByUserId(data, fun, colname)
 }
 \arguments{
-\item{data}{dataframe. dataframe containing column named 'userId', which should be the unique identifier for each ID.}
+\item{data}{dataframe. Dataframe containing column named 'userId', which should be the unique identifier for each ID.}
 
 \item{fun}{function. Must be a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.}
 
 \item{colname}{character. Column name of the new column.}
 }
 \value{
-dataframe with added column
+dataframe with added column, where a \code{fun} is evaluated grouped by 'userid'.
 }
 \description{
-Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
+Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
+This function will be evaluated grouped by the column 'userId'.
 }
 \seealso{
-Other helper functions: \code{\link{addDateTime}},
-  \code{\link{addDate}}, \code{\link{addTime}},
+Other helper functions: \code{\link{addColumn}},
+  \code{\link{addDateTime}}, \code{\link{addDate}},
+  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
   \code{\link{slidingWindow}}
 }

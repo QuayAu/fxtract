@@ -7,17 +7,19 @@
 calcStudyDay(data)
 }
 \arguments{
-\item{data}{dataframe containing column named 'timestamp'.}
+\item{data}{dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).}
 }
 \value{
-dataframe with added ordered factor variable 'studyDay'. The first day for will be 'day1'.
+character. Character variable where 'day1' indicates the first day and the following days are saved as 'dayx', where x is the difference to 'day1'.
 }
 \description{
 Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 }
 \seealso{
 Other helper functions: \code{\link{addColumnByUserId}},
-  \code{\link{addDateTime}}, \code{\link{addDate}},
-  \code{\link{addTime}}, \code{\link{addWeekday}},
-  \code{\link{slidingWindow}}
+  \code{\link{addColumn}}, \code{\link{addDateTime}},
+  \code{\link{addDate}},
+  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addStudyDay}}, \code{\link{addTime}},
+  \code{\link{addWeekday}}, \code{\link{slidingWindow}}
 }

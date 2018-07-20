@@ -7,7 +7,7 @@
 addDate(data, tz = "UTC", unit = "s")
 }
 \arguments{
-\item{data}{dataframe containing column named 'timestamp'.}
+\item{data}{dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).}
 
 \item{tz}{timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
 
@@ -21,7 +21,9 @@ Adds column 'date' to a dataframe containing a timestamp variable.
 }
 \seealso{
 Other helper functions: \code{\link{addColumnByUserId}},
-  \code{\link{addDateTime}}, \code{\link{addTime}},
+  \code{\link{addColumn}}, \code{\link{addDateTime}},
+  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
   \code{\link{slidingWindow}}
 }

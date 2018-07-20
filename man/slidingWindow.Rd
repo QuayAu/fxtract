@@ -7,7 +7,7 @@
 slidingWindow(data, fun, steps, time_in_sec, colname = "new_feature")
 }
 \arguments{
-\item{data}{dataframe. dataframe containing column named 'userId', which should be the unique identifier for each ID.}
+\item{data}{dataframe. Dataframe containing column named 'userId', which should be the unique identifier for each ID.}
 
 \item{fun}{function. Must be a function, which has a dataframe as input and a vector of length 1 as output.}
 
@@ -32,7 +32,9 @@ slidingWindow(data, fun = fun, time_in_sec = 60 * 60) #mean accuracy of last hou
 }
 \seealso{
 Other helper functions: \code{\link{addColumnByUserId}},
-  \code{\link{addDateTime}}, \code{\link{addDate}},
-  \code{\link{addTime}}, \code{\link{addWeekday}},
-  \code{\link{calcStudyDay}}
+  \code{\link{addColumn}}, \code{\link{addDateTime}},
+  \code{\link{addDate}},
+  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addStudyDay}}, \code{\link{addTime}},
+  \code{\link{addWeekday}}, \code{\link{calcStudyDay}}
 }
