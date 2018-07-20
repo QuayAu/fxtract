@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • fxtract</title>
+<title>Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day. — addStudyDayPerUserId • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day. — addStudyDayPerUserId" />
+
+<meta property="og:description" content="Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -92,17 +95,61 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</h1>
+    
+    <div class="hidden name"><code>addStudyDayPerUserId.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="fxtract.html">Introduction to fxtract</a></li>
-      </ul>
+    <div class="ref-description">
+    
+    <p>Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p>
+    
     </div>
+
+    <pre class="usage"><span class='fu'>addStudyDayPerUserId</span>(<span class='no'>data</span>, <span class='kw'>colname</span> <span class='kw'>=</span> <span class='st'>"studyDay"</span>, <span class='kw'>ordered</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>dataframe. Dataframe containing column named 'userId', which should be the unique identifier for each ID.
+Also a column named 'timestamp' is needed, which should be a Unix Timestamp (in seconds or milliseconds).</p></td>
+    </tr>
+    <tr>
+      <th>colname</th>
+      <td><p>character. Column name of the new column.</p></td>
+    </tr>
+    <tr>
+      <th>ordered</th>
+      <td><p>logical. If <code>TRUE</code>, the added character variable will be ordered, like 'day1' &lt; 'day2' &lt; 'day3' &lt; ... .</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>dataframe with added factor variable 'studyDay' for each userId. The first day for each userId will be 'day1' .</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other helper functions: <code>addColumnByUserId</code>,
+  <code>addColumn</code>, <code>addDateTime</code>,
+  <code>addDate</code>, <code>addStudyDay</code>,
+  <code>addTime</code>, <code>addWeekday</code>,
+  <code>calcStudyDay</code>, <code>slidingWindow</code></p></div>
+    
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
+
   </div>
 </div>
 

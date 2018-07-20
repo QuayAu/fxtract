@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title> • seRu</title>
+<title>Function reference • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="" />
+<meta property="og:title" content="Function reference" />
 
 
 
@@ -57,7 +57,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">seRu</a>
+        <a class="navbar-link" href="../index.html">fxtract</a>
         <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1</span>
       </span>
     </div>
@@ -71,7 +71,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/seRu.html">Get started</a>
+  <a href="../articles/fxtract.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -103,20 +103,140 @@
       <col class="title" />
     </colgroup>
 
-    
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="addColumn.html">addColumn()</a></code> </p>
+        </td>
+        <td><p>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addColumnByUserId.html">addColumnByUserId()</a></code> </p>
+        </td>
+        <td><p>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
+This function will be evaluated grouped by the column 'userId'.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addDate.html">addDate()</a></code> </p>
+        </td>
+        <td><p>Adds column 'date' to a dataframe containing a timestamp variable.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addDateTime.html">addDateTime()</a></code> </p>
+        </td>
+        <td><p>Adds column 'date_time' to a dataframe containing a timestamp variable.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addStudyDay.html">addStudyDay()</a></code> </p>
+        </td>
+        <td><p>Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addStudyDayPerUserId.html">addStudyDayPerUserId()</a></code> </p>
+        </td>
+        <td><p>Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addTime.html">addTime()</a></code> </p>
+        </td>
+        <td><p>Adds column 'time' to a dataframe containing a timestamp variable.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addWeekday.html">addWeekday()</a></code> </p>
+        </td>
+        <td><p>Adds column 'weekday' to a dataframe containing a timestamp variable.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calcFeaturePerUserId.html">calcFeaturePerUserId()</a></code> </p>
+        </td>
+        <td><p>Calculates a given function for each userId</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calcStudyDay.html">calcStudyDay()</a></code> </p>
+        </td>
+        <td><p>Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="checkCols.html">checkCols()</a></code> </p>
+        </td>
+        <td><p>Helper function. Checks if data contains column names.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="checkTimeFormat.html">checkTimeFormat()</a></code> </p>
+        </td>
+        <td><p>Helper function. Checks if character has correct time format 'hh:mm:ss'.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filterDaytime.html">filterDaytime()</a></code> </p>
+        </td>
+        <td><p>Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
+The dataset needs an ordered factor variable named 'weekday'.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filterWeekday.html">filterWeekday()</a></code> </p>
+        </td>
+        <td><p>Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
+The dataset needs an ordered factor variable named 'weekday'.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="phonedata.html">phonedata</a></code> </p>
+        </td>
+        <td><p>phonedata</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="slidingWindow.html">slidingWindow()</a></code> </p>
+        </td>
+        <td><p>Adds a variable to a dataset by a sliding window approach.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="studentlife.small.html">studentlife.small</a></code> </p>
+        </td>
+        <td><p>studentlife.small</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="timeToSec.html">timeToSec()</a></code> </p>
+        </td>
+        <td><p>Helper function. Converts "hh:mm:ss" into number of seconds.</p></td>
+      </tr>
+    </tbody>
     </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#section-all-functions">All functions</a></li>
     </ul>
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann, Clemens Stachl.</p>
+  <p>Developed by Quay Au, Theresa Ullmann.</p>
 </div>
 
 <div class="pkgdown">
