@@ -1,6 +1,6 @@
 ---
 title: "Introduction to fxtract"
-#author: "Vignette Author"
+author: "Quay Au"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

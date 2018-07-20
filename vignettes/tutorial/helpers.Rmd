@@ -1,0 +1,11 @@
+---
+title: "Preprocessing Helpers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Date functions
+<img src="img/addDate.svg" width="790">

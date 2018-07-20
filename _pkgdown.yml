@@ -1,0 +1,16 @@
+title: fxtract
+url: https://quayau.github.io/fxtract
+template:
+  params:
+    bootswatch: sandstone
+
+navbar:
+  title:
+  type: default
+  left:
+  - text: Get Started
+    href: articles/fxtract.html
+  - text: Preprocessing Helpers
+    menu:
+    - text: date functions
+      href: articles/tutorial/helpers.html
