@@ -1,13 +1,13 @@
-Package: seRu
-Title: Package for Feature Extraction of Cell Phone Data
+Package: fxtract
+Title: Package for Feature Extraction of Longitudinal Data
 Version: 0.1
 Authors@R: c(person("Quay", "Au", email = "quay.au@stat.uni-muenchen.de", role = c("aut", "cre")),
   person("Theresa", "Ullmann", email = "theresa_ullmann@gmx.de", role = "aut"),
-  person("Clemens", "Stachl", email = "clemens.stachl@psy.lmu.de", role = "aut"),
+  person("Clemens", "Stachl", email = "clemens.stachl@psy.lmu.de", role = "ctb"),
   person("Ramona", "Schoedel", email = "ramona.schoedel@psy.lmu.de", role = "ctb"),
   person("Andreas", "Hofheinz", email = "andreas.hofheinz@outlook.com", role = "ctb")
   )
-Description: This package contains functions, which calculate features from raw data logs of cell phone data.
+Description: This package contains functions, which calculate features longitudinal data.
 Depends: R (>= 3.4.0),
   lubridate
 License: MIT + file LICENSE

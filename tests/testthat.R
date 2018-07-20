@@ -1,4 +1,4 @@
 library(testthat)
-library(seRu)
+library(fxtract)
 
-test_check("seRu")
+test_check("fxtract")
