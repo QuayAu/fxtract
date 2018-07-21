@@ -7,7 +7,7 @@
 addColumn(data, fun, colname)
 }
 \arguments{
-\item{data}{dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).}
+\item{data}{dataframe.}
 
 \item{fun}{function. Must be a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.}
 

@@ -1,6 +1,6 @@
 #' Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
 #'
-#' @template param_data_ts
+#' @template param_data
 #' @template param_fun_n
 #' @template param_colname
 #' @family helper functions

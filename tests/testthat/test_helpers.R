@@ -127,7 +127,6 @@ test_that("addColumnByUserId", {
   #right function
   myFun = function(data) rep(mean(data$timestamp), nrow(data))
   expect_equal(addColumnByUserId(data = td, fun = myFun, colname = "meanTimestamp")$meanTimestamp, c(2, 2, 2, 5, 5, 5))
-  expect_equal(addColumnByUserId(data = td, fun = myFun, colname = "meanTimestamp")$meanTimestamp, c(2, 2, 2, 5, 5, 5))
 
   #test calcStudyDay
   d1 = 123456789
@@ -137,6 +136,19 @@ test_that("addColumnByUserId", {
   #expect: c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   expect_equal(addColumnByUserId(data = td, fun = calcStudyDay, colname = "studyDay")$studyDay, res)
+})
+
+
+test_that("addColumn", {
+  td = data.frame(x = c(1, 2, 3, 4, 5, 6), y = c(rep("1", 3), rep("2", 3)))
+  
+  #wrong function
+  myFun = function(data) mean(data$x)
+  expect_error(addColumn(data = td, fun = myFun, colname = "meanX"), regexp = "fun must return a vector of length: nrow data")
+  
+  #right function
+  myFun = function(data) rep(mean(data$x), nrow(data))
+  expect_equal(addColumn(data = td, fun = myFun, colname = "meanX")$meanX, rep(3.5, 6))
 })
 
 test_that("slidingWindow", {
