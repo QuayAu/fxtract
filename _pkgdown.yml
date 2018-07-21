@@ -14,3 +14,5 @@ navbar:
     menu:
     - text: date functions
       href: articles/tutorial/helpers.html
+  - text: "Reference"
+    href: "reference/index.html"
