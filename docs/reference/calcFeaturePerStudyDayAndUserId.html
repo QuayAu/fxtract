@@ -112,7 +112,12 @@ A summary function, which summarizes the results for each day, will be evaluated
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/QuayAu/fxtract">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -128,7 +133,7 @@ A summary function, which summarizes the results for each day, will be evaluated
     <h1>Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
 Needs a function, which has a dataframe as input and a singular value as output.
 A summary function, which summarizes the results for each day, will be evaluated for each 'userId'.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/calcFeaturePerStudyDayAndUserId.R'><code>R/calcFeaturePerStudyDayAndUserId.R</code></a></small>
     <div class="hidden name"><code>calcFeaturePerStudyDayAndUserId.Rd</code></div>
     </div>
 
@@ -183,7 +188,7 @@ Results on days, which did not have any data, will be imputed with this value.</
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other feature functions: <code>calcFeaturePerUserId</code></p></div>
+    <div class='dont-index'><p>Other feature functions: <code><a href='calcFeaturePerUserId.html'>calcFeaturePerUserId</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -191,7 +196,7 @@ Results on days, which did not have any data, will be imputed with this value.</
   <span class='fu'>nrow</span>(<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>data</span>, <span class='no'>RUNNING_TASKS_baseActivity_mPackage</span> <span class='kw'>==</span> <span class='st'>"com.android.chrome"</span>))
 } <span class='co'>#number uses google chrome</span>
 <span class='no'>summary_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>mean</span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>data</span> <span class='kw'>=</span> <span class='fu'>addStudyDay</span>(<span class='no'>studentlife.small</span>)</div><div class='output co'>#&gt; <span class='message'>If you have data with different users, be aware, that this function ignores that! See addStudyDayPerUserId().</span></div><div class='input'><span class='fu'>calcFeaturePerStudyDayAndUserId</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>colname</span> <span class='kw'>=</span> <span class='st'>"mean_uses_chrome_per_day"</span>,
+<span class='no'>data</span> <span class='kw'>=</span> <span class='fu'><a href='addStudyDay.html'>addStudyDay</a></span>(<span class='no'>studentlife.small</span>)</div><div class='output co'>#&gt; <span class='message'>If you have data with different users, be aware, that this function ignores that! See addStudyDayPerUserId().</span></div><div class='input'><span class='fu'>calcFeaturePerStudyDayAndUserId</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>colname</span> <span class='kw'>=</span> <span class='st'>"mean_uses_chrome_per_day"</span>,
  <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='no'>summary_fun</span>)</div><div class='output co'>#&gt; <span class='message'>max_study_day will be automatically calculated from the given data.</span></div><div class='output co'>#&gt;   userId mean_uses_chrome_per_day
 #&gt; 1      1                 33.16667
 #&gt; 2      2                  1.50000

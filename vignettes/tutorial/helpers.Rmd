@@ -9,14 +9,33 @@ vignette: >
 
 # Date functions
 
+## addDateTime
+<img src="img/addDateTime.svg" width="790">
+
+Given a dataset with a timestamp variable, `addDateTime()` adds a date_time variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package.
+
 ## addDate
 <img src="img/addDate.svg" width="790">
 
-## addDateTime
+Given a dataset with a timestamp variable, `addDate()` adds a date variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package.
 
 ## addWeekday
+<img src="img/addWeekday.svg" width="790">
+
+Given a dataset with a timestamp variable, `addWeekday()` adds an ordered weekday variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day) package.
+
+With this new variable you can filter your dataset very easily. E.g., if you want to filter working days from your dataset, you can easily do this:
+```{r, message = FALSE, warning = FALSE}
+library(fxtract)
+library(dplyr)
+data = studentlife.small %>% addWeekday() %>% filter(weekday >= "Mon" & weekday <= "Fri")
+unique(data$weekday)
+```
 
 ## addTime
+<img src="img/addTime.svg" width="790">
+
+Given a dataset with a timestamp variable, `addDate()` adds a time variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package.
 
 ## addStudyDay
 

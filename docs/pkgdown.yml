@@ -1,7 +1,12 @@
 pandoc: 1.19.2.1
 pkgdown: 1.1.0
 pkgdown_sha: ~
-articles: []
+articles:
+  fxtract: fxtract.html
+  basics_calcFeaturePerUserId: tutorial/basics_calcFeaturePerUserId.html
+  basics_slidingWindow: tutorial/basics_slidingWindow.html
+  filters: tutorial/filters.html
+  helpers: tutorial/helpers.html
 urls:
   reference: https://quayau.github.io/fxtract/reference
   article: https://quayau.github.io/fxtract/articles

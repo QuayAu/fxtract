@@ -1,10 +1,10 @@
 ---
-title: "Introduction to fxtract"
+title: "fxtract"
 author: "Quay Au"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to fxtract}
+  %\VignetteIndexEntry{fxtract}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(fxtract)
 ```
 
 This will be the Get Started page.

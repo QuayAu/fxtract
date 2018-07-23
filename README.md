@@ -7,5 +7,10 @@
 This is work in progress!
 [Tutorial](https://quayau.github.io/fxtract/)
 
+# Installation
+For the development version, use [devtools](https://cran.r-project.org/package=devtools):
+```{R}
+devtools::install_github("QuayAu/fxtract")
+```
 ## Introduction
 ## Features

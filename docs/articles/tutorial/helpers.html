@@ -72,7 +72,14 @@
   <a href="../../reference/index.html">Reference</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/QuayAu/fxtract">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -87,7 +94,7 @@
       <h1>Preprocessing Helpers</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/helpers.Rmd"><code>vignettes/tutorial/helpers.Rmd</code></a></small>
       <div class="hidden name"><code>helpers.Rmd</code></div>
 
     </div>
@@ -97,22 +104,36 @@
 <div id="date-functions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#date-functions" class="anchor"></a>Date functions</h1>
+<div id="adddatetime" class="section level2">
+<h2 class="hasAnchor">
+<a href="#adddatetime" class="anchor"></a>addDateTime</h2>
+<p><img src="img/addDateTime.svg" width="790"></p>
+<p>Given a dataset with a timestamp variable, <code><a href="../../reference/addDateTime.html">addDateTime()</a></code> adds a date_time variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package.</p>
+</div>
 <div id="adddate" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adddate" class="anchor"></a>addDate</h2>
 <p><img src="img/addDate.svg" width="790"></p>
-</div>
-<div id="adddatetime" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adddatetime" class="anchor"></a>addDateTime</h2>
+<p>Given a dataset with a timestamp variable, <code><a href="../../reference/addDate.html">addDate()</a></code> adds a date variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package.</p>
 </div>
 <div id="addweekday" class="section level2">
 <h2 class="hasAnchor">
 <a href="#addweekday" class="anchor"></a>addWeekday</h2>
+<p><img src="img/addWeekday.svg" width="790"></p>
+<p>Given a dataset with a timestamp variable, <code><a href="../../reference/addWeekday.html">addWeekday()</a></code> adds an ordered weekday variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day">lubridate</a> package.</p>
+<p>With this new variable you can filter your dataset very easily. E.g., if you want to filter working days from your dataset, you can easily do this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
+<span class="kw">library</span>(dplyr)
+data =<span class="st"> </span>studentlife.small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../../reference/addWeekday.html">addWeekday</a></span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)
+<span class="kw">unique</span>(data<span class="op">$</span>weekday)</code></pre></div>
+<pre><code>## [1] Wed Thu Fri Mon Tue
+## Levels: Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat &lt; Sun</code></pre>
 </div>
 <div id="addtime" class="section level2">
 <h2 class="hasAnchor">
 <a href="#addtime" class="anchor"></a>addTime</h2>
+<p><img src="img/addTime.svg" width="790"></p>
+<p>Given a dataset with a timestamp variable, <code><a href="../../reference/addDate.html">addDate()</a></code> adds a time variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package.</p>
 </div>
 <div id="addstudyday" class="section level2">
 <h2 class="hasAnchor">
@@ -132,8 +153,8 @@
       <ul class="nav nav-pills nav-stacked">
 <li>
 <a href="#date-functions">Date functions</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#adddate">addDate</a></li>
-      <li><a href="#adddatetime">addDateTime</a></li>
+<li><a href="#adddatetime">addDateTime</a></li>
+      <li><a href="#adddate">addDate</a></li>
       <li><a href="#addweekday">addWeekday</a></li>
       <li><a href="#addtime">addTime</a></li>
       <li><a href="#addstudyday">addStudyDay</a></li>

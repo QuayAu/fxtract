@@ -1,5 +1,7 @@
 Package: fxtract
-Title: Package for Feature Extraction of Longitudinal Data
+Type: Package
+Title: Feature Extraction for Longitudinal Data
+Description: This package contains functions, which calculate features from longitudinal data.
 Version: 0.1
 Authors@R: c(person("Quay", "Au", email = "quay.au@stat.uni-muenchen.de", role = c("aut", "cre")),
   person("Theresa", "Ullmann", email = "theresa_ullmann@gmx.de", role = "aut"),
@@ -7,13 +9,16 @@ Authors@R: c(person("Quay", "Au", email = "quay.au@stat.uni-muenchen.de", role =
   person("Ramona", "Schoedel", email = "ramona.schoedel@psy.lmu.de", role = "ctb"),
   person("Andreas", "Hofheinz", email = "andreas.hofheinz@outlook.com", role = "ctb")
   )
-Description: This package contains functions, which calculate features longitudinal data.
+URL: https://github.com/QuayAu/fxtract
+BugReports: https://github.com/QuayAu/fxtract/issues
+NeedsCompilation: yes
+ByteCompile: yes
 Depends: R (>= 3.4.0),
   lubridate
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.0.1
 Imports: dplyr,
   magrittr,
   checkmate
