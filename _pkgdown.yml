@@ -12,7 +12,17 @@ navbar:
     href: articles/fxtract.html
   - text: Preprocessing Helpers
     menu:
-    - text: date functions
+    - text: add date information
       href: articles/tutorial/helpers.html
+    - text: filters
+      href: articles/tutorial/filters.html
+  - text: Basics
+    menu:
+    - text: slidingWindow
+      href: articles/tutorial/basics_slidingWindow.html
+    - text: calcFeaturePerUserId
+      href: articles/tutorial/basics_calcFeaturePerUserId.html
   - text: "Reference"
     href: "reference/index.html"
+    contents:
+    - '`fxtract`'

@@ -7,17 +7,11 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-# Date functions
+<!-- write something about why it's useful to use our filters -->
+# Filter functions
 
-## addDate
-<img src="img/addDate.svg" width="790">
+## filterDaytime
 
-## addDateTime
+## filterWeekday
 
-## addWeekday
-
-## addTime
-
-## addStudyDay
-
-## addStudyDayPerUserId
+## Combination of these functions

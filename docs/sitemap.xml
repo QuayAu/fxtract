@@ -61,6 +61,15 @@
     <loc>https://quayau.github.io/fxtract/articles/fxtract.html</loc>
   </url>
   <url>
+    <loc>https://quayau.github.io/fxtract/articles/tutorial/basics_calcFeaturePerUserId.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/articles/tutorial/basics_slidingWindow.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/articles/tutorial/filters.html</loc>
+  </url>
+  <url>
     <loc>https://quayau.github.io/fxtract/articles/tutorial/helpers.html</loc>
   </url>
 </urlset>
