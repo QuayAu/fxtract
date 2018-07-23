@@ -20,8 +20,11 @@ dataframe with columns userId and \code{colname}.
 Calculates a given function for each userId
 }
 \examples{
-myFun = function(data) {
+fun = function(data) {
   nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
 }
-calcFeaturePerUserId(data = studentlife.small, fun = myFun, colname = "number_uses_chrome")
+calcFeaturePerUserId(data = studentlife.small, fun = fun, colname = "number_uses_chrome")
+}
+\seealso{
+Other feature functions: \code{\link{calcFeaturePerStudyDayAndUserId}}
 }

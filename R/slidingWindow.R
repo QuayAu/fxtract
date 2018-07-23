@@ -12,7 +12,8 @@
 #' @importFrom dplyr do
 #' @importFrom magrittr "%>%"
 #' @export
-#' @examples fun = function(x) mean(x$accuracy, na.rm = TRUE)
+#' @examples
+#' fun = function(x) mean(x$accuracy, na.rm = TRUE)
 #' data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
 #' slidingWindow(data, fun = fun, time_in_sec = 60 * 60) #mean accuracy of last hour
 slidingWindow = function(data, fun, steps, time_in_sec, colname = "new_feature") {

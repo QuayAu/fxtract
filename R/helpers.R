@@ -191,7 +191,7 @@ addStudyDayPerUserId = function(data, colname = "studyDay", ordered = TRUE) {
   return(data)
 }
 
-#' Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
+#' Helper function. It takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 #'
 #' @template param_data_ts
 #' @template param_colname
@@ -202,6 +202,7 @@ addStudyDayPerUserId = function(data, colname = "studyDay", ordered = TRUE) {
 #' @importFrom magrittr "%>%"
 #' @export
 addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
+  message("If you have data with different users, be aware, that this function ignores that! See addStudyDayPerUserId().")
   data = addColumn(data = data, fun = calcStudyDay, colname = colname)
   if (ordered) {
     max_number_days = max(as.numeric(gsub("\\D", "", data[, colname])))
