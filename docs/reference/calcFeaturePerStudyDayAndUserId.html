@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculates a given function for each userId — calcFeaturePerUserId • fxtract</title>
+<title>Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
+Needs a function, which has a dataframe as input and a singular value as output.
+A summary function, which summarizes the results for each day, will be evaluated for each 'userId'. — calcFeaturePerStudyDayAndUserId • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +32,13 @@
 
 
 
-<meta property="og:title" content="Calculates a given function for each userId — calcFeaturePerUserId" />
+<meta property="og:title" content="Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
+Needs a function, which has a dataframe as input and a singular value as output.
+A summary function, which summarizes the results for each day, will be evaluated for each 'userId'. — calcFeaturePerStudyDayAndUserId" />
 
-<meta property="og:description" content="Calculates a given function for each userId" />
+<meta property="og:description" content="Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
+Needs a function, which has a dataframe as input and a singular value as output.
+A summary function, which summarizes the results for each day, will be evaluated for each 'userId'." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,18 +125,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculates a given function for each userId</h1>
+    <h1>Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
+Needs a function, which has a dataframe as input and a singular value as output.
+A summary function, which summarizes the results for each day, will be evaluated for each 'userId'.</h1>
     
-    <div class="hidden name"><code>calcFeaturePerUserId.Rd</code></div>
+    <div class="hidden name"><code>calcFeaturePerStudyDayAndUserId.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculates a given function for each userId</p>
+    <p>Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
+Needs a function, which has a dataframe as input and a singular value as output.
+A summary function, which summarizes the results for each day, will be evaluated for each 'userId'.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>calcFeaturePerUserId</span>(<span class='no'>data</span>, <span class='no'>fun</span>, <span class='no'>colname</span>)</pre>
+    <pre class="usage"><span class='fu'>calcFeaturePerStudyDayAndUserId</span>(<span class='no'>data</span>, <span class='no'>fun</span>, <span class='no'>colname</span>, <span class='no'>summary_fun</span>, <span class='no'>max_study_day</span>,
+  <span class='kw'>impute_empty_day</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>export_results_per_day</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,34 +152,50 @@
     </tr>
     <tr>
       <th>fun</th>
-      <td><p>function. Must be a function, which has a dataframe as input and a vector of length 1 as output.</p></td>
+      <td><p>function. Must be a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.</p></td>
     </tr>
     <tr>
       <th>colname</th>
-      <td><p>character. Desired column name.</p></td>
+      <td><p>character. Column name of the new column.</p></td>
+    </tr>
+    <tr>
+      <th>summary_fun</th>
+      <td><p>function. Must be a function, which has a vector as input and a singular value as output.</p></td>
+    </tr>
+    <tr>
+      <th>max_study_day</th>
+      <td><p>integer. Function will be evaluated until the max study day.</p></td>
+    </tr>
+    <tr>
+      <th>impute_empty_day</th>
+      <td><p>can be character, factor, or numerical.
+Results on days, which did not have any data, will be imputed with this value.</p></td>
+    </tr>
+    <tr>
+      <th>export_results_per_day</th>
+      <td><p>logical. If TRUE, an additional dataframe, where <code>fun</code> is evaluated at each studyDay, is returned.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe with columns userId and <code>colname</code>.</p>
+    <p>dataframe with columns userId and <code>colname</code>. One value for each userId.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other feature functions: <code>calcFeaturePerStudyDayAndUserId</code></p></div>
+    <div class='dont-index'><p>Other feature functions: <code>calcFeaturePerUserId</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
   <span class='fu'>nrow</span>(<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>data</span>, <span class='no'>RUNNING_TASKS_baseActivity_mPackage</span> <span class='kw'>==</span> <span class='st'>"com.android.chrome"</span>))
-}
-<span class='fu'>calcFeaturePerUserId</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>studentlife.small</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>colname</span> <span class='kw'>=</span> <span class='st'>"number_uses_chrome"</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 2
-#&gt; # Groups:   userId [3]
-#&gt;   userId number_uses_chrome
-#&gt;   &lt;chr&gt;               &lt;int&gt;
-#&gt; 1 1                     199
-#&gt; 2 2                       9
-#&gt; 3 3                     198</div></pre>
+} <span class='co'>#number uses google chrome</span>
+<span class='no'>summary_fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>mean</span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>data</span> <span class='kw'>=</span> <span class='fu'>addStudyDay</span>(<span class='no'>studentlife.small</span>)</div><div class='output co'>#&gt; <span class='message'>If you have data with different users, be aware, that this function ignores that! See addStudyDayPerUserId().</span></div><div class='input'><span class='fu'>calcFeaturePerStudyDayAndUserId</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>colname</span> <span class='kw'>=</span> <span class='st'>"mean_uses_chrome_per_day"</span>,
+ <span class='kw'>summary_fun</span> <span class='kw'>=</span> <span class='no'>summary_fun</span>)</div><div class='output co'>#&gt; <span class='message'>max_study_day will be automatically calculated from the given data.</span></div><div class='output co'>#&gt;   userId mean_uses_chrome_per_day
+#&gt; 1      1                 33.16667
+#&gt; 2      2                  1.50000
+#&gt; 3      3                 33.00000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
