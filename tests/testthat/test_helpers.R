@@ -22,10 +22,10 @@ test_that("test_wrong_inputs", {
   expect_error(addDate(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
   expect_error(addDateTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
 
-  expect_error(addWeekday(data = td, unit = "S"), regexp = "unit must be 's' or 'ms")
-  expect_error(addTime(data = td, unit = "S"), regexp = "unit must be 's' or 'ms")
-  expect_error(addDate(data = td, unit = "S"), regexp = "unit must be 's' or 'ms")
-  expect_error(addDateTime(data = td, unit = "S"), regexp = "unit must be 's' or 'ms")
+  expect_error(addWeekday(data = td, unit = "S"))
+  expect_error(addTime(data = td, unit = "S"))
+  expect_error(addDate(data = td, unit = "S"))
+  expect_error(addDateTime(data = td, unit = "S"))
 
   #addWeekday
   expect_error(addWeekday(data = td, week_start = "Mon"), regexp = "Assertion on 'week_start' failed: Must be of type 'numeric', not 'character'.")

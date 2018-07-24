@@ -38,7 +38,7 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
   checkmate::assertCharacter(locale)
   checkmate::assertNumeric(week_start)
   checkmate::checkNames(names(data), must.include = "timestamp")
-  if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  checkmate::assertSubset(unit, c("s", "ms"))
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
     message("timestamp was converted from character to numeric")
@@ -49,6 +49,7 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
+  if ("weekday" %in% names(data)) warning("Your dataset already has a column named 'weekday'. It will be overwritten!")
   data$weekday = lubridate::wday(dt, label = TRUE, week_start = week_start, locale = locale)
   return(data)
 }
@@ -67,7 +68,7 @@ addTime = function(data, tz = "UTC", unit = "s") {
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
   checkmate::checkNames(names(data), must.include = "timestamp")
-  if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  checkmate::assertSubset(unit, c("s", "ms"))
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
     message("timestamp was converted from character to numeric")
@@ -75,6 +76,7 @@ addTime = function(data, tz = "UTC", unit = "s") {
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
+  if ("time" %in% names(data)) warning("Your dataset already has a column named 'time'. It will be overwritten!")
   data$time = strftime(dt, "%H:%M:%S", tz = tz)
   return(data)
 }
@@ -93,7 +95,7 @@ addDate = function(data, tz = "UTC", unit = "s") {
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
   checkmate::checkNames(names(data), must.include = "timestamp")
-  if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  checkmate::assertSubset(unit, c("s", "ms"))
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
     message("timestamp was converted from character to numeric")
@@ -101,6 +103,7 @@ addDate = function(data, tz = "UTC", unit = "s") {
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
+  if ("date" %in% names(data)) warning("Your dataset already has a column named 'date'. It will be overwritten!")
   data$date = lubridate::as_date(dt)
   return(data)
 }
@@ -119,7 +122,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
   checkmate::checkNames(names(data), must.include = "timestamp")
-  if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
+  checkmate::assertSubset(unit, c("s", "ms"))
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
     message("timestamp was converted from character to numeric")
@@ -127,6 +130,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
   conv = ifelse(unit == "s", 1, 1000)
   dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
+  if ("date_time" %in% names(data)) warning("Your dataset already has a column named 'date_time'. It will be overwritten!")
   data$date_time = dt
   return(data)
 }
@@ -203,11 +207,34 @@ addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
   return(data)
 }
 
-#' #' Helper function. Divides the dataset into intervals of a given length.
-#' #' @template param_data_ts
-#' #' @param interval numeric. Number of seconds, which will be the length of the intervals.
-#' checkCols = function(data, interval) {
-#'   checkmate::assert_numeric(interval)
-#'   checkmate::assertDataFrame(data)
-#'   checkCols(data)
-#' }
+#' Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+#' @template param_data_ts
+#' @param interval numeric. Number of seconds, which will be the length of the intervals.
+#' @template param_unit
+#' @template param_colname
+#' @return dataframe with new column, which divides the dataset into intervals.
+#' @export
+divideDataIntoIntervals = function(data, interval, unit = "s", colname = "interval") {
+  checkmate::assert_numeric(interval)
+  checkmate::assertDataFrame(data)
+  checkmate::assertNames(names(data), must.include = c("timestamp"))
+  checkmate::assertSubset(unit, c("s", "ms"))
+  if (colname %in% names(data)) stop()
+
+  timestamp = data$timestamp
+  if (anyNA(timestamp)) stop("your dataset contains NA in the timestamp variable")
+
+  # only for debugging
+  # ts_df = data.frame(timestamp = timestamp, original_order = 1:length(timestamp))
+  # ts_df = ts_df[order(ts_df$timestamp), ]
+  # ts_df = addDateTime(ts_df)
+  start_time = min(timestamp)
+  end_time = max(timestamp)
+  x = ifelse(unit == "s", 1, 1000)
+
+  iv = cut(timestamp, breaks = seq(start_time, end_time, by = interval * x), include.lowest = TRUE)
+  if (anyNA(iv)) stop("after cutting the timestamp variable, NA's occured.")
+  iv = paste0("interval", as.numeric(iv))
+
+  addColumn(data, fun = function(x) iv, colname = colname)
+}
