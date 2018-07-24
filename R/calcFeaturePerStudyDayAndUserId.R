@@ -27,7 +27,7 @@ calcFeaturePerStudyDayAndUserId = function(data, fun, colname, summary_fun, max_
   export_results_per_day = FALSE) {
   userId = studyDay = min_day =  max_day = NULL
   checkmate::assertDataFrame(data)
-  checkCols("userId", data)
+  checkmate::checkNames(names(data), must.include = "userId")
   if (!"studyDay" %in% colnames(data)) stop("Your data set needs a column named 'studyDay'.
       See function addStudyDayPerUserId() or addStudyDay().")
   if (length(do.call(fun, list(data))) != 1) stop("fun must return a vector of length 1")

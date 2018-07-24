@@ -1,12 +1,3 @@
-#' Helper function. Checks if data contains column names.
-#' @param colname character. It will be checked, if the dataframe contains these column names.
-#' @param data dataframe.
-checkCols = function(colname, data) {
-  ld = colnames(data)
-  for (i in 1:length(colname)) if (!any(ld %in% colname[i]))
-    stop(paste0("Your data set needs a column named '", colname[i], "'"))
-}
-
 #' Helper function. Checks if character has correct time format 'hh:mm:ss'.
 #' @param x character vector.
 checkTimeFormat = function(x) {
@@ -46,7 +37,7 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
   checkmate::assertCharacter(unit)
   checkmate::assertCharacter(locale)
   checkmate::assertNumeric(week_start)
-  checkCols("timestamp", data)
+  checkmate::checkNames(names(data), must.include = "timestamp")
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
@@ -75,7 +66,7 @@ addTime = function(data, tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkCols("timestamp", data)
+  checkmate::checkNames(names(data), must.include = "timestamp")
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
@@ -101,7 +92,7 @@ addDate = function(data, tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkCols("timestamp", data)
+  checkmate::checkNames(names(data), must.include = "timestamp")
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
@@ -127,7 +118,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkCols("timestamp", data)
+  checkmate::checkNames(names(data), must.include = "timestamp")
   if (!unit %in% c("s", "ms")) stop("unit must be 's' or 'ms")
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
@@ -211,3 +202,12 @@ addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
   }
   return(data)
 }
+
+#' #' Helper function. Divides the dataset into intervals of a given length.
+#' #' @template param_data_ts
+#' #' @param interval numeric. Number of seconds, which will be the length of the intervals.
+#' checkCols = function(data, interval) {
+#'   checkmate::assert_numeric(interval)
+#'   checkmate::assertDataFrame(data)
+#'   checkCols(data)
+#' }

@@ -1,11 +1,5 @@
 context("Helpers")
 
-test_that("not_exported", {
-  td = data.frame(x = 1:3, y = 4:6)
-  expect_error(checkCols("z", td), regexp = "Your data set needs a column named 'z'")
-})
-
-
 test_that("test_wrong_inputs", {
   td = data.frame(timestamp = c(1, 2, 3))
   #data
@@ -141,11 +135,11 @@ test_that("addColumnByUserId", {
 
 test_that("addColumn", {
   td = data.frame(x = c(1, 2, 3, 4, 5, 6), y = c(rep("1", 3), rep("2", 3)))
-  
+
   #wrong function
   myFun = function(data) mean(data$x)
   expect_error(addColumn(data = td, fun = myFun, colname = "meanX"), regexp = "fun must return a vector of length: nrow data")
-  
+
   #right function
   myFun = function(data) rep(mean(data$x), nrow(data))
   expect_equal(addColumn(data = td, fun = myFun, colname = "meanX")$meanX, rep(3.5, 6))

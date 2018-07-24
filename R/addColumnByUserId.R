@@ -11,7 +11,7 @@
 #' @export
 addColumnByUserId = function(data, fun, colname) {
   checkmate::assertDataFrame(data)
-  checkCols("userId", data)
+  checkmate::checkNames(names(data), must.include = "userId")
   if (length(do.call(fun, list(data))) != nrow(data)) stop("fun must return a vector of length: nrow data")
   userId = . = NULL
   newCol = data %>% group_by(userId) %>% do(do.call(fun, list(.)) %>% data.frame()) %>% pull(.)
