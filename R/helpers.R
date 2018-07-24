@@ -212,7 +212,8 @@ addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
 #' @param interval numeric. Number of seconds, which will be the length of the intervals.
 #' @template param_unit
 #' @template param_colname
-#' @return dataframe with new column, which divides the dataset into intervals.
+#' @family helper functions
+#' @return character. This character divides the dataset into intervals.
 #' @export
 divideDataIntoIntervals = function(data, interval, unit = "s", colname = "interval") {
   checkmate::assert_numeric(interval)
@@ -233,8 +234,12 @@ divideDataIntoIntervals = function(data, interval, unit = "s", colname = "interv
   x = ifelse(unit == "s", 1, 1000)
 
   iv = cut(timestamp, breaks = seq(start_time, end_time, by = interval * x), include.lowest = TRUE)
-  if (anyNA(iv)) stop("after cutting the timestamp variable, NA's occured.")
   iv = paste0("interval", as.numeric(iv))
 
-  addColumn(data, fun = function(x) iv, colname = colname)
+  if (anyNA(iv)) {
+    # if (timestamp[which(is.na(iv))] == end_time) timestamp[which(is.na(iv))] = paste0("interval", max(as.numeric(iv)))
+    # FIXME: add unit test timestamp == end_time
+    stop("after cutting the timestamp variable, NA's occured.")
+  }
+  iv
 }

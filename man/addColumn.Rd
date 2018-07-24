@@ -25,5 +25,6 @@ Other helper functions: \code{\link{addColumnByUserId}},
   \code{\link{addStudyDayPerUserId}},
   \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
+  \code{\link{divideDataIntoIntervals}},
   \code{\link{slidingWindow}}
 }

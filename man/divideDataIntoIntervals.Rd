@@ -16,8 +16,17 @@ divideDataIntoIntervals(data, interval, unit = "s", colname = "interval")
 \item{colname}{character. Column name of the new column.}
 }
 \value{
-dataframe with new column, which divides the dataset into intervals.
+character. This character divides the dataset into intervals.
 }
 \description{
 Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+}
+\seealso{
+Other helper functions: \code{\link{addColumnByUserId}},
+  \code{\link{addColumn}}, \code{\link{addDateTime}},
+  \code{\link{addDate}},
+  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addStudyDay}}, \code{\link{addTime}},
+  \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
+  \code{\link{slidingWindow}}
 }
