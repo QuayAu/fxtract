@@ -2,24 +2,30 @@
 % Please edit documentation in R/helpers.R
 \name{divideDataIntoIntervals}
 \alias{divideDataIntoIntervals}
-\title{Helper function. Adds a new column, which divides the dataset into intervals of a given length.}
+\title{Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+The base R function \code{cut} is used with \code{include.lowest = TRUE}.
+Values larger than the biggest cut point will be assigned a new interval.}
 \usage{
-divideDataIntoIntervals(data, interval, unit = "s", colname = "interval")
+divideDataIntoIntervals(data, steps, time_in_sec, unit = "s")
 }
 \arguments{
-\item{data}{dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).}
+\item{data}{dataframe.}
 
-\item{interval}{numeric. Number of seconds, which will be the length of the intervals.}
+\item{steps}{integer. Number of observations, which will be in the intervals.
+Use this for data with fixed sample rate. \code{unit} will have no effect, if \code{steps} are chosen.}
+
+\item{time_in_sec}{numeric. Number of seconds, which will be the length of the intervals.
+Use this for data with variable sample rate.}
 
 \item{unit}{unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).}
-
-\item{colname}{character. Column name of the new column.}
 }
 \value{
 character. This character divides the dataset into intervals.
 }
 \description{
 Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+The base R function \code{cut} is used with \code{include.lowest = TRUE}.
+Values larger than the biggest cut point will be assigned a new interval.
 }
 \seealso{
 Other helper functions: \code{\link{addColumnByUserId}},

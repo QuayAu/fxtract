@@ -208,38 +208,44 @@ addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
 }
 
 #' Helper function. Adds a new column, which divides the dataset into intervals of a given length.
-#' @template param_data_ts
-#' @param interval numeric. Number of seconds, which will be the length of the intervals.
+#' The base R function \code{cut} is used with \code{include.lowest = TRUE}.
+#' Values larger than the biggest cut point will be assigned a new interval.
+#' @template param_data
+#' @param steps integer. Number of observations, which will be in the intervals.
+#'   Use this for data with fixed sample rate. \code{unit} will have no effect, if \code{steps} are chosen.
+#' @param time_in_sec numeric. Number of seconds, which will be the length of the intervals.
+#'   Use this for data with variable sample rate.
 #' @template param_unit
-#' @template param_colname
 #' @family helper functions
 #' @return character. This character divides the dataset into intervals.
 #' @export
-divideDataIntoIntervals = function(data, interval, unit = "s", colname = "interval") {
-  checkmate::assert_numeric(interval)
+divideDataIntoIntervals = function(data, steps, time_in_sec, unit = "s") {
+  if (!xor(missing(steps), missing(time_in_sec)))
+    stop("Pass either steps or time_in_sec, but not both!")
+  if (missing(steps)) checkmate::assert_numeric(time_in_sec)
+  if (missing(time_in_sec)) checkmate::assert_integerish(steps)
   checkmate::assertDataFrame(data)
   checkmate::assertNames(names(data), must.include = c("timestamp"))
   checkmate::assertSubset(unit, c("s", "ms"))
-  if (colname %in% names(data)) stop()
 
-  timestamp = data$timestamp
-  if (anyNA(timestamp)) stop("your dataset contains NA in the timestamp variable")
+  if (missing(steps)) {
+    timestamp = data$timestamp
+    if (anyNA(timestamp)) stop("your dataset contains NA in the timestamp variable")
 
-  # only for debugging
-  # ts_df = data.frame(timestamp = timestamp, original_order = 1:length(timestamp))
-  # ts_df = ts_df[order(ts_df$timestamp), ]
-  # ts_df = addDateTime(ts_df)
-  start_time = min(timestamp)
-  end_time = max(timestamp)
-  x = ifelse(unit == "s", 1, 1000)
+    start_time = min(timestamp)
+    end_time = max(timestamp)
+    x = ifelse(unit == "s", 1, 1000)
 
-  iv = cut(timestamp, breaks = seq(start_time, end_time, by = interval * x), include.lowest = TRUE)
-  iv = paste0("interval", as.numeric(iv))
-
-  if (anyNA(iv)) {
-    # if (timestamp[which(is.na(iv))] == end_time) timestamp[which(is.na(iv))] = paste0("interval", max(as.numeric(iv)))
-    # FIXME: add unit test timestamp == end_time
-    stop("after cutting the timestamp variable, NA's occured.")
+    breaks = seq(start_time, end_time, by = time_in_sec * x)
+    iv = cut(timestamp, breaks = c(breaks, max(breaks) + time_in_sec * x), include.lowest = TRUE)
+    # if (anyNA(iv)) stop("after cutting the timestamp variable, NA's occured.") #this should not happen! just for caution.
+    iv = paste0("interval", as.numeric(iv))
+    return(iv)
+  } else {
+    breaks = seq(1, nrow(data), by = steps)
+    iv = cut(1:nrow(data), breaks = c(breaks, max(breaks) + steps), include.lowest = TRUE)
+    # if (anyNA(iv)) stop("after cutting the datasets, NA's occured.") #this should not happen! just for caution.
+    iv = paste0("interval", as.numeric(iv))
+    return(iv)
   }
-  iv
 }

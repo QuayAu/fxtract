@@ -196,3 +196,52 @@ test_that("addStudyDayPerUserId", {
   expect_equal(as.character(unique(td2$studyDay)), c("day2", "day4"))
 })
 
+test_that("divideDataIntoIntervals", {
+  d1 = 100
+  td = data.frame(timestamp = c(d1 + c(0, 0, 0, 1:7)))
+  td$x = 1:nrow(td)
+
+  #check duplicate timestamps == start timestamp
+  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
+  expect_equal(c(rep("interval1", 8), rep("interval2", 2)), y)
+
+  #check duplicate timestamps == end timestamp
+  td$timestamp = c(1:7, 8, 8, 8)
+  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
+  expect_equal(c(rep("interval1", 6), rep("interval2", 4)), y)
+
+  #check duplicate timestamps in between
+  td$timestamp = c(1, 2, 2, 2, 3:8)
+  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
+  expect_equal(c(rep("interval1", 8), rep("interval2", 2)), y)
+
+  #check duplicate timestamps everywhere
+  td$timestamp = c(1, 1, 1, 2, 7, 7, 7, 16, 24, 24)
+  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
+  expect_equal(c(rep("interval1", 4), rep("interval2", 3), "interval3", rep("interval5", 2)), y)
+
+  #check data not ordered by timestamp
+  td$timestamp = c(1, 24, 1, 2, 24, 7, 7, 16, 7, 1)
+  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
+  expect_equal(c("interval1", "interval5", rep("interval1", 2), "interval5", rep("interval2", 2),
+    "interval3", "interval2", "interval1"), y)
+
+  #check different unit
+  td$timestamp = c(1, 24, 1, 2, 24, 7, 7, 16, 7, 1) * 1000
+  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "ms")
+  expect_equal(c("interval1", "interval5", rep("interval1", 2), "interval5", rep("interval2", 2),
+    "interval3", "interval2", "interval1"), y)
+
+  #check steps + time_in_sec
+  expect_error(divideDataIntoIntervals(data = td, steps = 5, time_in_sec = 5),
+    regexp = "Pass either steps or time_in_sec, but not both!")
+
+  #check steps
+  td$timestamp = 1:10
+  y = divideDataIntoIntervals(data = td, steps = 5)
+  expect_equal(c(rep("interval1", 6), rep("interval2", 4)), y)
+
+  y = divideDataIntoIntervals(data = td, steps = 4)
+  expect_equal(c(rep("interval1", 5), rep("interval2", 4), "interval3"), y)
+})
+
