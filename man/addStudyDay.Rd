@@ -20,10 +20,9 @@ dataframe with added factor variable 'studyDay'. The first day will be 'day1' .
 Helper function. It takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 }
 \seealso{
-Other helper functions: \code{\link{addColumnByUserId}},
+Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addColumn}}, \code{\link{addDateTime}},
-  \code{\link{addDate}},
-  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addDate}}, \code{\link{addStudyDayByGroup}},
   \code{\link{addTime}}, \code{\link{addWeekday}},
   \code{\link{calcStudyDay}},
   \code{\link{divideDataIntoIntervals}},

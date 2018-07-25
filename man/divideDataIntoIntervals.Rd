@@ -28,10 +28,9 @@ The base R function \code{cut} is used with \code{include.lowest = TRUE}.
 Values larger than the biggest cut point will be assigned a new interval.
 }
 \seealso{
-Other helper functions: \code{\link{addColumnByUserId}},
+Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addColumn}}, \code{\link{addDateTime}},
-  \code{\link{addDate}},
-  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addDate}}, \code{\link{addStudyDayByGroup}},
   \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
   \code{\link{slidingWindow}}

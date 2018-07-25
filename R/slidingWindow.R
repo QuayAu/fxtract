@@ -1,6 +1,6 @@
 #' Adds a variable to a dataset by a sliding window approach.
 #'
-#' @template param_data_uid
+#' @template param_data
 #' @template param_fun_1
 #' @param steps integer. Number of steps which the sliding window should go back.
 #'   Use this for data with fixed sample rate.

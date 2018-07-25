@@ -8,7 +8,7 @@ The dataset needs an ordered factor variable named 'weekday'.}
 filterDaytime(data, from_time = "07:00:00", until_time = "18:00:00")
 }
 \arguments{
-\item{data}{dataframe. Dataframe containing column named 'userId', which should be the unique identifier for each ID.}
+\item{data}{dataframe.}
 
 \item{from_time}{character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".}
 

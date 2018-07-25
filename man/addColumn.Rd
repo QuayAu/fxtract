@@ -20,9 +20,9 @@ dataframe with added column.
 Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
 }
 \seealso{
-Other helper functions: \code{\link{addColumnByUserId}},
+Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addDateTime}}, \code{\link{addDate}},
-  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addStudyDayByGroup}},
   \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
   \code{\link{divideDataIntoIntervals}},

@@ -1,7 +1,7 @@
 #' Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
 #' The dataset needs an ordered factor variable named 'weekday'.
 #'
-#' @param data dataframe. dataframe containing column named 'userId', which should be the unique identifier for each ID.
+#' @template param_data
 #' @param from_day character. Day of the week where filtering should start. Please check the machines locale for correct usage. Defaults to "Mon".
 #' @param from_time character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".
 #' @param until_day character. Day of the week where filtering should end. Please check the machines locale for correct usage. Defaults to "Sun".

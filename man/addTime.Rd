@@ -20,10 +20,9 @@ dataframe with added variable 'time'.
 Adds column 'time' to a dataframe containing a timestamp variable.
 }
 \seealso{
-Other helper functions: \code{\link{addColumnByUserId}},
+Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addColumn}}, \code{\link{addDateTime}},
-  \code{\link{addDate}},
-  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addDate}}, \code{\link{addStudyDayByGroup}},
   \code{\link{addStudyDay}}, \code{\link{addWeekday}},
   \code{\link{calcStudyDay}},
   \code{\link{divideDataIntoIntervals}},

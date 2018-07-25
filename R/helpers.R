@@ -37,7 +37,7 @@ addWeekday = function(data, tz = "UTC", unit = "s", week_start = 1, locale = "En
   checkmate::assertCharacter(unit)
   checkmate::assertCharacter(locale)
   checkmate::assertNumeric(week_start)
-  checkmate::checkNames(names(data), must.include = "timestamp")
+  checkmate::assertNames(names(data), must.include = "timestamp")
   checkmate::assertSubset(unit, c("s", "ms"))
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
@@ -67,7 +67,7 @@ addTime = function(data, tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkmate::checkNames(names(data), must.include = "timestamp")
+  checkmate::assertNames(names(data), must.include = "timestamp")
   checkmate::assertSubset(unit, c("s", "ms"))
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
@@ -94,7 +94,7 @@ addDate = function(data, tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkmate::checkNames(names(data), must.include = "timestamp")
+  checkmate::assertNames(names(data), must.include = "timestamp")
   checkmate::assertSubset(unit, c("s", "ms"))
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
@@ -121,7 +121,7 @@ addDateTime = function(data, tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkmate::checkNames(names(data), must.include = "timestamp")
+  checkmate::assertNames(names(data), must.include = "timestamp")
   checkmate::assertSubset(unit, c("s", "ms"))
   if (is.character(data$timestamp)) {
     data$timestamp = as.numeric(data$timestamp)
@@ -165,19 +165,20 @@ calcStudyDay = function(data) {
   daysId
 }
 
-#' Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
+#' Helper function. For each group variable it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 #'
-#' @param data dataframe. Dataframe containing column named 'userId', which should be the unique identifier for each ID.
-#'   Also a column named 'timestamp' is needed, which should be a Unix Timestamp (in seconds or milliseconds).
+#' @template param_data
+#' @template param_group_col
 #' @template param_colname
 #' @param ordered logical. If \code{TRUE}, the added character variable will be ordered, like 'day1' < 'day2' < 'day3' < ... .
 #' @family helper functions
-#' @return dataframe with added factor variable 'studyDay' for each userId. The first day for each userId will be 'day1' .
+#' @return dataframe with added factor variable 'studyDay' for each group variable. The first day for each variable will be 'day1' .
 #' @importFrom dplyr slice pull
 #' @importFrom magrittr "%>%"
 #' @export
-addStudyDayPerUserId = function(data, colname = "studyDay", ordered = TRUE) {
-  data = addColumnByUserId(data = data, fun = calcStudyDay, colname = colname)
+addStudyDayByGroup = function(data, group_col, colname = "studyDay", ordered = TRUE) {
+  checkmate::assertNames(names(data), must.include = group_col)
+  data = addColumnByGroup(data = data, group_col = group_col, fun = calcStudyDay, colname = colname)
   if (ordered) {
     max_number_days = max(as.numeric(gsub("\\D", "", data[, colname])))
     day_levels = paste0("day", 1:max_number_days)
@@ -197,7 +198,7 @@ addStudyDayPerUserId = function(data, colname = "studyDay", ordered = TRUE) {
 #' @importFrom magrittr "%>%"
 #' @export
 addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
-  message("If you have data with different users, be aware, that this function ignores that! See addStudyDayPerUserId().")
+  message("If you have data with different users, be aware, that this function ignores that! See addStudyDayByGroup().")
   data = addColumn(data = data, fun = calcStudyDay, colname = colname)
   if (ordered) {
     max_number_days = max(as.numeric(gsub("\\D", "", data[, colname])))

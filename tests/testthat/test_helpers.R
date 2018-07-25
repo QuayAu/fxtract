@@ -8,7 +8,7 @@ test_that("test_wrong_inputs", {
   expect_error(addDate(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
   expect_error(addDateTime(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
   expect_error(calcStudyDay(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
-  expect_error(addColumnByUserId(data = "test", fun = "mean", colname = "cn"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(addColumnByGroup(data = "test", fun = "mean", colname = "cn"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
 
   #tz
   expect_error(addWeekday(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
@@ -111,16 +111,21 @@ test_that("calcStudyDay", {
 })
 
 
-test_that("addColumnByUserId", {
+test_that("addColumnByGroup", {
   td = data.frame(timestamp = c(1, 2, 3, 4, 5, 6), userId = c(rep("1", 3), rep("2", 3)))
+
+  #no group_col in dataset
+  myFun = function(data) rep(mean(data$timestamp), nrow(data))
+  expect_error(addColumnByGroup(data = td, group_col = "x", fun = myFun, colname = "meanTimestamp"))
 
   #wrong function
   myFun = function(data) mean(data$timestamp)
-  expect_error(addColumnByUserId(data = td, fun = myFun, colname = "meanTimestamp"), regexp = "fun must return a vector of length: nrow data")
+  expect_error(addColumnByGroup(data = td, group_col = "userId", fun = myFun, colname = "meanTimestamp"),
+    regexp = "fun must return a vector of length: nrow data")
 
   #right function
   myFun = function(data) rep(mean(data$timestamp), nrow(data))
-  expect_equal(addColumnByUserId(data = td, fun = myFun, colname = "meanTimestamp")$meanTimestamp, c(2, 2, 2, 5, 5, 5))
+  expect_equal(addColumnByGroup(data = td, group_col = "userId", fun = myFun, colname = "meanTimestamp")$meanTimestamp, c(2, 2, 2, 5, 5, 5))
 
   #test calcStudyDay
   d1 = 123456789
@@ -129,7 +134,7 @@ test_that("addColumnByUserId", {
   td = addDate(td)
   #expect: c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
-  expect_equal(addColumnByUserId(data = td, fun = calcStudyDay, colname = "studyDay")$studyDay, res)
+  expect_equal(addColumnByGroup(data = td, group_col = "userId", fun = calcStudyDay, colname = "studyDay")$studyDay, res)
 })
 
 
@@ -178,17 +183,17 @@ test_that("addStudyDay", {
   expect_equal(as.character(unique(td2$studyDay)), c("day25030", "day17898"))
 })
 
-test_that("addStudyDayPerUserId", {
+test_that("addStudyDayByGroup", {
   d1 = 123456789
   td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
   td$userId = userId = c(rep("1", 4), rep("2", 5))
   td = addDate(td)
   res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   #check equality
-  expect_equal(as.character(addStudyDayPerUserId(data = td, ordered = FALSE)$studyDay), res)
-  expect_equal(levels(addStudyDayPerUserId(td, ordered = TRUE)$studyDay), paste0("day", 1:4))
+  expect_equal(as.character(addStudyDayByGroup(data = td, group_col = "userId", ordered = FALSE)$studyDay), res)
+  expect_equal(levels(addStudyDayByGroup(td, group_col = "userId", ordered = TRUE)$studyDay), paste0("day", 1:4))
   #check filters
-  td = addStudyDayPerUserId(td, ordered = TRUE)
+  td = addStudyDayByGroup(td, group_col = "userId", ordered = TRUE)
   studyDay = NULL
   td2 = td %>% dplyr::filter(studyDay <= "day2")
   expect_equal(as.character(unique(td2$studyDay)), c("day1", "day2"))

@@ -16,10 +16,9 @@ character. Character variable where 'day1' indicates the first day and the follo
 Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.
 }
 \seealso{
-Other helper functions: \code{\link{addColumnByUserId}},
+Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addColumn}}, \code{\link{addDateTime}},
-  \code{\link{addDate}},
-  \code{\link{addStudyDayPerUserId}},
+  \code{\link{addDate}}, \code{\link{addStudyDayByGroup}},
   \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}},
   \code{\link{divideDataIntoIntervals}},
