@@ -1,6 +1,18 @@
 context("filters")
 
 test_that("filterWeekday", {
+  td = data.frame(timestamp = 1:10)
+  
+  #test checks
+  expect_error(filterWeekday(td), regexp = "Your data set needs a column named 'weekday'. See function addWeekday().")
+  td = addWeekday(td)
+  expect_error(filterWeekday(td), regexp = "Your data set needs a column named 'time'. See function addTime().")
+  td = addTime(td)
+  expect_error(filterWeekday(td, from_day = "Fri", until_day = "Sun"), regexp = "there are no dataset entries within the chosen time interval")
+  td$weekday = as.character(td$weekday)
+  expect_error(filterWeekday(td), regexp = "The variable 'weekday' must be an ordered factor, e.g. Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun")  
+
+  #test functionality
   i = 3
   days = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
   td = data.frame(weekday = c(rep(days, i), days[1:3]), time = c("00:18:49", "01:12:45",
@@ -40,8 +52,6 @@ test_that("filterWeekday", {
     until_time = "23:59:59"))
   expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Sun",
     until_time = "23:70:59"))
-  
-  
 })
 
 test_that("filterDaytime", {

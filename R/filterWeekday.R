@@ -27,7 +27,7 @@ filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_d
   if (!"weekday" %in% colnames(data)) stop("Your data set needs a column named 'weekday'. See function addWeekday().")
   if (!"time" %in% colnames(data)) stop("Your data set needs a column named 'time'. See function addTime().")
   if (!is.ordered(data$weekday)) stop("The variable 'weekday' must be an ordered factor, e.g. Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun")
-  if (length(lw) != 7) warning("The variable 'weekday' does not have 7 levels. Please check your data!")
+  # if (length(lw) != 7) warning("The variable 'weekday' does not have 7 levels. Please check your data!") #do we need this check?
 
   # convert from_day and until_day into ordered factors
   from_day = factor(from_day, levels = lw, ordered = TRUE)
@@ -39,6 +39,7 @@ filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_d
   } else {
     df_res = data %>% dplyr::filter(weekday >= from_day | weekday <= until_day)
   }
+  if (nrow(df_res) == 0) stop("there are no dataset entries within the chosen time interval")
 
   # convert timestamp character string input and time variable of dataset into numeric (in seconds) starting from time 00:00:00
   ft = timeToSec(from_time)
@@ -47,9 +48,7 @@ filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_d
 
   # filter dataset according to from_time and until_time
   df_res = df_res %>% dplyr::filter(time_in_sec >= ft | weekday != from_day, time_in_sec <= ut | weekday != until_day) %>% dplyr::select(-time_in_sec)
-
-  if (nrow(df_res) == 0) stop("there are no dataset entries within the chosen time interval")
-
+  
   return(df_res)
 }
 
