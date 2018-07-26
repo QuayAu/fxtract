@@ -4,7 +4,8 @@
 \alias{slidingWindow}
 \title{Adds a variable to a dataset by a sliding window approach.}
 \usage{
-slidingWindow(data, fun, steps, time_in_sec, colname = "new_feature")
+slidingWindow(data, fun, steps, time_in_sec, colname = "new_feature",
+  check_fun = TRUE)
 }
 \arguments{
 \item{data}{dataframe.}
@@ -18,6 +19,9 @@ Use this for data with fixed sample rate.}
 Use this for data with variable sample rate.}
 
 \item{colname}{character. Column name of the new column.}
+
+\item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
+if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
 }
 \value{
 dataframe with added column

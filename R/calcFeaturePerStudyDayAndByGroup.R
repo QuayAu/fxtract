@@ -10,6 +10,7 @@
 #' @param max_study_day integer. Function will be evaluated until the max study day.
 #' @param impute_empty_day can be character, factor, or numerical.
 #' Results on days, which did not have any data, will be imputed with this value.
+#' @template param_check_fun
 #' @param export_results_per_day logical. If TRUE, an additional dataframe, where \code{fun} is evaluated at each studyDay, is returned.
 #' @family feature functions
 #' @return dataframe with columns \code{group_col} and \code{colname}. One value for each variable of \code{group_col}.
@@ -24,15 +25,21 @@
 #' data = addStudyDay(studentlife.small)
 #' calcFeaturePerStudyDayAndByGroup(data = data, group_col = "userId", fun = fun,
 #'   colname = "mean_uses_chrome_per_day", summary_fun = summary_fun)
-calcFeaturePerStudyDayAndByGroup = function(data, group_col, fun, colname, summary_fun, max_study_day, impute_empty_day = NA,
-  export_results_per_day = FALSE) {
+calcFeaturePerStudyDayAndByGroup = function(data, group_col, fun, colname, summary_fun, max_study_day, impute_empty_day = NA, 
+  check_fun = TRUE, export_results_per_day = FALSE) {
   studyDay = min_day =  max_day = NULL
   checkmate::assertDataFrame(data)
   checkmate::assertNames(names(data), must.include = group_col)
+  checkmate::assertLogical(check_fun)
+  if (colname %in% names(data)) stop("colname is already in dataset. Please choose a different colname!")
+
   if (!"studyDay" %in% colnames(data)) stop("Your data set needs a column named 'studyDay'.
       See function addStudyDayPerUserId() or addStudyDay().")
-  if (length(do.call(fun, list(data))) != 1) stop("fun must return a vector of length 1")
-
+  
+  if (check_fun) {
+    if (length(do.call(fun, list(data))) != 1) stop("fun must return a vector of length 1")
+  }
+  
   if (missing(max_study_day)) {
     message("max_study_day will be automatically calculated from the given data.")
     day_end = data %>% dplyr::summarize(max_day = max(studyDay)) %>% dplyr::pull(max_day) %>% as.numeric()

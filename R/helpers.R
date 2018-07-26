@@ -178,6 +178,8 @@ calcStudyDay = function(data) {
 #' @export
 addStudyDayByGroup = function(data, group_col, colname = "studyDay", ordered = TRUE) {
   checkmate::assertNames(names(data), must.include = group_col)
+  if (colname %in% names(data)) stop("colname is already in dataset. Please choose a different colname!")
+
   data = addColumnByGroup(data = data, group_col = group_col, fun = calcStudyDay, colname = colname)
   if (ordered) {
     max_number_days = max(as.numeric(gsub("\\D", "", data[, colname])))
@@ -199,6 +201,8 @@ addStudyDayByGroup = function(data, group_col, colname = "studyDay", ordered = T
 #' @export
 addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
   message("If you have data with different users, be aware, that this function ignores that! See addStudyDayByGroup().")
+  if (colname %in% names(data)) stop("colname is already in dataset. Please choose a different colname!")
+
   data = addColumn(data = data, fun = calcStudyDay, colname = colname)
   if (ordered) {
     max_number_days = max(as.numeric(gsub("\\D", "", data[, colname])))

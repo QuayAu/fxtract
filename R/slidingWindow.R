@@ -7,6 +7,7 @@
 #' @param time_in_sec integer. Number of seconds which the sliding window should go back.
 #'   Use this for data with variable sample rate.
 #' @template param_colname
+#' @template param_check_fun
 #' @family helper functions
 #' @return dataframe with added column
 #' @importFrom dplyr do
@@ -16,13 +17,19 @@
 #' fun = function(x) mean(x$accuracy, na.rm = TRUE)
 #' data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
 #' slidingWindow(data, fun = fun, time_in_sec = 60 * 60) #mean accuracy of last hour
-slidingWindow = function(data, fun, steps, time_in_sec, colname = "new_feature") {
+slidingWindow = function(data, fun, steps, time_in_sec, colname = "new_feature", check_fun = TRUE) {
   . = NULL
   checkmate::assertDataFrame(data)
+  checkmate::assertLogical(check_fun)
+  if (colname %in% names(data)) stop("colname is already in dataset. Please choose a different colname!")
+
   if (!missing(steps)) checkmate::assertNumber(steps)
   if (!missing(time_in_sec)) checkmate::assertNumber(time_in_sec)
-  if (length(do.call(fun, list(data))) != 1) stop("fun must return a vector of length 1")
-
+  
+  if (check_fun) {
+    if (length(do.call(fun, list(data))) != 1) stop("fun must return a vector of length 1")
+  }
+  
   if (!xor(missing(steps), missing(time_in_sec)))
     stop("Pass either steps or time_in_sec, but not both!")
 

@@ -4,7 +4,7 @@
 \alias{addColumn}
 \title{Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.}
 \usage{
-addColumn(data, fun, colname)
+addColumn(data, fun, colname, check_fun = TRUE)
 }
 \arguments{
 \item{data}{dataframe.}
@@ -12,6 +12,9 @@ addColumn(data, fun, colname)
 \item{fun}{function. Must be a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.}
 
 \item{colname}{character. Column name of the new column.}
+
+\item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
+if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
 }
 \value{
 dataframe with added column.

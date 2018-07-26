@@ -5,7 +5,7 @@
 \title{Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
 This function will be evaluated grouped by \code{group_col}.}
 \usage{
-addColumnByGroup(data, group_col, fun, colname)
+addColumnByGroup(data, group_col, fun, colname, check_fun = TRUE)
 }
 \arguments{
 \item{data}{dataframe.}
@@ -15,6 +15,9 @@ addColumnByGroup(data, group_col, fun, colname)
 \item{fun}{function. Must be a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.}
 
 \item{colname}{character. Column name of the new column.}
+
+\item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
+if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
 }
 \value{
 dataframe with added column, where a function \code{fun} is evaluated grouped by \code{group_col}.

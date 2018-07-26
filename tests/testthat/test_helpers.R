@@ -146,6 +146,11 @@ test_that("calcStudyDay", {
 
 test_that("addColumnByGroup", {
   td = data.frame(timestamp = c(1, 2, 3, 4, 5, 6), userId = c(rep("1", 3), rep("2", 3)))
+  
+  #colname already in dataset
+  myFun = function(data) rep(mean(data$timestamp), nrow(data))
+  expect_error(addColumnByGroup(data = td, group_col = "userId", fun = myFun, colname = "timestamp"), 
+    regexp = "colname is already in dataset. Please choose a different colname!")
 
   #no group_col in dataset
   myFun = function(data) rep(mean(data$timestamp), nrow(data))
@@ -173,6 +178,11 @@ test_that("addColumnByGroup", {
 
 test_that("addColumn", {
   td = data.frame(x = c(1, 2, 3, 4, 5, 6), y = c(rep("1", 3), rep("2", 3)))
+  
+  #colname already in dataset
+  myFun = function(data) rep(mean(data$x), nrow(data))
+  expect_error(addColumn(data = td, fun = myFun, colname = "x"), 
+    regexp = "colname is already in dataset. Please choose a different colname!")
 
   #wrong function
   myFun = function(data) mean(data$x)
@@ -186,6 +196,10 @@ test_that("addColumn", {
 test_that("slidingWindow", {
   td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
   fun = function(data) sum(data$x)
+
+  #colname already in dataset
+  expect_error(slidingWindow(data = td, fun = fun, steps = 3, colname = "x"), 
+    regexp = "colname is already in dataset. Please choose a different colname!")
 
   #test steps
   x = slidingWindow(td, fun, steps = 3)$new_feature

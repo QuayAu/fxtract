@@ -7,7 +7,8 @@ Needs a function, which has a dataframe as input and a singular value as output.
 A summary function, which summarizes the results for each day, will be evaluated by each member of \code{group_col}.}
 \usage{
 calcFeaturePerStudyDayAndByGroup(data, group_col, fun, colname, summary_fun,
-  max_study_day, impute_empty_day = NA, export_results_per_day = FALSE)
+  max_study_day, impute_empty_day = NA, check_fun = TRUE,
+  export_results_per_day = FALSE)
 }
 \arguments{
 \item{data}{dataframe.}
@@ -24,6 +25,9 @@ calcFeaturePerStudyDayAndByGroup(data, group_col, fun, colname, summary_fun,
 
 \item{impute_empty_day}{can be character, factor, or numerical.
 Results on days, which did not have any data, will be imputed with this value.}
+
+\item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
+if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
 
 \item{export_results_per_day}{logical. If TRUE, an additional dataframe, where \code{fun} is evaluated at each studyDay, is returned.}
 }

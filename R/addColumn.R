@@ -3,14 +3,20 @@
 #' @template param_data
 #' @template param_fun_n
 #' @template param_colname
+#' @template param_check_fun
 #' @family helper functions
 #' @return dataframe with added column.
 #' @importFrom dplyr group_by do
 #' @importFrom magrittr "%>%"
 #' @export
-addColumn = function(data, fun, colname) {
+addColumn = function(data, fun, colname, check_fun = TRUE) {
   checkmate::assertDataFrame(data)
-  if (length(do.call(fun, list(data))) != nrow(data)) stop("fun must return a vector of length: nrow data")
+  if (colname %in% names(data)) stop("colname is already in dataset. Please choose a different colname!")
+
+  if (check_fun) {
+    if (length(do.call(fun, list(data))) != nrow(data)) stop("fun must return a vector of length: nrow data")
+  }
+  
   . = NULL
   newCol = data %>% do(do.call(fun, list(.)) %>% data.frame()) %>% pull(.)
   eval(parse(text = paste0("data$", colname, " = newCol")))
