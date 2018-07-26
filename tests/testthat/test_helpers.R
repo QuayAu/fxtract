@@ -1,5 +1,19 @@
 context("Helpers")
 
+test_that("test_non_exported", {
+  x = "23:14:21"
+  expect_silent(checkTimeFormat(x))
+  
+  x = "25:14:22"
+  expect_error(checkTimeFormat(x), regexp = "hours cannot exceed 23.")
+  
+  x = "14:96:53"
+  expect_error(checkTimeFormat(x), regexp = "character must be a time format like '15:21:30'")
+  
+  x = "13:42:60"
+  expect_error(checkTimeFormat(x), regexp = "character must be a time format like '15:21:30'")
+})
+
 test_that("test_wrong_inputs", {
   td = data.frame(timestamp = c(1, 2, 3))
   #data
