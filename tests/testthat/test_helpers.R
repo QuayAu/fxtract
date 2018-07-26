@@ -43,7 +43,20 @@ test_that("test_wrong_inputs", {
 
   #addWeekday
   expect_error(addWeekday(data = td, week_start = "Mon"), regexp = "Assertion on 'week_start' failed: Must be of type 'numeric', not 'character'.")
-  # expect_error(addWeekday(data = td, locale = "123456"))
+  td$weekday = c("Mon", "Tue", "Wed")
+  expect_warning(addWeekday(td), regexp = "Your dataset already has a column named 'weekday'. It will be overwritten!")
+  
+  #addTime
+  td$time = c("11:01:17", "01:01:01", "02:05:08")
+  expect_warning(addTime(td), regexp = "Your dataset already has a column named 'time'. It will be overwritten!")
+  
+  #addDate
+  td$date = c("2018-07-12", "1999-01-01", "1950-01-01")
+  expect_warning(addDate(td), regexp = "Your dataset already has a column named 'date'. It will be overwritten!")
+  
+  #addDate
+  td$date_time = c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")
+  expect_warning(addDateTime(td), regexp = "Your dataset already has a column named 'date_time'. It will be overwritten!")
 })
 
 
@@ -262,5 +275,11 @@ test_that("divideDataIntoIntervals", {
 
   y = divideDataIntoIntervals(data = td, steps = 4)
   expect_equal(c(rep("interval1", 5), rep("interval2", 4), "interval3"), y)
+  
+  #check timestamp NA
+  td$timestamp = c(NA, 2:10)
+  y = divideDataIntoIntervals(data = td, steps = 4)
+  expect_equal(c(rep("interval1", 5), rep("interval2", 4), "interval3"), y)
+  expect_error(divideDataIntoIntervals(data = td, time_in_sec = 3), regexp = "your dataset contains NA in the timestamp variable")
 })
 
