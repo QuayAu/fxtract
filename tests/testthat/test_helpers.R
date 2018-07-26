@@ -3,8 +3,14 @@ context("Helpers")
 test_that("test_non_exported", {
   x = "23:14:21"
   expect_silent(checkTimeFormat(x))
+ 
+  x = c(x, x)
+  expect_silent(checkTimeFormat(x))
   
   x = "25:14:22"
+  expect_error(checkTimeFormat(x), regexp = "hours cannot exceed 23.")
+  
+  x = c("01:02:02", x)
   expect_error(checkTimeFormat(x), regexp = "hours cannot exceed 23.")
   
   x = "14:96:53"

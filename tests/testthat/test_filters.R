@@ -40,6 +40,8 @@ test_that("filterWeekday", {
     until_time = "23:59:59"))
   expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Sun",
     until_time = "23:70:59"))
+  
+  
 })
 
 test_that("filterDaytime", {
