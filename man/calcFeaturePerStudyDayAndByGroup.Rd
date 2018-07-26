@@ -2,9 +2,9 @@
 % Please edit documentation in R/calcFeaturePerStudyDayAndByGroup.R
 \name{calcFeaturePerStudyDayAndByGroup}
 \alias{calcFeaturePerStudyDayAndByGroup}
-\title{Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
+\title{Calculates a given function on the dataset for each studyDay and grouped by \code{group_col}.
 Needs a function, which has a dataframe as input and a singular value as output.
-A summary function, which summarizes the results for each day, will be evaluated for each 'userId'.}
+A summary function, which summarizes the results for each day, will be evaluated by each member of \code{group_col}.}
 \usage{
 calcFeaturePerStudyDayAndByGroup(data, group_col, fun, colname, summary_fun,
   max_study_day, impute_empty_day = NA, export_results_per_day = FALSE)
@@ -28,12 +28,12 @@ Results on days, which did not have any data, will be imputed with this value.}
 \item{export_results_per_day}{logical. If TRUE, an additional dataframe, where \code{fun} is evaluated at each studyDay, is returned.}
 }
 \value{
-dataframe with columns userId and \code{colname}. One value for each userId.
+dataframe with columns \code{group_col} and \code{colname}. One value for each variable of \code{group_col}.
 }
 \description{
-Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
+Calculates a given function on the dataset for each studyDay and grouped by \code{group_col}.
 Needs a function, which has a dataframe as input and a singular value as output.
-A summary function, which summarizes the results for each day, will be evaluated for each 'userId'.
+A summary function, which summarizes the results for each day, will be evaluated by each member of \code{group_col}.
 }
 \examples{
 fun = function(data) {
