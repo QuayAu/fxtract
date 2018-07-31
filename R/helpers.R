@@ -216,10 +216,8 @@ addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
 #' The base R function \code{cut} is used with \code{include.lowest = TRUE}.
 #' Values larger than the biggest cut point will be assigned a new interval.
 #' @template param_data
-#' @param steps integer. Number of observations, which will be in the intervals.
-#'   Use this for data with fixed sample rate. \code{unit} will have no effect, if \code{steps} are chosen.
-#' @param time_in_sec numeric. Number of seconds, which will be the length of the intervals.
-#'   Use this for data with variable sample rate.
+#' @template param_interval_steps 
+#' @template param_interval_time_in_sec
 #' @template param_unit
 #' @family helper functions
 #' @return character. This character divides the dataset into intervals.
