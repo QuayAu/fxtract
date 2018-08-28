@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output. — addColumn • fxtract</title>
+<title>Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+The base R function <code>cut</code> is used with <code>include.lowest = TRUE</code>.
+Values larger than the biggest cut point will be assigned a new interval. — divideDataIntoIntervals • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +32,13 @@
 
 
 
-<meta property="og:title" content="Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output. — addColumn" />
+<meta property="og:title" content="Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+The base R function <code>cut</code> is used with <code>include.lowest = TRUE</code>.
+Values larger than the biggest cut point will be assigned a new interval. — divideDataIntoIntervals" />
 
-<meta property="og:description" content="Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output." />
+<meta property="og:description" content="Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+The base R function cut is used with include.lowest = TRUE.
+Values larger than the biggest cut point will be assigned a new interval." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,18 +130,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/addColumn.R'><code>R/addColumn.R</code></a></small>
-    <div class="hidden name"><code>addColumn.Rd</code></div>
+    <h1>Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+The base R function <code>cut</code> is used with <code>include.lowest = TRUE</code>.
+Values larger than the biggest cut point will be assigned a new interval.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/helpers.R'><code>R/helpers.R</code></a></small>
+    <div class="hidden name"><code>divideDataIntoIntervals.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.</p>
+    <p>Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+The base R function <code>cut</code> is used with <code>include.lowest = TRUE</code>.
+Values larger than the biggest cut point will be assigned a new interval.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>addColumn</span>(<span class='no'>data</span>, <span class='no'>fun</span>, <span class='no'>colname</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>divideDataIntoIntervals</span>(<span class='no'>data</span>, <span class='no'>steps</span>, <span class='no'>time_in_sec</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"s"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,32 +155,32 @@
       <td><p>dataframe.</p></td>
     </tr>
     <tr>
-      <th>fun</th>
-      <td><p>function. Must be a function, which has a dataframe as input and a vector (of length nrow(dataframe)) as output.</p></td>
+      <th>steps</th>
+      <td><p>integer. Number of observations, which will be in the intervals.
+Use this for data with fixed sample rate. <code>unit</code> will have no effect, if <code>steps</code> are chosen.</p></td>
     </tr>
     <tr>
-      <th>colname</th>
-      <td><p>character. Column name of the new column.</p></td>
+      <th>time_in_sec</th>
+      <td><p>numeric. Number of seconds, which will be the length of the intervals.
+Use this for data with variable sample rate.</p></td>
     </tr>
     <tr>
-      <th>check_fun</th>
-      <td><p>logical. If <code>TRUE</code>, fun(data) will be evaluated and checked, 
-if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on the whole dataset takes too long.</p></td>
+      <th>unit</th>
+      <td><p>unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe with added column.</p>
+    <p>character. This character divides the dataset into intervals.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other helper functions: <code><a href='addColumnByGroup.html'>addColumnByGroup</a></code>,
-  <code><a href='addDateTime.html'>addDateTime</a></code>, <code><a href='addDate.html'>addDate</a></code>,
-  <code><a href='addStudyDayByGroup.html'>addStudyDayByGroup</a></code>,
+  <code><a href='addColumn.html'>addColumn</a></code>, <code><a href='addDateTime.html'>addDateTime</a></code>,
+  <code><a href='addDate.html'>addDate</a></code>, <code><a href='addStudyDayByGroup.html'>addStudyDayByGroup</a></code>,
   <code><a href='addStudyDay.html'>addStudyDay</a></code>, <code><a href='addTime.html'>addTime</a></code>,
   <code><a href='addWeekday.html'>addWeekday</a></code>, <code><a href='calcStudyDay.html'>calcStudyDay</a></code>,
-  <code><a href='divideDataIntoIntervals.html'>divideDataIntoIntervals</a></code>,
   <code><a href='slidingWindow.html'>slidingWindow</a></code></p></div>
     
 

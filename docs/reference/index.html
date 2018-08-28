@@ -148,10 +148,10 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="addColumnByUserId.html">addColumnByUserId()</a></code> </p>
+          <p><code><a href="addColumnByGroup.html">addColumnByGroup()</a></code> </p>
         </td>
         <td><p>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
-This function will be evaluated grouped by the column 'userId'.</p></td>
+This function will be evaluated grouped by <code>group_col</code>.</p></td>
       </tr><tr>
         
         <td>
@@ -173,9 +173,9 @@ This function will be evaluated grouped by the column 'userId'.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="addStudyDayPerUserId.html">addStudyDayPerUserId()</a></code> </p>
+          <p><code><a href="addStudyDayByGroup.html">addStudyDayByGroup()</a></code> </p>
         </td>
-        <td><p>Helper function. For each userId it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p></td>
+        <td><p>Helper function. For each group variable it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p></td>
       </tr><tr>
         
         <td>
@@ -191,17 +191,17 @@ This function will be evaluated grouped by the column 'userId'.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="calcFeaturePerStudyDayAndUserId.html">calcFeaturePerStudyDayAndUserId()</a></code> </p>
+          <p><code><a href="calcFeatureByGroup.html">calcFeatureByGroup()</a></code> </p>
         </td>
-        <td><p>Calculates a given function on the dataset for each studyDay and grouped by the column 'userId'.
-Needs a function, which has a dataframe as input and a singular value as output.
-A summary function, which summarizes the results for each day, will be evaluated for each 'userId'.</p></td>
+        <td><p>Calculates a given function grouped by <code>group_col</code>. For each group variable one single value is returned.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="calcFeaturePerUserId.html">calcFeaturePerUserId()</a></code> </p>
+          <p><code><a href="calcFeaturePerStudyDayAndByGroup.html">calcFeaturePerStudyDayAndByGroup()</a></code> </p>
         </td>
-        <td><p>Calculates a given function for each userId</p></td>
+        <td><p>Calculates a given function on the dataset for each studyDay and grouped by <code>group_col</code>.
+Needs a function, which has a dataframe as input and a singular value as output.
+A summary function, which summarizes the results for each day, will be evaluated by each member of <code>group_col</code>.</p></td>
       </tr><tr>
         
         <td>
@@ -211,15 +211,17 @@ A summary function, which summarizes the results for each day, will be evaluated
       </tr><tr>
         
         <td>
-          <p><code><a href="checkCols.html">checkCols()</a></code> </p>
-        </td>
-        <td><p>Helper function. Checks if data contains column names.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="checkTimeFormat.html">checkTimeFormat()</a></code> </p>
         </td>
         <td><p>Helper function. Checks if character has correct time format 'hh:mm:ss'.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="divideDataIntoIntervals.html">divideDataIntoIntervals()</a></code> </p>
+        </td>
+        <td><p>Helper function. Adds a new column, which divides the dataset into intervals of a given length.
+The base R function <code>cut</code> is used with <code>include.lowest = TRUE</code>.
+Values larger than the biggest cut point will be assigned a new interval.</p></td>
       </tr><tr>
         
         <td>

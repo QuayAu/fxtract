@@ -49,5 +49,6 @@ calcFeaturePerStudyDayAndByGroup(data = data, group_col = "userId", fun = fun,
   colname = "mean_uses_chrome_per_day", summary_fun = summary_fun)
 }
 \seealso{
-Other feature functions: \code{\link{calcFeatureByGroup}}
+Other feature functions: \code{\link{calcFeatureByGroup}},
+  \code{\link{calcFeatureperIntervalAndByGroup}}
 }

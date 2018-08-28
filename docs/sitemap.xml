@@ -7,7 +7,7 @@
     <loc>https://quayau.github.io/fxtract/reference/addColumn.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/reference/addColumnByUserId.html</loc>
+    <loc>https://quayau.github.io/fxtract/reference/addColumnByGroup.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/reference/addDate.html</loc>
@@ -19,7 +19,7 @@
     <loc>https://quayau.github.io/fxtract/reference/addStudyDay.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/reference/addStudyDayPerUserId.html</loc>
+    <loc>https://quayau.github.io/fxtract/reference/addStudyDayByGroup.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/reference/addTime.html</loc>
@@ -28,19 +28,19 @@
     <loc>https://quayau.github.io/fxtract/reference/addWeekday.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/reference/calcFeaturePerStudyDayAndUserId.html</loc>
+    <loc>https://quayau.github.io/fxtract/reference/calcFeatureByGroup.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/reference/calcFeaturePerUserId.html</loc>
+    <loc>https://quayau.github.io/fxtract/reference/calcFeaturePerStudyDayAndByGroup.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/reference/calcStudyDay.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/reference/checkCols.html</loc>
+    <loc>https://quayau.github.io/fxtract/reference/checkTimeFormat.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/reference/checkTimeFormat.html</loc>
+    <loc>https://quayau.github.io/fxtract/reference/divideDataIntoIntervals.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/reference/filterDaytime.html</loc>

@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output. — addColumn • fxtract</title>
+<title>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
+This function will be evaluated grouped by <code>group_col</code>. — addColumnByGroup • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +31,11 @@
 
 
 
-<meta property="og:title" content="Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output. — addColumn" />
+<meta property="og:title" content="Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
+This function will be evaluated grouped by <code>group_col</code>. — addColumnByGroup" />
 
-<meta property="og:description" content="Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output." />
+<meta property="og:description" content="Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
+This function will be evaluated grouped by group_col." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,18 +127,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/addColumn.R'><code>R/addColumn.R</code></a></small>
-    <div class="hidden name"><code>addColumn.Rd</code></div>
+    <h1>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
+This function will be evaluated grouped by <code>group_col</code>.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/addColumnByGroup.R'><code>R/addColumnByGroup.R</code></a></small>
+    <div class="hidden name"><code>addColumnByGroup.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.</p>
+    <p>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
+This function will be evaluated grouped by <code>group_col</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>addColumn</span>(<span class='no'>data</span>, <span class='no'>fun</span>, <span class='no'>colname</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>addColumnByGroup</span>(<span class='no'>data</span>, <span class='no'>group_col</span>, <span class='no'>fun</span>, <span class='no'>colname</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,6 +148,10 @@
     <tr>
       <th>data</th>
       <td><p>dataframe.</p></td>
+    </tr>
+    <tr>
+      <th>group_col</th>
+      <td><p>character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.</p></td>
     </tr>
     <tr>
       <th>fun</th>
@@ -161,11 +170,11 @@ if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on t
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe with added column.</p>
+    <p>dataframe with added column, where a function <code>fun</code> is evaluated grouped by <code>group_col</code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other helper functions: <code><a href='addColumnByGroup.html'>addColumnByGroup</a></code>,
+    <div class='dont-index'><p>Other helper functions: <code><a href='addColumn.html'>addColumn</a></code>,
   <code><a href='addDateTime.html'>addDateTime</a></code>, <code><a href='addDate.html'>addDate</a></code>,
   <code><a href='addStudyDayByGroup.html'>addStudyDayByGroup</a></code>,
   <code><a href='addStudyDay.html'>addStudyDay</a></code>, <code><a href='addTime.html'>addTime</a></code>,

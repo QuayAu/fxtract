@@ -32,5 +32,6 @@ calcFeatureByGroup(data = studentlife.small, group_col = "userId", fun = fun,
   colname = "number_uses_chrome")
 }
 \seealso{
-Other feature functions: \code{\link{calcFeaturePerStudyDayAndByGroup}}
+Other feature functions: \code{\link{calcFeaturePerStudyDayAndByGroup}},
+  \code{\link{calcFeatureperIntervalAndByGroup}}
 }

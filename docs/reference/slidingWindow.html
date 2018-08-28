@@ -135,14 +135,15 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>slidingWindow</span>(<span class='no'>data</span>, <span class='no'>fun</span>, <span class='no'>steps</span>, <span class='no'>time_in_sec</span>, <span class='kw'>colname</span> <span class='kw'>=</span> <span class='st'>"new_feature"</span>)</pre>
+    <pre class="usage"><span class='fu'>slidingWindow</span>(<span class='no'>data</span>, <span class='no'>fun</span>, <span class='no'>steps</span>, <span class='no'>time_in_sec</span>, <span class='kw'>colname</span> <span class='kw'>=</span> <span class='st'>"new_feature"</span>,
+  <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>dataframe. Dataframe containing column named 'userId', which should be the unique identifier for each ID.</p></td>
+      <td><p>dataframe.</p></td>
     </tr>
     <tr>
       <th>fun</th>
@@ -162,6 +163,11 @@ Use this for data with variable sample rate.</p></td>
       <th>colname</th>
       <td><p>character. Column name of the new column.</p></td>
     </tr>
+    <tr>
+      <th>check_fun</th>
+      <td><p>logical. If <code>TRUE</code>, fun(data) will be evaluated and checked, 
+if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on the whole dataset takes too long.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -170,12 +176,12 @@ Use this for data with variable sample rate.</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other helper functions: <code><a href='addColumnByUserId.html'>addColumnByUserId</a></code>,
+    <div class='dont-index'><p>Other helper functions: <code><a href='addColumnByGroup.html'>addColumnByGroup</a></code>,
   <code><a href='addColumn.html'>addColumn</a></code>, <code><a href='addDateTime.html'>addDateTime</a></code>,
-  <code><a href='addDate.html'>addDate</a></code>,
-  <code><a href='addStudyDayPerUserId.html'>addStudyDayPerUserId</a></code>,
+  <code><a href='addDate.html'>addDate</a></code>, <code><a href='addStudyDayByGroup.html'>addStudyDayByGroup</a></code>,
   <code><a href='addStudyDay.html'>addStudyDay</a></code>, <code><a href='addTime.html'>addTime</a></code>,
-  <code><a href='addWeekday.html'>addWeekday</a></code>, <code><a href='calcStudyDay.html'>calcStudyDay</a></code></p></div>
+  <code><a href='addWeekday.html'>addWeekday</a></code>, <code><a href='calcStudyDay.html'>calcStudyDay</a></code>,
+  <code><a href='divideDataIntoIntervals.html'>divideDataIntoIntervals</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
