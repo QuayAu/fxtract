@@ -22,12 +22,12 @@ calcFeatureByGroup = function(data, group_col, fun, colname, check_fun = TRUE) {
   checkmate::assertNames(names(data), must.include = group_col)
   checkmate::assertLogical(check_fun)
   if (colname %in% names(data)) stop("colname is already in dataset. Please choose a different colname!")
-  
+
   if (check_fun) {
     if (length(do.call(fun, list(data))) != 1) stop("fun must return a vector of length 1")
   }
-  
-  res = data %>% dplyr::group_by_(group_col) %>% dplyr::do(do.call(fun, list(.)) %>% data.frame())
+
+  res = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(do.call(fun, list(.)) %>% data.frame())
   colnames(res)[2] = colname
   return(res)
 }

@@ -3,3 +3,5 @@
 .RData
 *.Rproj
 docs/*
+man/*.Rd
+.project

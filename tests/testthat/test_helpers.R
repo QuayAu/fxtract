@@ -3,19 +3,19 @@ context("Helpers")
 test_that("test_non_exported", {
   x = "23:14:21"
   expect_silent(checkTimeFormat(x))
- 
+
   x = c(x, x)
   expect_silent(checkTimeFormat(x))
-  
+
   x = "25:14:22"
   expect_error(checkTimeFormat(x), regexp = "hours cannot exceed 23.")
-  
+
   x = c("01:02:02", x)
   expect_error(checkTimeFormat(x), regexp = "hours cannot exceed 23.")
-  
+
   x = "14:96:53"
   expect_error(checkTimeFormat(x), regexp = "character must be a time format like '15:21:30'")
-  
+
   x = "13:42:60"
   expect_error(checkTimeFormat(x), regexp = "character must be a time format like '15:21:30'")
 })
@@ -51,15 +51,15 @@ test_that("test_wrong_inputs", {
   expect_error(addWeekday(data = td, week_start = "Mon"), regexp = "Assertion on 'week_start' failed: Must be of type 'numeric', not 'character'.")
   td$weekday = c("Mon", "Tue", "Wed")
   expect_warning(addWeekday(td), regexp = "Your dataset already has a column named 'weekday'. It will be overwritten!")
-  
+
   #addTime
   td$time = c("11:01:17", "01:01:01", "02:05:08")
   expect_warning(addTime(td), regexp = "Your dataset already has a column named 'time'. It will be overwritten!")
-  
+
   #addDate
   td$date = c("2018-07-12", "1999-01-01", "1950-01-01")
   expect_warning(addDate(td), regexp = "Your dataset already has a column named 'date'. It will be overwritten!")
-  
+
   #addDate
   td$date_time = c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")
   expect_warning(addDateTime(td), regexp = "Your dataset already has a column named 'date_time'. It will be overwritten!")
@@ -146,10 +146,10 @@ test_that("calcStudyDay", {
 
 test_that("addColumnByGroup", {
   td = data.frame(timestamp = c(1, 2, 3, 4, 5, 6), userId = c(rep("1", 3), rep("2", 3)))
-  
+
   #colname already in dataset
   myFun = function(data) rep(mean(data$timestamp), nrow(data))
-  expect_error(addColumnByGroup(data = td, group_col = "userId", fun = myFun, colname = "timestamp"), 
+  expect_error(addColumnByGroup(data = td, group_col = "userId", fun = myFun, colname = "timestamp"),
     regexp = "colname is already in dataset. Please choose a different colname!")
 
   #no group_col in dataset
@@ -173,15 +173,17 @@ test_that("addColumnByGroup", {
   #expect: c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   expect_equal(addColumnByGroup(data = td, group_col = "userId", fun = calcStudyDay, colname = "studyDay")$studyDay, res)
+
+  #test add column two times by new group
 })
 
 
 test_that("addColumn", {
   td = data.frame(x = c(1, 2, 3, 4, 5, 6), y = c(rep("1", 3), rep("2", 3)))
-  
+
   #colname already in dataset
   myFun = function(data) rep(mean(data$x), nrow(data))
-  expect_error(addColumn(data = td, fun = myFun, colname = "x"), 
+  expect_error(addColumn(data = td, fun = myFun, colname = "x"),
     regexp = "colname is already in dataset. Please choose a different colname!")
 
   #wrong function
@@ -198,7 +200,7 @@ test_that("slidingWindow", {
   fun = function(data) sum(data$x)
 
   #colname already in dataset
-  expect_error(slidingWindow(data = td, fun = fun, steps = 3, colname = "x"), 
+  expect_error(slidingWindow(data = td, fun = fun, steps = 3, colname = "x"),
     regexp = "colname is already in dataset. Please choose a different colname!")
 
   #test steps
@@ -295,7 +297,7 @@ test_that("divideDataIntoIntervals", {
 
   y = divideDataIntoIntervals(data = td, steps = 4)
   expect_equal(c(rep("interval1", 5), rep("interval2", 4), "interval3"), y)
-  
+
   #check timestamp NA
   td$timestamp = c(NA, 2:10)
   y = divideDataIntoIntervals(data = td, steps = 4)

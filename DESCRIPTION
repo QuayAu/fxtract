@@ -24,5 +24,6 @@ Imports: dplyr,
   checkmate
 Suggests: testthat,
   knitr,
-  covr 
+  covr,
+  pkgdown
 VignetteBuilder: knitr

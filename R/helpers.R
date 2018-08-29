@@ -216,7 +216,7 @@ addStudyDay = function(data, colname = "studyDay", ordered = TRUE) {
 #' The base R function \code{cut} is used with \code{include.lowest = TRUE}.
 #' Values larger than the biggest cut point will be assigned a new interval.
 #' @template param_data
-#' @template param_interval_steps 
+#' @template param_interval_steps
 #' @template param_interval_time_in_sec
 #' @template param_unit
 #' @family helper functions

@@ -20,11 +20,9 @@ addColumnByGroup = function(data, group_col, fun, colname, check_fun = TRUE) {
   if (check_fun) {
     if (length(do.call(fun, list(data))) != nrow(data)) stop("fun must return a vector of length: nrow data")
   }
-  
+
   . = NULL
-  newCol = data %>% dplyr::group_by_(group_col) %>% dplyr::do(do.call(fun, list(.)) %>% data.frame()) %>% dplyr::pull(.)
+  newCol = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(do.call(fun, list(.)) %>% data.frame()) %>% dplyr::pull(.)
   eval(parse(text = paste0("data$", colname, " = newCol")))
   return(data)
 }
-
-
