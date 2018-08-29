@@ -23,9 +23,3 @@ deploy:
   local-dir: docs
   on:
     branch: master
-
-deploy:
-  provider: script
-  script: R -q -e 'devtools::document()'
-   on:
-  branch: master
