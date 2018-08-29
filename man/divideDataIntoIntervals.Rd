@@ -6,7 +6,7 @@
 The base R function \code{cut} is used with \code{include.lowest = TRUE}.
 Values larger than the biggest cut point will be assigned a new interval.}
 \usage{
-divideDataIntoIntervals(data, steps, time_in_sec, unit = "s", group_col)
+divideDataIntoIntervals(data, steps, time_in_sec, unit = "s")
 }
 \arguments{
 \item{data}{dataframe.}
@@ -18,8 +18,6 @@ Use this for data with fixed sample rate. \code{unit} will have no effect, if \c
 Use this for data with variable sample rate.}
 
 \item{unit}{unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).}
-
-\item{group_col}{character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.}
 }
 \value{
 character. This character divides the dataset into intervals.
