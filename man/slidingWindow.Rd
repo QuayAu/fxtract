@@ -2,15 +2,14 @@
 % Please edit documentation in R/slidingWindow.R
 \name{slidingWindow}
 \alias{slidingWindow}
-\title{Adds a variable to a dataset by a sliding window approach.}
+\title{Adds a variable (or a set of variables) to a dataset by a sliding window approach.}
 \usage{
-slidingWindow(data, fun, steps, time_in_sec, colname = "new_feature",
-  check_fun = TRUE)
+slidingWindow(data, fun, steps, time_in_sec, check_fun = TRUE)
 }
 \arguments{
 \item{data}{dataframe.}
 
-\item{fun}{function. Must be a function, which has a dataframe as input and a vector of length 1 as output.}
+\item{fun}{function. A function that has `data`` as input and a dataframe with 1 row as output.}
 
 \item{steps}{integer. Number of steps which the sliding window should go back.
 Use this for data with fixed sample rate.}
@@ -18,19 +17,18 @@ Use this for data with fixed sample rate.}
 \item{time_in_sec}{integer. Number of seconds which the sliding window should go back.
 Use this for data with variable sample rate.}
 
-\item{colname}{character. Column name of the new column.}
-
 \item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
 if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
 }
 \value{
-dataframe with added column
+dataframe with added column(s).
 }
 \description{
-Adds a variable to a dataset by a sliding window approach.
+Adds a variable (or a set of variables) to a dataset by a sliding window approach.
 }
 \examples{
-fun = function(x) mean(x$accuracy, na.rm = TRUE)
+fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE), 
+  max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
 data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
 slidingWindow(data, fun = fun, time_in_sec = 60 * 60) #mean accuracy of last hour
 }
@@ -40,6 +38,5 @@ Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addDate}}, \code{\link{addStudyDayByGroup}},
   \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
-  \code{\link{divideDataIntoIntervals}},
-  \code{\link{slidingWindow2}}
+  \code{\link{divideDataIntoIntervals}}
 }
