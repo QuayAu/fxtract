@@ -33,5 +33,5 @@ Other helper functions: \code{\link{addColumn}},
   \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
   \code{\link{divideDataIntoIntervals}},
-  \code{\link{slidingWindow}}
+  \code{\link{slidingWindow2}}, \code{\link{slidingWindow}}
 }

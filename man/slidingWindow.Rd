@@ -40,5 +40,6 @@ Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addDate}}, \code{\link{addStudyDayByGroup}},
   \code{\link{addStudyDay}}, \code{\link{addTime}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
-  \code{\link{divideDataIntoIntervals}}
+  \code{\link{divideDataIntoIntervals}},
+  \code{\link{slidingWindow2}}
 }

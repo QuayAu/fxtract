@@ -21,7 +21,8 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports: dplyr,
   magrittr,
-  checkmate
+  checkmate,
+  utils
 Suggests: testthat,
   knitr,
   covr,
