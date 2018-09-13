@@ -1,7 +1,7 @@
 #' Adds a variable to a dataset by a sliding window approach.
 #'
 #' @template param_data
-#' @param fun function. A function that has data as sole input and a dataframe with 1 row as output.
+#' @param fun function. A function that has `data`` as input and a dataframe with 1 row as output.
 #' @param steps integer. Number of steps which the sliding window should go back.
 #'   Use this for data with fixed sample rate.
 #' @param time_in_sec integer. Number of seconds which the sliding window should go back.
