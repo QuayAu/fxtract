@@ -31,3 +31,4 @@ fun = function(data) {
 calcFeatureByGroup(data = studentlife.small, group_col = "userId", fun = fun,
   colname = "number_uses_chrome")
 }
+\concept{feature functions}

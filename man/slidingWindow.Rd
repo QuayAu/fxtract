@@ -4,7 +4,8 @@
 \alias{slidingWindow}
 \title{Adds a variable (or a set of variables) to a dataset by a sliding window approach.}
 \usage{
-slidingWindow(data, fun, steps, time_in_sec, check_fun = TRUE)
+slidingWindow(data, fun, steps, time_in_sec, check_fun = TRUE,
+  eval_at_rows = numeric(0))
 }
 \arguments{
 \item{data}{dataframe.}
@@ -19,6 +20,8 @@ Use this for data with variable sample rate.}
 
 \item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
 if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
+
+\item{eval_at_rows}{integer. Inte}
 }
 \value{
 dataframe with added column(s).
@@ -27,7 +30,7 @@ dataframe with added column(s).
 Adds a variable (or a set of variables) to a dataset by a sliding window approach.
 }
 \examples{
-fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE), 
+fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
   max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
 data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
 slidingWindow(data, fun = fun, time_in_sec = 60 * 60) #mean accuracy of last hour
@@ -40,3 +43,4 @@ Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
   \code{\link{divideDataIntoIntervals}}
 }
+\concept{helper functions}

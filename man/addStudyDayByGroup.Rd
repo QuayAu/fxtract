@@ -4,7 +4,8 @@
 \alias{addStudyDayByGroup}
 \title{Helper function. For each group variable it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.}
 \usage{
-addStudyDayByGroup(data, group_col, colname = "studyDay", ordered = TRUE)
+addStudyDayByGroup(data, group_col, colname = "studyDay",
+  ordered = TRUE)
 }
 \arguments{
 \item{data}{dataframe.}
@@ -30,3 +31,4 @@ Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{divideDataIntoIntervals}},
   \code{\link{slidingWindow}}
 }
+\concept{helper functions}

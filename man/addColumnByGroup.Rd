@@ -35,3 +35,4 @@ Other helper functions: \code{\link{addColumn}},
   \code{\link{divideDataIntoIntervals}},
   \code{\link{slidingWindow}}
 }
+\concept{helper functions}

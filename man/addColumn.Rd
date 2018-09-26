@@ -31,3 +31,4 @@ Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{divideDataIntoIntervals}},
   \code{\link{slidingWindow}}
 }
+\concept{helper functions}

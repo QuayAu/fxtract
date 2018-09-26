@@ -35,3 +35,4 @@ Other helper functions: \code{\link{addColumnByGroup}},
   \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
   \code{\link{slidingWindow}}
 }
+\concept{helper functions}

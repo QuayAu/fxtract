@@ -24,3 +24,4 @@ The dataset needs an ordered factor variable named 'weekday'.
 \seealso{
 Other filter functions: \code{\link{filterWeekday}}
 }
+\concept{filter functions}
