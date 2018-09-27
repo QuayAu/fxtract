@@ -211,8 +211,10 @@ test_that("slidingWindow", {
   x = slidingWindow(td, fun, steps = 3, eval_at_rows = c(5, 10, 15, 20))
   expect_equal(x$sum_x_last3[4:21], c(NA, 9, NA, NA, NA, NA, 24, NA, NA, NA, NA, 39, NA, NA, NA, NA, 54, NA))
 
+  ###test steps > interval at eval_at_rows
+  x = slidingWindow(td, fun, steps = 6, eval_at_rows = c(5, 10, 15, 20))
+  expect_equal(x$sum_x_last3[4:21], c(NA, NA, NA, NA, NA, NA, 39, NA, NA, NA, NA, 69, NA, NA, NA, NA, 19 + 18 + 17 + 16 + 15 + 14, NA))
 
-  
   ##test wrong inputs
   expect_error(slidingWindow(td, fun, time_in_sec = 5), regexp = "please specify timestamp column")
   expect_error(slidingWindow(td, fun, time_in_sec = 5, steps = 2), regexp = "Pass either steps or time_in_sec, but not both!")

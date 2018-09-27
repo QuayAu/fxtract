@@ -51,6 +51,7 @@ slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_a
     checkmate::assertSubset(unit, c("s", "ms"))
     conv = ifelse(unit == "s", 1, 1000)
     
+    pb = txtProgressBar(min = 0, max = length(eval_at_rows), style = 3)
     for (i in setdiff(eval_at_rows, 1)) {
       time_row = data[[utc_col]][i]
       diff_times = (data[[utc_col]] - time_row) / conv
@@ -63,12 +64,13 @@ slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_a
         res = rbind(res, res_i)
       }
       rm(res_i)
+      setTxtProgressBar(pb, i)
     }
   } else {
     pb = txtProgressBar(min = 0, max = length(eval_at_rows), style = 3)
     for (i in eval_at_rows) {
       if (i - steps <= 0) next
-      if (i - steps == 1 | i == eval_at_rows[1]) {
+      if (!exists("res", inherits = FALSE)) {
         res = data[(i - steps):(i - 1), ] %>% dplyr::do(do.call(fun, list(.)) %>% data.frame())
         res = data.frame(rn = i, res)
       } else {
