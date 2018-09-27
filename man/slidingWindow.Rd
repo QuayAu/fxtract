@@ -5,7 +5,7 @@
 \title{Adds a variable (or a set of variables) to a dataset by a sliding window approach.}
 \usage{
 slidingWindow(data, fun, steps, time_in_sec, check_fun = TRUE,
-  eval_at_rows = numeric(0))
+  eval_at_rows = numeric(0), utc_col = character(1), unit = "s")
 }
 \arguments{
 \item{data}{dataframe.}
@@ -21,19 +21,17 @@ Use this for data with variable sample rate.}
 \item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
 if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
 
-\item{eval_at_rows}{integer. Inte}
+\item{eval_at_rows}{integer. Integer vector at which rows the function should be executed. Defaults to `1:nrow(data)`.}
+
+\item{utc_col}{character. Column name of the UTC timestamp.}
+
+\item{unit}{unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).}
 }
 \value{
 dataframe with added column(s).
 }
 \description{
 Adds a variable (or a set of variables) to a dataset by a sliding window approach.
-}
-\examples{
-fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
-  max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
-data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
-slidingWindow(data, fun = fun, time_in_sec = 60 * 60) #mean accuracy of last hour
 }
 \seealso{
 Other helper functions: \code{\link{addColumnByGroup}},

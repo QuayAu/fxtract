@@ -7,7 +7,9 @@
 #' @param time_in_sec integer. Number of seconds which the sliding window should go back.
 #'   Use this for data with variable sample rate.
 #' @template param_check_fun
-#' @param eval_at_rows integer. Inte
+#' @param eval_at_rows integer. Integer vector at which rows the function should be executed. Defaults to `1:nrow(data)`.
+#' @param utc_col character. Column name of the UTC timestamp.
+#' @template param_unit
 #' @family helper functions
 #' @return dataframe with added column(s).
 #' @importFrom dplyr do bind_rows
@@ -18,14 +20,15 @@
 #' fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
 #'   max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
 #' data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
-#' slidingWindow(data, fun = fun, time_in_sec = 60 * 60) #mean accuracy of last hour
-slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_at_rows = numeric(0)) {
+#' slidingWindow(data, fun = fun, time_in_sec = 60 * 60, utc_col = "timestamp) #mean accuracy of last hour
+slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_at_rows = numeric(0), utc_col = character(1), unit = "s") {
   . = NULL
   checkmate::assertDataFrame(data)
   checkmate::assertLogical(check_fun)
-  checkmate::assertInteger(eval_at_rows)
+  checkmate::assertIntegerish(eval_at_rows)
   checkmate::assertSubset(eval_at_rows, 1:nrow(data))
-
+  checkmate::assertCharacter(utc_col, len = 1)
+  
   if (!missing(steps)) checkmate::assertNumber(steps)
   if (!missing(time_in_sec)) checkmate::assertNumber(time_in_sec)
 
@@ -34,18 +37,23 @@ slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_a
     if (nrow(fd) != 1) stop("fun must have a dataframe with 1 row as output!")
     if (length(intersect(names(fd), names(data))) > 0) stop("calculated column has a column name already present in data!")
   }
-
+  
   if (!xor(missing(steps), missing(time_in_sec)))
     stop("Pass either steps or time_in_sec, but not both!")
 
   if (length(eval_at_rows) == 0) eval_at_rows = 1:nrow(data)
-
+  
+  
   if (missing(steps)) {
-    if (!"date_time" %in% colnames(data)) stop("Your data set needs a column named 'date_time'.
-      See function addDateTime().")
+    if (nchar(utc_col) == 0) stop("please specify timestamp column")
+    checkmate::assertSubset(utc_col, names(data))
+    checkmate::assertNumeric(data[[utc_col]])
+    checkmate::assertSubset(unit, c("s", "ms"))
+    conv = ifelse(unit == "s", 1, 1000)
+    
     for (i in setdiff(eval_at_rows, 1)) {
-      time_row = data$date_time[i]
-      diff_times = difftime(data$date_time, time_row, units = "s")
+      time_row = data[[utc_col]][i]
+      diff_times = (data[[utc_col]] - time_row) / conv
       res_i = data %>% dplyr::filter(diff_times < 0 & abs(diff_times) < time_in_sec) %>%
         dplyr::do(do.call(fun, list(.)) %>% data.frame())
       res_i = data.frame(rn = i, res_i)

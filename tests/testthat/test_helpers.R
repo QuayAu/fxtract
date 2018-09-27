@@ -207,12 +207,37 @@ test_that("slidingWindow", {
   expect_equal(x$sum_x_last3[4:21], c(6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57))
   expect_equal(x$max_x_last3[4:21], 3:20)
   
-  #test time in seconds
-  td = addDateTime(td)
-  x = slidingWindow(td, fun, time_in_sec = 3)
+  ##test eval_at_rows
+  x = slidingWindow(td, fun, steps = 3, eval_at_rows = c(5, 10, 15, 20))
+  expect_equal(x$sum_x_last3[4:21], c(NA, 9, NA, NA, NA, NA, 24, NA, NA, NA, NA, 39, NA, NA, NA, NA, 54, NA))
 
+
+  
+  ##test wrong inputs
+  expect_error(slidingWindow(td, fun, time_in_sec = 5), regexp = "please specify timestamp column")
+  expect_error(slidingWindow(td, fun, time_in_sec = 5, steps = 2), regexp = "Pass either steps or time_in_sec, but not both!")
+  expect_error(slidingWindow(td, fun, time_in_sec = 5, utc_col = "wrong timestamp"))
+  expect_error(slidingWindow(td, fun, time_in_sec = 5, utc_col = "timestamp", unit = "wrong unit"))
+  
+  #test time in seconds
+  x = slidingWindow(td, fun, time_in_sec = 3, utc_col = "timestamp")
+  
   expect_equal(x$sum_x_last3, c(NA_integer_, 1, 3, 5, 7, 9, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
   expect_equal(x$max_x_last3, c(NA_integer_, 1:9, -Inf, 11:20))
+  
+  #test time in milliseconds
+  td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
+  td$timestamp[2] = 1.5
+  td$timestamp[4] = 3.5  
+  td$timestamp = td$timestamp * 1000
+  x = slidingWindow(td, fun, time_in_sec = 2.4, utc_col = "timestamp", unit = "ms")
+  expect_equal(x$sum_x_last3, c(NA_integer_, 1, 3, 5, 7, 5, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
+  
+  ##test eval_at_rows
+  td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
+  x = slidingWindow(td, fun, time_in_sec = 3, utc_col = "timestamp", eval_at_rows = c(5, 10, 15, 20))
+  
+  expect_equal(x$sum_x_last3, c(rep(NA_integer_, 4), 7, rep(NA_integer_, 4), 17, rep(NA_integer_, 4), 27, rep(NA_integer_, 4), 37, NA))
 })
 
 test_that("addStudyDay", {
