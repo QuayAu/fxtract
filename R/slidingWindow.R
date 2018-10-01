@@ -20,7 +20,7 @@
 #' fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
 #'   max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
 #' data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
-#' slidingWindow(data, fun = fun, time_in_sec = 60 * 60, utc_col = "timestamp) #mean accuracy of last hour
+#' slidingWindow(data, fun = fun, time_in_sec = 60 * 60, utc_col = "timestamp") #mean accuracy of last hour
 slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_at_rows = numeric(0), utc_col = character(1), unit = "s") {
   . = NULL
   checkmate::assertDataFrame(data)
