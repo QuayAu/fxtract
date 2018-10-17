@@ -2,13 +2,13 @@
 #'
 #' @template param_data
 #' @param fun function. A function that has `data`` as input and a dataframe with 1 row as output.
+#' @template param_utc_col
 #' @param steps integer. Number of steps which the sliding window should go back.
 #'   Use this for data with fixed sample rate.
 #' @param time_in_sec integer. Number of seconds which the sliding window should go back.
 #'   Use this for data with variable sample rate.
 #' @template param_check_fun
 #' @param eval_at_rows integer. Integer vector at which rows the function should be executed. Defaults to `1:nrow(data)`.
-#' @param utc_col character. Column name of the UTC timestamp.
 #' @template param_unit
 #' @family helper functions
 #' @return dataframe with added column(s).
@@ -22,7 +22,7 @@
 #' data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
 #' slidingWindow(data, fun = fun, time_in_sec = 60 * 60,
 #'   utc_col = "timestamp") #mean accuracy of last hour
-slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_at_rows = numeric(0), utc_col = character(1), unit = "s") {
+slidingWindow = function(data, utc_col = character(1), fun, steps, time_in_sec, check_fun = TRUE, eval_at_rows = numeric(0), unit = "s") {
   . = NULL
   checkmate::assertDataFrame(data)
   checkmate::assertLogical(check_fun)

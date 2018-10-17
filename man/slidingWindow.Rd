@@ -4,11 +4,13 @@
 \alias{slidingWindow}
 \title{Adds a variable (or a set of variables) to a dataset by a sliding window approach.}
 \usage{
-slidingWindow(data, fun, steps, time_in_sec, check_fun = TRUE,
-  eval_at_rows = numeric(0), utc_col = character(1), unit = "s")
+slidingWindow(data, utc_col = character(1), fun, steps, time_in_sec,
+  check_fun = TRUE, eval_at_rows = numeric(0), unit = "s")
 }
 \arguments{
 \item{data}{dataframe.}
+
+\item{utc_col}{character. Column name of the UTC timestamp.}
 
 \item{fun}{function. A function that has `data`` as input and a dataframe with 1 row as output.}
 
@@ -22,8 +24,6 @@ Use this for data with variable sample rate.}
 if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
 
 \item{eval_at_rows}{integer. Integer vector at which rows the function should be executed. Defaults to `1:nrow(data)`.}
-
-\item{utc_col}{character. Column name of the UTC timestamp.}
 
 \item{unit}{unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).}
 }
