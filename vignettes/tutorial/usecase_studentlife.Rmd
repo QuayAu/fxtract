@@ -28,7 +28,7 @@ studentlife.small %>% distinct(userId)
 
 # User Defined Functions
 
-## Number of diferent used apps in the morning
+## Number of different used apps in the morning
 Let us define "morning" by 6am until 9am. The dataset does not have any information of the time of the day, but it is available via the UTC timestamp.
 
 ```{r}
