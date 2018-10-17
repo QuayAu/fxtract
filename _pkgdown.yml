@@ -8,8 +8,6 @@ navbar:
   title:
   type: default
   left:
-  - text: Get Started
-    href: articles/fxtract.html
   - text: Preprocessing Helpers
     menu:
     - text: add date information
@@ -22,6 +20,10 @@ navbar:
       href: articles/tutorial/basics_slidingWindow.html
     - text: calcFeaturePerUserId
       href: articles/tutorial/basics_calcFeaturePerUserId.html
+  - text: Use Cases
+    menu:
+    - text: StudentLife
+      href: articles/tutorial/usecase_studentlife.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

@@ -1,0 +1,37 @@
+---
+title: "Use Cases"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Introduction to Dataset
+
+See [official site](http://studentlife.cs.dartmouth.edu/dataset.html) for more information.
+
+## studentlife.small
+We downloaded gps and app data from three participants of the studentlife dataset.
+
+
+```{r, message = FALSE, warning = FALSE}
+library(fxtract)
+head(studentlife.small)
+```
+
+```{r, message = FALSE, warning = FALSE}
+library(dplyr)
+studentlife.small %>% distinct(userId)
+```
+
+
+# User Defined Functions
+
+## Number of diferent used apps in the morning
+Let us define "morning" by 6am until 9am. The dataset does not have any information of the time of the day, but it is available via the UTC timestamp.
+
+```{r}
+
+```
+
