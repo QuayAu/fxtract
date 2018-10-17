@@ -41,28 +41,39 @@ test_that("test_wrong_inputs", {
   expect_error(addTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
   expect_error(addDate(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
   expect_error(addDateTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
-
+  
   expect_error(addWeekday(data = td, unit = "S"))
   expect_error(addTime(data = td, unit = "S"))
   expect_error(addDate(data = td, unit = "S"))
   expect_error(addDateTime(data = td, unit = "S"))
+  
+  #utc_col
+  expect_error(addWeekday(data = td, utc_col = "ts"))
+  expect_error(addTime(data = td, utc_col = "ts"))
+  expect_error(addDate(data = td, utc_col = "ts"))
+  expect_error(addDateTime(data = td, utc_col = "ts"))
+
+  expect_error(addWeekday(data = td), regexp = "please specify timestamp column")
+  expect_error(addTime(data = td), regexp = "please specify timestamp column")
+  expect_error(addDate(data = td), regexp = "please specify timestamp column")
+  expect_error(addDateTime(data = td), regexp = "please specify timestamp column")
 
   #addWeekday
   expect_error(addWeekday(data = td, week_start = "Mon"), regexp = "Assertion on 'week_start' failed: Must be of type 'numeric', not 'character'.")
   td$weekday = c("Mon", "Tue", "Wed")
-  expect_warning(addWeekday(td), regexp = "Your dataset already has a column named 'weekday'. It will be overwritten!")
+  expect_warning(addWeekday(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'weekday'. It will be overwritten!")
 
   #addTime
   td$time = c("11:01:17", "01:01:01", "02:05:08")
-  expect_warning(addTime(td), regexp = "Your dataset already has a column named 'time'. It will be overwritten!")
+  expect_warning(addTime(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'time'. It will be overwritten!")
 
   #addDate
   td$date = c("2018-07-12", "1999-01-01", "1950-01-01")
-  expect_warning(addDate(td), regexp = "Your dataset already has a column named 'date'. It will be overwritten!")
+  expect_warning(addDate(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'date'. It will be overwritten!")
 
   #addDate
   td$date_time = c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")
-  expect_warning(addDateTime(td), regexp = "Your dataset already has a column named 'date_time'. It will be overwritten!")
+  expect_warning(addDateTime(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'date_time'. It will be overwritten!")
 })
 
 
