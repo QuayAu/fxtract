@@ -9,6 +9,6 @@ articles:
   helpers: tutorial/helpers.html
   usecase_studentlife: tutorial/usecase_studentlife.html
 urls:
-  reference: https://quayau.github.io/fxtract/reference
-  article: https://quayau.github.io/fxtract/articles
+  reference: https://quayau.github.io/fxtract/docs/index.html/reference
+  article: https://quayau.github.io/fxtract/docs/index.html/articles
 

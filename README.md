@@ -5,7 +5,7 @@
 
 # fxtract [working title]  
 This is work in progress!
-[Tutorial](https://quayau.github.io/fxtract/)
+[Tutorial](https://quayau.github.io/fxtract/docs/index.html)
 
 fxtract helps you to extract user-defined features from timestamped data.
 
