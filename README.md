@@ -7,10 +7,21 @@
 This is work in progress!
 [Tutorial](https://quayau.github.io/fxtract/)
 
+fxtract helps you to extract user-defined features from timestamped data.
+
+![Image description](man/figures/fxtract_main.svg)
+
 # Installation
 For the development version, use [devtools](https://cran.r-project.org/package=devtools):
 ```{R}
 devtools::install_github("QuayAu/fxtract")
 ```
 ## Introduction
+
 ## Features
+
+* Extracting features from timeseries data of many different users/IDs/etc.
+* Timestamp to date & time converters. 
+    * This is useful for filtering datasets, e.g. if one is interested in filtering the morning hours from a dataset, or distinguishing working days from weekends.
+* divideDataIntoIntervals
+* sliding window function
