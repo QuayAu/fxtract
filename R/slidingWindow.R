@@ -20,7 +20,8 @@
 #' fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
 #'   max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
 #' data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
-#' slidingWindow(data, fun = fun, time_in_sec = 60 * 60, utc_col = "timestamp") #mean accuracy of last hour
+#' slidingWindow(data, fun = fun, time_in_sec = 60 * 60,
+#'   utc_col = "timestamp") #mean accuracy of last hour
 slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_at_rows = numeric(0), utc_col = character(1), unit = "s") {
   . = NULL
   checkmate::assertDataFrame(data)
@@ -28,7 +29,7 @@ slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_a
   checkmate::assertIntegerish(eval_at_rows)
   checkmate::assertSubset(eval_at_rows, 1:nrow(data))
   checkmate::assertCharacter(utc_col, len = 1)
-  
+
   if (!missing(steps)) checkmate::assertNumber(steps)
   if (!missing(time_in_sec)) checkmate::assertNumber(time_in_sec)
 
@@ -37,20 +38,20 @@ slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_a
     if (nrow(fd) != 1) stop("fun must have a dataframe with 1 row as output!")
     if (length(intersect(names(fd), names(data))) > 0) stop("calculated column has a column name already present in data!")
   }
-  
+
   if (!xor(missing(steps), missing(time_in_sec)))
     stop("Pass either steps or time_in_sec, but not both!")
 
   if (length(eval_at_rows) == 0) eval_at_rows = 1:nrow(data)
-  
-  
+
+
   if (missing(steps)) {
     if (nchar(utc_col) == 0) stop("please specify timestamp column")
     checkmate::assertSubset(utc_col, names(data))
     checkmate::assertNumeric(data[[utc_col]])
     checkmate::assertSubset(unit, c("s", "ms"))
     conv = ifelse(unit == "s", 1, 1000)
-    
+
     pb = txtProgressBar(min = 0, max = length(eval_at_rows), style = 3)
     for (i in setdiff(eval_at_rows, 1)) {
       time_row = data[[utc_col]][i]
@@ -76,7 +77,7 @@ slidingWindow = function(data, fun, steps, time_in_sec, check_fun = TRUE, eval_a
       } else {
         res_i = data[(i - steps):(i - 1), ] %>% dplyr::do(do.call(fun, list(.)) %>% data.frame())
         res_i = data.frame(rn = i, res_i)
-        res = rbind(res, res_i)
+        res = dplyr::bind_rows(res, res_i)
         rm(res_i)
       }
       setTxtProgressBar(pb, i)
