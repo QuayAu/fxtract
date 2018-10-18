@@ -144,8 +144,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>addWeekday</span>(<span class='no'>data</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"s"</span>, <span class='kw'>week_start</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>locale</span> <span class='kw'>=</span> <span class='st'>"English_United States.1252"</span>)</pre>
+    <pre class="usage"><span class='fu'>addWeekday</span>(<span class='no'>data</span>, <span class='kw'>utc_col</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>1</span>), <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"s"</span>,
+  <span class='kw'>week_start</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>locale</span> <span class='kw'>=</span> <span class='st'>"English_United States.1252"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,6 +153,10 @@
     <tr>
       <th>data</th>
       <td><p>dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).</p></td>
+    </tr>
+    <tr>
+      <th>utc_col</th>
+      <td><p>character. Column name of the UTC timestamp.</p></td>
     </tr>
     <tr>
       <th>tz</th>

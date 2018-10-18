@@ -38,21 +38,20 @@ addWeekday = function(data, utc_col = character(1), tz = "UTC", unit = "s", week
   checkmate::assertCharacter(unit)
   checkmate::assertCharacter(locale)
   checkmate::assertNumeric(week_start)
-  checkmate::assertNames(names(data), must.include = "timestamp")
   checkmate::assertSubset(unit, c("s", "ms"))
   checkmate::assertCharacter(utc_col, len = 1)
   if (nchar(utc_col) == 0) stop("please specify timestamp column")
   checkmate::assertSubset(utc_col, names(data))
     
-  if (is.character(data$timestamp)) {
-    data$timestamp = as.numeric(data$timestamp)
+  if (is.character(data[[utc_col]])) {
+    data[[utc_col]] = as.numeric(data[[utc_col]])
     message("timestamp was converted from character to numeric")
   }
   if (locale != "English_United States.1252") message("locale was changed. Use at own risk.")
 
 
   conv = ifelse(unit == "s", 1, 1000)
-  dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
+  dt = lubridate::as_datetime(data[[utc_col]] / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
   if ("weekday" %in% names(data)) warning("Your dataset already has a column named 'weekday'. It will be overwritten!")
   data$weekday = lubridate::wday(dt, label = TRUE, week_start = week_start, locale = locale)
@@ -73,18 +72,17 @@ addTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkmate::assertNames(names(data), must.include = "timestamp")
   checkmate::assertSubset(unit, c("s", "ms"))
   checkmate::assertCharacter(utc_col, len = 1)
   if (nchar(utc_col) == 0) stop("please specify timestamp column")
   checkmate::assertSubset(utc_col, names(data))
     
-  if (is.character(data$timestamp)) {
-    data$timestamp = as.numeric(data$timestamp)
+  if (is.character(data[[utc_col]])) {
+    data[[utc_col]] = as.numeric(data[[utc_col]])
     message("timestamp was converted from character to numeric")
   }
   conv = ifelse(unit == "s", 1, 1000)
-  dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
+  dt = lubridate::as_datetime(data[[utc_col]] / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
   if ("time" %in% names(data)) warning("Your dataset already has a column named 'time'. It will be overwritten!")
   data$time = strftime(dt, "%H:%M:%S", tz = tz)
@@ -105,18 +103,17 @@ addDate = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkmate::assertNames(names(data), must.include = "timestamp")
   checkmate::assertSubset(unit, c("s", "ms"))
   checkmate::assertCharacter(utc_col, len = 1)
   if (nchar(utc_col) == 0) stop("please specify timestamp column")
   checkmate::assertSubset(utc_col, names(data))
   
-  if (is.character(data$timestamp)) {
-    data$timestamp = as.numeric(data$timestamp)
+  if (is.character(data[[utc_col]])) {
+    data[[utc_col]] = as.numeric(data[[utc_col]])
     message("timestamp was converted from character to numeric")
   }
   conv = ifelse(unit == "s", 1, 1000)
-  dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
+  dt = lubridate::as_datetime(data[[utc_col]] / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
   if ("date" %in% names(data)) warning("Your dataset already has a column named 'date'. It will be overwritten!")
   data$date = lubridate::as_date(dt)
@@ -137,18 +134,17 @@ addDateTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
-  checkmate::assertNames(names(data), must.include = "timestamp")
   checkmate::assertSubset(unit, c("s", "ms"))
   checkmate::assertCharacter(utc_col, len = 1)
   if (nchar(utc_col) == 0) stop("please specify timestamp column")
   checkmate::assertSubset(utc_col, names(data))
     
-  if (is.character(data$timestamp)) {
-    data$timestamp = as.numeric(data$timestamp)
+  if (is.character(data[[utc_col]])) {
+    data[[utc_col]] = as.numeric(data[[utc_col]])
     message("timestamp was converted from character to numeric")
   }
   conv = ifelse(unit == "s", 1, 1000)
-  dt = lubridate::as_datetime(data$timestamp / conv, tz = tz) #lubridate needs timestamp to be in seconds
+  dt = lubridate::as_datetime(data[[utc_col]] / conv, tz = tz) #lubridate needs timestamp to be in seconds
 
   if ("date_time" %in% names(data)) warning("Your dataset already has a column named 'date_time'. It will be overwritten!")
   data$date_time = dt

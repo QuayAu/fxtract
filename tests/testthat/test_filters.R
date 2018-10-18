@@ -5,9 +5,9 @@ test_that("filterWeekday", {
   
   #test checks
   expect_error(filterWeekday(td), regexp = "Your data set needs a column named 'weekday'. See function addWeekday().")
-  td = addWeekday(td)
+  td = addWeekday(td, utc_col = "timestamp")
   expect_error(filterWeekday(td), regexp = "Your data set needs a column named 'time'. See function addTime().")
-  td = addTime(td)
+  td = addTime(td, utc_col = "timestamp")
   expect_error(filterWeekday(td, from_day = "Fri", until_day = "Sun"), regexp = "there are no dataset entries within the chosen time interval")
   td$weekday = as.character(td$weekday)
   expect_error(filterWeekday(td), regexp = "The variable 'weekday' must be an ordered factor, e.g. Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun")  
