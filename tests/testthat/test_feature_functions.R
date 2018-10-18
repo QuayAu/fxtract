@@ -50,7 +50,7 @@ test_that("calcFeatureByGroup", {
   td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
   td$userId = userId = c(rep("1", 4), rep("2", 5))
   td$x = 1:nrow(td)
-  td = addDate(td)
+  td = addDate(td, utc_col = "timestamp")
 
   #test checks
   expect_error(calcFeatureByGroup(data = td, group_col = "y"))

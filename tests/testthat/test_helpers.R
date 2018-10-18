@@ -41,82 +41,124 @@ test_that("test_wrong_inputs", {
   expect_error(addTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
   expect_error(addDate(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
   expect_error(addDateTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
-
+  
   expect_error(addWeekday(data = td, unit = "S"))
   expect_error(addTime(data = td, unit = "S"))
   expect_error(addDate(data = td, unit = "S"))
   expect_error(addDateTime(data = td, unit = "S"))
+  
+  #utc_col
+  expect_error(addWeekday(data = td, utc_col = "ts"))
+  expect_error(addTime(data = td, utc_col = "ts"))
+  expect_error(addDate(data = td, utc_col = "ts"))
+  expect_error(addDateTime(data = td, utc_col = "ts"))
+
+  expect_error(addWeekday(data = td), regexp = "please specify timestamp column")
+  expect_error(addTime(data = td), regexp = "please specify timestamp column")
+  expect_error(addDate(data = td), regexp = "please specify timestamp column")
+  expect_error(addDateTime(data = td), regexp = "please specify timestamp column")
 
   #addWeekday
   expect_error(addWeekday(data = td, week_start = "Mon"), regexp = "Assertion on 'week_start' failed: Must be of type 'numeric', not 'character'.")
   td$weekday = c("Mon", "Tue", "Wed")
-  expect_warning(addWeekday(td), regexp = "Your dataset already has a column named 'weekday'. It will be overwritten!")
+  expect_warning(addWeekday(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'weekday'. It will be overwritten!")
 
   #addTime
   td$time = c("11:01:17", "01:01:01", "02:05:08")
-  expect_warning(addTime(td), regexp = "Your dataset already has a column named 'time'. It will be overwritten!")
+  expect_warning(addTime(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'time'. It will be overwritten!")
 
   #addDate
   td$date = c("2018-07-12", "1999-01-01", "1950-01-01")
-  expect_warning(addDate(td), regexp = "Your dataset already has a column named 'date'. It will be overwritten!")
+  expect_warning(addDate(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'date'. It will be overwritten!")
 
   #addDate
   td$date_time = c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")
-  expect_warning(addDateTime(td), regexp = "Your dataset already has a column named 'date_time'. It will be overwritten!")
+  expect_warning(addDateTime(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'date_time'. It will be overwritten!")
 })
 
 
 test_that("add_time_variables", {
   td = data.frame(timestamp = c(1531393277, 915152461,-631144492))
-  td2 = td3 = td
-  td2$timestamp = td2$timestamp * 1000
-  td3$timestamp = as.character(td3$timestamp)
   #1531393277 is 07/12/2018 @ 11:01:17am (UTC) Thu, 12 Jul 2018
   #915152461 is 01/01/1999 @ 1:01:01am (UTC) Fri, 01 Jan
   #-631144492 01/01/1950 @ 2:05:08am (UTC) Sun, 01 Jan
-
-  ##messages
-  expect_message(addWeekday(td3), regexp = "timestamp was converted from character to numeric")
-  expect_message(addTime(td3), regexp = "timestamp was converted from character to numeric")
-  expect_message(addDate(td3), regexp = "timestamp was converted from character to numeric")
-  expect_message(addDateTime(td3), regexp = "timestamp was converted from character to numeric")
-
+  td4 = td2 = td3 = td
+  #timestamp in ms
+  td2$timestamp = td2$timestamp * 1000
+  #timestamp as character
+  td3$timestamp = as.character(td3$timestamp)
+  #different timestamp name
+  td4$utc = td4$timestamp
+  td4$timestamp = NULL 
+  
+  #character timestamp
+  expect_message(addWeekday(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
+  expect_message(addTime(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
+  expect_message(addDate(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
+  expect_message(addDateTime(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
+  
   #check addWeekday
-  x = addWeekday(td)
-  expect_equal(as.character(x$weekday), c("Thu", "Fri", "Sun"))
+  expected = c("Thu", "Fri", "Sun")
+  x = addWeekday(td, utc_col = "timestamp")
+  expect_equal(as.character(x$weekday), expected)
 
-  x2 = addWeekday(td2, unit = "ms")
-  expect_equal(as.character(x2$weekday), c("Thu", "Fri", "Sun"))
+  x = addWeekday(td2, utc_col = "timestamp", unit = "ms")
+  expect_equal(as.character(x$weekday), expected)
+  
+  x = addWeekday(td3, utc_col = "timestamp")
+  expect_equal(as.character(x$weekday), expected)
 
+  x = addWeekday(td4, utc_col = "utc")
+  expect_equal(as.character(x$weekday), expected)
+  
   ##change locale
-  expect_message(addWeekday(data = td, locale = "Deu"), regexp = "locale was changed. Use at own risk.")
-  expect_message(addWeekday(data = td, locale = "Esp"), regexp = "locale was changed. Use at own risk.")
+  expect_message(addWeekday(data = td, utc_col = "timestamp", locale = "Deu"), regexp = "locale was changed. Use at own risk.")
+  expect_message(addWeekday(data = td, utc_col = "timestamp", locale = "Esp"), regexp = "locale was changed. Use at own risk.")
 
   #check addTime
-  x = addTime(td)
-  expect_equal(as.character(x$time), c("11:01:17", "01:01:01", "02:05:08"))
+  expected = c("11:01:17", "01:01:01", "02:05:08")
 
-  x2 = addTime(td2, unit = "ms")
-  expect_equal(as.character(x2$time), c("11:01:17", "01:01:01", "02:05:08"))
+  x = addTime(td, utc_col = "timestamp")
+  expect_equal(as.character(x$time), expected)
 
+  x = addTime(td2, utc_col = "timestamp", unit = "ms")
+  expect_equal(as.character(x$time), expected)
 
+  x = addTime(td3, utc_col = "timestamp")
+  expect_equal(as.character(x$time), expected)
+
+  x = addTime(td4, utc_col = "utc")
+  expect_equal(as.character(x$time), expected)
+  
   #check addDateTime
-  x = addDateTime(td)
-  expect_equal(as.character(x$date_time),
-    c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08"))
+  expected = c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")
 
-  x2 = addDateTime(td2, unit = "ms")
-  expect_equal(as.character(x2$date_time),
-    c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08"))
+  x = addDateTime(td, utc_col = "timestamp")
+  expect_equal(as.character(x$date_time), expected)
 
+  x = addDateTime(td2, utc_col = "timestamp", unit = "ms")
+  expect_equal(as.character(x$date_time), expected)
+
+  x = addDateTime(td3, utc_col = "timestamp")
+  expect_equal(as.character(x$date_time), expected)
+  
+  x = addDateTime(td4, utc_col = "utc")
+  expect_equal(as.character(x$date_time), expected)
+  
   #check addDate
-  x = addDate(td)
-  expect_equal(as.character(x$date),
-    c("2018-07-12", "1999-01-01", "1950-01-01"))
+  expected = c("2018-07-12", "1999-01-01", "1950-01-01")
+  
+  x = addDate(td, utc_col = "timestamp")
+  expect_equal(as.character(x$date), expected)
+  
+  x = addDate(td2, utc_col = "timestamp", unit = "ms")
+  expect_equal(as.character(x$date), expected)
+  
+  x = addDate(td3, utc_col = "timestamp")
+  expect_equal(as.character(x$date), expected)
 
-  x2 = addDate(td2, unit = "ms")
-  expect_equal(as.character(x2$date),
-    c("2018-07-12", "1999-01-01", "1950-01-01"))
+  x = addDate(td4, utc_col = "utc")
+  expect_equal(as.character(x$date), expected)
 })
 
 
@@ -126,20 +168,20 @@ test_that("calcStudyDay", {
   expect_error(calcStudyDay(td), regexp = "data needs a column named 'date'. Consider adding 'date' by using addDate().")
 
   #check equality
-  td = addDate(td)
+  td = addDate(td, utc_col = "timestamp")
   expect_equal(as.character(calcStudyDay(td)), c("day25030", "day17898", "day1"))
 
   d1 = 123456789
   td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
   #11/29/1973, 11/29/1973, 11/29/1973,  11/30/1973,  11/30/1973, 12/01/1973, 12/01/1973, 12/01/1973, 12/03/1973
   #day1, day1, day1, day2, day2, day3, day3, day3, day5
-  td = addDate(td)
+  td = addDate(td, utc_col = "timestamp")
   expect_equal(as.character(calcStudyDay(td)), c("day1", "day1", "day1", "day2", "day2", "day3", "day3", "day3", "day5"))
 
   #check only one day
   d1 = 123456789
   td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2))
-  td = addDate(td)
+  td = addDate(td, utc_col = "timestamp")
   expect_equal(as.character(calcStudyDay(td)), c("day1", "day1", "day1"))
 })
 
@@ -169,7 +211,7 @@ test_that("addColumnByGroup", {
   d1 = 123456789
   td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
   td$userId = userId = c(rep("1", 4), rep("2", 5))
-  td = addDate(td)
+  td = addDate(td, utc_col = "timestamp")
   #expect: c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   expect_equal(addColumnByGroup(data = td, group_col = "userId", fun = calcStudyDay, colname = "studyDay")$studyDay, res)
@@ -247,7 +289,7 @@ test_that("addStudyDay", {
   td = data.frame(timestamp = c(1531393277, 915152461, -631144492))
   expect_error(calcStudyDay(td), regexp = "data needs a column named 'date'. Consider adding 'date' by using addDate().")
   #check equality
-  td = addDate(td)
+  td = addDate(td, utc_col = "timestamp")
   expect_equal(as.character(addStudyDay(td, ordered = FALSE)$studyDay), c("day25030", "day17898", "day1"))
   expect_equal(levels(addStudyDay(td, ordered = TRUE)$studyDay), paste0("day", 1:25030))
   #check filters
@@ -263,7 +305,7 @@ test_that("addStudyDayByGroup", {
   d1 = 123456789
   td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
   td$userId = userId = c(rep("1", 4), rep("2", 5))
-  td = addDate(td)
+  td = addDate(td, utc_col = "timestamp")
   res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
   #check equality
   expect_equal(as.character(addStudyDayByGroup(data = td, group_col = "userId", ordered = FALSE)$studyDay), res)
@@ -330,5 +372,7 @@ test_that("divideDataIntoIntervals", {
   y = divideDataIntoIntervals(data = td, steps = 4)
   expect_equal(c(rep("interval1", 5), rep("interval2", 4), "interval3"), y)
   expect_error(divideDataIntoIntervals(data = td, time_in_sec = 3), regexp = "your dataset contains NA in the timestamp variable")
+  
+  #different timestamp name
 })
 

@@ -4,10 +4,12 @@
 \alias{addTime}
 \title{Adds column 'time' to a dataframe containing a timestamp variable.}
 \usage{
-addTime(data, tz = "UTC", unit = "s")
+addTime(data, utc_col = character(1), tz = "UTC", unit = "s")
 }
 \arguments{
 \item{data}{dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).}
+
+\item{utc_col}{character. Column name of the UTC timestamp.}
 
 \item{tz}{timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
 

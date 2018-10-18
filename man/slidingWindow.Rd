@@ -36,7 +36,7 @@ Adds a variable (or a set of variables) to a dataset by a sliding window approac
 \examples{
 fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
   max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
-data = addDateTime(studentlife.small[1:30, ]) #needs date_time variable
+data = studentlife.small[1:30, ] #needs date_time variable
 slidingWindow(data, fun = fun, time_in_sec = 60 * 60,
   utc_col = "timestamp") #mean accuracy of last hour
 }
