@@ -1,4 +1,3 @@
-
 #' Helper function. Adds a new column, which divides the dataset into intervals of a given length.
 #' The base R function \code{cut} is used with \code{include.lowest = TRUE}.
 #' Values larger than the biggest cut point will be assigned a new interval.
