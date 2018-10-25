@@ -24,6 +24,8 @@ navbar:
     menu:
     - text: StudentLife
       href: articles/tutorial/usecase_studentlife.html
+    - text: StudentLife-SQL
+      href: articles/tutorial/usecase_studentlife_sql.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

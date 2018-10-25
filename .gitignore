@@ -4,3 +4,5 @@
 *.Rproj
 #docs/*
 .project
+vignettes/tutorial/studentlife/
+vignettes/tutorial/SQL_database

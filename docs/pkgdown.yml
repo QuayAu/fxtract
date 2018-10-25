@@ -8,6 +8,7 @@ articles:
   filters: tutorial/filters.html
   helpers: tutorial/helpers.html
   usecase_studentlife: tutorial/usecase_studentlife.html
+  usecase_studentlife_sql: tutorial/usecase_studentlife_sql.html
 urls:
   reference: https://quayau.github.io/fxtract/docs/index.html/reference
   article: https://quayau.github.io/fxtract/docs/index.html/articles

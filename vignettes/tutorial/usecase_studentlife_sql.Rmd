@@ -1,0 +1,67 @@
+---
+title: "Use Cases"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# Introduction
+make folder studentlife
+download data from studentlife [here](http://studentlife.cs.dartmouth.edu/dataset.html)
+
+Goals:
+- create features from loggingdata directly from a SQL database, because data is too big for RAM.
+- Show a few timestamp helper functions
+
+```{r, eval = FALSE}
+library(dplyr)
+db = src_sqlite("SQL_database", create = TRUE)
+# loop for all Ids
+
+id = "u00"
+app = read.csv(file = "studentlife/dataset/app_usage/running_app_u00.csv")
+app$userId = id
+app$source = "app"
+calls = read.csv(file = "studentlife/dataset/call_log/call_log_u00.csv")
+calls$userId = id
+calls$source = "calls"
+gps = read.csv(file = "studentlife/dataset/app_usage/running_app_u00.csv")
+gps$userId = id
+gps$source = "gps"
+  
+data_all = app %>% bind_rows(calls) %>% bind_rows(gps)
+
+copy_to(db, data_all, name = id)
+
+# db2 = src_sqlite("SQL_database")
+# phonedata = tbl(db, "u00")
+```
+
+# Features
+## Number different apps
+```{r}
+featureNumDiffApps = function(data) length(unique(data$RUNNING_TASKS_baseActivity_mPackage))
+```
+
+## Mean Number different apps per day
+```{r}
+phonedata = addDate(phonedata, utc_col = "timestamp")
+featureMeanNumDiffAppsPerDay = function(data) {
+  n = data %>% dplyr::group_by(date) %>% distinct(RUNNING_TASKS_baseActivity_mPackage) %>% summarize(n = n()) %>% pull(n) 
+  return(data.frame(mean = mean(n), sd = sd(n)))
+}
+```
+
+## gps - maximum distance
+```{r}
+
+```
+
+## calls - total number caals
+
+# show shiny app
+
+
+
