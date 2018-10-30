@@ -1,0 +1,14 @@
+h1 {
+  font-family: 'Arial';
+  line-height: 1.1;
+  color: #29292a;
+}
+
+.multicol { 
+    height: 40px;
+    -webkit-column-count: 4; /* Chrome, Safari, Opera */ 
+    -moz-column-count: 4;    /* Firefox */ 
+    column-count: 5; 
+
+}
+
