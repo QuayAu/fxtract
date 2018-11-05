@@ -17,26 +17,62 @@ Goals:
 
 ```{r, eval = FALSE}
 library(dplyr)
+library(stringr)
+
 db = src_sqlite("SQL_database", create = TRUE)
 # loop for all Ids
 
-id = "u00"
-app = read.csv(file = "studentlife/dataset/app_usage/running_app_u00.csv")
-app$userId = id
-app$source = "app"
-calls = read.csv(file = "studentlife/dataset/call_log/call_log_u00.csv")
-calls$userId = id
-calls$source = "calls"
-gps = read.csv(file = "studentlife/dataset/app_usage/running_app_u00.csv")
-gps$userId = id
-gps$source = "gps"
+# Ingestion of Appusage data
+lsFiles = list.files(path="studentlife/dataset/app_usage", full.names=TRUE, recursive=FALSE)[1:2]
+lsData = lapply(files, function(x) {
+    df_temp = read.csv(x, header=TRUE, fileEncoding="UTF-8-BOM") # load file
+    userId = str_sub(x,  -7, -5)
+    df_temp$userId = userId
+    df_temp$source = "app"
+    df_temp
+})
+
+# Create data frame with app data
+calls = do.call(rbind.data.frame, lsData)
+
+
+# Calls data
+lsFiles = list.files(path="studentlife/dataset/call_log", full.names=TRUE, recursive=FALSE)[1:2]
+lsData = lapply(files, function(x) {
+    df_temp = read.csv(x, header=TRUE, fileEncoding="UTF-8-BOM") # load file
+    userId = str_sub(x,  -7, -5)
+    df_temp$userId = userId
+    df_temp$source = "calls"
+    df_temp
+})
+
+# Create data frame with calls data
+calls = do.call(rbind.data.frame, lsData)
+
+# GPS data
+lsFiles = list.files(path="studentlife/dataset/sensing/gps", full.names=TRUE, recursive=FALSE)[1:2]
+lsData = lapply(files, function(x) {
+    df_temp = read.csv(x, header=TRUE, fileEncoding="UTF-8-BOM") # load file
+    userId = str_sub(x,  -7, -5)
+    df_temp$userId = userId
+    df_temp$source = "gps"
+    df_temp
+})
+
+# Create data frame with gps data
+gps = do.call(rbind.data.frame, lsData)
   
 data_all = app %>% bind_rows(calls) %>% bind_rows(gps)
 
 copy_to(db, data_all, name = id)
 
-# db2 = src_sqlite("SQL_database")
-# phonedata = tbl(db, "u00")
+#test = tbl(db, "u00") %>% select(timestamp)
+
+
+```
+
+```{r}
+
 ```
 
 # Features
