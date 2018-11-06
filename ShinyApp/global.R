@@ -13,7 +13,7 @@ library(DT)
 first_load <- T
 projectNames <- list.files("Projects")
 
-ids <- c("001", "002", "003") # Temporary -> later ids from db
+ids <- tbl(db, "studentlife_data") %>% distinct(userId) %>% as.data.frame()
 num_total_users <- length(ids)
 
 cur_feature_type <- NULL # Currently active feature type (tab) e.g. 'communication', 'appusage'
