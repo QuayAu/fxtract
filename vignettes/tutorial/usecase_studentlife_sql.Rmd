@@ -11,24 +11,23 @@ vignette: >
 To demonstrate the functionalities of the fxtract package we use the studentlife data set.
 The data set can be downloaded [here](http://studentlife.cs.dartmouth.edu/dataset.html)
 
-make folder studentlife
-download data from studentlife [here](http://studentlife.cs.dartmouth.edu/dataset.html)
+Safe studentlife data files into studentlife/dataset folder
 
 Goals:
+- Save studentlife data in SQL database 
 - create features from loggingdata directly from a SQL database, because data is too big for RAM.
 - Show a few timestamp helper functions
 
-```{r, eval = FALSE, warning=FALSE}
+```{r, eval = FALSE, warning=FALSE, echo = FALSE}
 library(dplyr)
 library(stringr)
 library(devtools)
 load_all()
 
-db = src_sqlite("SQL_database", create = TRUE)
-# loop for all Ids
+con = src_sqlite("studentlife/SQL_database.sql", create = TRUE)
 
 # Ingestion of Appusage data
-lsFiles = list.files(path="studentlife/dataset/app_usage", full.names=TRUE, recursive=FALSE)[1:2]
+lsFiles = list.files(path="studentlife/dataset/app_usage", full.names=TRUE, recursive=FALSE)
 lsData = lapply(lsFiles, function(x) {
     df_temp = read.csv(x, header=TRUE, fileEncoding="UTF-8-BOM") # load file
     userId = str_sub(x,  -7, -5)
@@ -41,7 +40,7 @@ lsData = lapply(lsFiles, function(x) {
 app = do.call(bind_rows, lsData)
 
 # Calls data
-lsFiles = list.files(path="studentlife/dataset/call_log", full.names=TRUE, recursive=FALSE)[1:2]
+lsFiles = list.files(path="studentlife/dataset/call_log", full.names=TRUE, recursive=FALSE)
 lsData = lapply(lsFiles, function(x) {
     df_temp = read.csv(x, header=TRUE, fileEncoding="UTF-8-BOM") # load file
     userId = str_sub(x,  -7, -5)
@@ -54,7 +53,7 @@ lsData = lapply(lsFiles, function(x) {
 calls = do.call(bind_rows, lsData)
 
 # GPS data
-lsFiles = list.files(path="studentlife/dataset/sensing/gps", full.names=TRUE, recursive=FALSE)[1:2]
+lsFiles = list.files(path="studentlife/dataset/sensing/gps", full.names=TRUE, recursive=FALSE)
 lsData = lapply(lsFiles, function(x) {
     df_temp = read.csv(x, header=TRUE, fileEncoding="UTF-8-BOM") # load file
     userId = str_sub(x,  -7, -5)
@@ -68,7 +67,10 @@ gps = do.call(bind_rows, lsData)
 
 # Combine data frames and save as data base
 data_all = app %>% bind_rows(calls) %>% bind_rows(gps)
-copy_to(db, data_all, name = "studentlife_data")
+
+# Write data to data base
+copy_to(con, data_all, name = "studentlife_data", temporary = F, overwrite = T)
+
 
 ```
 
@@ -84,7 +86,7 @@ df = as.data.frame(data)
 featureNumDiffApps = function(data) length(unique(data$RUNNING_TASKS_baseActivity_mPackage))
 
 nApps = featureNumDiffApps(df)
-print(paste("Number of different apps:", n_apps))
+print(paste("Number of different apps:", nApps))
 ```
 
 ## Mean Number different apps per day
@@ -99,7 +101,7 @@ print(paste("Mean number of different apps per day", round(nMeanDiffApps[1],2), 
 ```
 
 ## gps - maximum distance
-```{r}
+```{r, echo = FALSe}
 library(geosphere)
 
 gpsAvailable = df %>% filter(!is.na(latitude), !is.na(longitude), latitude >= 0, latitude <= 360, longitude >= 0, longitude <= 360)
