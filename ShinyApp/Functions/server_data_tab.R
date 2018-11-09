@@ -19,6 +19,7 @@ output$dt <- DT::renderDataTable({
       file_name <- paste0(feat_cat, "/", id, "_", feat, ".csv")
 
       file_path <- paste0("Projects/", input$sProjectName, "/", feat_cat, "/", id, "_", feat, ".csv")
+      print(file_path)
       file_exists <- file.exists(file_path)
       df_temp <- data.frame(file_name, file_exists)
       df <- rbind(df, df_temp)
@@ -32,16 +33,21 @@ output$dt <- DT::renderDataTable({
   
   df <- df %>% separate(file_name, sep = "/", into = c("feature_category", "user_feature_name"))
   df <- df %>% separate(user_feature_name, c("user_id", "feature_name"), "_", extra = "merge")
+
   
   selFeatCats = input$cbFeatureCat
   df = df %>% filter(feature_category %in% selFeatCats)
   df <- df[-1] %>% spread(feature_name, file_exists)
   
+  rownames(df) <- df[,1]
+  df <- df[,-1]
 
-  DT::datatable(df, rownames=FALSE,extensions = c('FixedColumns',"FixedHeader"),
-    options = list(dom = 't', 
-      scrollX = TRUE, 
-      fixedColumns = list(leftColumns = 1, rightColumns = 0))
+  DT::datatable(df, rownames=TRUE,
+    options = list( 
+      scrollX = TRUE
+    )
+  ) %>% formatStyle(1:ncol(df),
+    backgroundColor = styleEqual(c(1), c('#b5f6aa'))
   )
   
   
