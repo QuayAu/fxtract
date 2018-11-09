@@ -96,7 +96,7 @@ body <-  dashboardBody(
             column(width = 4,
               drop_down_button(
                 label = "Select Feature Category", status = "default", width = 80,
-                checkboxGroupInput(inputId = "check1", label = "Choose", choices = feature_categories, selected = feature_categories)
+                checkboxGroupInput(inputId = "cbFeatureCat", label = "Choose", choices = feature_categories, selected = feature_categories)
               )
             )
           ),
