@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# calcFeatureByGroup
+# calcFeature
 ```{r, message = FALSE, warning = FALSE}
 library(fxtract)
 df = data.frame(id = c(rep(1, 10), rep(2, 10)))
@@ -24,7 +24,7 @@ df
 max_x = function(data) {
   max(data$x)
 }
-calcFeatureByGroup(df, group_col = "id", fun = max_x)
+calcFeature(df, group_col = "id", fun = max_x)
 ```
 
 ## return more values at once
@@ -32,17 +32,17 @@ calcFeatureByGroup(df, group_col = "id", fun = max_x)
 more_features = function(data) {
   data.frame(max_x = max(data$x), sd_x = sd(data$x))
 }
-calcFeatureByGroup(df, group_col = "id", fun = more_features)
+calcFeature(df, group_col = "id", fun = more_features)
 ```
 
 ## group by two columns
 ```{r}
-calcFeatureByGroup(df, group_col = c("id", "task"), fun = more_features)
+calcFeature(df, group_col = c("id", "task"), fun = more_features)
 ```
 
 ## group by three colums
 ```{r}
-calcFeatureByGroup(df, group_col = c("id", "task", "hour"), fun = more_features)
+calcFeature(df, group_col = c("id", "task", "hour"), fun = more_features)
 ```
 
 
