@@ -103,16 +103,19 @@ print(paste("Mean number of different apps per day", round(nMeanDiffApps[1],2), 
 ## gps - maximum distance
 ```{r, echo = FALSe}
 library(geosphere)
-
 gpsAvailable = df %>% filter(!is.na(latitude), !is.na(longitude), latitude >= 0, latitude <= 360, longitude >= 0, longitude <= 360)
-maxDistKm = max(distm(cbind(gpsAvailable$longitude,gpsAvailable$latitude))) / 1000
+
+maxDistKm = function(data) max(distm(cbind(gpsAvailable$longitude,gpsAvailable$latitude))) / 1000
+
+maxDistKm = maxDistKm(data)
 print(paste("Maximum distance:", round(maxDistKm,2), "km"))
 
 ```
 
 ## calls - total number calls
 ```{r}
-nCalls = df %>% filter(!is.na(CALLS__id)) %>% summarize(nCalls = n())
+totalCalls = function(data) data %>% filter(!is.na(CALLS__id)) %>% summarize(nCalls = n())
+nCalls = totalCalls(df)
 print(paste("Number of total calls:", nCalls))
 ```
 
