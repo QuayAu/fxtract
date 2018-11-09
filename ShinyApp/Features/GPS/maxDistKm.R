@@ -1,0 +1,1 @@
+maxDistKm = function(data) max(distm(cbind(gpsAvailable$longitude,gpsAvailable$latitude))) / 1000

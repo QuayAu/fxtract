@@ -1,0 +1,1 @@
+featureNumDiffApps = function(df) length(unique(df$RUNNING_TASKS_baseActivity_mPackage))

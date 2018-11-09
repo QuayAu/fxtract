@@ -1,0 +1,1 @@
+totalCalls = function(data) data %>% filter(!is.na(CALLS__id)) %>% summarize(nCalls = n())
