@@ -18,35 +18,35 @@ df$x = rnorm(20)
 calcFeatureByGroup
 ```
 
-<!-- ## return 1 value each -->
-<!-- ```{r} -->
-<!-- max_x = function(data) { -->
-<!--   max(data$x) -->
-<!-- } -->
-<!-- calcFeatureByGroup(df, group_col = "id", fun = max_x) -->
-<!-- ``` -->
+## return 1 value each
+```{r}
+max_x = function(data) {
+  max(data$x)
+}
+calcFeatureByGroup(df, group_col = "id", fun = max_x)
+```
 
-<!-- ## return more values at once -->
-<!-- ```{r} -->
-<!-- more_features = function(data) { -->
-<!--   data.frame(max_x = max(data$x), sd_x = sd(data$x)) -->
-<!-- } -->
-<!-- calcFeatureByGroup(df, group_col = "id", fun = more_features) -->
-<!-- ``` -->
+## return more values at once
+```{r}
+more_features = function(data) {
+  data.frame(max_x = max(data$x), sd_x = sd(data$x))
+}
+calcFeatureByGroup(df, group_col = "id", fun = more_features)
+```
 
-<!-- ## group by two columns -->
-<!-- ```{r} -->
-<!-- max_x = function(data) { -->
-<!--   max(data$x) -->
-<!-- } -->
-<!-- calcFeatureByGroup(df, group_col = c("id", "task"), fun = more_features) -->
-<!-- ``` -->
+## group by two columns
+```{r}
+max_x = function(data) {
+  max(data$x)
+}
+calcFeatureByGroup(df, group_col = c("id", "task"), fun = more_features)
+```
 
-<!-- ## group by three colums -->
-<!-- ```{r} -->
-<!-- df$hour = rep(c(rep(1, 3), rep(2, 2), rep(3, 2), rep(4, 3)), 2) -->
-<!-- calcFeatureByGroup(df, group_col = c("id", "task", "hour"), fun = more_features) -->
-<!-- ``` -->
+## group by three colums
+```{r}
+df$hour = rep(c(rep(1, 3), rep(2, 2), rep(3, 2), rep(4, 3)), 2)
+calcFeatureByGroup(df, group_col = c("id", "task", "hour"), fun = more_features)
+```
 
 
 
