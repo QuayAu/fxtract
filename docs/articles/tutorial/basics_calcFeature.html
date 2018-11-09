@@ -120,26 +120,26 @@ df<span class="op">$</span>hour =<span class="st"> </span><span class="kw">rep</
 df<span class="op">$</span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>)
 df</code></pre></div>
 <pre><code>##    id  task  hour           x
-## 1   1 task1 hour1  1.32283430
-## 2   1 task1 hour1 -1.12218574
-## 3   1 task1 hour1 -1.16702120
-## 4   1 task1 hour2 -0.10889100
-## 5   1 task1 hour2  0.15182409
-## 6   1 task2 hour1 -0.71639626
-## 7   1 task2 hour1 -1.85339407
-## 8   1 task2 hour2 -0.01253497
-## 9   1 task2 hour2  1.31925197
-## 10  1 task2 hour2  1.43158003
-## 11  2 task1 hour1  1.46240268
-## 12  2 task1 hour1  1.31504764
-## 13  2 task1 hour1 -1.49172454
-## 14  2 task1 hour2 -0.05348257
-## 15  2 task1 hour2  0.62104512
-## 16  2 task2 hour1  1.29955241
-## 17  2 task2 hour1 -1.23139392
-## 18  2 task2 hour2  0.34122134
-## 19  2 task2 hour2 -0.51300764
-## 20  2 task2 hour2  1.19419123</code></pre>
+## 1   1 task1 hour1  0.61948250
+## 2   1 task1 hour1 -1.73747778
+## 3   1 task1 hour1  0.58374733
+## 4   1 task1 hour2 -1.27919741
+## 5   1 task1 hour2 -0.20055107
+## 6   1 task2 hour1  1.04196112
+## 7   1 task2 hour1  1.30011245
+## 8   1 task2 hour2 -0.00811168
+## 9   1 task2 hour2  1.33472605
+## 10  1 task2 hour2 -2.50330243
+## 11  2 task1 hour1  1.04398401
+## 12  2 task1 hour1 -0.87649923
+## 13  2 task1 hour1  0.63243413
+## 14  2 task1 hour2 -1.00118293
+## 15  2 task1 hour2  1.34215135
+## 16  2 task2 hour1 -0.45130410
+## 17  2 task2 hour1 -0.06729877
+## 18  2 task2 hour2  0.90998325
+## 19  2 task2 hour2  0.27690622
+## 20  2 task2 hour2  0.78349747</code></pre>
 <div id="return-1-value-each" class="section level2">
 <h2 class="hasAnchor">
 <a href="#return-1-value-each" class="anchor"></a>return 1 value each</h2>
@@ -148,8 +148,8 @@ df</code></pre></div>
 }
 <span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> max_x)</code></pre></div>
 <pre><code>##   id    max_x
-## 1  1 1.431580
-## 2  2 1.462403</code></pre>
+## 1  1 1.334726
+## 2  2 1.342151</code></pre>
 </div>
 <div id="return-more-values-at-once" class="section level2">
 <h2 class="hasAnchor">
@@ -158,31 +158,31 @@ df</code></pre></div>
   <span class="kw">data.frame</span>(<span class="dt">max_x =</span> <span class="kw">max</span>(data<span class="op">$</span>x), <span class="dt">sd_x =</span> <span class="kw">sd</span>(data<span class="op">$</span>x))
 }
 <span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> more_features)</code></pre></div>
-<pre><code>##   id    max_x     sd_x
-## 1  1 1.431580 1.158895
-## 2  2 1.462403 1.086586</code></pre>
+<pre><code>##   id    max_x      sd_x
+## 1  1 1.334726 1.3404791
+## 2  2 1.342151 0.8243845</code></pre>
 </div>
 <div id="group-by-two-columns" class="section level2">
 <h2 class="hasAnchor">
 <a href="#group-by-two-columns" class="anchor"></a>group by two columns</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1 max_x_task2 sd_x_task1 sd_x_task2
-## 1  1    1.322834    1.431580   1.029015   1.390379
-## 2  2    1.462403    1.299552   1.203623   1.092360</code></pre>
+## 1  1   0.6194825   1.3347260   1.073392  1.6242254
+## 2  2   1.3421513   0.9099832   1.095621  0.5712451</code></pre>
 </div>
 <div id="group-by-three-colums" class="section level2">
 <h2 class="hasAnchor">
 <a href="#group-by-three-colums" class="anchor"></a>group by three colums</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>, <span class="st">"hour"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1_hour1 max_x_task1_hour2 max_x_task2_hour1
-## 1  1          1.322834         0.1518241        -0.7163963
-## 2  2          1.462403         0.6210451         1.2995524
+## 1  1         0.6194825        -0.2005511        1.30011245
+## 2  2         1.0439840         1.3421513       -0.06729877
 ##   max_x_task2_hour2 sd_x_task1_hour1 sd_x_task1_hour2 sd_x_task2_hour1
-## 1          1.431580         1.424752        0.1843534        0.8039789
-## 2          1.194191         1.664660        0.4769631        1.7896493
+## 1         1.3347260         1.350594        0.7627181        0.1825406
+## 2         0.9099832         1.011147        1.6569876        0.2715328
 ##   sd_x_task2_hour2
-## 1        0.8032997
-## 2        0.8535995</code></pre>
+## 1        1.9476333
+## 2        0.3350174</code></pre>
 </div>
 </div>
   </div>
