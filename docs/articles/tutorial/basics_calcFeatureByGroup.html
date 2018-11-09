@@ -61,7 +61,7 @@
       <a href="../../articles/tutorial/basics_slidingWindow.html">slidingWindow</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_calcFeaturePerUserId.html">calcFeaturePerUserId</a>
+      <a href="../../articles/tutorial/basics_calcFeatureByGroup.html">calcFeatureByGroup</a>
     </li>
   </ul>
 </li>
@@ -103,16 +103,72 @@
       <h1>Basics</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/basics_calcFeaturePerUserId.Rmd"><code>vignettes/tutorial/basics_calcFeaturePerUserId.Rmd</code></a></small>
-      <div class="hidden name"><code>basics_calcFeaturePerUserId.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/basics_calcFeatureByGroup.Rmd"><code>vignettes/tutorial/basics_calcFeatureByGroup.Rmd</code></a></small>
+      <div class="hidden name"><code>basics_calcFeatureByGroup.Rmd</code></div>
 
     </div>
 
     
     
-<div id="calcfeatureperuserid" class="section level1">
+<div id="calcfeaturebygroup" class="section level1">
 <h1 class="hasAnchor">
-<a href="#calcfeatureperuserid" class="anchor"></a>calcFeaturePerUserId</h1>
+<a href="#calcfeaturebygroup" class="anchor"></a>calcFeatureByGroup</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)</code></pre></div>
+<pre><code>## Lade nötiges Paket: lubridate</code></pre>
+<pre><code>## 
+## Attache Paket: 'lubridate'</code></pre>
+<pre><code>## The following object is masked from 'package:base':
+## 
+##     date</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">10</span>)))
+df<span class="op">$</span>task =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">"task1"</span>, <span class="dv">5</span>), <span class="kw">rep</span>(<span class="st">"task2"</span>, <span class="dv">5</span>)), <span class="dv">2</span>)
+df<span class="op">$</span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calcFeatureByGroup</code></pre></div>
+<pre><code>## function (data, group_col, fun, colname, check_fun = TRUE) 
+## {
+##     . = NULL
+##     checkmate::assertDataFrame(data)
+##     checkmate::assertNames(names(data), must.include = group_col)
+##     checkmate::assertLogical(check_fun)
+##     if (colname %in% names(data)) 
+##         stop("colname is already in dataset. Please choose a different colname!")
+##     if (check_fun) {
+##         if (length(do.call(fun, list(data))) != 1) 
+##             stop("fun must return a vector of length 1")
+##     }
+##     res = data %&gt;% dplyr::group_by_(.dots = group_col) %&gt;% dplyr::do(do.call(fun, 
+##         list(.)) %&gt;% data.frame())
+##     colnames(res)[2] = colname
+##     return(res)
+## }
+## &lt;bytecode: 0x0c4475e8&gt;
+## &lt;environment: namespace:fxtract&gt;</code></pre>
+<!-- ## return 1 value each -->
+<!-- ```{r} -->
+<!-- max_x = function(data) { -->
+<!--   max(data$x) -->
+<!-- } -->
+<!-- calcFeatureByGroup(df, group_col = "id", fun = max_x) -->
+<!-- ``` -->
+<!-- ## return more values at once -->
+<!-- ```{r} -->
+<!-- more_features = function(data) { -->
+<!--   data.frame(max_x = max(data$x), sd_x = sd(data$x)) -->
+<!-- } -->
+<!-- calcFeatureByGroup(df, group_col = "id", fun = more_features) -->
+<!-- ``` -->
+<!-- ## group by two columns -->
+<!-- ```{r} -->
+<!-- max_x = function(data) { -->
+<!--   max(data$x) -->
+<!-- } -->
+<!-- calcFeatureByGroup(df, group_col = c("id", "task"), fun = more_features) -->
+<!-- ``` -->
+<!-- ## group by three colums -->
+<!-- ```{r} -->
+<!-- df$hour = rep(c(rep(1, 3), rep(2, 2), rep(3, 2), rep(4, 3)), 2) -->
+<!-- calcFeatureByGroup(df, group_col = c("id", "task", "hour"), fun = more_features) -->
+<!-- ``` -->
 </div>
   </div>
 
@@ -121,7 +177,7 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#calcfeatureperuserid">calcFeaturePerUserId</a></li>
+<li><a href="#calcfeaturebygroup">calcFeatureByGroup</a></li>
       </ul>
 </div>
       </div>
