@@ -30,8 +30,8 @@ calcFeatureByGroup = function(data, group_col, fun, check_fun = TRUE) {
   if (length(group_col) >= 2) {
     res = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(data.frame(do.call(fun, list(.))))
     dcast_formula = as.formula(paste(group_col[1], "~", paste(group_col[-1], collapse = "+")))
-    data.table::dcast(setDT(res), dcast_formula, value.var = setdiff(colnames(res), group_col)) 
+    res = data.table::dcast(data.table::setDT(res), dcast_formula, value.var = setdiff(colnames(res), group_col)) 
   }
   if (ncol(res) == 2) colnames(res)[2] = deparse(substitute(fun))
-  return(res)
+  return(data.frame(res))
 }

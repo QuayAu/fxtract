@@ -3,8 +3,10 @@ title: "Basics"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 # calcFeatureByGroup
@@ -13,9 +15,6 @@ library(fxtract)
 df = data.frame(id = c(rep(1, 10), rep(2, 10)))
 df$task = rep(c(rep("task1", 5), rep("task2", 5)), 2)
 df$x = rnorm(20)
-```
-```{r}
-calcFeatureByGroup
 ```
 
 ## return 1 value each
@@ -44,7 +43,7 @@ calcFeatureByGroup(df, group_col = c("id", "task"), fun = more_features)
 
 ## group by three colums
 ```{r}
-df$hour = rep(c(rep(1, 3), rep(2, 2), rep(3, 2), rep(4, 3)), 2)
+df$hour = rep(c(rep("hour1", 3), rep("hour2", 2), rep("hour1", 2), rep("hour2", 3)), 2)
 calcFeatureByGroup(df, group_col = c("id", "task", "hour"), fun = more_features)
 ```
 
