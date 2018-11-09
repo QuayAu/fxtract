@@ -3,7 +3,7 @@ pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
   fxtract: fxtract.html
-  basics_calcFeatureByGroup: tutorial/basics_calcFeatureByGroup.html
+  basics_calcFeature: tutorial/basics_calcFeature.html
   basics_slidingWindow: tutorial/basics_slidingWindow.html
   filters: tutorial/filters.html
   helpers: tutorial/helpers.html
