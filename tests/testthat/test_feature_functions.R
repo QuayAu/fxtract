@@ -44,25 +44,25 @@ context("feature_functions")
 #   expect_equal(res$res$mean_x_of_sum_per_day[1], (1 + 2 + 3 + 4) / 5)
 #   expect_equal(res$res$mean_x_of_sum_per_day[2], (5 + 6 + 7 + 8 + 9) / 5)
 # })
-
-test_that("calcFeatureByGroup", {
-  d1 = 123456789
-  td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
-  td$userId = userId = c(rep("1", 4), rep("2", 5))
-  td$x = 1:nrow(td)
-  td = addDate(td, utc_col = "timestamp")
-
-  #test checks
-  expect_error(calcFeatureByGroup(data = td, group_col = "y"))
-  fun = function(data) data$x
-  expect_error(calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "test"),
-    regexp = "fun must return a vector of length 1")
-  expect_error(calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "userId", check_fun = FALSE),
-    regexp = "colname is already in dataset. Please choose a different colname!")
-
-  #check functionality
-  fun = function(data) mean(data$x)
-  y = calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "test")
-  expect_equal(y$test, c(mean(1:4), mean(5:9)))
-})
-
+# 
+# test_that("calcFeatureByGroup", {
+#   d1 = 123456789
+#   td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
+#   td$userId = userId = c(rep("1", 4), rep("2", 5))
+#   td$x = 1:nrow(td)
+#   td = addDate(td, utc_col = "timestamp")
+# 
+#   #test checks
+#   expect_error(calcFeatureByGroup(data = td, group_col = "y"))
+#   fun = function(data) data$x
+#   expect_error(calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "test"),
+#     regexp = "fun must return a vector of length 1")
+#   expect_error(calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "userId", check_fun = FALSE),
+#     regexp = "colname is already in dataset. Please choose a different colname!")
+# 
+#   #check functionality
+#   fun = function(data) mean(data$x)
+#   y = calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "test")
+#   expect_equal(y$test, c(mean(1:4), mean(5:9)))
+# })
+# 
