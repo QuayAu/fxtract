@@ -86,7 +86,24 @@ body <-  dashboardBody(
       
       # Data tab ------------------------------------------------------------------------------------
       tabItem(tabName = "tab_data",
-        box(div(
+        
+        fluidRow(box(div(
+          fluidRow(
+            column(width = 3, h4("Select data source"))),
+          fluidRow(
+            column(width = 3, h4("Select path"))),
+          fluidRow(
+            column(width = 3, h4("SQL query (optional)"))
+          )),
+          title = "Data Source",
+          solidHeader = TRUE,
+          status = "warning",
+          width = 13,
+          collapsible = TRUE
+        )),
+        
+        
+        fluidRow(box(div(
           fluidRow(
             column(width = 2, h4("Users")), 
             column(width = 8, h4("Features"))),
@@ -102,19 +119,23 @@ body <-  dashboardBody(
           ),
 
           DT::dataTableOutput("dt")),
-          title= "Table",
+          title= "Calculated Features per User",
           solidHeader = TRUE,
           status = "warning",
           width = 13,
           collapsible = T
         )
-      ),
+      )),
       
       # Feature category tabs ------------------------------------------------------------------------------------
       tabItem(tabName = paste0("tab_", feature_categories[[1]]),
         uiOutput(
           outputId = "feature_category_tabs"
         )
+      ),
+      
+      tabItem(tabName = "tab_collect_res",
+        h1("Collection of Results")
       )
       
       # tabItem(tabName = input$id_tabs,

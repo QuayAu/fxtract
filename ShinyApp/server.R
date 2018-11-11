@@ -12,13 +12,19 @@ shinyServer(function(input, output, session) {
   source("Functions/server_feats_category_tabs.R", local = TRUE, encoding = "utf-8")
   source("Functions/server_data_tab.R", local = TRUE, encoding = "utf-8")
   
+  db_path <- paste0(dirname(getwd()), "/vignettes/tutorial/studentlife/SQL_database.sql")
+  db <<- src_sqlite(db_path, create = FALSE)
+  ids <<- tbl(db, "studentlife_data") %>% distinct(userId) %>% as.data.frame() %>% as.vector()#%>% unlist()
+  num_total_users <<- nrow(ids)
+  
   
   rv <- reactiveValues()
-  rv$cur_feature_type <- NULL # Currently active feature type (tab) e.g. 'communication', 'appusage', use instad of input$id_tabs to avoid substring every time
+  rv$cur_feature_type <- NULL # Currently active feature type (tab) e.g. 'communication', 'appusage'
+  rv$selected_users <- NULL # Currently selected users in data table in data tab
+
   
-  # 
-  # 
-  # 
+  
+  
   # # Appusage tab ----------------------------------------------------------------------------------------
   # 
   # # Observe Button find not done

@@ -1,6 +1,6 @@
 # UI =================================================================================
-# Tabelle -------------------------------------------------------------------
 
+# Table -------------------------------------------------------------------
 output$dt <- DT::renderDataTable({
   
   calc_feat <- get_all_features() # Remove .R
@@ -39,6 +39,7 @@ output$dt <- DT::renderDataTable({
   
   rownames(df) <- df[,1]
   df <- df[,-1]
+  data_dt <<- df
 
   DT::datatable(df, rownames=TRUE,
     options = list( 
@@ -61,3 +62,9 @@ observeEvent(input$dt_sel, {
     DT::selectRows(dt_proxy, NULL)
   }
 })
+
+# Observe selected users -------------------------------------------------------------------
+observeEvent(input$dt_rows_selected, {
+  rv$selected_users <- rownames(data_dt[input$dt_rows_selected,])
+})
+
