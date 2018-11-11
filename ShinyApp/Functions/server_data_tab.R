@@ -19,14 +19,12 @@ output$dt <- DT::renderDataTable({
       file_name <- paste0(feat_cat, "/", id, "_", feat, ".csv")
 
       file_path <- paste0("Projects/", input$sProjectName, "/", feat_cat, "/", id, "_", feat, ".csv")
-      print(file_path)
       file_exists <- file.exists(file_path)
       df_temp <- data.frame(file_name, file_exists)
       df <- rbind(df, df_temp)
       df
     }
   } 
-  
   
   
   df$file_name <- str_extract(df$file_name, '^[^.]+') # Remove .R

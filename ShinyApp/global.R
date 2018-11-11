@@ -9,12 +9,10 @@ library(pryr)
 library(robustbase)
 library(readr)
 library(DT)
+library(geosphere)
 
 first_load <- T
 projectNames <- list.files("Projects")
-
-ids <- tbl(db, "studentlife_data") %>% distinct(userId) %>% as.data.frame()
-num_total_users <- length(ids)
 
 cur_feature_type <- NULL # Currently active feature type (tab) e.g. 'communication', 'appusage'
 feature_categories <<- list.files("Features")
