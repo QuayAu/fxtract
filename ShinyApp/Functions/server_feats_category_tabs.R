@@ -3,11 +3,11 @@
 # Upper fix part -------------------------------------------------------------------
 output$feature_category_tabs <- renderUI({
   
-  rv$cur_feature_type <- substring(input$id_tabs, first = 5)
+  rv$cur_feature_type <- input$selFeature
   
   tagList(
     
-    h1(rv$cur_feature_type),
+    h1("Features"),
     
     fluidRow(style='padding:10px;'),
   

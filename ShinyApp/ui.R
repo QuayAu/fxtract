@@ -127,11 +127,11 @@ body <-  dashboardBody(
         )
       )),
       
-      # Feature category tabs ------------------------------------------------------------------------------------
-      tabItem(tabName = paste0("tab_", feature_categories[[1]]),
+      tabItem(tabName = "tabFeatures",
+        selectInput(inputId = "selFeature", label = "Select feature", choices = list.files("Features")),
         uiOutput(
-          outputId = "feature_category_tabs"
-        )
+            outputId = "feature_category_tabs"
+          )
       ),
       
       tabItem(tabName = "tab_collect_res",
