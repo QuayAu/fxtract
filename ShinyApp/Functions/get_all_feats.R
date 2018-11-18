@@ -1,9 +1,10 @@
 get_all_features <- function(type = "all"){
   
   if(type == "all") cur_feature_type <<- ""
-  else cur_feature_type <<- rv$cur_feature_type
+  else cur_feature_type <<- input$selFeature
   
   df <- all_features()
+  df
   
 }
 

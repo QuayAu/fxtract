@@ -11,6 +11,8 @@ shinyServer(function(input, output, session) {
   source("Functions/server_project_tab.R", local = TRUE, encoding = "utf-8")
   source("Functions/server_feats_category_tabs.R", local = TRUE, encoding = "utf-8")
   source("Functions/server_data_tab.R", local = TRUE, encoding = "utf-8")
+  source("Functions/getAllFeatsPerUser.R", local = TRUE, encoding = "utf-8")
+  
   
   db_path <- paste0(dirname(getwd()), "/vignettes/tutorial/studentlife/SQL_database.sql")
   db <<- src_sqlite(db_path, create = FALSE)

@@ -6,18 +6,16 @@ output$feature_category_tabs <- renderUI({
   rv$cur_feature_type <- input$selFeature
   
   tagList(
-    
-    h1("Features"),
-    
+
     fluidRow(style='padding:10px;'),
-  
+
     ### Calculate ALL features (of specific feature category)
     fluidRow(
-      
+
       # Text
-      column(width = 3, h4("Calculate all", rv$cur_feature_type ,"features",
+      column(width = 4, h4("Calculate all", rv$cur_feature_type ,"features",
         style = "color:#207d09;font-size:19;")),
-      
+
       # Button
       column(width = 2, actionButton(
         inputId = "btn_calc_all",
@@ -25,57 +23,57 @@ output$feature_category_tabs <- renderUI({
         style="color: #fff; background-color: #207d09; border-color: #207d09;",
         width = 100
       ))
-      
+
     ),
-    
+
     fluidRow(style='padding:8px;'),
-    
+
     ### Find Features not done (of specific feature category)
     fluidRow(
-      
-      column(width = 3, h4("Find", rv$cur_feature_type, "features not calculated",
+
+      column(width = 4, h4("Find", rv$cur_feature_type, "features not calculated",
         style = "color:#207d09;font-size:19;")),
-      
+
       column(width = 2, actionButton(
         inputId = "btn_find_not_done",
         label = "Find!",
         style="color: #fff; background-color: #207d09; border-color: #207d09;",
         width = 100
       ))
-      
+
     ),
-    
+
     fluidRow(style='padding:8px;'),
-     
+
     ### Show All features (of specific feature category)
     fluidRow(
-      
-      column(width = 3, h4("Select specific features",
+
+      column(width = 4, h4("Select specific features",
         style = "color:#207d09;font-size:19;")),
-      
+
       column(width = 2, actionButton(
         inputId = "btn_list_all",
         label = "Select!",
         style="color: #fff; background-color: #207d09; border-color: #207d09;",
         width = 100
       ))
-      
+
     ),
-    
+
     fluidRow(style='padding:20px;'),
-    
+
     fluidRow(
-      
+
       # List box with features
       uiOutput(
         outputId = "list_box_features"
       ),
-      
+
       # Button: Calculate selected features in list box
       uiOutput(
         outputId = "btn_Calc_selected"
       )
-      
+
     )
     
   )
@@ -120,7 +118,6 @@ observeEvent(input$cAllNone, {
   if(b_show_all == T) choice <- get_all_features(type = rv$cur_feature_type)
   else choice <- get_feats_not_done()
   selectAll <- input$cAllNone
-  print(selectAll)
   
   if (is.null(selectAll)) selectAll <- F
 
@@ -153,15 +150,13 @@ observeEvent(input$btn_find_not_done, {
   
 })
 
-# Observe Button find not done
+# Observe Button calc all
 observeEvent(input$btn_calc_all, {
   
   # Prepare log files
   if (dir.exists("logfiles") == FALSE){
     dir.create("logfiles")
   }
-  
-
   
 })
 

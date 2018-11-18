@@ -4,13 +4,25 @@ get_freq_calc_feats <- function(){
   #     |--------------------------
   
   ls_files_calc <- get_calc_feats()
-  if(is_empty(ls_files_calc)) return(NULL) # If no calculated features -> return(NULL)
+  if(is_empty(ls_files_calc) | is_empty(input$selFeature)) return(NULL) # If no calculated features or no users selected -> return(NULL)
+
+  # Generate table userID | feature
+  userIds = str_extract(ls_files_calc, '^[^_]+')
+  feats = substring(ls_files_calc, regexpr("_", ls_files_calc) + 1) # remove userId
+  feats = str_extract(feats, '^[^.]+') # remove '.csv'
+  tUserFeat = data.frame(userIds, feats)
   
-  ls_files_calc <- substring(ls_files_calc, regexpr("_", ls_files_calc) + 1) # remove userId
-  ls_features_calc <- str_extract(ls_files_calc, '^[^.]+') # remove '.csv'
+  tUserFeat = tUserFeat %>% filter(userIds %in% rv$selected_users)
+  print("tUserFeat")
+  print(tUserFeat)
   
-  features_calc_freq <-  table(ls_features_calc) %>% as.data.frame()
+  features_calc_freq <-  table(tUserFeat$feats) %>% as.data.frame()
+  
   names(features_calc_freq) <- c("Calulated_Features", "Count")
+
+  features_calc_freq = features_calc_freq %>% filter(Count > 0)
+  print("features_calc_freq")
+  print(features_calc_freq)
   return(features_calc_freq)
   
 }

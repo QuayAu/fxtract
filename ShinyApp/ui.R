@@ -128,115 +128,16 @@ body <-  dashboardBody(
       )),
       
       tabItem(tabName = "tabFeatures",
-        selectInput(inputId = "selFeature", label = "Select feature", choices = list.files("Features")),
+        selectInput(inputId = "selFeature", label = "Select feature category", choices = list.files("Features")),
         uiOutput(
             outputId = "feature_category_tabs"
-          )
+        )
       ),
       
       tabItem(tabName = "tab_collect_res",
         h1("Collection of Results")
       )
-      
-      # tabItem(tabName = input$id_tabs,
-      #   h1("Appusage")
-      # )
 
-      # Appusage tab ----------------------------------------------------------------------------------------
-  #     tabItem(tabName = "tab_appusage",
-  #       h1("Appusage"),
-  # 
-  #       fluidRow(style='padding:10px;'),
-  # 
-  #       ### Calculate BUTTON
-  #       fluidRow(
-  # 
-  #           column(width = 2, h4("Calculate all appusage features",
-  #                 style = "color:#207d09;font-size:19;")),
-  # 
-  #           column(width = 2, actionButton(
-  #             inputId = "btn_CalcAll_AppUsage",
-  #             label = "Calculate!",
-  #             style="color: #fff; background-color: #207d09; border-color: #207d09;",
-  #             width = 100
-  #           ))
-  # 
-  #       ),
-  # 
-  #       fluidRow(style='padding:8px;'),
-  # 
-  #       ### Features not done
-  #       fluidRow(
-  # 
-  #         column(width = 2, h4("Find features not done",
-  #           style = "color:#207d09;font-size:19;")),
-  # 
-  #         column(width = 2, actionButton(
-  #           inputId = "btn_FindNotDone_AppUsage",
-  #           label = "Find!",
-  #           style="color: #fff; background-color: #207d09; border-color: #207d09;",
-  #           width = 100
-  #         ))
-  # 
-  #       ),
-  # 
-  #       fluidRow(style='padding:8px;'),
-  # 
-  # 
-  #       # All features
-  #       fluidRow(
-  # 
-  #         column(width = 2, h4("Select specific features",
-  #           style = "color:#207d09;font-size:19;")),
-  # 
-  #         column(width = 2, actionButton(
-  #           inputId = "btn_listAll_appusage",
-  #           label = "Select!",
-  #           style="color: #fff; background-color: #207d09; border-color: #207d09;",
-  #           width = 100
-  #         ))
-  # 
-  #       ),
-  # 
-  # 
-  #       fluidRow(style='padding:20px;'),
-  # 
-  #       fluidRow(
-  # 
-  #         uiOutput(
-  #           outputId = "giAllAppUsage"
-  #         ),
-  # 
-  #         uiOutput(
-  #           outputId = "btn_Calc_selected_AppUsage"
-  #         )
-  # 
-  #       )
-  # 
-  #     ),
-  # 
-  #     # Communication tab
-  #     tabItem(tabName = "tab_communication",
-  #       h2("Communication")
-  #     ),
-  # 
-  #     # General tab
-  #     tabItem(tabName = "tab_general",
-  #       h2("General")
-  #     ),
-  # 
-  #     # Music tab
-  #     tabItem(tabName = "tab_music",
-  #       h2("Music")
-  #     ),
-  # 
-  #     # Collect results tab
-  #     tabItem(tabName = "tab_collect_res",
-  #       h2("Collect results")
-  #     )
-  # 
-  #   )
-  # 
   ),
 
   tags$head(tags$style("#txtDirExists{color: red;
