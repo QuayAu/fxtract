@@ -87,24 +87,24 @@ body <-  dashboardBody(
       # Data tab ------------------------------------------------------------------------------------
       tabItem(tabName = "tab_data",
         
-        fluidRow(box(div(
-          fluidRow(
-            column(width = 3, h4("Select data source"))),
-          fluidRow(
-            column(width = 3, h4("Select path"))),
-          fluidRow(
-            column(width = 3, h4("SQL query (optional)"))
-          )),
-          title = "Data Source",
-          solidHeader = TRUE,
-          status = "warning",
-          width = 13,
-          collapsible = TRUE
-        )),
+        fluidRow(
+          box(
+            div(
+              fluidRow(column(width = 3, h4("Select data source"))),
+              fluidRow(column(width = 3, h4("Select path")))
+            ),
+            title = "Data Source",
+            solidHeader = TRUE,
+            status = "success",
+            width = 13,
+            collapsible = TRUE
+          )
+        ),
         
         
         fluidRow(box(div(
-          fluidRow(
+         # box(
+            fluidRow(
             column(width = 2, h4("Users")), 
             column(width = 8, h4("Features"))),
 
@@ -115,13 +115,15 @@ body <-  dashboardBody(
                 label = "Select Feature Category", status = "default", width = 80,
                 checkboxGroupInput(inputId = "cbFeatureCat", label = "Choose", choices = feature_categories, selected = feature_categories)
               )
-            )
-          ),
+            #)
+          )),
+          
+          br(),
 
           DT::dataTableOutput("dt")),
-          title= "Calculated Features per User",
+          title= "Select Users",
           solidHeader = TRUE,
-          status = "warning",
+          status = "success",
           width = 13,
           collapsible = T
         )

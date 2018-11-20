@@ -1,8 +1,7 @@
 get_freq_remain_users <- function(){
   
   calc_feat <- get_freq_calc_feats()
-  print("calc_feat")
-  print(calc_feat)
+
   if(is_empty(calc_feat)) return(NULL)
   nSelectedUsers = length(rv$selected_users)
   calc_feat_missing_users <- calc_feat %>% filter(Count != nSelectedUsers)

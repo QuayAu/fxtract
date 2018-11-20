@@ -28,8 +28,6 @@ all_features <- reactivePoll(10, session,
     feat_path <- "Features/"
     all_files <- sort(list.files(feat_path, recursive = T)) %>% unlist()
     all_features <- str_extract(all_files, '^[^.]+') # remove '.R
-    print("all_features")
-    print(all_features)
     all_features
   }
   

@@ -101,33 +101,33 @@ observeEvent(input$btn_list_all, {
       checkboxInput('cAllNone', 'All/None'),
       checkboxGroupInput(
         inputId = "inp_list_box_features",
-        choices = get_all_features(type = rv$cur_feature_type),
+        choices = get_all_features(type = input$selFeature)$feature,
         label = "All app usage features"
       )
     )
 
   })
   
-  b_show_all <<- T
+  rv$show_all <- T
 
 })
 
 # Observe select all/none Checkbox
 observeEvent(input$cAllNone, {
-  
-  if(b_show_all == T) choice <- get_all_features(type = rv$cur_feature_type)
+
+  if(rv$show_all  == T) choice <- get_all_features(type = input$selFeature)$feature
   else choice <- get_feats_not_done()
   selectAll <- input$cAllNone
-  
+
   if (is.null(selectAll)) selectAll <- F
 
   updateCheckboxGroupInput(
-    session = session, 
-    inputId = 'inp_list_box_features', 
+    session = session,
+    inputId = 'inp_list_box_features',
     choices = choice,
     selected = if (selectAll) choice
   )
-  
+
 })
 
 
@@ -146,7 +146,7 @@ observeEvent(input$btn_find_not_done, {
 
   })
   
-  b_show_all <<- F
+  rv$show_all  <- F
   
 })
 

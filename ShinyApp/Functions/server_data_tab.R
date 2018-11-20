@@ -4,27 +4,26 @@ dt_proxy <- DT::dataTableProxy("dt")
 
 # Table -------------------------------------------------------------------
 output$dt <- DT::renderDataTable({
-  print("render")
-
   
   df <- getAllFeatsPerUser()
-  # print("head(df)")
-  # print(head(df))
 
   selFeatCats = input$cbFeatureCat
-  print("selFeatCats")
-  print(selFeatCats)
   df = df %>% filter(feature_category %in% selFeatCats)
-  print("head(df)2")
-  print(head(df))
 
   df <- df[-1] %>% spread(feature_name, file_exists)
   
+  if(nrow(df) == 0) return(NULL) #All feature categories filtered
+  
+  if (ncol(df) > 2) percentComplPerUser = rowSums(df[,2:ncol(df)]) / (ncol(df) - 1)
+  else percentComplPerUser = df[,2] / ncol(df)
+  
+  df = add_column(df, Completed = percentComplPerUser, .after = 1)
+  
   rownames(df) <- df[,1]
-  df <- df[,-1]
+  df <- df[,-1] %>% as.data.frame()
   data_dt <<- df
 
-  DT::datatable(df, rownames=TRUE,
+  DT::datatable(df, rownames=TRUE, filter = "top",
     options = list( 
       scrollX = TRUE
     )
@@ -51,15 +50,7 @@ observeEvent(input$dt_rows_selected, {
   rv$selected_users <- rownames(data_dt[input$dt_rows_selected,])
 })
 
-# observe({
-#   if (input$id_tabs == "tab_data"){
-#     
-#     if (isTRUE(input$dt_sel)) {
-#       DT::selectRows(dt_proxy, input$dt_rows_all)
-#     } 
-#     
-#   }
-# })
+
 
 
 
