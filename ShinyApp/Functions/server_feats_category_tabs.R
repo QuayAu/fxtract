@@ -95,7 +95,8 @@ output$btn_Calc_selected <- renderUI({
 
 # Observe Button list all -> if clicked show listbox with all features
 observeEvent(input$btn_list_all, {
-
+  
+  if(is_empty(rv$selected_users)) return(NULL)
   output$list_box_features <- renderUI({
     box(
       checkboxInput('cAllNone', 'All/None'),
@@ -133,6 +134,8 @@ observeEvent(input$cAllNone, {
 
 # Observe Button find not done
 observeEvent(input$btn_find_not_done, {
+  
+  if(is_empty(rv$selected_users)) return(NULL)
   
   output$list_box_features <- renderUI({
     box(
