@@ -1,6 +1,6 @@
 get_feat_not_calc <- function(){
   
-  feats = get_all_features(input$selFeature)
+  feats = get_all_features(input$selFeature)$feature
   
   calc_feat <- get_freq_calc_feats()$Calulated_Features
   print("calc_feat")

@@ -4,6 +4,9 @@ get_freq_calc_feats <- function(){
   #     |--------------------------
   
   ls_files_calc <- get_calc_feats()
+  print("ls_files_calc")
+  print(ls_files_calc)
+  
   if(is_empty(ls_files_calc) | is_empty(input$selFeature)) return(NULL) # If no calculated features or no users selected -> return(NULL)
 
   # Generate table userID | feature
@@ -13,16 +16,13 @@ get_freq_calc_feats <- function(){
   tUserFeat = data.frame(userIds, feats)
   
   tUserFeat = tUserFeat %>% filter(userIds %in% rv$selected_users)
-  print("tUserFeat")
-  print(tUserFeat)
-  
+
   features_calc_freq <-  table(tUserFeat$feats) %>% as.data.frame()
   
   names(features_calc_freq) <- c("Calulated_Features", "Count")
 
   features_calc_freq = features_calc_freq %>% filter(Count > 0)
-  print("features_calc_freq")
-  print(features_calc_freq)
+
   return(features_calc_freq)
   
 }

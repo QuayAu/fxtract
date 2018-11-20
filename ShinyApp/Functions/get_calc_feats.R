@@ -5,7 +5,7 @@ get_calc_feats <- reactivePoll(1000, session,
   checkFunc = function(){
     
     cur_feature_type <- input$selFeature
-    csv_export_path <- paste0("Projects/", input$sProjectName, "/csv_exports/", cur_feature_type)
+    csv_export_path <- paste0("Projects/", input$sProjectName, "/csv_exports/", input$selFeature)
     if(dir.exists(csv_export_path)) list.files(csv_export_path)
     
   },
@@ -14,7 +14,7 @@ get_calc_feats <- reactivePoll(1000, session,
   valueFunc = function(){
 
     cur_feature_type <- input$cbFeatureCat  #rv$cur_feature_type
-    csv_export_path <- paste0("Projects/", input$sProjectName, "/csv_exports/", cur_feature_type)
+    csv_export_path <- paste0("Projects/", input$sProjectName, "/csv_exports/", input$selFeature)
     all_Files = sort(list.files(csv_export_path)) %>% unlist()
     ls_files <- list.files(csv_export_path)
     ls_files
