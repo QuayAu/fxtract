@@ -1,30 +1,29 @@
 getAllFeatsPerUser <- reactive({
 # returns df with features per user
-# structure:feature_category | user_id | feature_name | file_exists
+# structure: featCat | userId | featName | fileExists
   
-  df_feats_cat <- get_all_features() # Remove .R
+  dfFeatsWithCat <- getAllFeats() # Remove .R
   df <- NULL
   
-  
   for (id in ids){
-    for (row in 1:nrow(df_feats_cat)){
-      feat_cat = df_feats_cat[row, 1]
-      feat = df_feats_cat[row, 2]
+    for (row in 1:nrow(dfFeatsWithCat)){
+      featCat = dfFeatsWithCat[row, 1]
+      feat = dfFeatsWithCat[row, 2]
       
-      file_name <- paste0(feat_cat, "/", id, "_", feat, ".csv")
+      fileName <- paste0(featCat, "/", id, "_", feat, ".csv")
       
-      file_path <- paste0("Projects/", input$sProjectName, "/csv_exports/", feat_cat, "/", id, "_", feat, ".csv")
-      file_exists <- file.exists(file_path)
-      df_temp <- data.frame(file_name, file_exists)
-      df <- rbind(df, df_temp)
+      filePath <- paste0("Projects/", input$sProjectName, "/csv_exports/", featCat, "/", id, "_", feat, ".csv")
+      fileExists <- file.exists(filePath)
+      dfTemp <- data.frame(fileName, fileExists)
+      df <- rbind(df, dfTemp)
       df
     }
   } 
   
-  df$file_name <- str_extract(df$file_name, '^[^.]+') # Remove .R
+  df$fileName <- str_extract(df$fileName, '^[^.]+') # Remove .R
   
-  df <- df %>% separate(file_name, sep = "/", into = c("feature_category", "user_feature_name"))
-  df <- df %>% separate(user_feature_name, c("user_id", "feature_name"), "_", extra = "merge")
+  df <- df %>% separate(fileName, sep = "/", into = c("featCat", "userFeatureName"))
+  df <- df %>% separate(userFeatureName, c("userId", "featName"), "_", extra = "merge")
 
   df
   

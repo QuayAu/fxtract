@@ -1,9 +1,7 @@
 
 # UI =================================================================================
 # Upper fix part -------------------------------------------------------------------
-output$feature_category_tabs <- renderUI({
-  
-  rv$cur_feature_type <- input$selFeature
+output$featsTabUi <- renderUI({
   
   tagList(
 
@@ -13,12 +11,12 @@ output$feature_category_tabs <- renderUI({
     fluidRow(
 
       # Text
-      column(width = 4, h4("Calculate all", rv$cur_feature_type ,"features",
+      column(width = 4, h4("Calculate all", input$selFeature ,"features",
         style = "color:#207d09;font-size:19;")),
 
       # Button
       column(width = 2, actionButton(
-        inputId = "btn_calc_all",
+        inputId = "btnCalcAll",
         label = "Calculate!",
         style="color: #fff; background-color: #207d09; border-color: #207d09;",
         width = 100
@@ -31,11 +29,11 @@ output$feature_category_tabs <- renderUI({
     ### Find Features not done (of specific feature category)
     fluidRow(
 
-      column(width = 4, h4("Find", rv$cur_feature_type, "features not calculated",
+      column(width = 4, h4("Find", input$selFeature, "features not calculated",
         style = "color:#207d09;font-size:19;")),
 
       column(width = 2, actionButton(
-        inputId = "btn_find_not_done",
+        inputId = "btnFindNotDone",
         label = "Find!",
         style="color: #fff; background-color: #207d09; border-color: #207d09;",
         width = 100
@@ -52,7 +50,7 @@ output$feature_category_tabs <- renderUI({
         style = "color:#207d09;font-size:19;")),
 
       column(width = 2, actionButton(
-        inputId = "btn_list_all",
+        inputId = "btnListAll",
         label = "Select!",
         style="color: #fff; background-color: #207d09; border-color: #207d09;",
         width = 100
@@ -66,12 +64,12 @@ output$feature_category_tabs <- renderUI({
 
       # List box with features
       uiOutput(
-        outputId = "list_box_features"
+        outputId = "lbFeats"
       ),
 
       # Button: Calculate selected features in list box
       uiOutput(
-        outputId = "btn_Calc_selected"
+        outputId = "btnCalcSel"
       )
 
     )
@@ -83,26 +81,26 @@ output$feature_category_tabs <- renderUI({
 # Lower flexible part -------------------------------------------------------------------
 
 # Button: Calculate selected features in list box
-output$btn_Calc_selected <- renderUI({
+output$btnCalcSel <- renderUI({
   
-  selected_features <- input$inp_list_box_features
+  selected_features <- input$inpLbFeats
   
   if (length(selected_features) == 0) return(NULL)
-  actionButton("btn_calc_selected", label = "Calculate selected!",
+  actionButton("btnCalcSel", label = "Calculate selected!",
     style="color: #fff; background-color: #337ab7; border-color: #2e6da4;")
   
 })
 
 # Observe Button list all -> if clicked show listbox with all features
-observeEvent(input$btn_list_all, {
+observeEvent(input$btnListAll, {
   
-  if(is_empty(rv$selected_users)) return(NULL)
-  output$list_box_features <- renderUI({
+  if(is_empty(rv$selectedUsers)) return(NULL)
+  output$lbFeats <- renderUI({
     box(
       checkboxInput('cAllNone', 'All/None'),
       checkboxGroupInput(
-        inputId = "inp_list_box_features",
-        choices = get_all_features(type = input$selFeature)$feature,
+        inputId = "inpLbFeats",
+        choices = getAllFeats(type = input$selFeature)$feature,
         label = "All app usage features"
       )
     )
@@ -116,15 +114,15 @@ observeEvent(input$btn_list_all, {
 # Observe select all/none Checkbox
 observeEvent(input$cAllNone, {
 
-  if(rv$show_all  == T) choice <- get_all_features(type = input$selFeature)$feature
-  else choice <- get_feats_not_done()
+  if(rv$show_all  == T) choice <- getAllFeats(type = input$selFeature)$feature
+  else choice <- getFeatsNotDone()
   selectAll <- input$cAllNone
 
   if (is.null(selectAll)) selectAll <- F
 
   updateCheckboxGroupInput(
     session = session,
-    inputId = 'inp_list_box_features',
+    inputId = 'inpLbFeats',
     choices = choice,
     selected = if (selectAll) choice
   )
@@ -133,16 +131,16 @@ observeEvent(input$cAllNone, {
 
 
 # Observe Button find not done
-observeEvent(input$btn_find_not_done, {
+observeEvent(input$btnFindNotDone, {
   
-  if(is_empty(rv$selected_users)) return(NULL)
+  if(is_empty(rv$selectedUsers)) return(NULL)
   
-  output$list_box_features <- renderUI({
+  output$lbFeats <- renderUI({
     box(
       checkboxInput('cAllNone', 'All/None'),
       checkboxGroupInput(
-        inputId = "inp_list_box_features",
-        choices = get_feats_not_done(),
+        inputId = "inpLbFeats",
+        choices = getFeatsNotDone(),
         label = "All app usage features"
       )
     )
@@ -154,7 +152,7 @@ observeEvent(input$btn_find_not_done, {
 })
 
 # Observe Button calc all
-observeEvent(input$btn_calc_all, {
+observeEvent(input$btnCalcAll, {
   
   # Prepare log files
   if (dir.exists("logfiles") == FALSE){

@@ -1,4 +1,4 @@
-# Project tab ----------------------------------------------------------------------------------------
+# Render UI for Project tab ----------------------------------------------------------------------------------------
 # ### Select Project
 output$projectName<-renderUI({
   
@@ -42,6 +42,6 @@ observeEvent(input$btnCreateProject, {
 
 ### Next Button
 observeEvent(input$btnGoToAppUsage, {
-  updateTabItems(session, "id_tabs",
-    selected = "tab_data")
+  updateTabItems(session, "idTabs",
+    selected = "tabData")
 })

@@ -23,7 +23,7 @@ body <-  dashboardBody(
     tabItems(
 
       # Project tab ----------------------------------------------------------------------------------------
-      tabItem(tabName = "tab_project",
+      tabItem(tabName = "tabProject",
         
         h1("Project"),
         
@@ -85,7 +85,7 @@ body <-  dashboardBody(
       ),
       
       # Data tab ------------------------------------------------------------------------------------
-      tabItem(tabName = "tab_data",
+      tabItem(tabName = "tabData",
         
         fluidRow(
           box(
@@ -109,7 +109,7 @@ body <-  dashboardBody(
             column(width = 8, h4("Features"))),
 
           fluidRow(
-            column(width = 2, checkboxInput("dt_sel", "(Un)Select All")),
+            column(width = 2, checkboxInput("dtSelAll", "(Un)Select All")),
             column(width = 4,
               drop_down_button(
                 label = "Select Feature Category", status = "default", width = 80,
@@ -132,11 +132,11 @@ body <-  dashboardBody(
       tabItem(tabName = "tabFeatures",
         selectInput(inputId = "selFeature", label = "Select feature category", choices = list.files("Features")),
         uiOutput(
-            outputId = "feature_category_tabs"
+            outputId = "featsTabUi"
         )
       ),
       
-      tabItem(tabName = "tab_collect_res",
+      tabItem(tabName = "tabCollResults",
         h1("Collection of Results")
       )
 

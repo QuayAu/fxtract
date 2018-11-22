@@ -1,16 +1,16 @@
 shinyServer(function(input, output, session) {
   
-  source("Functions/get_all_feats.R", local = TRUE, encoding = "utf-8")
-  source("Functions/get_calc_feats.R", local = TRUE, encoding = "utf-8")
-  source("Functions/get_freq_calc_feats.R", local = TRUE, encoding = "utf-8")
-  source("Functions/get_feats_not_calc.R", local = TRUE, encoding = "utf-8")
-  source("Functions/get_freq_remain_users.R", local = TRUE, encoding = "utf-8")
-  source("Functions/get_feats_not_done.R", local = TRUE, encoding = "utf-8")
+  source("Functions/getAllFeats.R", local = TRUE, encoding = "utf-8")
+  source("Functions/getCalcFeats.R", local = TRUE, encoding = "utf-8")
+  source("Functions/getFreqCalcFeats.R", local = TRUE, encoding = "utf-8")
+  source("Functions/getFeatNotCalc.R", local = TRUE, encoding = "utf-8")
+  source("Functions/getFreqRemUsers.R", local = TRUE, encoding = "utf-8")
+  source("Functions/getFeatsNotDone.R", local = TRUE, encoding = "utf-8")
   source("Functions/f_calc_save_feature.R", local = TRUE, encoding = "utf-8")
-  source("Functions/server_sidepanel.R", local = TRUE, encoding = "utf-8")
-  source("Functions/server_project_tab.R", local = TRUE, encoding = "utf-8")
-  source("Functions/server_feats_category_tabs.R", local = TRUE, encoding = "utf-8")
-  source("Functions/server_data_tab.R", local = TRUE, encoding = "utf-8")
+  source("Functions/serverSidepanel.R", local = TRUE, encoding = "utf-8")
+  source("Functions/serverProjectTab.R", local = TRUE, encoding = "utf-8")
+  source("Functions/serverFeatsTab.R", local = TRUE, encoding = "utf-8")
+  source("Functions/serverDataTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/getAllFeatsPerUser.R", local = TRUE, encoding = "utf-8")
   
   
@@ -22,65 +22,9 @@ shinyServer(function(input, output, session) {
   
   rv <- reactiveValues()
   rv$cur_feature_type <- NULL # Currently active feature type (tab) e.g. 'communication', 'appusage'
-  rv$selected_users <- NULL # Currently selected users in data table in data tab
+  rv$selectedUsers <- NULL # Currently selected user ids in data table in data tab
 
   
-  
-  
-  # # Appusage tab ----------------------------------------------------------------------------------------
-  # 
-  # # Observe Button find not done
-  # observeEvent(input$btn_FindNotDone_AppUsage, {
-  #   
-  #   rv$choices = get_Features_not_Done()
-  #   print("here")
-  #   output$giAllAppUsage <- renderUI({
-  #     box(
-  #       checkboxInput('cAllNone', 'All/None'),
-  #       checkboxGroupInput(
-  #         inputId = "giAllAppUsage",
-  #         choices = rv$choices,
-  #         label = "All app usage features"
-  #       )
-  #     )
-  # 
-  #   })
-  # 
-  # })
-  # 
-  # # Observe Button list all
-  # observeEvent(input$btn_listAll_appusage, {
-  # 
-  #   rv$choices = get_All_Features()
-  # 
-  #   output$giAllAppUsage <- renderUI({
-  #     box(
-  #       checkboxInput('cAllNone', 'All/None'),
-  #       checkboxGroupInput(
-  #         inputId = "giAllAppUsage",
-  #         choices = rv$choices,
-  #         label = "All app usage features"
-  #       )
-  #     )
-  # 
-  #   })
-  # 
-  # })
-  # 
-  # # Observe select all/none Checkbox
-  # observe({
-  #   
-  #   selectAll = input$cAllNone
-  #   if (is.null(selectAll)) selectAll = F
-  #   
-  #   if (input$inTabset != "tab_project"){
-  #     updateCheckboxGroupInput(
-  #       session, 'giAllAppUsage', choices = rv$choices,
-  #       selected = if (selectAll) rv$choices
-  #     )
-  #   }
-  #   
-  # })
   # 
   # # Render Button calulate selected Features
   # output$btn_Calc_selected_AppUsage <- renderUI({
