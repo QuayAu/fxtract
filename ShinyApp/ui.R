@@ -111,9 +111,9 @@ body <-  dashboardBody(
           fluidRow(
             column(width = 2, checkboxInput("dtSelAll", "(Un)Select All")),
             column(width = 4,
-              drop_down_button(
+              dropDownButton(
                 label = "Select Feature Category", status = "default", width = 80,
-                checkboxGroupInput(inputId = "cbFeatureCat", label = "Choose", choices = feature_categories, selected = feature_categories)
+                checkboxGroupInput(inputId = "cbFeatureCat", label = "Choose", choices = list.files("Features"), selected = list.files("Features"))
               )
             #)
           )),

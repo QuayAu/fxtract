@@ -3,20 +3,12 @@ library(shinydashboard)
 library(stringr)
 library(tidyverse)
 library(devtools)
-library(dplyr)
-library(tidyr)
 library(pryr)
 library(robustbase)
-library(readr)
 library(DT)
 library(geosphere)
 
-first_load <- T
-projectNames <- list.files("Projects")
-
-cur_feature_type <- NULL # Currently active feature type (tab) e.g. 'communication', 'appusage'
-feature_categories <<- list.files("Features")
-source("Functions/drop_down_button.R", local = TRUE, encoding = "utf-8")
+source("Functions/dropDownButton.R", local = TRUE, encoding = "utf-8")
 
 # Create features ------------------------------------
 #load_all("phonestudyLMU")

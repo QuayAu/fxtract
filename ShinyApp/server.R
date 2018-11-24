@@ -13,28 +13,16 @@ shinyServer(function(input, output, session) {
   source("Functions/serverDataTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/getAllFeatsPerUser.R", local = TRUE, encoding = "utf-8")
   
-  
+  first_load <<- T
+  projectNames <<- list.files("Projects")
   db_path <- paste0(dirname(getwd()), "/vignettes/tutorial/studentlife/SQL_database.sql")
   db <<- src_sqlite(db_path, create = FALSE)
-  ids <<- tbl(db, "studentlife_data") %>% distinct(userId) %>% as.data.frame() %>% as.vector()#%>% unlist()
-  num_total_users <<- nrow(ids)
-  
+  ids <<- tbl(db, "studentlife_data") %>% distinct(userId) %>% as.data.frame() %>% as.vector()
   
   rv <- reactiveValues()
-  rv$cur_feature_type <- NULL # Currently active feature type (tab) e.g. 'communication', 'appusage'
   rv$selectedUsers <- NULL # Currently selected user ids in data table in data tab
 
   
-  # 
-  # # Render Button calulate selected Features
-  # output$btn_Calc_selected_AppUsage <- renderUI({
-  #   
-  #   selected_features <- input$giAllAppUsage
-  #   if (length(selected_features) == 0) return(NULL)
-  #   actionButton("btn_calc_selected_appusage", label = "Calculate selected!",
-  #     style="color: #fff; background-color: #337ab7; border-color: #2e6da4;")
-  #   
-  # })
   # 
   # # Observe Button calculate all appusage features
   # observeEvent(input$btn_CalcAll_AppUsage, {

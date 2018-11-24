@@ -1,4 +1,4 @@
-drop_down_button <- function(label = "", status = c("default", "primary", "success", "info", "warning", "danger"), ..., width = NULL) {
+dropDownButton <- function(label = "", status = c("default", "primary", "success", "info", "warning", "danger"), ..., width = NULL) {
   status <- match.arg(status)
   # dropdown button content
   html_ul <- list(
