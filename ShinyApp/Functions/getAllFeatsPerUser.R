@@ -3,6 +3,8 @@ getAllFeatsPerUser <- reactive({
 # structure: featCat | userId | featName | fileExists
   
   dfFeatsWithCat <- getAllFeats() # Remove .R
+
+  if(is_empty(dfFeatsWithCat)) return(NULL)
   df <- NULL
   
   for (id in ids){

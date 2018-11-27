@@ -3,6 +3,7 @@ getFeatsNotDone <- function(){
   
   dfNot <- getFeatNotCalc()
   dfRemain <- getFreqRemUsers()
-  df <- c(dfNot, dfRemain)
+  df <- rbind(dfNot, dfRemain)
+  df
   
 }

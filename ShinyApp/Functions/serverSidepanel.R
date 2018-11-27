@@ -16,10 +16,15 @@ output$tabs <- renderUI({
 
 # On First load active project tab
 observe({
-  if(first_load){
+  if(is_empty(input$idTabs)){
     updateTabItems(session, "idTabs", selected = "tabProject")
-    first_load <<- F
   }
 })
 
 
+observe({
+  if(is_empty(input$idTabs)) return(NULL) # First load -> prevent crash
+  
+  if(input$idTabs == "tabData") rv$inpSelFeature = input$selFeature # Differentiate between buttons with almost same functionality on different pages
+  else if (input$idTabs == "tabFeatures") rv$inpSelFeature = input$selFeatureFTab
+})

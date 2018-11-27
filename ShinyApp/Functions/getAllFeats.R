@@ -1,14 +1,14 @@
 getAllFeats <- function(type = "all"){
 # returns a data frame containing all features with corresponding categories
 # The underlying reactivePoll recognizes changes in the features folder and adds or removes the features from data
-  
+  rv$inpSelFeature
   df <- allFeats()
-  
+
   fCategory <- vapply(strsplit(df,"/"), `[`, 1, FUN.VALUE=character(1))
   feature <- vapply(strsplit(df,"/"), `[`, 2, FUN.VALUE=character(1))
   dfFeatsWithCat <- data.frame(fCategory, feature)
-  
-  if(type != "all") dfFeatsWithCat = dfFeatsWithCat %>% filter(fCategory == input$selFeature)
+
+  if(type != "all") dfFeatsWithCat = dfFeatsWithCat %>% filter(fCategory == rv$inpSelFeature)
   
   dfFeatsWithCat
   

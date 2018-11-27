@@ -4,9 +4,10 @@ dtProxy <- DT::dataTableProxy("dt")
 
 # Table -------------------------------------------------------------------
 output$dt <- DT::renderDataTable({
-  
+
   df <- getAllFeatsPerUser()
 
+  if(is_empty(df)) return(NULL)
   selFeatCats = input$cbFeatureCat # Selected Feature Categories in drop down
   df = df %>% filter(featCat %in% selFeatCats)
 
@@ -22,11 +23,7 @@ output$dt <- DT::renderDataTable({
   df <- df[,-1] %>% as.data.frame()
   dataDT <<- df
 
-  DT::datatable(df, rownames=TRUE, filter = "top",
-    options = list( 
-      scrollX = TRUE
-    )
-  ) %>% formatStyle(1:ncol(df),
+  DT::datatable(df, rownames=TRUE, filter = "top") %>% formatStyle(1:ncol(df),
     backgroundColor = styleEqual(c(1), c('#b5f6aa'))
   )
   

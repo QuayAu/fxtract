@@ -4,7 +4,10 @@ getCalcFeats <- reactivePoll(1000, session,
   # Check wether calculated features of current feature category have changed                                    
   checkFunc = function(){
     
-    csvExportPath <- paste0("Projects/", input$sProjectName, "/csv_exports/", input$selFeature)
+    if(is_empty(input$idTabs)) return(NULL)
+    if (input$idTabs == "tabData") csvExportPath = paste0("Projects/", input$sProjectName, "/csv_exports/", input$selFeature)
+    else csvExportPath = paste0("Projects/", input$sProjectName, "/csv_exports/", input$selFeatureFTab)
+
     if(dir.exists(csvExportPath)) list.files(csvExportPath)
     
   },
@@ -12,9 +15,10 @@ getCalcFeats <- reactivePoll(1000, session,
   # If changed -> reload calculated features                             
   valueFunc = function(){
 
-    csvExportPath <- paste0("Projects/", input$sProjectName, "/csv_exports/", input$selFeature)
+    if (input$idTabs == "tabData") csvExportPath = paste0("Projects/", input$sProjectName, "/csv_exports/", input$selFeature)
+    else allFeats =  csvExportPath = paste0("Projects/", input$sProjectName, "/csv_exports/", input$selFeatureFTab)
     allFiles = sort(list.files(csvExportPath)) %>% unlist()
-    lsFiles <- list.files(csvExportPath)
+    lsFiles = list.files(csvExportPath)
     lsFiles
     
   }

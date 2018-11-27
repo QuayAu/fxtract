@@ -12,8 +12,8 @@ shinyServer(function(input, output, session) {
   source("Functions/serverFeatsTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/serverDataTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/getAllFeatsPerUser.R", local = TRUE, encoding = "utf-8")
-  
-  first_load <<- T
+
+  #first_load <<- T
   projectNames <<- list.files("Projects")
   db_path <- paste0(dirname(getwd()), "/vignettes/tutorial/studentlife/SQL_database.sql")
   db <<- src_sqlite(db_path, create = FALSE)
@@ -21,6 +21,9 @@ shinyServer(function(input, output, session) {
   
   rv <- reactiveValues()
   rv$selectedUsers <- NULL # Currently selected user ids in data table in data tab
+  
+  
+  
 
   
   # 

@@ -163,6 +163,39 @@ observeEvent(input$btnCalcAll, {
 
 
 
+dtFTabProxy <- DT::dataTableProxy("dtFTab")
+# Table -------------------------------------------------------------------
+output$dtFTab <- DT::renderDataTable({
+  
+  if(is_empty(rv$inpSelFeature)) return(NULL) # Move back from features tab to data tab
+  df <- getFeatsNotDone()%>% as.data.frame()
+  
+  if(nrow(df) == 0) return(NULL) #If no features to be shown
+  
+  DT::datatable(df, rownames=TRUE, filter = "top"#,
+    # options = list( 
+    #   scrollX = TRUE
+    # )
+  ) %>% formatStyle(1:ncol(df),
+    backgroundColor = styleEqual(c(1), c('#b5f6aa'))
+  )
+  
+  
+})
+
+
+# All/None Checkbox -------------------------------------------------------------------
+observeEvent(input$dtSelAllFTab, {
+  if (isTRUE(input$dtSelAllFTab)) {
+    DT::selectRows(dtFTabProxy, input$dtFTab_rows_all)
+  } else {
+    DT::selectRows(dtFTabProxy, NULL)
+  }
+})
+
+# Number of selected Users
+output$nUsers <- renderText({paste("n =", length(rv$selectedUsers))})
+
 
 
 

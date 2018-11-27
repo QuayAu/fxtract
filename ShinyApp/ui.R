@@ -103,10 +103,9 @@ body <-  dashboardBody(
         
         
         fluidRow(box(div(
-         # box(
             fluidRow(
             column(width = 2, h4("Users")), 
-            column(width = 8, h4("Features"))),
+            column(width = 8, h4("Feature Categories"))),
 
           fluidRow(
             column(width = 2, checkboxInput("dtSelAll", "(Un)Select All")),
@@ -115,7 +114,6 @@ body <-  dashboardBody(
                 label = "Select Feature Category", status = "default", width = 80,
                 checkboxGroupInput(inputId = "cbFeatureCat", label = "Choose", choices = list.files("Features"), selected = list.files("Features"))
               )
-            #)
           )),
           
           br(),
@@ -130,7 +128,34 @@ body <-  dashboardBody(
       )),
       
       tabItem(tabName = "tabFeatures",
-        selectInput(inputId = "selFeature", label = "Select feature category", choices = list.files("Features")),
+        fluidRow(box(div(
+          fluidRow(
+            column(width = 2, h4("Features")), 
+            column(width = 3, h4("Feature Category")),
+            column(width = 3, h4("Number of selected users"))),
+          
+          fluidRow(
+            column(width = 2, checkboxInput("dtSelAllFTab", "(Un)Select All")),
+            column(width = 3, selectInput(inputId = "selFeatureFTab", label = NULL, choices = list.files("Features"), width = 200)),
+            column(width = 3, textOutput("nUsers"))
+            # column(width = 3,
+            #   selectInput(inputId = "selFeats2bSeen", label = NULL, 
+            #     choices = c("All", "Calculation done", "Calculation not started", "Calculation started but not done"), width = 200)
+            # )
+          ),
+          
+          
+          br(),
+          
+          column(width = 7, DT::dataTableOutput("dtFTab", width = "100%"))),
+          title= "Select Features",
+          solidHeader = TRUE,
+          status = "success",
+          width = 13,
+          collapsible = T
+          
+        )),
+          
         uiOutput(
             outputId = "featsTabUi"
         )
@@ -142,11 +167,19 @@ body <-  dashboardBody(
 
   ),
 
-  tags$head(tags$style("#txtDirExists{color: red;
-                                 font-size: 12px;
-                                 }"
-            )
+  tags$head(
+    tags$style("#txtDirExists{
+                  color: red;
+                  font-size: 12px;
+                }"
+    ),
+    tags$style("#nUsers{
+                  font-size: 20px;
+                  margin-left: 70px;
+                }"
+    )
   )
+
 
 ))
 
