@@ -41,9 +41,7 @@ selFeats <- reactive({!is.null(input$dtFTab_rows_selected)})
 
 # Button calc selected -----------------------------------------------------------------------
 output$btnCalcSel <- renderUI({
-  selectedFeatures = rv$selectedFeats
-  if (length(selectedFeatures) == 0) return(NULL)
-  
+  if (length(rv$selectedFeats) == 0 | length(rv$selectedUsers) == 0) return(NULL)
   actionButton("btnCalcSel", label = "Calculate selected!",
     style="color: #fff; background-color: #337ab7; border-color: #2e6da4;")
 })

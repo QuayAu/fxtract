@@ -14,10 +14,11 @@ output$tabs <- renderUI({
   
 })
 
-# On First load active project tab
+# On First load active project tab; Create project folder if not existing
 observe({
   if(is_empty(input$idTabs)){
     updateTabItems(session, "idTabs", selected = "tabProject")
+    if (!dir.exists("Projects")) dir.create("Projects")
   }
 })
 

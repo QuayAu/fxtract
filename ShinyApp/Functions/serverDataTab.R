@@ -4,7 +4,7 @@ dtProxy <- DT::dataTableProxy("dt")
 
 # Table -------------------------------------------------------------------
 output$dt <- DT::renderDataTable({
-  print(isolate(rv$selectedUsers))
+
   selUsers = isolate(rv$selectedUsers)
   df <- getAllFeatsPerUser()
 
