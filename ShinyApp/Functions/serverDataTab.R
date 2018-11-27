@@ -4,7 +4,8 @@ dtProxy <- DT::dataTableProxy("dt")
 
 # Table -------------------------------------------------------------------
 output$dt <- DT::renderDataTable({
-
+  print(isolate(rv$selectedUsers))
+  selUsers = isolate(rv$selectedUsers)
   df <- getAllFeatsPerUser()
 
   if(is_empty(df)) return(NULL)
@@ -23,7 +24,7 @@ output$dt <- DT::renderDataTable({
   df <- df[,-1] %>% as.data.frame()
   dataDT <<- df
 
-  DT::datatable(df, rownames=TRUE, filter = "top") %>% formatStyle(1:ncol(df),
+  dt = DT::datatable(df, rownames=TRUE, filter = "top", selection = list(selected = selUsers)) %>% formatStyle(1:ncol(df),
     backgroundColor = styleEqual(c(1), c('#b5f6aa'))
   )
   
@@ -34,8 +35,10 @@ output$dt <- DT::renderDataTable({
 observeEvent(input$dtSelAll, {
   if (isTRUE(input$dtSelAll)) {
     DT::selectRows(dtProxy, input$dt_rows_all)
+    rv$selectedUsers = input$dt_rows_all
   } else {
     DT::selectRows(dtProxy, NULL)
+    rv$selectedUsers = NULL
   }
 })
 
