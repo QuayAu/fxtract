@@ -12,6 +12,7 @@ getFreqRemUsers <- function(){
   freqCalcFeatsNotDone$nRemUsers = nSelUsers - freqCalcFeatsNotDone$Count
   freqCalcFeatsNotDone = freqCalcFeatsNotDone %>% select(-Count)
   names(freqCalcFeatsNotDone) = c("Feature", "RemainingUsers")
-  freqCalcFeatsNotDone
+  
+  return(freqCalcFeatsNotDone)
   
 }

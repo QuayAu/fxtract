@@ -1,10 +1,8 @@
 # Sidepanel ----------------------------------------------------------------------------------------
 ### Tabs
 output$tabs <- renderUI({
-  
   # Read all feature categories (sub folder names in 'features' folder) e.g. appusage, communication
   # Create for each folder a separate menuSubItem in sidebar under 'Project' tab
-  
   sidebarMenu(id = "idTabs",
     menuItem(text = "Project", tabName = "tabProject"),
     menuItem(text = "Data", tabName = "tabData"),

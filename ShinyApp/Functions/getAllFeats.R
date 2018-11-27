@@ -10,7 +10,7 @@ getAllFeats <- function(type = "all"){
 
   if(type != "all") dfFeatsWithCat = dfFeatsWithCat %>% filter(fCategory == rv$inpSelFeature)
   
-  dfFeatsWithCat
+  return(dfFeatsWithCat)
   
 }
 

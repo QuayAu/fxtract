@@ -46,12 +46,18 @@ output$btnCalcSel <- renderUI({
     style="color: #fff; background-color: #337ab7; border-color: #2e6da4;")
 })
 
-# Observe Button calc all --------------------------------------------------------------------
 observeEvent(input$btnCalcSel, {
   
-  # Prepare log files
-  if (dir.exists("logfiles") == FALSE){
-    dir.create("logfiles")
+  projectPathName = paste0("Projects/",input$sProjectName)
+  
+  # Create csvExports-folder if not existing
+  if (dir.exists(paste0(projectPathName, "/csvExports")) == FALSE){
+    dir.create(paste0(projectPathName, "/csvExports"))
+  }
+  
+  #Prepare log files
+  if (dir.exists(paste0(projectPathName, "/logfiles")) == FALSE){
+    dir.create(paste0(projectPathName, "/logfiles"))
   }
   
 })

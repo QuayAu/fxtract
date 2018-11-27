@@ -10,6 +10,7 @@ getFeatNotCalc <- function(){
 
   notCalcFeatsUsers = data.frame(notCalcFeats, length(rv$selectedUsers))
   names(notCalcFeatsUsers) = c("Feature", "RemainingUsers")
-  notCalcFeatsUsers
+  
+  return(notCalcFeatsUsers)
   
 }

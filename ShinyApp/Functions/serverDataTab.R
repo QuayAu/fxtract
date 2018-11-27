@@ -1,5 +1,4 @@
 # Render UI for Data tab ----------------------------------------------------------------------------------------
-
 dtProxy <- DT::dataTableProxy("dt")
 
 # Table -------------------------------------------------------------------
@@ -11,7 +10,6 @@ output$dt <- DT::renderDataTable({
   if(is_empty(df)) return(NULL)
   selFeatCats = input$cbFeatureCat # Selected Feature Categories in drop down
   df = df %>% filter(featCat %in% selFeatCats)
-
   df <- df[-1] %>% spread(featName, fileExists)
   
   if(nrow(df) == 0) return(NULL) #All feature categories filtered
@@ -27,7 +25,6 @@ output$dt <- DT::renderDataTable({
   dt = DT::datatable(df, rownames=TRUE, filter = "top", selection = list(selected = selUsers)) %>% formatStyle(1:ncol(df),
     backgroundColor = styleEqual(c(1), c('#b5f6aa'))
   )
-  
   
 })
 
