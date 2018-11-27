@@ -138,27 +138,22 @@ body <-  dashboardBody(
             column(width = 2, checkboxInput("dtSelAllFTab", "(Un)Select All")),
             column(width = 3, selectInput(inputId = "selFeatureFTab", label = NULL, choices = list.files("Features"), width = 200)),
             column(width = 3, textOutput("nUsers"))
-            # column(width = 3,
-            #   selectInput(inputId = "selFeats2bSeen", label = NULL, 
-            #     choices = c("All", "Calculation done", "Calculation not started", "Calculation started but not done"), width = 200)
-            # )
           ),
           
           
           br(),
           
           column(width = 7, DT::dataTableOutput("dtFTab", width = "100%"))),
+          column(width = 5, uiOutput(
+            outputId = "btnCalcSel"
+          )),
           title= "Select Features",
           solidHeader = TRUE,
           status = "success",
           width = 13,
           collapsible = T
           
-        )),
-          
-        uiOutput(
-            outputId = "featsTabUi"
-        )
+        ))
       ),
       
       tabItem(tabName = "tabCollResults",
@@ -171,12 +166,16 @@ body <-  dashboardBody(
     tags$style("#txtDirExists{
                   color: red;
                   font-size: 12px;
-                }"
-    ),
-    tags$style("#nUsers{
+                }
+                #nUsers{
                   font-size: 20px;
                   margin-left: 70px;
-                }"
+                }
+                #btnCalcSel{
+                  margin-left: 70px;
+                }
+                "
+                
     )
   )
 
