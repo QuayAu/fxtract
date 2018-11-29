@@ -30,7 +30,7 @@ With this new variable you can filter your dataset very easily. E.g., if you wan
 ```{r, message = FALSE, warning = FALSE}
 library(fxtract)
 library(dplyr)
-data = studentlife.small %>% addWeekday(utc_col = "timestamp") %>% filter(weekday >= "Mon" & weekday <= "Fri")
+data = studentlife_small %>% addWeekday(utc_col = "timestamp") %>% filter(weekday >= "Mon" & weekday <= "Fri")
 unique(data$weekday)
 ```
 
