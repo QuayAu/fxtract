@@ -4,7 +4,7 @@
 \alias{calcFeature}
 \title{Calculates a given function grouped by \code{group_col}.}
 \usage{
-calcFeature(data, group_col, fun, check_fun = TRUE)
+calcFeature(data, group_col, fun, check_fun = TRUE, summarize, colname)
 }
 \arguments{
 \item{data}{dataframe.}
@@ -15,6 +15,10 @@ calcFeature(data, group_col, fun, check_fun = TRUE)
 
 \item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
 if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
+
+\item{summarize}{function. If more than one value is returned for each group, this function summarizes these values to one value. E.g. mean.}
+
+\item{colname}{character. If one variable is returned for each group, you can specify a custom column name for this new column.}
 }
 \value{
 dataframe
