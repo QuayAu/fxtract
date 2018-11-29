@@ -4,3 +4,4 @@
 ^man-roxygen
 ^docs$
 ^_pkgdown\.yml$
+^data_gitignore

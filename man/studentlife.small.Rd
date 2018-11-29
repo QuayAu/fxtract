@@ -4,12 +4,12 @@
 \name{studentlife.small}
 \alias{studentlife.small}
 \title{studentlife.small}
-\format{An object of class \code{data.frame} with 4071 rows and 21 columns.}
+\format{An object of class \code{data.frame} with 162154 rows and 19 columns.}
 \usage{
 studentlife.small
 }
 \description{
-Contains exemplary gps and app data from the studentlife dataset.
+Contains exemplary gps and app data from the studentlife dataset (users: u00, u01, u02)
 }
 \details{
 http://studentlife.cs.dartmouth.edu/dataset.html

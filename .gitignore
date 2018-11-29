@@ -4,3 +4,4 @@
 *.Rproj
 #docs/*
 .project
+data_gitignore/
