@@ -7,17 +7,17 @@
 #' @docType data
 "phonedata"
 
-#' studentlife.small
+#' studentlife_small
 #'
 #' Contains exemplary gps and app data from the studentlife dataset (users: u00, u01, u02)
 #'
 #' http://studentlife.cs.dartmouth.edu/dataset.html
 #'
 #' Wang, Rui, Fanglin Chen, Zhenyu Chen, Tianxing Li, Gabriella Harari, Stefanie Tignor, Xia Zhou, Dror Ben-Zeev, and Andrew T. Campbell. "StudentLife: Assessing Mental Health, Academic Performance and Behavioral Trends of College Students using Smartphones." In Proceedings of the ACM Conference on Ubiquitous Computing. 2014.
-#' @name studentlife.small
+#' @name studentlife_small
 #' @keywords data
 #' @docType data
-"studentlife.small"
+"studentlife_small"
 
 # library(dplyr)
 # gpsdummy = read.csv("data_gitignore/studentlife/dataset/sensing/gps/gps_u00.csv")
@@ -42,7 +42,7 @@
 # d00 = gps00 %>% bind_rows(app00) %>% arrange(timestamp)
 # d01 = gps01 %>% bind_rows(app01) %>% arrange(timestamp)
 # d02 = gps02 %>% bind_rows(app02) %>% arrange(timestamp)
-# studentlife.small = d00 %>% bind_rows(d01) %>% bind_rows(d02)
-# studentlife.small$ï..id = NULL
+# studentlife_small = d00 %>% bind_rows(d01) %>% bind_rows(d02)
+# studentlife_small$ï..id = NULL
 # library(devtools)
-# use_data(studentlife.small, overwrite = TRUE)
+# use_data(studentlife_small, overwrite = TRUE)

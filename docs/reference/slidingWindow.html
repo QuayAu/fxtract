@@ -202,227 +202,203 @@ if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on t
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>data.frame</span>(<span class='kw'>mean.accuracy.last30</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>x</span>$<span class='no'>accuracy</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attache Paket: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:lubridate':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, union</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>data.frame</span>(<span class='kw'>mean.accuracy.last30</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>x</span>$<span class='no'>accuracy</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
   <span class='kw'>max.accuracy.last30</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='no'>x</span>$<span class='no'>accuracy</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
-<span class='no'>data</span> <span class='kw'>=</span> <span class='no'>studentlife.small</span>[<span class='fl'>1</span>:<span class='fl'>30</span>, ] <span class='co'>#needs date_time variable</span>
+<span class='no'>data</span> <span class='kw'>=</span> <span class='no'>studentlife.small</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(!<span class='fu'>is.na</span>(<span class='no'>latitude</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>) <span class='co'>#needs date_time variable</span>
 <span class='fu'>slidingWindow</span>(<span class='no'>data</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>time_in_sec</span> <span class='kw'>=</span> <span class='fl'>60</span> * <span class='fl'>60</span>,
-  <span class='kw'>utc_col</span> <span class='kw'>=</span> <span class='st'>"timestamp"</span>) <span class='co'>#mean accuracy of last hour</span></div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=====                                                                 |   7%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=======                                                               |  10%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=========                                                             |  13%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |============                                                          |  17%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |==============                                                        |  20%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |================                                                      |  23%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |===================                                                   |  27%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=====================                                                 |  30%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=======================                                               |  33%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |==========================                                            |  37%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |============================                                          |  40%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |==============================                                        |  43%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=================================                                     |  47%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |===================================                                   |  50%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=====================================                                 |  53%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |========================================                              |  57%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |==========================================                            |  60%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |============================================                          |  63%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |===============================================                       |  67%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=================================================                     |  70%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |===================================================                   |  73%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |======================================================                |  77%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |========================================================              |  80%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |==========================================================            |  83%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=============================================================         |  87%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |===============================================================       |  90%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |=================================================================     |  93%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |====================================================================  |  97%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;    provider network_type accuracy latitude longitude altitude bearing speed
-#&gt; 1      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 2      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 3      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 4      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 5      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 6      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 7      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 8      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 9      &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 10     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 11     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 12     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 13     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 14     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 15     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 16     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 17     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 18     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 19     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 20     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 21     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 22     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 23     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 24     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 25     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 26     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 27     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 28     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 29     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt; 30     &lt;NA&gt;         &lt;NA&gt;       NA       NA        NA       NA      NA    NA
-#&gt;    travelstate userId  timestamp                               device
-#&gt; 1         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 2         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 3         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 4         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 5         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 6         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 7         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 8         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 9         &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 10        &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 11        &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 12        &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 13        &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 14        &lt;NA&gt;     00 1364095883 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 15        &lt;NA&gt;     00 1364097083 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 16        &lt;NA&gt;     00 1364097083 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 17        &lt;NA&gt;     00 1364097083 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 18        &lt;NA&gt;     00 1364097083 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 19        &lt;NA&gt;     00 1364097083 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 20        &lt;NA&gt;     00 1364098283 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 21        &lt;NA&gt;     00 1364098283 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 22        &lt;NA&gt;     00 1364098283 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 23        &lt;NA&gt;     00 1364098283 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 24        &lt;NA&gt;     00 1364098283 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 25        &lt;NA&gt;     00 1364099483 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 26        &lt;NA&gt;     00 1364099483 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 27        &lt;NA&gt;     00 1364099483 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 28        &lt;NA&gt;     00 1364099483 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 29        &lt;NA&gt;     00 1364099483 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt; 30        &lt;NA&gt;     00 1364100683 1977b545-a88f-4903-a7ae-2c434de4be49
-#&gt;                          RUNNING_TASKS_baseActivity_mClass
-#&gt; 1                          org.bewellapp.dashBoardActivity
-#&gt; 2          com.android.packageinstaller.InstallAppProgress
-#&gt; 3                      com.google.android.apps.chrome.Main
-#&gt; 4                      com.google.android.gm.GmailActivity
-#&gt; 5                           com.android.launcher2.Launcher
-#&gt; 6              com.android.systemui.recent.RecentsActivity
-#&gt; 7                        com.android.gallery3d.app.Gallery
-#&gt; 8   com.google.android.apps.paco.ExperimentManagerActivity
-#&gt; 9                            com.android.settings.Settings
-#&gt; 10                         com.android.deskclock.DeskClock
-#&gt; 11 com.android.settings.Settings$PowerUsageSummaryActivity
-#&gt; 12       com.android.contacts.activities.DialtactsActivity
-#&gt; 13                    edu.dartmouth.cs.camera.MainActivity
-#&gt; 14                          com.android.phone.InCallScreen
-#&gt; 15                       com.example.android.apis.ApiDemos
-#&gt; 16                          com.android.launcher2.Launcher
-#&gt; 17     com.google.android.gm.ConversationListActivityGmail
-#&gt; 18 com.android.settings.Settings$PowerUsageSummaryActivity
-#&gt; 19                          com.android.phone.InCallScreen
-#&gt; 20                       com.example.android.apis.ApiDemos
-#&gt; 21                          com.android.launcher2.Launcher
-#&gt; 22     com.google.android.gm.ConversationListActivityGmail
-#&gt; 23 com.android.settings.Settings$PowerUsageSummaryActivity
-#&gt; 24                          com.android.phone.InCallScreen
-#&gt; 25                       com.example.android.apis.ApiDemos
-#&gt; 26                          com.android.launcher2.Launcher
-#&gt; 27     com.google.android.gm.ConversationListActivityGmail
-#&gt; 28 com.android.settings.Settings$PowerUsageSummaryActivity
-#&gt; 29                          com.android.phone.InCallScreen
-#&gt; 30     com.google.android.gm.ConversationListActivityGmail
+  <span class='kw'>utc_col</span> <span class='kw'>=</span> <span class='st'>"timestamp"</span>) <span class='co'>#mean accuracy of last hour</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  13%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |=====================                                                 |  30%  |                                                                              |=======================                                               |  33%  |                                                                              |==========================                                            |  37%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |============================                                          |  40%  |                                                                              |==============================                                        |  43%  |                                                                              |=================================                                     |  47%  |                                                                              |===================================                                   |  50%  |                                                                              |=====================================                                 |  53%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  60%  |                                                                              |============================================                          |  63%  |                                                                              |===============================================                       |  67%  |                                                                              |=================================================                     |  70%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |=============================================================         |  87%  |                                                                              |===============================================================       |  90%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  97%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;    provider network_type accuracy latitude longitude altitude bearing speed
+#&gt; 1   network         wifi   24.000 43.75913 -72.32924      0.0       0     0
+#&gt; 2       gps                22.000 43.75950 -72.32902    250.9       0     0
+#&gt; 3   network         wifi   23.000 43.75913 -72.32924      0.0       0     0
+#&gt; 4   network         wifi   25.000 43.75913 -72.32924      0.0       0     0
+#&gt; 5   network         wifi   25.000 43.75913 -72.32924      0.0       0     0
+#&gt; 6   network         wifi   23.000 43.75913 -72.32924      0.0       0     0
+#&gt; 7   network         wifi   25.000 43.75913 -72.32924      0.0       0     0
+#&gt; 8   network         cell 5000.000 43.60805 -72.16217      0.0       0     0
+#&gt; 9   network         cell 5000.000 43.60805 -72.16217      0.0       0     0
+#&gt; 10  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 11  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 12  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 13  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 14  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 15  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 16  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 17  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 18  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 19  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 20  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 21  network         wifi   20.000 43.75913 -72.32923      0.0       0     0
+#&gt; 22  network         cell 2294.000 43.70647 -72.28731      0.0       0     0
+#&gt; 23  network         wifi   27.443 43.70511 -72.28852      0.0       0     0
+#&gt; 24  network         wifi   20.000 43.70672 -72.28730      0.0       0     0
+#&gt; 25  network         wifi   20.000 43.70673 -72.28734      0.0       0     0
+#&gt; 26  network         wifi   20.000 43.70672 -72.28733      0.0       0     0
+#&gt; 27  network         wifi   30.535 43.70672 -72.28729      0.0       0     0
+#&gt; 28  network         wifi   20.000 43.70671 -72.28733      0.0       0     0
+#&gt; 29  network         wifi   66.924 43.70890 -72.28367      0.0       0     0
+#&gt; 30  network         wifi   46.188 43.70895 -72.28397      0.0       0     0
+#&gt;    travelstate userId  timestamp device RUNNING_TASKS_baseActivity_mClass
+#&gt; 1   stationary     00 1364356963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 2                  00 1364358144   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 3   stationary     00 1364359364   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 4   stationary     00 1364360563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 5   stationary     00 1364361763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 6   stationary     00 1364362963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 7   stationary     00 1364364163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 8   stationary     00 1364365364   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 9   stationary     00 1364365368   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 10      moving     00 1364367763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 11      moving     00 1364367768   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 12      moving     00 1364372563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 13  stationary     00 1364373763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 14  stationary     00 1364374963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 15  stationary     00 1364376163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 16  stationary     00 1364377363   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 17  stationary     00 1364378563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 18  stationary     00 1364379763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 19  stationary     00 1364380963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 20  stationary     00 1364382163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 21  stationary     00 1364383363   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 22      moving     00 1364384563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 23      moving     00 1364385763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 24      moving     00 1364386963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 25  stationary     00 1364388163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 26  stationary     00 1364389363   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 27  stationary     00 1364390563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 28  stationary     00 1364391763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 29      moving     00 1364392963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 30      moving     00 1364394163   &lt;NA&gt;                              &lt;NA&gt;
 #&gt;    RUNNING_TASKS_baseActivity_mPackage RUNNING_TASKS_id
-#&gt; 1                        org.bewellapp              249
-#&gt; 2         com.android.packageinstaller              248
-#&gt; 3                   com.android.chrome              245
-#&gt; 4                com.google.android.gm              244
-#&gt; 5                 com.android.launcher                2
-#&gt; 6                 com.android.systemui              240
-#&gt; 7         com.google.android.gallery3d              241
-#&gt; 8         com.google.android.apps.paco              247
-#&gt; 9                 com.android.settings              243
-#&gt; 10        com.google.android.deskclock              242
-#&gt; 11                com.android.settings               76
-#&gt; 12                com.android.contacts              235
-#&gt; 13             edu.dartmouth.cs.camera              232
-#&gt; 14                   com.android.phone               61
-#&gt; 15            com.example.android.apis              259
-#&gt; 16                com.android.launcher                2
-#&gt; 17               com.google.android.gm              256
-#&gt; 18                com.android.settings               76
-#&gt; 19                   com.android.phone               61
-#&gt; 20            com.example.android.apis              259
-#&gt; 21                com.android.launcher                2
-#&gt; 22               com.google.android.gm              256
-#&gt; 23                com.android.settings               76
-#&gt; 24                   com.android.phone               61
-#&gt; 25            com.example.android.apis              259
-#&gt; 26                com.android.launcher                2
-#&gt; 27               com.google.android.gm              256
-#&gt; 28                com.android.settings               76
-#&gt; 29                   com.android.phone               61
-#&gt; 30               com.google.android.gm              256
+#&gt; 1                                 &lt;NA&gt;               NA
+#&gt; 2                                 &lt;NA&gt;               NA
+#&gt; 3                                 &lt;NA&gt;               NA
+#&gt; 4                                 &lt;NA&gt;               NA
+#&gt; 5                                 &lt;NA&gt;               NA
+#&gt; 6                                 &lt;NA&gt;               NA
+#&gt; 7                                 &lt;NA&gt;               NA
+#&gt; 8                                 &lt;NA&gt;               NA
+#&gt; 9                                 &lt;NA&gt;               NA
+#&gt; 10                                &lt;NA&gt;               NA
+#&gt; 11                                &lt;NA&gt;               NA
+#&gt; 12                                &lt;NA&gt;               NA
+#&gt; 13                                &lt;NA&gt;               NA
+#&gt; 14                                &lt;NA&gt;               NA
+#&gt; 15                                &lt;NA&gt;               NA
+#&gt; 16                                &lt;NA&gt;               NA
+#&gt; 17                                &lt;NA&gt;               NA
+#&gt; 18                                &lt;NA&gt;               NA
+#&gt; 19                                &lt;NA&gt;               NA
+#&gt; 20                                &lt;NA&gt;               NA
+#&gt; 21                                &lt;NA&gt;               NA
+#&gt; 22                                &lt;NA&gt;               NA
+#&gt; 23                                &lt;NA&gt;               NA
+#&gt; 24                                &lt;NA&gt;               NA
+#&gt; 25                                &lt;NA&gt;               NA
+#&gt; 26                                &lt;NA&gt;               NA
+#&gt; 27                                &lt;NA&gt;               NA
+#&gt; 28                                &lt;NA&gt;               NA
+#&gt; 29                                &lt;NA&gt;               NA
+#&gt; 30                                &lt;NA&gt;               NA
 #&gt;    RUNNING_TASKS_numActivities RUNNING_TASKS_numRunning
-#&gt; 1                            1                        1
-#&gt; 2                            1                        1
-#&gt; 3                            1                        1
-#&gt; 4                            1                        1
-#&gt; 5                            1                        1
-#&gt; 6                            1                        1
-#&gt; 7                            3                        3
-#&gt; 8                            4                        4
-#&gt; 9                            2                        2
-#&gt; 10                           1                        1
-#&gt; 11                           1                        1
-#&gt; 12                           1                        1
-#&gt; 13                           2                        2
-#&gt; 14                           1                        1
-#&gt; 15                           3                        3
-#&gt; 16                           1                        1
-#&gt; 17                           1                        1
-#&gt; 18                           1                        0
-#&gt; 19                           1                        1
-#&gt; 20                           3                        3
-#&gt; 21                           1                        1
-#&gt; 22                           1                        1
-#&gt; 23                           1                        0
-#&gt; 24                           1                        1
-#&gt; 25                           3                        3
-#&gt; 26                           1                        1
-#&gt; 27                           1                        1
-#&gt; 28                           1                        0
-#&gt; 29                           1                        1
-#&gt; 30                           1                        1
-#&gt;                           RUNNING_TASKS_topActivity_mClass
-#&gt; 1                          org.bewellapp.dashBoardActivity
-#&gt; 2          com.android.packageinstaller.InstallAppProgress
-#&gt; 3                      com.google.android.apps.chrome.Main
-#&gt; 4                      com.google.android.gm.GmailActivity
-#&gt; 5                           com.android.launcher2.Launcher
-#&gt; 6              com.android.systemui.recent.RecentsActivity
-#&gt; 7                        com.android.gallery3d.app.Gallery
-#&gt; 8     com.google.android.apps.paco.FindExperimentsActivity
-#&gt; 9                         com.android.settings.SubSettings
-#&gt; 10                         com.android.deskclock.DeskClock
-#&gt; 11 com.android.settings.Settings$PowerUsageSummaryActivity
-#&gt; 12       com.android.contacts.activities.DialtactsActivity
-#&gt; 13                 edu.dartmouth.cs.camera.ProfileActivity
-#&gt; 14                          com.android.phone.InCallScreen
-#&gt; 15                       com.example.android.apis.ApiDemos
-#&gt; 16                          com.android.launcher2.Launcher
-#&gt; 17     com.google.android.gm.ConversationListActivityGmail
-#&gt; 18 com.android.settings.Settings$PowerUsageSummaryActivity
-#&gt; 19                          com.android.phone.InCallScreen
-#&gt; 20                       com.example.android.apis.ApiDemos
-#&gt; 21                          com.android.launcher2.Launcher
-#&gt; 22     com.google.android.gm.ConversationListActivityGmail
-#&gt; 23 com.android.settings.Settings$PowerUsageSummaryActivity
-#&gt; 24                          com.android.phone.InCallScreen
-#&gt; 25                       com.example.android.apis.ApiDemos
-#&gt; 26                          com.android.launcher2.Launcher
-#&gt; 27     com.google.android.gm.ConversationListActivityGmail
-#&gt; 28 com.android.settings.Settings$PowerUsageSummaryActivity
-#&gt; 29                          com.android.phone.InCallScreen
-#&gt; 30     com.google.android.gm.ConversationListActivityGmail
-#&gt;    RUNNING_TASKS_topActivity_mPackage mean.accuracy.last30 max.accuracy.last30
-#&gt; 1                       org.bewellapp                   NA                  NA
-#&gt; 2        com.android.packageinstaller                  NaN                -Inf
-#&gt; 3                  com.android.chrome                  NaN                -Inf
-#&gt; 4               com.google.android.gm                  NaN                -Inf
-#&gt; 5                com.android.launcher                  NaN                -Inf
-#&gt; 6                com.android.systemui                  NaN                -Inf
-#&gt; 7        com.google.android.gallery3d                  NaN                -Inf
-#&gt; 8        com.google.android.apps.paco                  NaN                -Inf
-#&gt; 9                com.android.settings                  NaN                -Inf
-#&gt; 10       com.google.android.deskclock                  NaN                -Inf
-#&gt; 11               com.android.settings                  NaN                -Inf
-#&gt; 12               com.android.contacts                  NaN                -Inf
-#&gt; 13            edu.dartmouth.cs.camera                  NaN                -Inf
-#&gt; 14                  com.android.phone                  NaN                -Inf
-#&gt; 15           com.example.android.apis                  NaN                -Inf
-#&gt; 16               com.android.launcher                  NaN                -Inf
-#&gt; 17              com.google.android.gm                  NaN                -Inf
-#&gt; 18               com.android.settings                  NaN                -Inf
-#&gt; 19                  com.android.phone                  NaN                -Inf
-#&gt; 20           com.example.android.apis                  NaN                -Inf
-#&gt; 21               com.android.launcher                  NaN                -Inf
-#&gt; 22              com.google.android.gm                  NaN                -Inf
-#&gt; 23               com.android.settings                  NaN                -Inf
-#&gt; 24                  com.android.phone                  NaN                -Inf
-#&gt; 25           com.example.android.apis                  NaN                -Inf
-#&gt; 26               com.android.launcher                  NaN                -Inf
-#&gt; 27              com.google.android.gm                  NaN                -Inf
-#&gt; 28               com.android.settings                  NaN                -Inf
-#&gt; 29                  com.android.phone                  NaN                -Inf
-#&gt; 30              com.google.android.gm                  NaN                -Inf</div></pre>
+#&gt; 1                           NA                       NA
+#&gt; 2                           NA                       NA
+#&gt; 3                           NA                       NA
+#&gt; 4                           NA                       NA
+#&gt; 5                           NA                       NA
+#&gt; 6                           NA                       NA
+#&gt; 7                           NA                       NA
+#&gt; 8                           NA                       NA
+#&gt; 9                           NA                       NA
+#&gt; 10                          NA                       NA
+#&gt; 11                          NA                       NA
+#&gt; 12                          NA                       NA
+#&gt; 13                          NA                       NA
+#&gt; 14                          NA                       NA
+#&gt; 15                          NA                       NA
+#&gt; 16                          NA                       NA
+#&gt; 17                          NA                       NA
+#&gt; 18                          NA                       NA
+#&gt; 19                          NA                       NA
+#&gt; 20                          NA                       NA
+#&gt; 21                          NA                       NA
+#&gt; 22                          NA                       NA
+#&gt; 23                          NA                       NA
+#&gt; 24                          NA                       NA
+#&gt; 25                          NA                       NA
+#&gt; 26                          NA                       NA
+#&gt; 27                          NA                       NA
+#&gt; 28                          NA                       NA
+#&gt; 29                          NA                       NA
+#&gt; 30                          NA                       NA
+#&gt;    RUNNING_TASKS_topActivity_mClass RUNNING_TASKS_topActivity_mPackage
+#&gt; 1                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 2                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 3                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 4                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 5                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 6                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 7                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 8                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 9                              &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 10                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 11                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 12                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 13                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 14                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 15                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 16                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 17                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 18                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 19                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 20                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 21                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 22                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 23                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 24                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 25                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 26                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 27                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 28                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 29                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt; 30                             &lt;NA&gt;                               &lt;NA&gt;
+#&gt;    mean.accuracy.last30 max.accuracy.last30
+#&gt; 1                    NA                  NA
+#&gt; 2              24.00000              24.000
+#&gt; 3              23.00000              24.000
+#&gt; 4              22.50000              23.000
+#&gt; 5              24.00000              25.000
+#&gt; 6              24.33333              25.000
+#&gt; 7              24.00000              25.000
+#&gt; 8              24.00000              25.000
+#&gt; 9            1682.66667            5000.000
+#&gt; 10           5000.00000            5000.000
+#&gt; 11           4483.66667            5000.000
+#&gt; 12                  NaN                -Inf
+#&gt; 13           3451.00000            3451.000
+#&gt; 14           3451.00000            3451.000
+#&gt; 15           3451.00000            3451.000
+#&gt; 16           3451.00000            3451.000
+#&gt; 17           3451.00000            3451.000
+#&gt; 18           3451.00000            3451.000
+#&gt; 19           3451.00000            3451.000
+#&gt; 20           3451.00000            3451.000
+#&gt; 21           3451.00000            3451.000
+#&gt; 22           1735.50000            3451.000
+#&gt; 23           1157.00000            2294.000
+#&gt; 24           1160.72150            2294.000
+#&gt; 25             23.72150              27.443
+#&gt; 26             20.00000              20.000
+#&gt; 27             20.00000              20.000
+#&gt; 28             25.26750              30.535
+#&gt; 29             25.26750              30.535
+#&gt; 30             43.46200              66.924</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

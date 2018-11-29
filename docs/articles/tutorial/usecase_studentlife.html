@@ -119,57 +119,187 @@
 <a href="#studentlife-small" class="anchor"></a>studentlife.small</h2>
 <p>We downloaded gps and app data from three participants of the studentlife dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
-<span class="kw">head</span>(studentlife.small)</code></pre></div>
-<pre><code>##    timestamp provider network_type accuracy latitude longitude altitude
-## 1 1364357009  network         wifi   67.993 43.70667 -72.28910      0.0
-## 2 1364358209  network         wifi   23.000 43.70664 -72.28907      0.0
-## 3 1364359405      gps                16.000 43.70668 -72.28902    136.3
-## 4 1364360609  network         wifi   71.126 43.70667 -72.28909      0.0
-## 5 1364361805      gps                16.000 43.70681 -72.28937    154.5
-## 6 1364363013      gps                12.000 43.70681 -72.28902    130.8
-##   bearing speed travelstate       date userId source device
-## 1     0.0  0.00  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-## 2     0.0  0.00      moving 2013-03-27      1    GPS   &lt;NA&gt;
-## 3    96.2  0.25             2013-03-27      1    GPS   &lt;NA&gt;
-## 4     0.0  0.00  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-## 5     0.0  0.00             2013-03-27      1    GPS   &lt;NA&gt;
-## 6     0.0  0.00             2013-03-27      1    GPS   &lt;NA&gt;
-##   RUNNING_TASKS_baseActivity_mClass RUNNING_TASKS_baseActivity_mPackage
-## 1                              &lt;NA&gt;                                &lt;NA&gt;
-## 2                              &lt;NA&gt;                                &lt;NA&gt;
-## 3                              &lt;NA&gt;                                &lt;NA&gt;
-## 4                              &lt;NA&gt;                                &lt;NA&gt;
-## 5                              &lt;NA&gt;                                &lt;NA&gt;
-## 6                              &lt;NA&gt;                                &lt;NA&gt;
-##   RUNNING_TASKS_id RUNNING_TASKS_numActivities RUNNING_TASKS_numRunning
-## 1               NA                          NA                       NA
-## 2               NA                          NA                       NA
-## 3               NA                          NA                       NA
-## 4               NA                          NA                       NA
-## 5               NA                          NA                       NA
-## 6               NA                          NA                       NA
-##   RUNNING_TASKS_topActivity_mClass RUNNING_TASKS_topActivity_mPackage
-## 1                             &lt;NA&gt;                               &lt;NA&gt;
-## 2                             &lt;NA&gt;                               &lt;NA&gt;
-## 3                             &lt;NA&gt;                               &lt;NA&gt;
-## 4                             &lt;NA&gt;                               &lt;NA&gt;
-## 5                             &lt;NA&gt;                               &lt;NA&gt;
-## 6                             &lt;NA&gt;                               &lt;NA&gt;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-studentlife.small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(userId)</code></pre></div>
-<pre><code>##   userId
-## 1      1
-## 2      2
-## 3      3</code></pre>
+<span class="kw">library</span>(dplyr)
+<span class="kw">str</span>(studentlife.small)</code></pre></div>
+<pre><code>## 'data.frame':    162154 obs. of  19 variables:
+##  $ provider                           : Factor w/ 2 levels "gps","network": NA NA NA NA NA NA NA NA NA NA ...
+##  $ network_type                       : chr  NA NA NA NA ...
+##  $ accuracy                           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ latitude                           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ longitude                          : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ altitude                           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ bearing                            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ speed                              : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ travelstate                        : Factor w/ 3 levels "","moving","stationary": NA NA NA NA NA NA NA NA NA NA ...
+##  $ userId                             : chr  "00" "00" "00" "00" ...
+##  $ timestamp                          : int  1364095883 1364095883 1364095883 1364095883 1364095883 1364095883 1364095883 1364095883 1364095883 1364095883 ...
+##  $ device                             : chr  "1977b545-a88f-4903-a7ae-2c434de4be49" "1977b545-a88f-4903-a7ae-2c434de4be49" "1977b545-a88f-4903-a7ae-2c434de4be49" "1977b545-a88f-4903-a7ae-2c434de4be49" ...
+##  $ RUNNING_TASKS_baseActivity_mClass  : chr  "org.bewellapp.dashBoardActivity" "com.android.packageinstaller.InstallAppProgress" "com.google.android.apps.chrome.Main" "com.google.android.gm.GmailActivity" ...
+##  $ RUNNING_TASKS_baseActivity_mPackage: chr  "org.bewellapp" "com.android.packageinstaller" "com.android.chrome" "com.google.android.gm" ...
+##  $ RUNNING_TASKS_id                   : int  249 248 245 244 2 240 241 247 243 242 ...
+##  $ RUNNING_TASKS_numActivities        : int  1 1 1 1 1 1 3 4 2 1 ...
+##  $ RUNNING_TASKS_numRunning           : int  1 1 1 1 1 1 3 4 2 1 ...
+##  $ RUNNING_TASKS_topActivity_mClass   : chr  "org.bewellapp.dashBoardActivity" "com.android.packageinstaller.InstallAppProgress" "com.google.android.apps.chrome.Main" "com.google.android.gm.GmailActivity" ...
+##  $ RUNNING_TASKS_topActivity_mPackage : chr  "org.bewellapp" "com.android.packageinstaller" "com.android.chrome" "com.google.android.gm" ...</code></pre>
+<!-- # ```{r, message = FALSE, warning = FALSE} -->
+<!-- # library(dplyr) -->
+<!-- # studentlife.small %>% distinct(userId) -->
+<!-- # ``` -->
 </div>
-</div>
-<div id="user-defined-functions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#user-defined-functions" class="anchor"></a>User Defined Functions</h1>
-<div id="number-of-different-used-apps-in-the-morning" class="section level2">
+<div id="number-of-different-used-apps" class="section level2">
 <h2 class="hasAnchor">
-<a href="#number-of-different-used-apps-in-the-morning" class="anchor"></a>Number of different used apps in the morning</h2>
-<p>Let us define “morning” by 6am until 9am. The dataset does not have any information of the time of the day, but it is available via the UTC timestamp.</p>
+<a href="#number-of-different-used-apps" class="anchor"></a>Number of different used apps</h2>
+<p>This is a very straightforward function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">numberDiffApps =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw">length</span>(<span class="kw">unique</span>(data<span class="op">$</span>RUNNING_TASKS_topActivity_mPackage))
+}</code></pre></div>
+<p>That’s all we need to calculate the number of different apps used in the morning for each participant:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feat_data =<span class="st"> </span><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(<span class="dt">data =</span> studentlife.small, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="st">"userId"</span>)
+feat_data</code></pre></div>
+<pre><code>##   userId numberDiffApps
+## 1     00             93
+## 2     01             43
+## 3     02             72</code></pre>
+<div id="number-of-different-used-apps-from-monday-until-friday" class="section level3">
+<h3 class="hasAnchor">
+<a href="#number-of-different-used-apps-from-monday-until-friday" class="anchor"></a>Number of different used apps from Monday until Friday</h3>
+<p>For this feature, we need to filter the dataset from Monday until Friday:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">studentlife.small.weekday =<span class="st"> </span>studentlife.small <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="../../reference/addWeekday.html">addWeekday</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)
+x =<span class="st"> </span><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(<span class="dt">data =</span> studentlife.small.weekday, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="st">"userId"</span>, <span class="dt">colname =</span> <span class="st">"numberDiffAppsWeekday"</span>)
+feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)
+feat_data</code></pre></div>
+<pre><code>##   userId numberDiffApps numberDiffAppsWeekday
+## 1     00             93                    91
+## 2     01             43                    43
+## 3     02             72                    66</code></pre>
+</div>
+<div id="number-of-different-used-apps-per-day" class="section level3">
+<h3 class="hasAnchor">
+<a href="#number-of-different-used-apps-per-day" class="anchor"></a>Number of different used apps per day</h3>
+<p>To calculate this feature per day, we need to add date information to the dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">studentlife.small.date =<span class="st"> </span>studentlife.small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../../reference/addDate.html">addDate</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<p>Now we can calculate this feature per day:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(<span class="dt">data =</span> studentlife.small.date, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>))
+x</code></pre></div>
+<pre><code>##   userId X2013.03.24 X2013.03.25 X2013.03.26 X2013.03.27 X2013.03.28
+## 1     00          22          21          12          20          26
+## 2     01           6           5          10          18           9
+## 3     02           7           3          17          28          24
+##   X2013.03.29 X2013.03.30 X2013.03.31 X2013.04.01 X2013.04.02 X2013.04.03
+## 1          17          18          11          18          22          22
+## 2          11          12          12          12          14           7
+## 3          23          17          25          23          20          18
+##   X2013.04.04 X2013.04.05 X2013.04.06 X2013.04.07 X2013.04.08 X2013.04.09
+## 1          24          24          22          33          19          28
+## 2           7           9           9           9          13          14
+## 3          23          20          19          21          21          20
+##   X2013.04.10 X2013.04.11 X2013.04.12 X2013.04.13 X2013.04.14 X2013.04.15
+## 1          29          33          35          31          17          22
+## 2          12          15          16           6           6          10
+## 3          15          17          16          17          22          14
+##   X2013.04.16 X2013.04.17 X2013.04.18 X2013.04.19 X2013.04.20 X2013.04.21
+## 1          23          21          15          29          17          24
+## 2          11          16          14          14          14           3
+## 3          17          20          23          16          18          19
+##   X2013.04.22 X2013.04.23 X2013.04.24 X2013.04.25 X2013.04.26 X2013.04.27
+## 1          27          16          14          20          23          20
+## 2           6          13          13          15          13           8
+## 3          20          24          11          18          20          18
+##   X2013.04.28 X2013.04.29 X2013.04.30 X2013.05.01 X2013.05.02 X2013.05.03
+## 1          20          28          10          17          15          10
+## 2           8          10          10           7           9           9
+## 3          16          18          15          17          18          17
+##   X2013.05.04 X2013.05.05 X2013.05.06 X2013.05.07 X2013.05.08 X2013.05.09
+## 1          13          14          15          17          17          15
+## 2          10          NA          NA           5           7           8
+## 3          17          17          12          20          19          21
+##   X2013.05.10 X2013.05.11 X2013.05.12 X2013.05.13 X2013.05.14 X2013.05.15
+## 1          11          14          14          12          13          17
+## 2           8           8           8           3           5          13
+## 3          17          18          17          22          21          20
+##   X2013.05.16 X2013.05.17 X2013.05.18 X2013.05.19 X2013.05.20 X2013.05.21
+## 1          13          12           9           6           6          NA
+## 2           6           7           7           9           9           9
+## 3          14          16          17          17          16          14
+##   X2013.05.22 X2013.05.23 X2013.05.24 X2013.05.25 X2013.05.26 X2013.05.27
+## 1           9          13          12          17          13          16
+## 2           9          10          11           3           6           9
+## 3          15          18          21          18          14          21
+##   X2013.05.28 X2013.05.29 X2013.05.30 X2013.05.31 X2013.06.01 X2013.06.02
+## 1          17          18          11          14          15          13
+## 2          11           8          NA          NA          NA          NA
+## 3          21          23          16          16          17          NA
+##   X2013.06.03 X2013.06.04 X2013.06.05 X2013.06.06 X2013.06.07 X2013.06.08
+## 1          11          10          15          13          10          12
+## 2          NA          NA          NA          NA          NA          NA
+## 3          NA          NA          NA          NA          NA          NA
+##   X2013.06.09 X2013.06.10 X2013.06.11 X2013.06.12 X2013.06.13 X2013.06.14
+## 1          10          10          11          15          11          13
+## 2          NA          NA          NA          NA          NA          NA
+## 3          NA          NA          NA          NA          NA          NA
+##   X2013.06.15 X2013.06.20
+## 1          14           1
+## 2          NA          NA
+## 3          NA          NA</code></pre>
+<p>All there is left to do is to apply a mean function on the rows of this dataset. You can do this by specifying a <code>summarize</code>-function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(<span class="dt">data =</span> studentlife.small.date, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>), 
+  <span class="dt">summarize =</span> <span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dt">colname =</span> <span class="st">"dailyNumberDiffApps"</span>)
+feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)</code></pre></div>
+<pre><code>## Joining, by = "userId"</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feat_data</code></pre></div>
+<pre><code>##   userId numberDiffApps numberDiffAppsWeekday dailyNumberDiffApps
+## 1     00             93                    91            16.86905
+## 2     01             43                    43             9.60000
+## 3     02             72                    66            18.14286</code></pre>
+</div>
+</div>
+<div id="some-gps-features" class="section level2 tabset">
+<h2 class="hasAnchor">
+<a href="#some-gps-features" class="anchor"></a>Some GPS features</h2>
+<div id="total-distance-covered" class="section level3">
+<h3 class="hasAnchor">
+<a href="#total-distance-covered" class="anchor"></a>Total distance covered</h3>
+<p>Again, we need to define a function, which calculates the total distance covered by the GPS points in a given dataset <code>data</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(geosphere)
+totalDist =<span class="st"> </span><span class="cf">function</span>(data) {
+  long =<span class="st"> </span>data<span class="op">$</span>longitude
+  lat =<span class="st"> </span>data<span class="op">$</span>latitude
+  <span class="kw">sum</span>(geosphere<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/geosphere/topics/distHaversine">distHaversine</a></span>(<span class="kw">cbind</span>(long, lat)), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(<span class="dt">data =</span> studentlife.small, <span class="dt">group_col =</span> <span class="st">"userId"</span>, <span class="dt">fun =</span> totalDist)
+feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x, <span class="dt">by =</span> <span class="st">"userId"</span>)
+feat_data </code></pre></div>
+<pre><code>##   userId numberDiffApps numberDiffAppsWeekday dailyNumberDiffApps
+## 1     00             93                    91            16.86905
+## 2     01             43                    43             9.60000
+## 3     02             72                    66            18.14286
+##   totalDist
+## 1 621719.25
+## 2  44649.62
+## 3 108303.26</code></pre>
+<!-- ##  -->
+<!-- ## Mean number of different used apps in the morning per day -->
+<!-- Let us define "morning" by 6am until 9am. The dataset does not have any information of the time of the day, but it is available via the UTC timestamp. We also need date information, to calculate this feature per day. -->
+<!-- ```{r, message = FALSE, warning = FALSE} -->
+<!-- library(dplyr) -->
+<!-- studentlife.small = studentlife.small %>% addTime(utc_col = "timestamp") %>% addDate(utc_col = "timestamp") -->
+<!-- studentlife.small.morning = studentlife.small %>% filterDaytime(from_time = "06:00:00", until_time = "09:00:00") -->
+<!-- ``` -->
+<!-- Now we need a function, which calculates the number of different used apps from a given dataset `data`: -->
+<!-- ```{r} -->
+<!-- numberDiffApps = function(data) { -->
+<!--   length(unique(data$RUNNING_TASKS_topActivity_mPackage)) -->
+<!-- } -->
+<!-- ``` -->
+<!-- That's all we need to calculate the number of different apps used in the morning for each participant: -->
+<!-- ```{r} -->
+<!-- feat_data = calcFeature(data = studentlife.small.morning, group_col = c("userId", "date"), fun = numberDiffApps,  -->
+<!--   summarize = function(x) mean(x, na.rm = TRUE), colname = "dailyMeanNumDiffAppsMorning") -->
+<!-- feat_data -->
+<!-- ``` -->
+</div>
 </div>
 </div>
   </div>
@@ -182,11 +312,8 @@ studentlife.small <span class="op">%&gt;%</span><span class="st"> </span><span c
 <li>
 <a href="#introduction-to-dataset">Introduction to Dataset</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#studentlife-small">studentlife.small</a></li>
-      </ul>
-</li>
-      <li>
-<a href="#user-defined-functions">User Defined Functions</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#number-of-different-used-apps-in-the-morning">Number of different used apps in the morning</a></li>
+      <li><a href="#number-of-different-used-apps">Number of different used apps</a></li>
+      <li><a href="#some-gps-features">Some GPS features</a></li>
       </ul>
 </li>
       </ul>

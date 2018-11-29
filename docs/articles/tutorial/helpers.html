@@ -135,7 +135,7 @@
 <span class="kw">library</span>(dplyr)
 data =<span class="st"> </span>studentlife.small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../../reference/addWeekday.html">addWeekday</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)
 <span class="kw">unique</span>(data<span class="op">$</span>weekday)</code></pre></div>
-<pre><code>## [1] Wed Thu Fri Mon Tue
+<pre><code>## [1] Mon Tue Wed Thu Fri
 ## Levels: Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat &lt; Sun</code></pre>
 </div>
 <div id="addtime" class="section level2">

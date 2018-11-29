@@ -17,7 +17,7 @@
 #' number_uses_chrome = function(data) {
 #'   nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
 #' }
-#' calcFeature(data = studentlife.small, group_col = "userId", fun = number_uses_chrome)
+#' calcFeature(data = studentlife_small, group_col = "userId", fun = number_uses_chrome)
 calcFeature = function(data, group_col, fun, check_fun = TRUE, summarize, colname) {
   . = NULL
   checkmate::assertDataFrame(data)

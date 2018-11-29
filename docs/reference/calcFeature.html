@@ -144,7 +144,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>calcFeature</span>(<span class='no'>data</span>, <span class='no'>group_col</span>, <span class='no'>fun</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>calcFeature</span>(<span class='no'>data</span>, <span class='no'>group_col</span>, <span class='no'>fun</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>summarize</span>, <span class='no'>colname</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,6 +165,14 @@
       <th>check_fun</th>
       <td><p>logical. If <code>TRUE</code>, fun(data) will be evaluated and checked, 
 if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on the whole dataset takes too long.</p></td>
+    </tr>
+    <tr>
+      <th>summarize</th>
+      <td><p>function. If more than one value is returned for each group, this function summarizes these values to one value. E.g. mean.</p></td>
+    </tr>
+    <tr>
+      <th>colname</th>
+      <td><p>character. If one variable is returned for each group, you can specify a custom column name for this new column.</p></td>
     </tr>
     </table>
     
