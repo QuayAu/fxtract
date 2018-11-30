@@ -13,7 +13,7 @@ output$dtFTab <- DT::renderDataTable({
   
   DT::datatable(df, rownames=TRUE, filter = "top") %>% 
   formatStyle(1:ncol(df),
-    backgroundColor = styleEqual(c(1), c('#b5f6aa'))
+    backgroundColor = styleEqual(c(1), c('#E3F6CE'))
   )
   
 })
@@ -71,12 +71,9 @@ observeEvent(input$btnCalcSel, {
   
   #pb <- txtProgressBar(min = 0, max = length(rv$selectedUsers), style = 3)
   selUsers = rv$selectedUsers %>% as.vector()
-  #for (uId in rv$selectedUsers){
   for (uId in selUsers){
 
     #Sys.sleep(0.1) # wegen progressbar
-
-
 
     data_id = logsAll %>% filter(userId == uId) %>% as.data.frame()
     msg <- paste0("\n User: ", uId)
@@ -85,7 +82,7 @@ observeEvent(input$btnCalcSel, {
     for (feature in featPaths){
       out <- tryCatch(
         {
-          f_calc_save_feature(feature, data_id, uId, projectPathName)
+          calcExpFeats(feature, data_id, uId, projectPathName)
         },
         error = function(cond){
           message(paste(uId, ":", feature, ":",cond))

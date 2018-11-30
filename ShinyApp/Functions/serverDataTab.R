@@ -23,7 +23,7 @@ output$dt <- DT::renderDataTable({
   dataDT <<- df
 
   dt = DT::datatable(df, rownames=TRUE, filter = "top", selection = list(selected = selUsers)) %>% formatStyle(1:ncol(df),
-    backgroundColor = styleEqual(c(1), c('#b5f6aa'))
+    backgroundColor = styleEqual(c(1), c('#E3F6CE'))
   )
   
 })
