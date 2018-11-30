@@ -16,7 +16,7 @@ calcFeature(data, group_col, fun, check_fun = TRUE, summarize, colname)
 \item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
 if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
 
-\item{summarize}{function. If more than one value is returned for each group, this function summarizes these values to one value. E.g. mean.}
+\item{summarize}{function. If more than one value is returned for each group, this function summarizes these values to one value or more values. E.g. mean or/and sd.}
 
 \item{colname}{character. If one variable is returned for each group, you can specify a custom column name for this new column.}
 }

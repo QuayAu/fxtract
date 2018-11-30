@@ -41,9 +41,20 @@ test_that("calcFeature", {
   y = calcFeature(data = df, group_col = "id", fun = mean_x, colname = "mean_of_x")
   expect_equal(colnames(y)[2], "mean_of_x")
 
-  #summarize function
+  #summarize function return 1 value
   y1 = calcFeature(data = df, group_col = c("id", "hour"), fun = mean_x)
   y2 = calcFeature(data = df, group_col = c("id", "hour"), fun = mean_x, summarize = mean)
   expect_equal(y2[, 2], rowMeans(y1[, -1]))
+  expect_equal(colnames(y2)[2], "mean_x")
+
+  #summarize function return more than 1 value
+  summaryFun = function(x) {
+    data.frame(mean_hour = mean(x, na.rm = TRUE), sd_hour = sd(x, na.rm = TRUE))
+  }
+  y1 = calcFeature(data = df, group_col = c("id", "hour"), fun = mean_x)
+  y2 = calcFeature(data = df, group_col = c("id", "hour"), fun = mean_x, summarize = summaryFun)
+  expect_equal(y2[, 2], rowMeans(y1[, -1]))
+  expect_equal(y2[, 3], c(sd(y1[1, -1]), sd(y1[2, -1])))
+  expect_equal(colnames(y2), c("id", "mean_hour", "sd_hour"))
 })
 
