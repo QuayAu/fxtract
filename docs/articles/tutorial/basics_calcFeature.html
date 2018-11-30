@@ -113,6 +113,11 @@
 <div id="calcfeature" class="section level1">
 <h1 class="hasAnchor">
 <a href="#calcfeature" class="anchor"></a>calcFeature</h1>
+<p>This is the main function of this package. Given a <strong>user-defined</strong> function <code>fun</code>, it calculates this function for each member of a group variable (e.g. participants in a study). The function <code>fun</code> needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.</p>
+<div id="example-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-data" class="anchor"></a>Example data</h2>
+<p>Let’s simulate a simple (absolutely arbitrary!) example dataset. Two participants with the ID <em>1</em> or <em>2</em> were given two tasks. For each task they were given two hours of time. A value <em>x</em> was measured during this task.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
 df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">10</span>)))
 df<span class="op">$</span>task =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">"task1"</span>, <span class="dv">5</span>), <span class="kw">rep</span>(<span class="st">"task2"</span>, <span class="dv">5</span>)), <span class="dv">2</span>)
@@ -120,69 +125,73 @@ df<span class="op">$</span>hour =<span class="st"> </span><span class="kw">rep</
 df<span class="op">$</span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>)
 df</code></pre></div>
 <pre><code>##    id  task  hour           x
-## 1   1 task1 hour1 -1.21696877
-## 2   1 task1 hour1  0.62560736
-## 3   1 task1 hour1  1.01383921
-## 4   1 task1 hour2  0.51789736
-## 5   1 task1 hour2 -0.74536184
-## 6   1 task2 hour1 -0.81575512
-## 7   1 task2 hour1  0.88365694
-## 8   1 task2 hour2 -1.83865451
-## 9   1 task2 hour2  0.38077977
-## 10  1 task2 hour2  0.16940866
-## 11  2 task1 hour1 -0.09922054
-## 12  2 task1 hour1  1.30678658
-## 13  2 task1 hour1 -0.53040864
-## 14  2 task1 hour2  0.73405378
-## 15  2 task1 hour2 -2.22512017
-## 16  2 task2 hour1  2.12488410
-## 17  2 task2 hour1  0.89777149
-## 18  2 task2 hour2  0.27710333
-## 19  2 task2 hour2 -0.34231626
-## 20  2 task2 hour2  0.36335813</code></pre>
-<div id="return-1-value-each" class="section level2">
-<h2 class="hasAnchor">
-<a href="#return-1-value-each" class="anchor"></a>return 1 value each</h2>
+## 1   1 task1 hour1  1.46598004
+## 2   1 task1 hour1  0.15909431
+## 3   1 task1 hour1  2.04404165
+## 4   1 task1 hour2 -0.73401935
+## 5   1 task1 hour2 -2.35869339
+## 6   1 task2 hour1 -1.58914912
+## 7   1 task2 hour1  1.25111990
+## 8   1 task2 hour2 -0.44581158
+## 9   1 task2 hour2 -0.17006176
+## 10  1 task2 hour2 -0.92592921
+## 11  2 task1 hour1  0.60517644
+## 12  2 task1 hour1  0.26304908
+## 13  2 task1 hour1 -0.76057809
+## 14  2 task1 hour2  1.55159389
+## 15  2 task1 hour2 -0.37485263
+## 16  2 task2 hour1  2.33265530
+## 17  2 task2 hour1  0.65780999
+## 18  2 task2 hour2 -0.07225221
+## 19  2 task2 hour2  0.62355864
+## 20  2 task2 hour2 -1.16781954</code></pre>
+<div id="return-1-value-each" class="section level3">
+<h3 class="hasAnchor">
+<a href="#return-1-value-each" class="anchor"></a>Return 1 value each</h3>
+<p>Let’s say we are interested in the maximum value of <strong>x</strong> for each participant. We need to define a function, which has a dataframe as input and a scalar or vector as output:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">max_x =<span class="st"> </span><span class="cf">function</span>(data) {
   <span class="kw">max</span>(data<span class="op">$</span>x)
-}
-<span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> max_x)</code></pre></div>
+}</code></pre></div>
+<p>Now we can calculate the desired outcome:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> max_x)</code></pre></div>
 <pre><code>##   id    max_x
-## 1  1 1.013839
-## 2  2 2.124884</code></pre>
+## 1  1 2.044042
+## 2  2 2.332655</code></pre>
 </div>
-<div id="return-more-values-at-once" class="section level2">
-<h2 class="hasAnchor">
-<a href="#return-more-values-at-once" class="anchor"></a>return more values at once</h2>
+<div id="return-more-values-at-once" class="section level3">
+<h3 class="hasAnchor">
+<a href="#return-more-values-at-once" class="anchor"></a>Return more values at once</h3>
+<p>Sometimes calculations can take a long time (e.g. clustering of GPS points) and we want to calculate more than one value (e.g. <strong>mean</strong> and <strong>sd</strong>). This can be achieved by returning a named vector:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">more_features =<span class="st"> </span><span class="cf">function</span>(data) {
   <span class="kw">data.frame</span>(<span class="dt">max_x =</span> <span class="kw">max</span>(data<span class="op">$</span>x), <span class="dt">sd_x =</span> <span class="kw">sd</span>(data<span class="op">$</span>x))
 }
 <span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> more_features)</code></pre></div>
-<pre><code>##   id    max_x      sd_x
-## 1  1 1.013839 0.9786341
-## 2  2 2.124884 1.1788665</code></pre>
+<pre><code>##   id    max_x     sd_x
+## 1  1 2.044042 1.392861
+## 2  2 2.332655 1.046442</code></pre>
 </div>
-<div id="group-by-two-columns" class="section level2">
-<h2 class="hasAnchor">
-<a href="#group-by-two-columns" class="anchor"></a>group by two columns</h2>
+<div id="group-by-two-columns" class="section level3">
+<h3 class="hasAnchor">
+<a href="#group-by-two-columns" class="anchor"></a>group by two columns</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1 max_x_task2 sd_x_task1 sd_x_task2
-## 1  1    1.013839   0.8836569   0.963904  1.0842847
-## 2  2    1.306787   2.1248841   1.356132  0.9275746</code></pre>
+## 1  1    2.044042    1.251120  1.7598498   1.056995
+## 2  2    1.551594    2.332655  0.8988798   1.275217</code></pre>
 </div>
-<div id="group-by-three-colums" class="section level2">
-<h2 class="hasAnchor">
-<a href="#group-by-three-colums" class="anchor"></a>group by three colums</h2>
+<div id="group-by-three-colums" class="section level3">
+<h3 class="hasAnchor">
+<a href="#group-by-three-colums" class="anchor"></a>group by three colums</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(df, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>, <span class="st">"hour"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1_hour1 max_x_task1_hour2 max_x_task2_hour1
-## 1  1          1.013839         0.5178974         0.8836569
-## 2  2          1.306787         0.7340538         2.1248841
+## 1  1         2.0440417        -0.7340193          1.251120
+## 2  2         0.6051764         1.5515939          2.332655
 ##   max_x_task2_hour2 sd_x_task1_hour1 sd_x_task1_hour2 sd_x_task2_hour1
-## 1         0.3807798        1.1917994        0.8932591        1.2016658
-## 2         0.3633581        0.9607346        2.0924520        0.8676996
+## 1        -0.1700618        0.9656718         1.148818         2.008373
+## 2         0.6235586        0.7106510         1.362203         1.184294
 ##   sd_x_task2_hour2
-## 1        1.2249411
-## 2        0.3849452</code></pre>
+## 1        0.3825107
+## 2        0.9030925</code></pre>
+</div>
 </div>
 </div>
   </div>
@@ -194,10 +203,7 @@ df</code></pre></div>
       <ul class="nav nav-pills nav-stacked">
 <li>
 <a href="#calcfeature">calcFeature</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#return-1-value-each">return 1 value each</a></li>
-      <li><a href="#return-more-values-at-once">return more values at once</a></li>
-      <li><a href="#group-by-two-columns">group by two columns</a></li>
-      <li><a href="#group-by-three-colums">group by three colums</a></li>
+<li><a href="#example-data">Example data</a></li>
       </ul>
 </li>
       </ul>

@@ -39,6 +39,6 @@ unique(data$weekday)
 
 Given a dataset with a timestamp variable, `addDate()` adds a time variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package.
 
-## addStudyDay
+<!-- ## addStudyDay -->
 
-## addStudyDayPerUserId
+<!-- ## addStudyDayPerUserId -->

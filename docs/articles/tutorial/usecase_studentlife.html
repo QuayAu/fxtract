@@ -191,12 +191,12 @@ x[, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>), 
   <span class="dt">summarize =</span> <span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dt">colname =</span> <span class="st">"dailyNumberDiffApps"</span>)
 feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)</code></pre></div>
-<pre><code>## Joining, by = "userId"</code></pre>
+<pre><code>## Joining, by = c("userId", "numberDiffApps")</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feat_data</code></pre></div>
-<pre><code>##   userId numberDiffApps numberDiffAppsWeekday dailyNumberDiffApps
-## 1     00             93                    91            16.86905
-## 2     01             43                    43             9.60000
-## 3     02             72                    66            18.14286</code></pre>
+<pre><code>##   userId numberDiffApps numberDiffAppsWeekday
+## 1     00             93                    91
+## 2     01             43                    43
+## 3     02             72                    66</code></pre>
 </div>
 </div>
 <div id="some-gps-features" class="section level2 tabset">
@@ -215,14 +215,10 @@ totalDist =<span class="st"> </span><span class="cf">function</span>(data) {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calcFeature.html">calcFeature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">group_col =</span> <span class="st">"userId"</span>, <span class="dt">fun =</span> totalDist)
 feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x, <span class="dt">by =</span> <span class="st">"userId"</span>)
 feat_data </code></pre></div>
-<pre><code>##   userId numberDiffApps numberDiffAppsWeekday dailyNumberDiffApps
-## 1     00             93                    91            16.86905
-## 2     01             43                    43             9.60000
-## 3     02             72                    66            18.14286
-##   totalDist
-## 1 621719.25
-## 2  44649.62
-## 3 108303.26</code></pre>
+<pre><code>##   userId numberDiffApps numberDiffAppsWeekday totalDist
+## 1     00             93                    91 621719.25
+## 2     01             43                    43  44649.62
+## 3     02             72                    66 108303.26</code></pre>
 <!-- ##  -->
 <!-- ## Mean number of different used apps in the morning per day -->
 <!-- Let us define "morning" by 6am until 9am. The dataset does not have any information of the time of the day, but it is available via the UTC timestamp. We also need date information, to calculate this feature per day. -->
