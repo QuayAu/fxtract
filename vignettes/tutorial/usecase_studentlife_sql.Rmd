@@ -66,7 +66,7 @@ lsData = lapply(lsFiles, function(x) {
 gps = do.call(bind_rows, lsData)
 
 # Combine data frames and save as data base
-data_all = app %>% bind_rows(calls) %>% bind_rows(gps)
+data_all = app %>% bind_rows(calls) %>% bind_rows(gps) %>% addDate(utc_col = "timestamp")
 
 # Write data to data base
 copy_to(con, data_all, name = "studentlife_data", temporary = F, overwrite = T)
@@ -76,7 +76,7 @@ copy_to(con, data_all, name = "studentlife_data", temporary = F, overwrite = T)
 
 ## Load data of first user
 ```{r}
-data = tbl(db, "studentlife_data") %>% select(everything()) %>% filter(userId == "u00")
+data = tbl(con, "studentlife_data") %>% select(everything()) %>% filter(userId == "u00")
 df = as.data.frame(data)
 ```
 
@@ -91,11 +91,11 @@ print(paste("Number of different apps:", nApps))
 
 ## Mean Number different apps per day
 ```{r}
-df = addDate(df, utc_col = "timestamp")
 featureMeanNumDiffAppsPerDay = function(data) {
   n = data %>% dplyr::group_by(date) %>% distinct(RUNNING_TASKS_baseActivity_mPackage) %>% summarize(n = n()) %>% pull(n)
   return(data.frame(mean = mean(n), sd = sd(n)))
 }
+
 nMeanDiffApps = featureMeanNumDiffAppsPerDay(df)
 print(paste("Mean number of different apps per day", round(nMeanDiffApps[1],2), "with standard deviation", round(nMeanDiffApps[2],2)))
 ```
@@ -103,6 +103,7 @@ print(paste("Mean number of different apps per day", round(nMeanDiffApps[1],2), 
 ## gps - maximum distance
 ```{r, echo = FALSe}
 library(geosphere)
+
 gpsAvailable = df %>% filter(!is.na(latitude), !is.na(longitude), latitude >= 0, latitude <= 360, longitude >= 0, longitude <= 360)
 
 maxDistKm = function(data) max(distm(cbind(gpsAvailable$longitude,gpsAvailable$latitude))) / 1000
