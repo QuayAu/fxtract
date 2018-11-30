@@ -1,4 +1,4 @@
-calcExpFeats = function(featPath, df, uId, projectPath){
+calcExpFeat = function(featPath, df, uId, projectPath){
   
   # This functions calculates the given feature for a specific user and saves the result as csv. file
   # in the ShinyApp/csvExports directory in the relevant folder (depending on feature category of the feature)

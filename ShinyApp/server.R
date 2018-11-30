@@ -6,7 +6,7 @@ shinyServer(function(input, output, session) {
   source("Functions/getFeatNotCalc.R", local = TRUE, encoding = "utf-8")
   source("Functions/getFreqRemUsers.R", local = TRUE, encoding = "utf-8")
   source("Functions/getFeatsNotDone.R", local = TRUE, encoding = "utf-8")
-  source("Functions/calcExpFeats.R", local = TRUE, encoding = "utf-8")
+  source("Functions/calcExpFeat.R", local = TRUE, encoding = "utf-8")
   source("Functions/serverSidepanel.R", local = TRUE, encoding = "utf-8")
   source("Functions/serverProjectTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/serverFeatsTab.R", local = TRUE, encoding = "utf-8")
@@ -14,6 +14,7 @@ shinyServer(function(input, output, session) {
   source("Functions/getAllFeatsPerUser.R", local = TRUE, encoding = "utf-8")
 
   load_all() # Loading fxtract
+  library(shinyBS)
   
   projectNames <<- list.files("Projects")
   db_path <- paste0(dirname(getwd()), "/vignettes/tutorial/studentlife/SQL_database.sql")

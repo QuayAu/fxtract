@@ -44,28 +44,51 @@ output$btnCalcSel <- renderUI({
 })
 
 observeEvent(input$btnCalcSel, {
+
+  showModal(modalDialog(
+    tags$div(HTML("Some of the features have already been calculated for some of the users! <br>
+        Do you want to calculate the features for all selected users or only the
+      remaining ones?"), style = "font-size: 15px;"),
+    fluidRow(style='padding:15px;'),
+    tags$div(checkboxInput("test", label = "Only remaining users", value = T), style = "font-size: 13px;"),
+    title = "Calculate Features",
+    footer = tagList(
+      modalButton("Cancel"),
+      actionButton("btnCalcSelAll", label = "Start Calculation!",
+        style="color: #fff; background-color: #337ab7; border-color: #2e6da4;"))
+    )
+  )
   
+})
+
+
+
+observeEvent(input$btnCalcSelAll, {
+  
+  removeModal()
+  
+  # Needs to be function from here (called from here and obove if no previously calculated users)
   projectPathName = paste0("Projects/",input$sProjectName)
-  
+
   # Create csvExports-folder if not existing
   if (dir.exists(paste0(projectPathName, "/csvExports")) == FALSE){
     dir.create(paste0(projectPathName, "/csvExports"))
   }
-  
+
   #Prepare log files
   if (dir.exists(paste0(projectPathName, "/logfiles")) == FALSE){
     dir.create(paste0(projectPathName, "/logfiles"))
   }
-  
+
   #logFilePath = paste0(projectPathName, "/logfiles/",format(Sys.time(), "%Y_%m_%d_%H_%M_%S"), "_logfile.txt")
   #logFile = file(logFilePath, open = "wt")
   #sink(logFile, type = "message")
-  
+
   # Determine features to be calculated
   featCat = input$selFeatureFTab
   featNames = rv$dataDtFTab[rv$selectedFeats,1]
   featPaths = paste0(featCat, "/", featNames, ".R") %>% sort()
-  
+
   #pb <- txtProgressBar(min = 0, max = length(rv$selectedUsers), style = 3)
   selUsers = rv$selectedUsers %>% as.vector()
   for (uId in selUsers){
@@ -75,11 +98,11 @@ observeEvent(input$btnCalcSel, {
     data_id = logsAll %>% filter(userId == uId) %>% as.data.frame()
     msg <- paste0("\n User: ", uId)
     cat(msg)
-    
+
     for (feature in featPaths){
       out <- tryCatch(
         {
-          calcExpFeats(feature, data_id, uId, projectPathName)
+          calcExpFeat(feature, data_id, uId, projectPathName)
         },
         error = function(cond){
           message(paste(uId, ":", feature, ":",cond))
@@ -91,17 +114,17 @@ observeEvent(input$btnCalcSel, {
         }
       )
     }
-    
+
   }
 
     #setTxtProgressBar(pb, i)
   #}
-  
+
   # Close log files
   #sink(type = "message")
   #close(logFile)
   #readLines(logFilePath) # Remove later
-  
+
 })
 
 

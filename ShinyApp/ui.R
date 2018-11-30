@@ -140,13 +140,13 @@ body <-  dashboardBody(
             column(width = 3, textOutput("nUsers"))
           ),
           
-          
           br(),
           
           column(width = 7, DT::dataTableOutput("dtFTab", width = "100%"))),
           column(width = 5, uiOutput(
             outputId = "btnCalcSel"
           )),
+            
           title= "Select Features",
           solidHeader = TRUE,
           status = "success",
@@ -161,6 +161,12 @@ body <-  dashboardBody(
       )
 
   ),
+    
+  # bsModal("modalExample", "Calculate Features", "btnCalcSel", size = "large",wellPanel(
+  #   actionButton("yes_button", "Yes"),
+  #   actionButton("no_button", "No")
+  #   )
+  # ),
 
   tags$head(
     tags$style("#txtDirExists{
