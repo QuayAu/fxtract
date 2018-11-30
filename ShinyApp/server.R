@@ -12,11 +12,17 @@ shinyServer(function(input, output, session) {
   source("Functions/serverFeatsTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/serverDataTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/getAllFeatsPerUser.R", local = TRUE, encoding = "utf-8")
-
+  source("Functions/helperFunctions.R", local = TRUE, encoding = "utf-8")
+  source(paste0(dirname(getwd()), "/R/addColumn.R"), local = TRUE, encoding = "utf-8")
+  
+  load_all() # Loading fxtract
+  
   projectNames <<- list.files("Projects")
   db_path <- paste0(dirname(getwd()), "/vignettes/tutorial/studentlife/SQL_database.sql")
   db <<- src_sqlite(db_path, create = FALSE)
-  ids <<- tbl(db, "studentlife_data") %>% distinct(userId) %>% as.data.frame() %>% as.vector()
+  logsAll <<- tbl(db, "studentlife_data")
+
+  ids <<- logsAll %>% distinct(userId) %>% as.data.frame() %>% as.vector()
   
   rv = reactiveValues()
   rv$selectedUsers = NULL # Currently selected user ids in data table in data tab

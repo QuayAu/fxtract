@@ -1,12 +1,12 @@
 f_calc_save_feature = function(feature_path, x, id, project_path_name){  #argumente richtige namen geben und dokumentieren #### add active_project_name
   
   file_path <- paste0("Features/", feature_path)
-  print(file_path)
   source(file_path)
   
   #Calc Feature
-  feature_calc = feature.fun(x) 
   
+  #feature_calc = feature.fun(x) 
+
   #QUAY: unit tests einbauen
   ## check: output dataframe mit richtigen dimensionen
   ## check: id richtiger name
@@ -15,11 +15,14 @@ f_calc_save_feature = function(feature_path, x, id, project_path_name){  #argume
   feature_cat = strsplit(file_path, "/")[[1]][2]
   feature_name = strsplit(file_path, "/")[[1]][3]
   
+  x = list(x)
+  feature_calc = do.call(feature_name, x) 
+  print(feature_calc)
   
   # If successfull write csv 
   myfilename = paste0(id, "_", feature_name)
   
-  saving_dir <- paste0(project_path_name, "/csv_exports/")
+  saving_dir <- paste0(project_path_name, "/csvExports/")
   if (dir.exists(saving_dir) == FALSE){
     dir.create(saving_dir)
   }

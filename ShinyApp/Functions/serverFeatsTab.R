@@ -1,12 +1,12 @@
 # Render UI for Feature tab ----------------------------------------------------------------------------------------
 
-dtFTabProxy <- DT::dataTableProxy("dtFTab")
+dtFTabProxy = DT::dataTableProxy("dtFTab")
 
 # Table -------------------------------------------------------------------
 output$dtFTab <- DT::renderDataTable({
   
   if(is_empty(rv$inpSelFeature)) return(NULL) # Move back from features tab to data tab
-  df <- getFeatsNotDone()%>% as.data.frame()
+  df = getFeatsNotDone()%>% as.data.frame()
   
   if(nrow(df) == 0) return(NULL) #If no features to be shown
   rv$dataDtFTab = df
@@ -37,7 +37,7 @@ observe({
   else rv$selectedFeats = NULL
 })
 
-selFeats <- reactive({!is.null(input$dtFTab_rows_selected)}) 
+selFeats = reactive({!is.null(input$dtFTab_rows_selected)}) 
 
 # Button calc selected -----------------------------------------------------------------------
 output$btnCalcSel <- renderUI({
@@ -59,6 +59,54 @@ observeEvent(input$btnCalcSel, {
   if (dir.exists(paste0(projectPathName, "/logfiles")) == FALSE){
     dir.create(paste0(projectPathName, "/logfiles"))
   }
+  
+  #logFilePath = paste0(projectPathName, "/logfiles/",format(Sys.time(), "%Y_%m_%d_%H_%M_%S"), "_logfile.txt")
+  #logFile = file(logFilePath, open = "wt")
+  #sink(logFile, type = "message")
+  
+  # Determine features to be calculated
+  featCat = input$selFeatureFTab
+  featNames = rv$dataDtFTab[rv$selectedFeats,1]
+  featPaths = paste0(featCat, "/", featNames, ".R") %>% sort()
+  
+  #pb <- txtProgressBar(min = 0, max = length(rv$selectedUsers), style = 3)
+  selUsers = rv$selectedUsers %>% as.vector()
+  #for (uId in rv$selectedUsers){
+  for (uId in selUsers){
+
+    #Sys.sleep(0.1) # wegen progressbar
+
+
+
+    data_id = logsAll %>% filter(userId == uId) %>% as.data.frame()
+    msg <- paste0("\n User: ", uId)
+    cat(msg)
+    
+    for (feature in featPaths){
+      out <- tryCatch(
+        {
+          f_calc_save_feature(feature, data_id, uId, projectPathName)
+        },
+        error = function(cond){
+          message(paste(uId, ":", feature, ":",cond))
+          return(NA)
+        },
+        warning = function(cond){
+          message(paste(uId, ":", feature, ":", cond))
+          return(NA)
+        }
+      )
+    }
+    
+  }
+
+    #setTxtProgressBar(pb, i)
+  #}
+  
+  # Close log files
+  #sink(type = "message")
+  #close(logFile)
+  #readLines(logFilePath) # Remove later
   
 })
 
