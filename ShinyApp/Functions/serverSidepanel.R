@@ -26,4 +26,6 @@ observe({
   
   if(input$idTabs == "tabData") rv$inpSelFeature = input$selFeature # Differentiate between buttons with almost same functionality on different pages
   else if (input$idTabs == "tabFeatures") rv$inpSelFeature = input$selFeatureFTab
+  
+  if(input$idTabs != "tabFeatures") updateCheckboxInput(session, "dtSelAllFTab", value = FALSE) # Unselect "SelectAll-Button on feature tab if not active
 })
