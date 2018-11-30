@@ -11,10 +11,7 @@ output$dtFTab <- DT::renderDataTable({
   if(nrow(df) == 0) return(NULL) #If no features to be shown
   rv$dataDtFTab = df
   
-  DT::datatable(df, rownames=TRUE, filter = "top") %>% 
-  formatStyle(1:ncol(df),
-    backgroundColor = styleEqual(c(1), c('#E3F6CE'))
-  )
+  DT::datatable(df, rownames=TRUE, filter = "top")
   
 })
 
