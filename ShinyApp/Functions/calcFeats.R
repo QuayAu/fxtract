@@ -27,6 +27,7 @@ calcFeats = function(){ # Documentation!!
   
   #pb <- txtProgressBar(min = 0, max = length(rv$selectedUsers), style = 3)
   selUsers = rv$selectedUsers %>% as.vector()
+  df = getAllFeatsPerUser() %>% filter(userId %in% selUsers)
   for (uId in selUsers){
     
     #Sys.sleep(0.1) # wegen progressbar
@@ -34,23 +35,30 @@ calcFeats = function(){ # Documentation!!
     data_id = logsAll %>% filter(userId == uId) %>% as.data.frame()
     msg <- paste0("\n User: ", uId)
     cat(msg)
-    
+    i = 0
     for (feature in featPaths){
-      out <- tryCatch(
-        {
-          calcExpFeat(feature, data_id, uId, projectPathName)
-        },
-        error = function(cond){
-          message(paste(uId, ":", feature, ":",cond))
-          return(NA)
-        },
-        warning = function(cond){
-          message(paste(uId, ":", feature, ":", cond))
-          return(NA)
-        }
-      )
+      
+      i = i + 1
+      # In case that only remaining users shall be calculated -> check wether feature for a users is already calculated
+      if(input$cRemOnly == 1) alreadyCalc = df %>% filter(userId == uId, featName == featNames[i]) %>% select(fileExists)
+      else alreadyCalc = F
+      
+      if(!alreadyCalc){
+        out <- tryCatch(
+          {
+            calcExpFeat(feature, data_id, uId, projectPathName)
+          },
+          error = function(cond){
+            message(paste(uId, ":", feature, ":",cond))
+            return(NA)
+          },
+          warning = function(cond){
+            message(paste(uId, ":", feature, ":", cond))
+            return(NA)
+          }
+        )
+      }
     }
-    
   }
   
   #setTxtProgressBar(pb, i)
