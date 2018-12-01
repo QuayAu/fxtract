@@ -24,7 +24,7 @@ calcFeats = function(){ # Documentation!!
   featCat = input$selFeatureFTab
   featNames = rv$dataDtFTab[rv$selectedFeats,1]
   featPaths = paste0(featCat, "/", featNames, ".R") %>% sort()
-  
+
   #pb <- txtProgressBar(min = 0, max = length(rv$selectedUsers), style = 3)
   selUsers = rv$selectedUsers %>% as.vector()
   df = getAllFeatsPerUser() %>% filter(userId %in% selUsers)
@@ -39,10 +39,11 @@ calcFeats = function(){ # Documentation!!
     for (feature in featPaths){
       
       i = i + 1
+
       # In case that only remaining users shall be calculated -> check wether feature for a users is already calculated
-      if(input$cRemOnly == 1) alreadyCalc = df %>% filter(userId == uId, featName == featNames[i]) %>% select(fileExists)
+      if(rv$RemainOnly == T) alreadyCalc = df %>% filter(userId == uId, featName == featNames[i]) %>% select(fileExists)
       else alreadyCalc = F
-      
+
       if(!alreadyCalc){
         out <- tryCatch(
           {

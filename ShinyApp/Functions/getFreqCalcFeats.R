@@ -1,6 +1,6 @@
 getFreqCalcFeats <- function(){
   # returns a data frame with the calculated features (name) and the corresponding frequency
-  # df: | Calulated_Features | Freq |
+  # df: | Calulated_Features | Count |
   #     |--------------------------
   
   lsFilesCalc <- getCalcFeats()

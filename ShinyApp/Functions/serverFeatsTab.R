@@ -69,6 +69,7 @@ observeEvent(input$btnCalcSel, {
 # Button Calculate Selected on modalDialog
 observeEvent(input$btnCalcSelModal, {
   removeModal()
+  rv$RemainOnly = input$cRemOnly
   calcFeats()
 })
 
