@@ -12,6 +12,7 @@ shinyServer(function(input, output, session) {
   source("Functions/serverFeatsTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/serverDataTab.R", local = TRUE, encoding = "utf-8")
   source("Functions/getAllFeatsPerUser.R", local = TRUE, encoding = "utf-8")
+  source("Functions/calcFeats.R", local = TRUE, encoding = "utf-8")
 
   load_all() # Loading fxtract
   library(shinyBS)
