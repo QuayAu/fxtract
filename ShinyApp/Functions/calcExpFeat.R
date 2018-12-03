@@ -45,5 +45,6 @@ calcExpFeat = function(featPath, df, uId, projectPath){
   
   msg <- paste0(" \n Feature: '", featName, "' was successfully calculated and saved \n")
   cat(msg)
+  if(length(featCalc) > 1) names(featCalc) = paste0(featName, ".", names(featCalc))
   
 }

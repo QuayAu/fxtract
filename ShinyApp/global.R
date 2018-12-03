@@ -7,6 +7,7 @@ library(pryr)
 library(robustbase)
 library(DT)
 library(geosphere)
+library(data.table)
 
 source("Functions/dropDownButton.R", local = TRUE, encoding = "utf-8")
 

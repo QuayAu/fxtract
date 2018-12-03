@@ -14,22 +14,24 @@ shinyServer(function(input, output, session) {
   source("Functions/getAllFeatsPerUser.R", local = TRUE, encoding = "utf-8")
   source("Functions/calcFeats.R", local = TRUE, encoding = "utf-8")
   source("Functions/getFeatsDone.R", local = TRUE, encoding = "utf-8")
+  source("Functions/getLastResults.R", local = TRUE, encoding = "utf-8")
+  
   
 
   load_all() # Loading fxtract
-  #library(shinyBS)
   
   projectNames <<- list.files("Projects")
-  db_path <- paste0(dirname(getwd()), "/vignettes/tutorial/studentlife/SQL_database.sql")
-  db <<- src_sqlite(db_path, create = FALSE)
+  dbPath <- paste0(dirname(getwd()), "/vignettes/tutorial/studentlife/SQL_database.sql")
+  db <<- src_sqlite(dbPath, create = FALSE)
   logsAll <<- tbl(db, "studentlife_data")
 
   ids <<- logsAll %>% distinct(userId) %>% as.data.frame() %>% as.vector()
-  
+
   rv = reactiveValues()
   rv$selectedUsers = NULL # Currently selected user ids in data table in data tab
   rv$selectedFeats = NULL
   rv$RemainOnly = FALSE
+  rv$lastCalFeatsPerUser = data.frame()
 
 }) 
   

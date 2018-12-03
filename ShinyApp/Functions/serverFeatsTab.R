@@ -46,7 +46,7 @@ output$btnCalcSel <- renderUI({
 observeEvent(input$btnCalcSel, {
   
   remUsers = rv$dataDtFTab[input$dtFTab_rows_selected,2]
-  print(remUsers)
+
   if(all(remUsers == length(rv$selectedUsers))) calcFeats()
   else {
     showModal(modalDialog(

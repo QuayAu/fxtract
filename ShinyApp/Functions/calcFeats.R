@@ -28,6 +28,8 @@ calcFeats = function(){ # Documentation!!
   #pb <- txtProgressBar(min = 0, max = length(rv$selectedUsers), style = 3)
   selUsers = rv$selectedUsers %>% as.vector()
   df = getAllFeatsPerUser() %>% filter(userId %in% selUsers)
+  ls = list()
+  j = 0
   for (uId in selUsers){
     
     #Sys.sleep(0.1) # wegen progressbar
@@ -39,6 +41,7 @@ calcFeats = function(){ # Documentation!!
     for (feature in featPaths){
       
       i = i + 1
+      j = j + 1
 
       # In case that only remaining users shall be calculated -> check wether feature for a users is already calculated
       if(rv$RemainOnly == T) alreadyCalc = df %>% filter(userId == uId, featName == featNames[i]) %>% select(fileExists)
@@ -48,6 +51,7 @@ calcFeats = function(){ # Documentation!!
         out <- tryCatch(
           {
             calcExpFeat(feature, data_id, uId, projectPathName)
+            ls[[j]] = cbind(uId,feature)
           },
           error = function(cond){
             message(paste(uId, ":", feature, ":",cond))
@@ -61,6 +65,9 @@ calcFeats = function(){ # Documentation!!
       }
     }
   }
+  
+  rv$lastCalFeatsPerUser = do.call(rbind.data.frame, ls)
+  print(getLastResults())
   
   #setTxtProgressBar(pb, i)
   #}
