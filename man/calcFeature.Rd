@@ -28,7 +28,9 @@ Calculates a given function grouped by \code{group_col}.
 }
 \examples{
 fun = function(data) {
-  c(uses_chrome = nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome")))
+  c(uses_chrome = nrow(
+    dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
+  )
 }
 calcFeature(data = studentlife_small, group_col = "userId", fun = fun)
 }

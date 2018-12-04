@@ -46,6 +46,12 @@ test_that("calcFeature", {
   y1 = calcFeature(data = df, group_col = c("id", "hour"), fun = fun)
   y2 = calcFeature(data = df, group_col = c("id", "hour"), fun = fun, summarize = mean)
   expect_equal(y2[, 2], rowMeans(y1[, -1]))
+  expect_equal(colnames(y2)[2], "mean")
+
+  #summarize function return 1 value with change colname
+  y1 = calcFeature(data = df, group_col = c("id", "hour"), fun = fun)
+  y2 = calcFeature(data = df, group_col = c("id", "hour"), fun = fun, summarize = mean, colname = "mean_x")
+  expect_equal(y2[, 2], rowMeans(y1[, -1]))
   expect_equal(colnames(y2)[2], "mean_x")
 
   #summarize function return more than 1 value

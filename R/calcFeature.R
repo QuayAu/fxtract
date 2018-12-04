@@ -15,7 +15,9 @@
 #' @export
 #' @examples
 #' fun = function(data) {
-#'   c(uses_chrome = nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome")))
+#'   c(uses_chrome = nrow(
+#'     dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
+#'   )
 #' }
 #' calcFeature(data = studentlife_small, group_col = "userId", fun = fun)
 calcFeature = function(data, group_col, fun, check_fun = TRUE, summarize, colname) {
@@ -47,8 +49,8 @@ calcFeature = function(data, group_col, fun, check_fun = TRUE, summarize, colnam
       if (i >= 2) res1 = rbind(res1, do.call(summarize, list(unlist(res0[i, ]))))
     }
     rownames(res1) = NULL
-    if (ncol(res1) == 1) colnames(res1) = deparse(substitute(fun))
-    if (!missing(colname) & ncol(res1) == 1) res1 = res1 %>% setNames(colname)
+    if (ncol(res1) == 1) colnames(res1) = deparse(substitute(summarize))
+    if (!missing(colname) & ncol(res1) == 1) colnames(res1) = colname
     res = data.frame(res %>% select(one_of(group_col[1])), res1)
   }
   return(res)
