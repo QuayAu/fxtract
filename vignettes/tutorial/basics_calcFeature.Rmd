@@ -37,7 +37,7 @@ fun = function(data) {
 ```
 Now we can calculate the desired outcome:
 ```{r}
-calcFeature(df, group_col = "id", fun = max_x)
+calcFeature(df, group_col = "id", fun = fun)
 ```
 
 
@@ -45,7 +45,7 @@ calcFeature(df, group_col = "id", fun = max_x)
 Sometimes calculations can take a long time (e.g. clustering of GPS points) and we want to calculate more than one value (e.g. **mean** and **sd**). This can be achieved by returning a named vector:
 ```{r}
 more_features = function(data) {
-  data.frame(max_x = max(data$x), sd_x = sd(data$x))
+  c(max_x = max(data$x), sd_x = sd(data$x))
 }
 calcFeature(df, group_col = "id", fun = more_features)
 ```

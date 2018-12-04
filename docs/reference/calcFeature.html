@@ -159,7 +159,7 @@
     </tr>
     <tr>
       <th>fun</th>
-      <td><p>function. Must be a function, which has a dataframe as input and a vector of length 1 as output.</p></td>
+      <td><p>function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.</p></td>
     </tr>
     <tr>
       <th>check_fun</th>
@@ -182,13 +182,15 @@ if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on t
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>number_uses_chrome</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
-  <span class='fu'>nrow</span>(<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>data</span>, <span class='no'>RUNNING_TASKS_baseActivity_mPackage</span> <span class='kw'>==</span> <span class='st'>"com.android.chrome"</span>))
+    <pre class="examples"><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
+  <span class='fu'>c</span>(<span class='kw'>uses_chrome</span> <span class='kw'>=</span> <span class='fu'>nrow</span>(
+    <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>data</span>, <span class='no'>RUNNING_TASKS_baseActivity_mPackage</span> <span class='kw'>==</span> <span class='st'>"com.android.chrome"</span>))
+  )
 }
-<span class='fu'>calcFeature</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>studentlife_small</span>, <span class='kw'>group_col</span> <span class='kw'>=</span> <span class='st'>"userId"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>number_uses_chrome</span>)</div><div class='output co'>#&gt;   userId number_uses_chrome
-#&gt; 1     00               3104
-#&gt; 2     01               1635
-#&gt; 3     02               2811</div></pre>
+<span class='fu'>calcFeature</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>studentlife_small</span>, <span class='kw'>group_col</span> <span class='kw'>=</span> <span class='st'>"userId"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>)</div><div class='output co'>#&gt;   userId uses_chrome
+#&gt; 1     00        3104
+#&gt; 2     01        1635
+#&gt; 3     02        2811</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
