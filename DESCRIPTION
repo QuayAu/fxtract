@@ -22,7 +22,8 @@ RoxygenNote: 6.1.0
 Imports: dplyr,
   magrittr,
   checkmate,
-  utils
+  utils,
+  data.table
 Suggests: testthat,
   knitr,
   covr,

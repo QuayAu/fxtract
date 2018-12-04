@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculates a given function grouped by <code>group_col</code>. For each group variable one single value is returned. — calcFeatureByGroup • fxtract</title>
+<title>Calculates a given function grouped by <code>group_col</code>. — calcFeatureByGroup • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Calculates a given function grouped by <code>group_col</code>. For each group variable one single value is returned. — calcFeatureByGroup" />
+<meta property="og:title" content="Calculates a given function grouped by <code>group_col</code>. — calcFeatureByGroup" />
 
-<meta property="og:description" content="Calculates a given function grouped by group_col. For each group variable one single value is returned." />
+<meta property="og:description" content="Calculates a given function grouped by group_col." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -93,7 +93,7 @@
       <a href="../articles/tutorial/basics_slidingWindow.html">slidingWindow</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_calcFeaturePerUserId.html">calcFeaturePerUserId</a>
+      <a href="../articles/tutorial/basics_calcFeatureByGroup.html">calcFeatureByGroup</a>
     </li>
   </ul>
 </li>
@@ -136,18 +136,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculates a given function grouped by <code>group_col</code>. For each group variable one single value is returned.</h1>
+    <h1>Calculates a given function grouped by <code>group_col</code>.</h1>
     <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/calcFeatureByGroup.R'><code>R/calcFeatureByGroup.R</code></a></small>
     <div class="hidden name"><code>calcFeatureByGroup.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculates a given function grouped by <code>group_col</code>. For each group variable one single value is returned.</p>
+    <p>Calculates a given function grouped by <code>group_col</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>calcFeatureByGroup</span>(<span class='no'>data</span>, <span class='no'>group_col</span>, <span class='no'>fun</span>, <span class='no'>colname</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>calcFeatureByGroup</span>(<span class='no'>data</span>, <span class='no'>group_col</span>, <span class='no'>fun</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,10 +165,6 @@
       <td><p>function. Must be a function, which has a dataframe as input and a vector of length 1 as output.</p></td>
     </tr>
     <tr>
-      <th>colname</th>
-      <td><p>character. Column name of the new column.</p></td>
-    </tr>
-    <tr>
       <th>check_fun</th>
       <td><p>logical. If <code>TRUE</code>, fun(data) will be evaluated and checked, 
 if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on the whole dataset takes too long.</p></td>
@@ -177,21 +173,17 @@ if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on t
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe with columns <code>group_col</code> and <code>colname</code>.</p>
+    <p>dataframe</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
+    <pre class="examples"><div class='input'><span class='no'>number_uses_chrome</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
   <span class='fu'>nrow</span>(<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>data</span>, <span class='no'>RUNNING_TASKS_baseActivity_mPackage</span> <span class='kw'>==</span> <span class='st'>"com.android.chrome"</span>))
 }
-<span class='fu'>calcFeatureByGroup</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>studentlife.small</span>, <span class='kw'>group_col</span> <span class='kw'>=</span> <span class='st'>"userId"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>,
-  <span class='kw'>colname</span> <span class='kw'>=</span> <span class='st'>"number_uses_chrome"</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 2
-#&gt; # Groups:   userId [3]
-#&gt;   userId number_uses_chrome
-#&gt;   &lt;chr&gt;               &lt;int&gt;
-#&gt; 1 1                     199
-#&gt; 2 2                       9
-#&gt; 3 3                     198</div></pre>
+<span class='fu'>calcFeatureByGroup</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>studentlife.small</span>, <span class='kw'>group_col</span> <span class='kw'>=</span> <span class='st'>"userId"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>number_uses_chrome</span>)</div><div class='output co'>#&gt;   userId number_uses_chrome
+#&gt; 1      1                199
+#&gt; 2      2                  9
+#&gt; 3      3                198</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

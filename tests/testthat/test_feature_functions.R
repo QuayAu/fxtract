@@ -1,68 +1,60 @@
 context("feature_functions")
 
-# test_that("calcFeaturePerStudyDayAndByGroup", {
-#   d1 = 123456789
-#   td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
-#   td$userId = userId = c(rep("1", 4), rep("2", 5))
-#   td$x = 1:nrow(td)
-#   td = addDate(td)
-#   td = addStudyDayByGroup(td, group_col = "userId")
-#
-#   #check defaults
-#   fun = function(x) sum(x$x)
-#   summary_fun = function(x) mean(x, na.rm = TRUE)
-#   res = calcFeaturePerStudyDayAndByGroup(data = td, group_col = "userId", colname = "mean_x_of_sum_per_day",
-#     summary_fun = summary_fun, fun = fun, export_results_per_day = TRUE)
-#   expect_equal(dim(res$df.res), c(2, 5))
-#   expect_equal(res$res$mean_x_of_sum_per_day[1], (1 + 2 + 3 + 4) / 2)
-#   expect_equal(res$res$mean_x_of_sum_per_day[2], (5 + 6 + 7 + 8 + 9) / 3)
-#
-#   #check colname already in dataset
-#   expect_error(calcFeaturePerStudyDayAndByGroup(data = td, group_col = "userId", colname = "date",
-#     summary_fun = summary_fun, fun = fun),
-#     regexp = "colname is already in dataset. Please choose a different colname!")
-#
-#   #check max_study_day
-#   res = calcFeaturePerStudyDayAndByGroup(data = td, group_col = "userId", colname = "mean_x_of_sum_per_day",
-#     summary_fun = summary_fun, fun = fun, max_study_day = 2, export_results_per_day = TRUE)
-#   expect_equal(dim(res$df.res), c(2, 3))
-#   expect_equal(res$res$mean_x_of_sum_per_day[1], (1 + 2 + 3 + 4) / 2)
-#   expect_equal(res$res$mean_x_of_sum_per_day[2], (5 + 6 + 7 + 8) / 2)
-#
-#   #check impute
-#   res = calcFeaturePerStudyDayAndByGroup(data = td, group_col = "userId", colname = "mean_x_of_sum_per_day",
-#     summary_fun = summary_fun, fun = fun, max_study_day = 5, impute_empty_day = 0, export_results_per_day = TRUE)
-#   expect_equal(dim(res$df.res), c(2, 6))
-#   expect_equal(res$res$mean_x_of_sum_per_day[1], (1 + 2 + 3 + 4) / 5)
-#   expect_equal(res$res$mean_x_of_sum_per_day[2], (5 + 6 + 7 + 8 + 9) / 5)
-#
-#   #check different group name
-#   td$group = td$userId
-#   res = calcFeaturePerStudyDayAndByGroup(data = td, group_col = "group", colname = "mean_x_of_sum_per_day",
-#     summary_fun = summary_fun, fun = fun, max_study_day = 5, impute_empty_day = 0, export_results_per_day = TRUE)
-#   expect_equal(dim(res$df.res), c(2, 6))
-#   expect_equal(res$res$mean_x_of_sum_per_day[1], (1 + 2 + 3 + 4) / 5)
-#   expect_equal(res$res$mean_x_of_sum_per_day[2], (5 + 6 + 7 + 8 + 9) / 5)
-# })
-
-test_that("calcFeatureByGroup", {
-  d1 = 123456789
-  td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
-  td$userId = userId = c(rep("1", 4), rep("2", 5))
-  td$x = 1:nrow(td)
-  td = addDate(td, utc_col = "timestamp")
+test_that("calcFeature", {
+  df = data.frame(id = c(rep(1, 10), rep(2, 10)))
+  df$task = rep(c(rep("task1", 5), rep("task2", 5)), 2)
+  df$hour = rep(c(rep("hour1", 3), rep("hour2", 2), rep("hour1", 2), rep("hour2", 3)), 2)
+  df$x = 1:20
 
   #test checks
-  expect_error(calcFeatureByGroup(data = td, group_col = "y"))
   fun = function(data) data$x
-  expect_error(calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "test"),
-    regexp = "fun must return a vector of length 1")
-  expect_error(calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "userId", check_fun = FALSE),
-    regexp = "colname is already in dataset. Please choose a different colname!")
+  expect_error(calcFeature(data = df, group_col = "id", fun = fun),
+    regexp = "fun must return a vector of length 1 or a dataframe with 1 row!")
 
-  #check functionality
-  fun = function(data) mean(data$x)
-  y = calcFeatureByGroup(data = td, group_col = "userId", fun = fun, colname = "test")
-  expect_equal(y$test, c(mean(1:4), mean(5:9)))
+  #return 1 value
+  mean_x = function(data) mean(data$x)
+  y = calcFeature(data = df, group_col = "id", fun = mean_x)
+  expect_equal(y$mean_x, c(mean(1:10), mean(11:20)))
+
+  #return 1 row of data
+  more_features = function(data) data.frame(mean_x = mean(data$x), sd_x = sd(data$x), min_x = min(data$x))
+  y = calcFeature(data = df, group_col = "id", fun = more_features)
+  expect_equal(y$mean_x, c(mean(1:10), mean(11:20)))
+  expect_equal(y$sd_x, c(sd(1:10), sd(11:20)))
+  expect_equal(y$min_x, c(min(1:10), min(11:20)))
+
+  #group by 2 columns
+  y = calcFeature(data = df, group_col = c("id", "task"), fun = more_features)
+  expect_equal(dim(y), c(2, 7))
+
+  #group by 3 columns
+  y = calcFeature(data = df, group_col = c("id", "task", "hour"), fun = more_features)
+  expect_equal(dim(y), c(2, 3 * 4 + 1))
+
+  #group by 4 columns
+  df$y = c(rep(1, 2), rep(2, 2))
+  y = calcFeature(data = df, group_col = c("id", "task", "hour", "y"), fun = more_features)
+  expect_equal(dim(y), c(2, 3 * 4 * 2 + 1))
+
+  #change colname
+  mean_x = function(data) mean(data$x)
+  y = calcFeature(data = df, group_col = "id", fun = mean_x, colname = "mean_of_x")
+  expect_equal(colnames(y)[2], "mean_of_x")
+
+  #summarize function return 1 value
+  y1 = calcFeature(data = df, group_col = c("id", "hour"), fun = mean_x)
+  y2 = calcFeature(data = df, group_col = c("id", "hour"), fun = mean_x, summarize = mean)
+  expect_equal(y2[, 2], rowMeans(y1[, -1]))
+  expect_equal(colnames(y2)[2], "mean_x")
+
+  #summarize function return more than 1 value
+  summaryFun = function(x) {
+    data.frame(mean_hour = mean(x, na.rm = TRUE), sd_hour = sd(x, na.rm = TRUE))
+  }
+  y1 = calcFeature(data = df, group_col = c("id", "hour"), fun = mean_x)
+  y2 = calcFeature(data = df, group_col = c("id", "hour"), fun = mean_x, summarize = summaryFun)
+  expect_equal(y2[, 2], rowMeans(y1[, -1]))
+  expect_equal(y2[, 3], c(sd(y1[1, -1]), sd(y1[2, -1])))
+  expect_equal(colnames(y2), c("id", "mean_hour", "sd_hour"))
 })
 

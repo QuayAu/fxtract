@@ -93,7 +93,7 @@
       <a href="../articles/tutorial/basics_slidingWindow.html">slidingWindow</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_calcFeaturePerUserId.html">calcFeaturePerUserId</a>
+      <a href="../articles/tutorial/basics_calcFeature.html">calcFeature</a>
     </li>
   </ul>
 </li>
@@ -205,134 +205,141 @@ if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on t
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>data.frame</span>(<span class='kw'>mean.accuracy.last30</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>x</span>$<span class='no'>accuracy</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attache Paket: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:lubridate':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, union</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>data.frame</span>(<span class='kw'>mean.accuracy.last30</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>x</span>$<span class='no'>accuracy</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
   <span class='kw'>max.accuracy.last30</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='no'>x</span>$<span class='no'>accuracy</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
-<span class='no'>data</span> <span class='kw'>=</span> <span class='no'>studentlife.small</span>[<span class='fl'>1</span>:<span class='fl'>30</span>, ] <span class='co'>#needs date_time variable</span>
+<span class='no'>data</span> <span class='kw'>=</span> <span class='no'>studentlife_small</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(!<span class='fu'>is.na</span>(<span class='no'>latitude</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>) <span class='co'>#needs date_time variable</span>
 <span class='fu'>slidingWindow</span>(<span class='no'>data</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>, <span class='kw'>time_in_sec</span> <span class='kw'>=</span> <span class='fl'>60</span> * <span class='fl'>60</span>,
-  <span class='kw'>utc_col</span> <span class='kw'>=</span> <span class='st'>"timestamp"</span>) <span class='co'>#mean accuracy of last hour</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  13%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |=====================                                                 |  30%  |                                                                              |=======================                                               |  33%  |                                                                              |==========================                                            |  37%  |                                                                              |============================                                          |  40%  |                                                                              |==============================                                        |  43%  |                                                                              |=================================                                     |  47%  |                                                                              |===================================                                   |  50%  |                                                                              |=====================================                                 |  53%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  60%  |                                                                              |============================================                          |  63%  |                                                                              |===============================================                       |  67%  |                                                                              |=================================================                     |  70%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |=============================================================         |  87%  |                                                                              |===============================================================       |  90%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  97%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;     timestamp provider network_type accuracy latitude longitude altitude
-#&gt; 1  1364357009  network         wifi   67.993 43.70667 -72.28910      0.0
-#&gt; 2  1364358209  network         wifi   23.000 43.70664 -72.28907      0.0
-#&gt; 3  1364359405      gps                16.000 43.70668 -72.28902    136.3
-#&gt; 4  1364360609  network         wifi   71.126 43.70667 -72.28909      0.0
-#&gt; 5  1364361805      gps                16.000 43.70681 -72.28937    154.5
-#&gt; 6  1364363013      gps                12.000 43.70681 -72.28902    130.8
-#&gt; 7  1364364209  network         wifi   67.267 43.70668 -72.28909      0.0
-#&gt; 8  1364365411      gps                 7.000 43.70681 -72.28937    149.2
-#&gt; 9  1364366611      gps                 6.000 43.70678 -72.28935    120.9
-#&gt; 10 1364367813      gps                10.000 43.70672 -72.28917    141.1
-#&gt; 11 1364369012      gps                12.000 43.70686 -72.28928    151.0
-#&gt; 12 1364370209  network         wifi   70.633 43.70668 -72.28909      0.0
-#&gt; 13 1364371412      gps                10.000 43.70683 -72.28939    177.0
-#&gt; 14 1364372610      gps                 9.000 43.70683 -72.28926    162.2
-#&gt; 15 1364373812      gps                10.000 43.70690 -72.28907    116.8
-#&gt; 16 1364375012      gps                10.000 43.70669 -72.28916    142.8
-#&gt; 17 1364376209  network         wifi   70.688 43.70666 -72.28909      0.0
-#&gt; 18 1364377409  network         wifi   67.073 43.70668 -72.28907      0.0
-#&gt; 19 1364378612      gps                17.000 43.70682 -72.28907    126.6
-#&gt; 20 1364379809  network         wifi  168.684 43.70668 -72.28901      0.0
-#&gt; 21 1364381009  network         wifi   84.674 43.70667 -72.28905      0.0
-#&gt; 22 1364382209  network         wifi   67.398 43.70667 -72.28909      0.0
-#&gt; 23 1364383411      gps                18.000 43.70681 -72.28932    194.9
-#&gt; 24 1364384609  network         wifi   20.000 43.70667 -72.28905      0.0
-#&gt; 25 1364385811      gps                17.000 43.70697 -72.28922    155.7
-#&gt; 26 1364387009  network         wifi   81.328 43.70666 -72.28911      0.0
-#&gt; 27 1364387817      gps                15.000 43.70661 -72.28948    154.1
-#&gt; 28 1364390609  network         wifi   21.523 43.70455 -72.29478      0.0
-#&gt; 29 1364391809  network         wifi   20.911 43.70460 -72.29481      0.0
-#&gt; 30 1364393011  network         wifi   36.285 43.70879 -72.28375      0.0
-#&gt;    bearing    speed travelstate       date userId source device
-#&gt; 1      0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 2      0.0 0.000000      moving 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 3     96.2 0.250000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 4      0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 5      0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 6      0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 7      0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 8      0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 9     96.2 0.559017             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 10     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 11     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 12     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 13     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 14    96.2 0.750000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 15     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 16     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 17     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 18     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 19     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 20     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 21     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 22     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 23     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 24     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 25     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 26     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 27     0.0 0.000000             2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 28     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 29     0.0 0.000000  stationary 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt; 30     0.0 0.000000      moving 2013-03-27      1    GPS   &lt;NA&gt;
-#&gt;    RUNNING_TASKS_baseActivity_mClass RUNNING_TASKS_baseActivity_mPackage
-#&gt; 1                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 2                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 3                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 4                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 5                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 6                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 7                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 8                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 9                               &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 10                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 11                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 12                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 13                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 14                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 15                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 16                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 17                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 18                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 19                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 20                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 21                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 22                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 23                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 24                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 25                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 26                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 27                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 28                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 29                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt; 30                              &lt;NA&gt;                                &lt;NA&gt;
-#&gt;    RUNNING_TASKS_id RUNNING_TASKS_numActivities RUNNING_TASKS_numRunning
-#&gt; 1                NA                          NA                       NA
-#&gt; 2                NA                          NA                       NA
-#&gt; 3                NA                          NA                       NA
-#&gt; 4                NA                          NA                       NA
-#&gt; 5                NA                          NA                       NA
-#&gt; 6                NA                          NA                       NA
-#&gt; 7                NA                          NA                       NA
-#&gt; 8                NA                          NA                       NA
-#&gt; 9                NA                          NA                       NA
-#&gt; 10               NA                          NA                       NA
-#&gt; 11               NA                          NA                       NA
-#&gt; 12               NA                          NA                       NA
-#&gt; 13               NA                          NA                       NA
-#&gt; 14               NA                          NA                       NA
-#&gt; 15               NA                          NA                       NA
-#&gt; 16               NA                          NA                       NA
-#&gt; 17               NA                          NA                       NA
-#&gt; 18               NA                          NA                       NA
-#&gt; 19               NA                          NA                       NA
-#&gt; 20               NA                          NA                       NA
-#&gt; 21               NA                          NA                       NA
-#&gt; 22               NA                          NA                       NA
-#&gt; 23               NA                          NA                       NA
-#&gt; 24               NA                          NA                       NA
-#&gt; 25               NA                          NA                       NA
-#&gt; 26               NA                          NA                       NA
-#&gt; 27               NA                          NA                       NA
-#&gt; 28               NA                          NA                       NA
-#&gt; 29               NA                          NA                       NA
-#&gt; 30               NA                          NA                       NA
+  <span class='kw'>utc_col</span> <span class='kw'>=</span> <span class='st'>"timestamp"</span>) <span class='co'>#mean accuracy of last hour</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=====                                                                 |   7%  |                                                                              |=======                                                               |  10%  |                                                                              |=========                                                             |  13%  |                                                                              |============                                                          |  17%  |                                                                              |==============                                                        |  20%  |                                                                              |================                                                      |  23%  |                                                                              |===================                                                   |  27%  |                                                                              |=====================                                                 |  30%  |                                                                              |=======================                                               |  33%  |                                                                              |==========================                                            |  37%</div><div class='output co'>#&gt; <span class='warning'>Warning: kein nicht-fehlendes Argument für max; gebe -Inf zurück</span></div><div class='output co'>#&gt;   |                                                                              |============================                                          |  40%  |                                                                              |==============================                                        |  43%  |                                                                              |=================================                                     |  47%  |                                                                              |===================================                                   |  50%  |                                                                              |=====================================                                 |  53%  |                                                                              |========================================                              |  57%  |                                                                              |==========================================                            |  60%  |                                                                              |============================================                          |  63%  |                                                                              |===============================================                       |  67%  |                                                                              |=================================================                     |  70%  |                                                                              |===================================================                   |  73%  |                                                                              |======================================================                |  77%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  83%  |                                                                              |=============================================================         |  87%  |                                                                              |===============================================================       |  90%  |                                                                              |=================================================================     |  93%  |                                                                              |====================================================================  |  97%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt;    provider network_type accuracy latitude longitude altitude bearing speed
+#&gt; 1   network         wifi   24.000 43.75913 -72.32924      0.0       0     0
+#&gt; 2       gps                22.000 43.75950 -72.32902    250.9       0     0
+#&gt; 3   network         wifi   23.000 43.75913 -72.32924      0.0       0     0
+#&gt; 4   network         wifi   25.000 43.75913 -72.32924      0.0       0     0
+#&gt; 5   network         wifi   25.000 43.75913 -72.32924      0.0       0     0
+#&gt; 6   network         wifi   23.000 43.75913 -72.32924      0.0       0     0
+#&gt; 7   network         wifi   25.000 43.75913 -72.32924      0.0       0     0
+#&gt; 8   network         cell 5000.000 43.60805 -72.16217      0.0       0     0
+#&gt; 9   network         cell 5000.000 43.60805 -72.16217      0.0       0     0
+#&gt; 10  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 11  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 12  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 13  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 14  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 15  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 16  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 17  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 18  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 19  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 20  network         cell 3451.000 43.69629 -72.28330      0.0       0     0
+#&gt; 21  network         wifi   20.000 43.75913 -72.32923      0.0       0     0
+#&gt; 22  network         cell 2294.000 43.70647 -72.28731      0.0       0     0
+#&gt; 23  network         wifi   27.443 43.70511 -72.28852      0.0       0     0
+#&gt; 24  network         wifi   20.000 43.70672 -72.28730      0.0       0     0
+#&gt; 25  network         wifi   20.000 43.70673 -72.28734      0.0       0     0
+#&gt; 26  network         wifi   20.000 43.70672 -72.28733      0.0       0     0
+#&gt; 27  network         wifi   30.535 43.70672 -72.28729      0.0       0     0
+#&gt; 28  network         wifi   20.000 43.70671 -72.28733      0.0       0     0
+#&gt; 29  network         wifi   66.924 43.70890 -72.28367      0.0       0     0
+#&gt; 30  network         wifi   46.188 43.70895 -72.28397      0.0       0     0
+#&gt;    travelstate userId  timestamp device RUNNING_TASKS_baseActivity_mClass
+#&gt; 1   stationary     00 1364356963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 2                  00 1364358144   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 3   stationary     00 1364359364   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 4   stationary     00 1364360563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 5   stationary     00 1364361763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 6   stationary     00 1364362963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 7   stationary     00 1364364163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 8   stationary     00 1364365364   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 9   stationary     00 1364365368   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 10      moving     00 1364367763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 11      moving     00 1364367768   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 12      moving     00 1364372563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 13  stationary     00 1364373763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 14  stationary     00 1364374963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 15  stationary     00 1364376163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 16  stationary     00 1364377363   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 17  stationary     00 1364378563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 18  stationary     00 1364379763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 19  stationary     00 1364380963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 20  stationary     00 1364382163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 21  stationary     00 1364383363   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 22      moving     00 1364384563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 23      moving     00 1364385763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 24      moving     00 1364386963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 25  stationary     00 1364388163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 26  stationary     00 1364389363   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 27  stationary     00 1364390563   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 28  stationary     00 1364391763   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 29      moving     00 1364392963   &lt;NA&gt;                              &lt;NA&gt;
+#&gt; 30      moving     00 1364394163   &lt;NA&gt;                              &lt;NA&gt;
+#&gt;    RUNNING_TASKS_baseActivity_mPackage RUNNING_TASKS_id
+#&gt; 1                                 &lt;NA&gt;               NA
+#&gt; 2                                 &lt;NA&gt;               NA
+#&gt; 3                                 &lt;NA&gt;               NA
+#&gt; 4                                 &lt;NA&gt;               NA
+#&gt; 5                                 &lt;NA&gt;               NA
+#&gt; 6                                 &lt;NA&gt;               NA
+#&gt; 7                                 &lt;NA&gt;               NA
+#&gt; 8                                 &lt;NA&gt;               NA
+#&gt; 9                                 &lt;NA&gt;               NA
+#&gt; 10                                &lt;NA&gt;               NA
+#&gt; 11                                &lt;NA&gt;               NA
+#&gt; 12                                &lt;NA&gt;               NA
+#&gt; 13                                &lt;NA&gt;               NA
+#&gt; 14                                &lt;NA&gt;               NA
+#&gt; 15                                &lt;NA&gt;               NA
+#&gt; 16                                &lt;NA&gt;               NA
+#&gt; 17                                &lt;NA&gt;               NA
+#&gt; 18                                &lt;NA&gt;               NA
+#&gt; 19                                &lt;NA&gt;               NA
+#&gt; 20                                &lt;NA&gt;               NA
+#&gt; 21                                &lt;NA&gt;               NA
+#&gt; 22                                &lt;NA&gt;               NA
+#&gt; 23                                &lt;NA&gt;               NA
+#&gt; 24                                &lt;NA&gt;               NA
+#&gt; 25                                &lt;NA&gt;               NA
+#&gt; 26                                &lt;NA&gt;               NA
+#&gt; 27                                &lt;NA&gt;               NA
+#&gt; 28                                &lt;NA&gt;               NA
+#&gt; 29                                &lt;NA&gt;               NA
+#&gt; 30                                &lt;NA&gt;               NA
+#&gt;    RUNNING_TASKS_numActivities RUNNING_TASKS_numRunning
+#&gt; 1                           NA                       NA
+#&gt; 2                           NA                       NA
+#&gt; 3                           NA                       NA
+#&gt; 4                           NA                       NA
+#&gt; 5                           NA                       NA
+#&gt; 6                           NA                       NA
+#&gt; 7                           NA                       NA
+#&gt; 8                           NA                       NA
+#&gt; 9                           NA                       NA
+#&gt; 10                          NA                       NA
+#&gt; 11                          NA                       NA
+#&gt; 12                          NA                       NA
+#&gt; 13                          NA                       NA
+#&gt; 14                          NA                       NA
+#&gt; 15                          NA                       NA
+#&gt; 16                          NA                       NA
+#&gt; 17                          NA                       NA
+#&gt; 18                          NA                       NA
+#&gt; 19                          NA                       NA
+#&gt; 20                          NA                       NA
+#&gt; 21                          NA                       NA
+#&gt; 22                          NA                       NA
+#&gt; 23                          NA                       NA
+#&gt; 24                          NA                       NA
+#&gt; 25                          NA                       NA
+#&gt; 26                          NA                       NA
+#&gt; 27                          NA                       NA
+#&gt; 28                          NA                       NA
+#&gt; 29                          NA                       NA
+#&gt; 30                          NA                       NA
 #&gt;    RUNNING_TASKS_topActivity_mClass RUNNING_TASKS_topActivity_mPackage
 #&gt; 1                              &lt;NA&gt;                               &lt;NA&gt;
 #&gt; 2                              &lt;NA&gt;                               &lt;NA&gt;
@@ -366,35 +373,35 @@ if the outcome is of correct form. Set to <code>FALSE</code>, if evaluation on t
 #&gt; 30                             &lt;NA&gt;                               &lt;NA&gt;
 #&gt;    mean.accuracy.last30 max.accuracy.last30
 #&gt; 1                    NA                  NA
-#&gt; 2             67.993000              67.993
-#&gt; 3             45.496500              67.993
-#&gt; 4             19.500000              23.000
-#&gt; 5             36.708667              71.126
-#&gt; 6             43.563000              71.126
-#&gt; 7             14.000000              16.000
-#&gt; 8             39.633500              67.267
-#&gt; 9             28.755667              67.267
-#&gt; 10             6.500000               7.000
-#&gt; 11             8.000000              10.000
-#&gt; 12             9.333333              12.000
-#&gt; 13            30.877667              70.633
-#&gt; 14            30.877667              70.633
-#&gt; 15             9.500000              10.000
-#&gt; 16             9.500000              10.000
-#&gt; 17             9.666667              10.000
-#&gt; 18            30.229333              70.688
-#&gt; 19            68.880500              70.688
-#&gt; 20            42.036500              67.073
-#&gt; 21            92.842000             168.684
-#&gt; 22            90.119333             168.684
-#&gt; 23            76.036000              84.674
-#&gt; 24            42.699000              67.398
-#&gt; 25            19.000000              20.000
-#&gt; 26            18.333333              20.000
-#&gt; 27            39.442667              81.328
-#&gt; 28            15.000000              15.000
-#&gt; 29            21.523000              21.523
-#&gt; 30            21.217000              21.523</div></pre>
+#&gt; 2              24.00000              24.000
+#&gt; 3              23.00000              24.000
+#&gt; 4              22.50000              23.000
+#&gt; 5              24.00000              25.000
+#&gt; 6              24.33333              25.000
+#&gt; 7              24.00000              25.000
+#&gt; 8              24.00000              25.000
+#&gt; 9            1682.66667            5000.000
+#&gt; 10           5000.00000            5000.000
+#&gt; 11           4483.66667            5000.000
+#&gt; 12                  NaN                -Inf
+#&gt; 13           3451.00000            3451.000
+#&gt; 14           3451.00000            3451.000
+#&gt; 15           3451.00000            3451.000
+#&gt; 16           3451.00000            3451.000
+#&gt; 17           3451.00000            3451.000
+#&gt; 18           3451.00000            3451.000
+#&gt; 19           3451.00000            3451.000
+#&gt; 20           3451.00000            3451.000
+#&gt; 21           3451.00000            3451.000
+#&gt; 22           1735.50000            3451.000
+#&gt; 23           1157.00000            2294.000
+#&gt; 24           1160.72150            2294.000
+#&gt; 25             23.72150              27.443
+#&gt; 26             20.00000              20.000
+#&gt; 27             20.00000              20.000
+#&gt; 28             25.26750              30.535
+#&gt; 29             25.26750              30.535
+#&gt; 30             43.46200              66.924</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

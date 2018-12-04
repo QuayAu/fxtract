@@ -18,8 +18,8 @@ navbar:
     menu:
     - text: slidingWindow
       href: articles/tutorial/basics_slidingWindow.html
-    - text: calcFeaturePerUserId
-      href: articles/tutorial/basics_calcFeaturePerUserId.html
+    - text: calcFeature
+      href: articles/tutorial/basics_calcFeature.html
   - text: Use Cases
     menu:
     - text: StudentLife

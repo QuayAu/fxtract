@@ -8,3 +8,11 @@ vignette: >
 ---
 
 # slidingWindow
+
+## steps
+
+<img src="img/slidingWindow_steps.svg" width="500">
+
+## time
+
+<img src="img/slidingWindow_time.svg" width="500">

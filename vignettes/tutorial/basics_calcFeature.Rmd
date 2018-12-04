@@ -1,0 +1,64 @@
+---
+title: "Basics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+# calcFeature
+This is the main function of this package. Given a **user-defined** function `fun`, it calculates this function for each member of a group variable (e.g. participants in a study). 
+The function `fun` needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.
+
+## Example data
+Let's simulate a simple (absolutely arbitrary!) example dataset.
+Two participants with the ID *1* or *2* were given two tasks.
+For each task they were given two hours of time. 
+A value *x* was measured during this task.
+```{r, message = FALSE, warning = FALSE}
+library(fxtract)
+df = data.frame(id = c(rep(1, 10), rep(2, 10)))
+df$task = rep(c(rep("task1", 5), rep("task2", 5)), 2)
+df$hour = rep(c(rep("hour1", 3), rep("hour2", 2), rep("hour1", 2), rep("hour2", 3)), 2)
+df$x = rnorm(20)
+df
+```
+
+### Return 1 value each
+Let's say we are interested in the maximum value of **x** for each participant. 
+We need to define a function, which has a dataframe as input and a scalar or vector as output:
+```{r}
+max_x = function(data) {
+  max(data$x)
+}
+```
+Now we can calculate the desired outcome:
+```{r}
+calcFeature(df, group_col = "id", fun = max_x)
+```
+
+
+### Return more values at once
+Sometimes calculations can take a long time (e.g. clustering of GPS points) and we want to calculate more than one value (e.g. **mean** and **sd**). This can be achieved by returning a named vector:
+```{r}
+more_features = function(data) {
+  data.frame(max_x = max(data$x), sd_x = sd(data$x))
+}
+calcFeature(df, group_col = "id", fun = more_features)
+```
+
+### group by two columns
+```{r}
+calcFeature(df, group_col = c("id", "task"), fun = more_features)
+```
+
+### group by three colums
+```{r}
+calcFeature(df, group_col = c("id", "task", "hour"), fun = more_features)
+```
+
+
+

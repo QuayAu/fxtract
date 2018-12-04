@@ -17,9 +17,10 @@
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 #' @examples
+#' library(dplyr)
 #' fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
 #'   max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
-#' data = studentlife.small[1:30, ] #needs date_time variable
+#' data = studentlife_small %>% filter(!is.na(latitude)) %>% slice(1:30) #needs date_time variable
 #' slidingWindow(data, fun = fun, time_in_sec = 60 * 60,
 #'   utc_col = "timestamp") #mean accuracy of last hour
 slidingWindow = function(data, utc_col = character(1), fun, steps, time_in_sec, check_fun = TRUE, eval_at_rows = numeric(0), unit = "s") {

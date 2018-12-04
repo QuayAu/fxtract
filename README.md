@@ -7,7 +7,7 @@
 This is work in progress!
 [Tutorial](https://quayau.github.io/fxtract/docs/index.html)
 
-fxtract helps you to extract user-defined features from timestamped data.
+fxtract helps you to extract user-defined features from longitudinal data with helpful functions if a UTC timestamp is available.
 
 ![Image description](man/figures/fxtract_main.svg)
 
@@ -20,7 +20,7 @@ devtools::install_github("QuayAu/fxtract")
 
 ## Features
 
-* Extracting features from timeseries data of many different users/IDs/etc.
+* Extracting features from longitudinal data of many different users/IDs/etc.
 * Timestamp to date & time converters. 
     * This is useful for filtering datasets, e.g. if one is interested in filtering the morning hours from a dataset, or distinguishing working days from weekends.
 * divideDataIntoIntervals

@@ -3,8 +3,10 @@ title: "Preprocessing Helpers"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Date functions
@@ -28,7 +30,7 @@ With this new variable you can filter your dataset very easily. E.g., if you wan
 ```{r, message = FALSE, warning = FALSE}
 library(fxtract)
 library(dplyr)
-data = studentlife.small %>% addWeekday() %>% filter(weekday >= "Mon" & weekday <= "Fri")
+data = studentlife_small %>% addWeekday(utc_col = "timestamp") %>% filter(weekday >= "Mon" & weekday <= "Fri")
 unique(data$weekday)
 ```
 
@@ -37,6 +39,6 @@ unique(data$weekday)
 
 Given a dataset with a timestamp variable, `addDate()` adds a time variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package.
 
-## addStudyDay
+<!-- ## addStudyDay -->
 
-## addStudyDayPerUserId
+<!-- ## addStudyDayPerUserId -->
