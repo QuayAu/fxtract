@@ -11,7 +11,7 @@ calcFeature(data, group_col, fun, check_fun = TRUE, summarize, colname)
 
 \item{group_col}{character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.}
 
-\item{fun}{function. Must be a function, which has a dataframe as input and a vector of length 1 as output.}
+\item{fun}{function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.}
 
 \item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
 if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
@@ -27,9 +27,9 @@ dataframe
 Calculates a given function grouped by \code{group_col}.
 }
 \examples{
-number_uses_chrome = function(data) {
-  nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
+fun = function(data) {
+  c(uses_chrome = nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome")))
 }
-calcFeature(data = studentlife_small, group_col = "userId", fun = number_uses_chrome)
+calcFeature(data = studentlife_small, group_col = "userId", fun = fun)
 }
 \concept{feature functions}

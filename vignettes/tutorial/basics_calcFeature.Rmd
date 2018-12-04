@@ -31,8 +31,8 @@ df
 Let's say we are interested in the maximum value of **x** for each participant. 
 We need to define a function, which has a dataframe as input and a scalar or vector as output:
 ```{r}
-max_x = function(data) {
-  max(data$x)
+fun = function(data) {
+  c(max_x = max(data$x))
 }
 ```
 Now we can calculate the desired outcome:

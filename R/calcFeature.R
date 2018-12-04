@@ -2,7 +2,7 @@
 #'
 #' @template param_data
 #' @template param_group_col
-#' @template param_fun_1
+#' @param fun function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.
 #' @template param_check_fun
 #' @param summarize function. If more than one value is returned for each group, this function summarizes these values to one value or more values. E.g. mean or/and sd.
 #' @param colname character. If one variable is returned for each group, you can specify a custom column name for this new column.
@@ -14,30 +14,30 @@
 #' @importFrom stats as.formula setNames
 #' @export
 #' @examples
-#' number_uses_chrome = function(data) {
-#'   nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
+#' fun = function(data) {
+#'   c(uses_chrome = nrow(dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome")))
 #' }
-#' calcFeature(data = studentlife_small, group_col = "userId", fun = number_uses_chrome)
+#' calcFeature(data = studentlife_small, group_col = "userId", fun = fun)
 calcFeature = function(data, group_col, fun, check_fun = TRUE, summarize, colname) {
   . = NULL
   checkmate::assertDataFrame(data)
   checkmate::assertNames(names(data), must.include = group_col)
   checkmate::assertLogical(check_fun)
   if (check_fun) {
-    if (dim(do.call(fun, list(data)) %>% data.frame())[1] != 1) stop("fun must return a vector of length 1 or a dataframe with 1 row!")
+    checkmate::assertAtomicVector(fun(data))
   }
 
   if (!missing(summarize)) checkmate::assertFunction(summarize)
   if (!missing(colname)) checkmate::assertCharacter(colname)
 
-  if (length(group_col) == 1) res = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(data.frame(do.call(fun, list(.))))
+  if (length(group_col) == 1) res = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(data.frame(t(fun(.))))
   if (length(group_col) >= 2) {
-    res = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(data.frame(do.call(fun, list(.))))
+    res = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(data.frame(t(fun(.))))
     dcast_formula = as.formula(paste(group_col[1], "~", paste(group_col[-1], collapse = "+")))
     res = data.table::dcast(data.table::setDT(res), dcast_formula, value.var = setdiff(colnames(res), group_col))
   }
 
-  if (ncol(res) == 2) colnames(res)[2] = ifelse(missing(colname), deparse(substitute(fun)), colname)
+  if (!missing(colname) & ncol(res) == 2) colnames(res)[2] = ifelse(missing(colname), deparse(substitute(fun)), colname)
   res = data.frame(res)
 
   if (!missing(summarize)) {
