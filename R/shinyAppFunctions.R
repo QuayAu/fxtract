@@ -5,8 +5,9 @@ makeProject = function(newProjectName){
   if (!dir.exists("Projects")) dir.create("Projects")
   if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
   dir.create(newDirPath)
-  dir.create(paste0(newDirPath, "/features"))
-  dir.create(paste0(newDirPath, "/raw_rda_files"))
+  dir.create(paste0(newDirPath, "/features_csv"))
+  dir.create(paste0(newDirPath, "/feature_functions"))
+  dir.create(paste0(newDirPath, "/raw_rds_files"))
   proj = list(dir = newDirPath)
   class(proj) = c("fxtract_proj", class(proj))
   proj
@@ -24,43 +25,44 @@ readSQLData = function(file.dir, tbl_name) {
   logs
 }
 
-sqlToRda = function(project, sql_db, participants){
 
-}
-
-
-unlink("Projects/personality_prediction", recursive = TRUE)
-proj = makeProject("Personality_Prediction")
-sql_empra = readSQLData(file.dir = "../Personality_Prediction/Data/SQL_database_EMPRA", tbl_name = "df1")
-
-
-sqlToRda = function(proj, file.dir, tbl_name, group_by){
+sqlToRds = function(proj, file.dir, tbl_name, group_by){
   checkmate::assertClass(proj, "fxtract_proj")
   checkmate::assertCharacter(tbl_name)
   db = dplyr::src_sqlite(file.dir, create = FALSE)
   logs = dplyr::tbl(db, from = tbl_name)
   gb = logs %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
-  x = foreach::foreach(i = gb, .packages = c("dplyr")) foreach::%dopar% {
+  x = foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
     db = dplyr::src_sqlite(file.dir, create = FALSE)
     logs = dplyr::tbl(db, from = tbl_name)
     logs_i = logs %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-    saveRDS(logs_i, file = paste0(proj$dir, "/raw_rda_files/", i, ".RDS"))
+    saveRDS(logs_i, file = paste0(proj$dir, "/raw_rds_files/", i, ".RDS"))
   }
 }
 
-
-library(foreach)
-library(doSNOW)
-cl = makeCluster(32)
-registerDoSNOW(cl)
-sqlToRda(proj = proj, file.dir = "../Personality_Prediction/Data/SQL_database_EMPRA", tbl_name = "df1", group_by = "userId")
-snow::stopCluster(cl); registerDoSEQ()
+# batchtools
+featureToCsv = function(feature_fun, data, id) {
+  res = do.call(feature_fun, list(data))
+  write.csv2(paste0(id, feature_fun, ".csv"))
+}
 
 
-source("../Personality_Prediction_OSF/Scripts/code_blocks/helper_functions.R")
+makeBatchtoolsExperiment = function(proj) {
+  reg = batchtools::makeExperimentRegistry(paste0(proj$dir, "/reg"))
+  rds_files = list.files(path = paste0(proj$dir, "/raw_rds_files"))
+  for (id in rds_files) {
+    data_id = readRDS(paste0(proj$dir, "/raw_rds_files/", id))
+    name = gsub(".RDS", "", id)
+    batchtools::addProblem(name = name, data = data_id)
+  }
+  feature_functions = list.files(path = paste0(proj$dir, "/feature_functions"))
 
-
-
-
-
+  for (feat_fun in feature_functions) {
+    fun = source(paste0(proj$dir, "/feature_functions/", feat_fun))
+    fun = fun$value
+    name = gsub(".RDS", "", feat_fun)
+    batchtools::addAlgorithm(name, fun = function(job, data, instance) fun(data))
+  }
+  addExperiments()
+}
