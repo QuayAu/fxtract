@@ -17,7 +17,6 @@ makeProject = function(newProjectName){
 
 #' @importFrom dplyr src_sqlite
 readSQLData = function(file.dir, tbl_name) {
-  checkmate::assertClass(proj, "fxtract_proj")
   checkmate::assertCharacter(tbl_name)
   db = dplyr::src_sqlite(file.dir, create = FALSE)
   logs = dplyr::tbl(db, from = tbl_name)
@@ -25,8 +24,9 @@ readSQLData = function(file.dir, tbl_name) {
   logs
 }
 
-
+#' @importFrom foreach %dopar%
 sqlToRds = function(proj, file.dir, tbl_name, group_by){
+  i = NULL
   checkmate::assertClass(proj, "fxtract_proj")
   checkmate::assertCharacter(tbl_name)
   db = dplyr::src_sqlite(file.dir, create = FALSE)
@@ -41,13 +41,7 @@ sqlToRds = function(proj, file.dir, tbl_name, group_by){
   }
 }
 
-# batchtools
-featureToCsv = function(feature_fun, data, id) {
-  res = do.call(feature_fun, list(data))
-  write.csv2(paste0(id, feature_fun, ".csv"))
-}
-
-
+#' @importFrom batchtools makeExperimentRegistry addExperiments addAlgorithm
 makeBatchtoolsExperiment = function(proj) {
   reg = batchtools::makeExperimentRegistry(paste0(proj$dir, "/reg"))
   rds_files = list.files(path = paste0(proj$dir, "/raw_rds_files"))
@@ -64,5 +58,15 @@ makeBatchtoolsExperiment = function(proj) {
     name = gsub(".RDS", "", feat_fun)
     batchtools::addAlgorithm(name, fun = function(job, data, instance) fun(data))
   }
-  addExperiments()
+  batchtools::addExperiments()
 }
+
+
+#load project
+
+#collect results
+
+#project status
+
+#delete feature
+#add feature

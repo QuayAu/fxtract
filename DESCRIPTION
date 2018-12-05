@@ -23,7 +23,9 @@ Imports: dplyr,
   magrittr,
   checkmate,
   utils,
-  data.table
+  data.table,
+  foreach,
+  batchtools
 Suggests: testthat,
   knitr,
   covr,
