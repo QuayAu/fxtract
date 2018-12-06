@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds column 'date_time' to a dataframe containing a timestamp variable. — addDateTime • fxtract</title>
+<title>Iniates batchtools functionality — makeProject • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,16 @@
 
 
 
-<meta property="og:title" content="Adds column 'date_time' to a dataframe containing a timestamp variable. — addDateTime" />
+<meta property="og:title" content="Iniates batchtools functionality — makeProject" />
 
-<meta property="og:description" content="Adds column 'date_time' to a dataframe containing a timestamp variable." />
+<meta property="og:description" content="This function iniates batchtools functionality of this package.
+Check the tutorial on the github page!
+Every desired function will be calculated for each member
+of a grouping variable (e.g. each participant of a study).
+The data will be saved as an RDS-file for each member of a grouping variable.
+This enables the possibility to calculate features even if all raw data cannot be loaded into RAM.
+Feature extraction can be paused and restarted at a later time, even on a different machine.
+Parallelization can be done via batchtools." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -133,55 +140,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds column 'date_time' to a dataframe containing a timestamp variable.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/helpersTimestamp.R'><code>R/helpersTimestamp.R</code></a></small>
-    <div class="hidden name"><code>addDateTime.Rd</code></div>
+    <h1>Iniates batchtools functionality</h1>
+    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/batchtools.R'><code>R/batchtools.R</code></a></small>
+    <div class="hidden name"><code>makeProject.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Adds column 'date_time' to a dataframe containing a timestamp variable.</p>
+    <p>This function iniates batchtools functionality of this package.
+Check the tutorial on the github page!
+Every desired function will be calculated for each member
+of a grouping variable (e.g. each participant of a study).
+The data will be saved as an RDS-file for each member of a grouping variable.
+This enables the possibility to calculate features even if all raw data cannot be loaded into RAM.
+Feature extraction can be paused and restarted at a later time, even on a different machine.
+Parallelization can be done via <cite>batchtools</cite>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>addDateTime</span>(<span class='no'>data</span>, <span class='kw'>utc_col</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>1</span>), <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"s"</span>)</pre>
+    <pre class="usage"><span class='fu'>makeProject</span>(<span class='no'>newProjectName</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).</p></td>
+      <th>newProjectName</th>
+      <td><p>character. The new project name. A subfolder under the (created) folder `Projects` will be created.</p></td>
     </tr>
     <tr>
-      <th>utc_col</th>
-      <td><p>character. Column name of the UTC timestamp.</p></td>
-    </tr>
-    <tr>
-      <th>tz</th>
-      <td><p>timezone. Defaults to using 'UTC'. See <code><a href='http://lubridate.tidyverse.org/reference/as_date.html'>as_datetime</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>unit</th>
-      <td><p>unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).</p></td>
+      <th>...</th>
+      <td><p>other arguments passed to <code><a href='http://www.rdocumentation.org/packages/batchtools/topics/makeExperimentRegistry'>batchtools::makeExperimentRegistry</a></code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe with added variable 'date_time'.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other helper functions: <code><a href='addColumnByGroup.html'>addColumnByGroup</a></code>,
-  <code><a href='addColumn.html'>addColumn</a></code>, <code><a href='addDate.html'>addDate</a></code>,
-  <code><a href='addStudyDayByGroup.html'>addStudyDayByGroup</a></code>,
-  <code><a href='addStudyDay.html'>addStudyDay</a></code>, <code><a href='addTime.html'>addTime</a></code>,
-  <code><a href='addWeekday.html'>addWeekday</a></code>, <code><a href='calcStudyDay.html'>calcStudyDay</a></code>,
-  <code><a href='divideDataIntoIntervals.html'>divideDataIntoIntervals</a></code>,
-  <code><a href='slidingWindow.html'>slidingWindow</a></code></p></div>
+    <p>fxtract_project object.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>project</span> <span class='kw'>=</span> <span class='fu'>makeProject</span>(<span class='st'>"my_project"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -189,9 +189,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -4,6 +4,12 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/index.html</loc>
   </url>
   <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addBatchtoolsAlgorithms.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addBatchtoolsProblems.html</loc>
+  </url>
+  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addColumn.html</loc>
   </url>
   <url>
@@ -37,6 +43,9 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/checkTimeFormat.html</loc>
   </url>
   <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/collectResults.html</loc>
+  </url>
+  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/divideDataIntoIntervals.html</loc>
   </url>
   <url>
@@ -46,10 +55,22 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filterWeekday.html</loc>
   </url>
   <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/getProjectStatus.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/loadProject.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/makeProject.html</loc>
+  </url>
+  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/phonedata.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/slidingWindow.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/sqlToRds.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/studentlife_small.html</loc>
@@ -71,6 +92,9 @@
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helpers.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_batchtools.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_studentlife.html</loc>

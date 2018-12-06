@@ -2,7 +2,7 @@ Package: fxtract
 Type: Package
 Title: Feature Extraction for Longitudinal Data
 Description: This package contains functions, which calculate features from longitudinal data.
-Version: 0.1
+Version: 0.6
 Authors@R: c(person("Quay", "Au", email = "quay.au@stat.uni-muenchen.de", role = c("aut", "cre")),
   person("Theresa", "Ullmann", email = "theresa_ullmann@gmx.de", role = "aut"),
   person("Clemens", "Stachl", email = "clemens.stachl@psy.lmu.de", role = "ctb"),
@@ -23,7 +23,9 @@ Imports: dplyr,
   magrittr,
   checkmate,
   utils,
-  data.table
+  data.table,
+  batchtools,
+  foreach
 Suggests: testthat,
   knitr,
   covr,
