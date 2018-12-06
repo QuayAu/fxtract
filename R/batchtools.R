@@ -1,4 +1,5 @@
 #make project
+# #' @export
 makeProject = function(newProjectName){
   checkmate::assertCharacter(newProjectName)
   newDirPath = paste0("Projects/", newProjectName)
@@ -14,6 +15,7 @@ makeProject = function(newProjectName){
 }
 
 #load project
+# #' @export
 loadProject = function(file.dir) {
   checkmate::assertTRUE(file.exists(paste0(file.dir, "/feature_functions")))
   checkmate::assertTRUE(file.exists(paste0(file.dir, "/raw_rds_files")))
@@ -23,6 +25,7 @@ loadProject = function(file.dir) {
 }
 
 #' @importFrom dplyr src_sqlite
+# #' @export
 readSQLData = function(file.dir, tbl_name) {
   checkmate::assertCharacter(tbl_name)
   db = dplyr::src_sqlite(file.dir, create = FALSE)
@@ -33,6 +36,7 @@ readSQLData = function(file.dir, tbl_name) {
 
 #' @importFrom foreach "%dopar%"
 #' @importFrom magrittr "%>%"
+# #' @export
 sqlToRds = function(project, file.dir, tbl_name, filter_by){
   i = NULL
   checkmate::assertClass(project, "fxtract_project")
@@ -41,7 +45,7 @@ sqlToRds = function(project, file.dir, tbl_name, filter_by){
   logs = dplyr::tbl(db, from = tbl_name)
   gb = logs %>% dplyr::distinct_(.dots = filter_by) %>% data.frame() %>% unlist()
 
-  x = foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
+  foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
     db = dplyr::src_sqlite(file.dir, create = FALSE)
     logs = dplyr::tbl(db, from = tbl_name)
     logs_i = logs %>% dplyr::filter(!!as.name(filter_by) == i) %>% data.frame()
@@ -50,6 +54,7 @@ sqlToRds = function(project, file.dir, tbl_name, filter_by){
 }
 
 #' @importFrom batchtools makeExperimentRegistry
+# #' @export
 makeBatchtoolsExperiment = function(project, ...) {
   reg = batchtools::makeExperimentRegistry(paste0(project$dir, "/reg"), ...)
   project[["reg"]] = reg
@@ -57,6 +62,7 @@ makeBatchtoolsExperiment = function(project, ...) {
 }
 
 #' @importFrom batchtools addProblem
+# #' @export
 addBatchtoolsProblems = function(project) {
   rds_files = list.files(path = paste0(project$dir, "/raw_rds_files"))
   for (id in rds_files) {
@@ -67,6 +73,7 @@ addBatchtoolsProblems = function(project) {
 }
 
 #' @importFrom batchtools batchExport addAlgorithm
+# #' @export
 addBatchtoolsAlgorithms = function(project) {
   feature_functions = list.files(path = paste0(project$dir, "/feature_functions"))
   for (feat_fun in feature_functions) {
@@ -80,6 +87,7 @@ addBatchtoolsAlgorithms = function(project) {
 }
 
 #' @importFrom batchtools loadRegistry
+# #' @export
 loadBatchtoolsExperiment = function(project, writeable = TRUE) {
   reg = batchtools::loadRegistry(paste0(project$dir, "/reg"), writeable = writeable)
   project[["reg"]] = reg
@@ -88,7 +96,9 @@ loadBatchtoolsExperiment = function(project, writeable = TRUE) {
 
 #project status
 #' @importFrom magrittr "%>%"
+# #' @export
 getProjectStatus = function(project) {
+  problem = vars = funs = NULL
   reg = project$reg
   batchtools::assertRegistry(reg, "ExperimentRegistry")
   res = batchtools::reduceResultsDataTable(reg = reg)
@@ -106,22 +116,19 @@ getProjectStatus = function(project) {
 }
 
 #collect results
+# #' @export
 getAllFeatureFunctions = function(project) {
   feature_functions = list.files(path = paste0(project$dir, "/feature_functions"))
   gsub(".R", replacement = "", feature_functions)
 }
 
+#' @importFrom magrittr "%>%"
+# #' @export
 findFeatureFunctionJobId = function(feature_function, project) {
+  job.id = algorithm = NULL
   reg = project$reg
   batchtools::assertRegistry(reg, "ExperimentRegistry")
   jt = batchtools::getJobTable(reg = reg)
   jt = data.frame(jt)
-  jt %>% dplyr::filter(algorithm == feature_function) %>% select(job.id)
+  jt %>% dplyr::filter(algorithm == feature_function) %>% dplyr::select(job.id)
 }
-
-
-
-
-
-#delete feature
-#add feature
