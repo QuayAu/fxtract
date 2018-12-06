@@ -48,6 +48,7 @@ calcFeature = function(data, group_col, fun, check_fun = TRUE, summarize, colnam
       if (i == 1) res1 = do.call(summarize, list(unlist(res0[i, ])))
       if (i >= 2) res1 = rbind(res1, do.call(summarize, list(unlist(res0[i, ]))))
     }
+    res1 = data.frame(res1)
     rownames(res1) = NULL
     if (ncol(res1) == 1) colnames(res1) = deparse(substitute(summarize))
     if (!missing(colname) & ncol(res1) == 1) colnames(res1) = colname
