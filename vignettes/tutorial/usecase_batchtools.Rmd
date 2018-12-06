@@ -6,5 +6,129 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
+```{r, include = FALSE}
+unlink("Projects", recursive = TRUE)
+file.remove("SQL_database_studentlife.sql")
+```
 
-TO DO
+First let us assume we have data, which cannot be loaded into RAM as whole (although here, we can...). 
+For demonstration purposes, we save our data into separate tables into one database (one with id **00**, and one table with both ids **01** and **02**).
+
+```{r, message = FALSE, warning = FALSE}
+library(fxtract)
+library(dplyr)
+studentlife_small_00 = studentlife_small %>% filter(userId == "00")
+studentlife_small_rest = studentlife_small %>% filter(userId %in% c("01", "02"))
+
+my_database = src_sqlite("SQL_database_studentlife.sql", create = TRUE) 
+copy_to(my_database, df = studentlife_small_00, temporary = FALSE)
+copy_to(my_database, df = studentlife_small_rest, temporary = FALSE)
+```
+
+Now that we have a local SQL database, we can start demonstrating the batchtools functionality of this package:
+
+# Make a Project
+```{r, message = FALSE, warning = FALSE}
+project = makeProject("my_project")
+```
+
+Because of automation reasons and usage of our planned shiny app, it is mandatory to write single .R scripts for functions.
+This simulates writing custom functions:
+
+### function 1
+```{r}
+fileConn = file("projects/my_project/feature_functions/GPS_features.R")
+writeLines(c("library(geosphere)
+function(data) {
+  long = data$longitude
+  lat = data$latitude
+  c(totalDist = sum(geosphere::distHaversine(cbind(long, lat)), na.rm = TRUE),
+    mean_long = mean(long, na.rm = TRUE),
+    mean_lat = mean(lat, na.rm = TRUE)
+  ) 
+}"), fileConn)
+close(fileConn)
+```
+
+### function 2
+```{r}
+fileConn = file("projects/my_project/feature_functions/App_features.R")
+writeLines(c("function(data) {
+  c(numberDiffApps = length(unique(data$RUNNING_TASKS_topActivity_mPackage)))
+}"), fileConn)
+close(fileConn)
+```
+
+# Saving RDS Files 
+Now we need to save single RDS files for each user:
+```{r, warning = FALSE, message = FALSE}
+project = sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_00", group_by = "userId")
+project = sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_rest", group_by = "userId")
+```
+
+# Add batchtools Problems and Algorithms
+Now we can add batchtools problems and algorithms. The static parts are each dataframe for the users. The algorithms are the feature functions.
+
+```{r}
+addBatchtoolsProblems(project = project)
+addBatchtoolsAlgorithms(project = project)
+```
+
+# Calculating features
+We have 3 users and 2 feature functions. Remember, this scales well for large data and many functions, since every feature function is calculated for each user separately. These jobs can  easily be parallelized. Here we have 6 jobs in total:
+```{r}
+batchtools::getStatus()
+```
+
+```{r, echo = TRUE, message = FALSE}
+batchtools::submitJobs(1:4)
+```
+
+```{r}
+batchtools::getStatus()
+```
+
+# Summary of Current Status
+We can get a summary of the current status by:
+```{r}
+getProjectStatus(project)
+```
+Here we see that the features for user **02** were not calculated yet.
+
+To show the possibility to stop feature extraction and restart at a later time, we clear all objects from the workspace:
+
+
+```{r, include = FALSE}
+RPostgreSQL::dbDisconnect(my_database$con)
+file.remove("SQL_database_studentlife.sql")
+```
+
+```{r}
+rm(list = ls())
+```
+
+Now we can load the project and submit the remaining jobs:
+```{r, message = FALSE}
+project = loadProject("projects/my_project", group_by = "userId")
+batchtools::submitJobs(5:6)
+batchtools::getStatus()
+```
+
+```{r}
+getProjectStatus(project)
+```
+All done. Now we can collect the desired result:
+
+```{r}
+res = collectResults(project)
+res
+```
+
+```{r, echo = FALSE}
+unlink("Projects", recursive = TRUE)
+```
+
+```{r, echo = FALSE, eval = FALSE}
+unlink("vignettes/tutorial/Projects", recursive = TRUE)
+file.remove("vignettes/tutorial/SQL_database_studentlife.sql")
+```
