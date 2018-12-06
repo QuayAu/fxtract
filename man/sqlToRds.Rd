@@ -24,7 +24,7 @@ and saves these as dataframes in RDS files. Parallelization is available via \li
 }
 \examples{
 \dontrun{
-project = sqlToRds(project, "Projects/myProject/SQL_database.sql",
+project = sqlToRds(project, "projects/myProject/SQL_database.sql",
   tbl_name = "table", group_by = "user")
 }
 }

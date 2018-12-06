@@ -7,7 +7,7 @@
 makeProject(newProjectName, ...)
 }
 \arguments{
-\item{newProjectName}{character. The new project name. A subfolder under the (created) folder `Projects` will be created.}
+\item{newProjectName}{character. The new project name. A subfolder under the (created) folder `projects` will be created.}
 
 \item{...}{other arguments passed to \code{batchtools::makeExperimentRegistry}}
 }

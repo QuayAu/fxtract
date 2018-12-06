@@ -19,6 +19,6 @@ In order to restart feature extraction, the fxtract project needs to be loaded w
 }
 \examples{
 \dontrun{
-project = loadProject("Projects/my_project", group_by = "user")
+project = loadProject("projects/my_project", group_by = "user")
 }
 }

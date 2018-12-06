@@ -75,6 +75,9 @@
 <li>
       <a href="../../articles/tutorial/usecase_studentlife.html">StudentLife</a>
     </li>
+    <li>
+      <a href="../../articles/tutorial/usecase_batchtools.html">StudentLife batchtools</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -110,10 +113,148 @@
 
     
     
-<p>TO DO</p>
+<p>First let us assume we have data, which cannot be loaded into RAM as whole (although here, we can…). For demonstration purposes, we save our data into separate tables into one database (one with id <strong>00</strong>, and one table with both ids <strong>01</strong> and <strong>02</strong>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
+<span class="kw">library</span>(dplyr)
+studentlife_small_<span class="dv">00</span> =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(userId <span class="op">==</span><span class="st"> "00"</span>)
+studentlife_small_rest =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(userId <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"01"</span>, <span class="st">"02"</span>))
+
+my_database =<span class="st"> </span><span class="kw">src_sqlite</span>(<span class="st">"SQL_database_studentlife.sql"</span>, <span class="dt">create =</span> <span class="ot">TRUE</span>) 
+<span class="kw">copy_to</span>(my_database, <span class="dt">df =</span> studentlife_small_<span class="dv">00</span>, <span class="dt">temporary =</span> <span class="ot">FALSE</span>)
+<span class="kw">copy_to</span>(my_database, <span class="dt">df =</span> studentlife_small_rest, <span class="dt">temporary =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>Now that we have a local SQL database, we can start demonstrating the batchtools functionality of this package:</p>
+<div id="make-a-project" class="section level1">
+<h1 class="hasAnchor">
+<a href="#make-a-project" class="anchor"></a>Make a Project</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project =<span class="st"> </span><span class="kw"><a href="../../reference/makeProject.html">makeProject</a></span>(<span class="st">"my_project"</span>)</code></pre></div>
+<p>Because of automation reasons and usage of our planned shiny app, it is mandatory to write single .R scripts for functions. This simulates writing custom functions:</p>
+<div id="function-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#function-1" class="anchor"></a>function 1</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fileConn =<span class="st"> </span><span class="kw">file</span>(<span class="st">"projects/my_project/feature_functions/GPS_features.R"</span>)
+<span class="kw">writeLines</span>(<span class="kw">c</span>(<span class="st">"library(geosphere)</span>
+<span class="st">function(data) {</span>
+<span class="st">  long = data$longitude</span>
+<span class="st">  lat = data$latitude</span>
+<span class="st">  c(totalDist = sum(geosphere::distHaversine(cbind(long, lat)), na.rm = TRUE),</span>
+<span class="st">    mean_long = mean(long, na.rm = TRUE),</span>
+<span class="st">    mean_lat = mean(lat, na.rm = TRUE)</span>
+<span class="st">  ) </span>
+<span class="st">}"</span>), fileConn)
+<span class="kw">close</span>(fileConn)</code></pre></div>
+</div>
+<div id="function-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#function-2" class="anchor"></a>function 2</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fileConn =<span class="st"> </span><span class="kw">file</span>(<span class="st">"projects/my_project/feature_functions/App_features.R"</span>)
+<span class="kw">writeLines</span>(<span class="kw">c</span>(<span class="st">"function(data) {</span>
+<span class="st">  c(numberDiffApps = length(unique(data$RUNNING_TASKS_topActivity_mPackage)))</span>
+<span class="st">}"</span>), fileConn)
+<span class="kw">close</span>(fileConn)</code></pre></div>
+</div>
+</div>
+<div id="saving-rds-files" class="section level1">
+<h1 class="hasAnchor">
+<a href="#saving-rds-files" class="anchor"></a>Saving RDS Files</h1>
+<p>Now we need to save single RDS files for each user:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project =<span class="st"> </span><span class="kw"><a href="../../reference/sqlToRds.html">sqlToRds</a></span>(<span class="dt">project =</span> project, <span class="dt">file.dir =</span> <span class="st">"SQL_database_studentlife.sql"</span>, <span class="dt">tbl_name =</span> <span class="st">"studentlife_small_00"</span>, <span class="dt">group_by =</span> <span class="st">"userId"</span>)
+project =<span class="st"> </span><span class="kw"><a href="../../reference/sqlToRds.html">sqlToRds</a></span>(<span class="dt">project =</span> project, <span class="dt">file.dir =</span> <span class="st">"SQL_database_studentlife.sql"</span>, <span class="dt">tbl_name =</span> <span class="st">"studentlife_small_rest"</span>, <span class="dt">group_by =</span> <span class="st">"userId"</span>)</code></pre></div>
+</div>
+<div id="add-batchtools-problems-and-algorithms" class="section level1">
+<h1 class="hasAnchor">
+<a href="#add-batchtools-problems-and-algorithms" class="anchor"></a>Add batchtools Problems and Algorithms</h1>
+<p>Now we can add batchtools problems and algorithms. The static parts are each dataframe for the users. The algorithms are the feature functions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/addBatchtoolsProblems.html">addBatchtoolsProblems</a></span>(<span class="dt">project =</span> project)</code></pre></div>
+<pre><code>## Adding problem '00'</code></pre>
+<pre><code>## Adding problem '01'</code></pre>
+<pre><code>## Adding problem '02'</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/addBatchtoolsAlgorithms.html">addBatchtoolsAlgorithms</a></span>(<span class="dt">project =</span> project)</code></pre></div>
+<pre><code>## Exporting new objects: 'App_features' ...</code></pre>
+<pre><code>## Adding algorithm 'App_features'</code></pre>
+<pre><code>## Exporting new objects: 'GPS_features' ...</code></pre>
+<pre><code>## Adding algorithm 'GPS_features'</code></pre>
+<pre><code>## Adding 1 experiments ('00'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('00'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('01'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('01'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('02'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('02'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
+</div>
+<div id="calculating-features" class="section level1">
+<h1 class="hasAnchor">
+<a href="#calculating-features" class="anchor"></a>Calculating features</h1>
+<p>We have 3 users and 2 feature functions. Remember, this scales well for large data and many functions, since every feature function is calculated for each user separately. These jobs can easily be parallelized. Here we have 6 jobs in total:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
+<pre><code>## Status for 6 jobs at 2018-12-06 18:14:07:
+##   Submitted    : 0 (  0.0%)
+##   -- Queued    : 0 (  0.0%)
+##   -- Started   : 0 (  0.0%)
+##   ---- Running : 0 (  0.0%)
+##   ---- Done    : 0 (  0.0%)
+##   ---- Error   : 0 (  0.0%)
+##   ---- Expired : 0 (  0.0%)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
+<pre><code>## Status for 6 jobs at 2018-12-06 18:14:12:
+##   Submitted    : 4 ( 66.7%)
+##   -- Queued    : 0 (  0.0%)
+##   -- Started   : 4 ( 66.7%)
+##   ---- Running : 0 (  0.0%)
+##   ---- Done    : 4 ( 66.7%)
+##   ---- Error   : 0 (  0.0%)
+##   ---- Expired : 0 (  0.0%)</code></pre>
+</div>
+<div id="summary-of-current-status" class="section level1">
+<h1 class="hasAnchor">
+<a href="#summary-of-current-status" class="anchor"></a>Summary of Current Status</h1>
+<p>We can get a summary of the current status by:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/getProjectStatus.html">getProjectStatus</a></span>(project)</code></pre></div>
+<pre><code>## $detailed
+##   problem App_features GPS_features
+## 1      00            1            1
+## 2      01            1            1
+## 3      02            0            0
+## 
+## $problem_wise
+##   problem finished
+## 1      00        1
+## 2      01        1
+## 3      02        0
+## 
+## $feature_wise
+## App_features GPS_features 
+##    0.6666667    0.6666667</code></pre>
+<p>Here we see that the features for user <strong>02</strong> were not calculated yet.</p>
+<p>To show the possibility to stop feature extraction and restart at a later time, we clear all objects from the workspace:</p>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">ls</span>())</code></pre></div>
+<p>Now we can load the project and submit the remaining jobs:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project =<span class="st"> </span><span class="kw"><a href="../../reference/loadProject.html">loadProject</a></span>(<span class="st">"projects/my_project"</span>, <span class="dt">group_by =</span> <span class="st">"userId"</span>)
+batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/findJobs">findNotSubmitted</a></span>())
+batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
+<pre><code>## Status for 6 jobs at 2018-12-06 18:14:15:
+##   Submitted    : 6 (100.0%)
+##   -- Queued    : 0 (  0.0%)
+##   -- Started   : 6 (100.0%)
+##   ---- Running : 0 (  0.0%)
+##   ---- Done    : 6 (100.0%)
+##   ---- Error   : 0 (  0.0%)
+##   ---- Expired : 0 (  0.0%)</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#make-a-project">Make a Project</a></li>
+      <li><a href="#saving-rds-files">Saving RDS Files</a></li>
+      <li><a href="#add-batchtools-problems-and-algorithms">Add batchtools Problems and Algorithms</a></li>
+      <li><a href="#calculating-features">Calculating features</a></li>
+      <li><a href="#summary-of-current-status">Summary of Current Status</a></li>
+      </ul>
+</div>
       </div>
 
 </div>

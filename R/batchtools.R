@@ -8,7 +8,7 @@
 #' This enables the possibility to calculate features even if all raw data cannot be loaded into RAM.
 #' Feature extraction can be paused and restarted at a later time, even on a different machine.
 #' Parallelization can be done via \cite{batchtools}.
-#' @param newProjectName character. The new project name. A subfolder under the (created) folder `Projects` will be created.
+#' @param newProjectName character. The new project name. A subfolder under the (created) folder `projects` will be created.
 #' @param ... other arguments passed to \code{batchtools::makeExperimentRegistry}
 #' @return fxtract_project object.
 #' @importFrom magrittr "%>%"
@@ -19,9 +19,9 @@
 #' }
 makeProject = function(newProjectName, ...){
   checkmate::assertCharacter(newProjectName)
-  newDirPath = paste0("Projects/", newProjectName)
-  if (dir.exists("Projects")) print("The project folder 'Projects' already exists. The new project will be saved in this folder")
-  if (!dir.exists("Projects")) dir.create("Projects")
+  newDirPath = paste0("projects/", newProjectName)
+  if (dir.exists("projects")) print("The project folder 'projects' already exists. The new project will be saved in this folder")
+  if (!dir.exists("projects")) dir.create("projects")
   if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
   dir.create(newDirPath)
   dir.create(paste0(newDirPath, "/feature_functions"))
@@ -42,7 +42,7 @@ makeProject = function(newProjectName, ...){
 #' @export
 #' @examples
 #' \dontrun{
-#' project = loadProject("Projects/my_project", group_by = "user")
+#' project = loadProject("projects/my_project", group_by = "user")
 #' }
 loadProject = function(file.dir, group_by) {
   checkmate::assertTRUE(file.exists(paste0(file.dir, "/feature_functions")))
@@ -70,7 +70,7 @@ loadProject = function(file.dir, group_by) {
 #' @export
 #' @examples
 #' \dontrun{
-#' project = sqlToRds(project, "Projects/myProject/SQL_database.sql",
+#' project = sqlToRds(project, "projects/myProject/SQL_database.sql",
 #'   tbl_name = "table", group_by = "user")
 #' }
 sqlToRds = function(project, file.dir, tbl_name, group_by){
@@ -191,7 +191,6 @@ collectResults = function(project) {
   all_features = job.id = problem = algorithm = NULL
   reg = project$reg
   batchtools::assertRegistry(reg, "ExperimentRegistry")
-  checkmate::assertLogical(all_features)
   res = batchtools::reduceResultsDataTable(reg = reg)
   jt = batchtools::getJobTable(reg = reg)
   lookup = jt %>% select(job.id, problem, algorithm)
