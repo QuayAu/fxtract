@@ -4,10 +4,12 @@
 \alias{makeProject}
 \title{Iniates batchtools functionality}
 \usage{
-makeProject(newProjectName, ...)
+makeProject(newProjectName, group_by, ...)
 }
 \arguments{
 \item{newProjectName}{character. The new project name. A subfolder under the (created) folder `projects` will be created.}
+
+\item{group_by}{character. The grouping variable.}
 
 \item{...}{other arguments passed to \code{batchtools::makeExperimentRegistry}}
 }

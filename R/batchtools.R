@@ -9,6 +9,7 @@
 #' Feature extraction can be paused and restarted at a later time, even on a different machine.
 #' Parallelization can be done via \cite{batchtools}.
 #' @param newProjectName character. The new project name. A subfolder under the (created) folder `projects` will be created.
+#' @param group_by character. The grouping variable.
 #' @param ... other arguments passed to \code{batchtools::makeExperimentRegistry}
 #' @return fxtract_project object.
 #' @importFrom magrittr "%>%"
@@ -17,7 +18,7 @@
 #' \dontrun{
 #' project = makeProject("my_project")
 #' }
-makeProject = function(newProjectName, ...){
+makeProject = function(newProjectName, group_by, ...){
   checkmate::assertCharacter(newProjectName)
   newDirPath = paste0("projects/", newProjectName)
   if (dir.exists("projects")) print("The project folder 'projects' already exists. The new project will be saved in this folder")
@@ -29,7 +30,9 @@ makeProject = function(newProjectName, ...){
   project = list(dir = newDirPath)
   reg = batchtools::makeExperimentRegistry(paste0(project$dir, "/reg"), ...)
   project[["reg"]] = reg
+  project[["group_by"]] = group_by
   class(project) = c("fxtract_project", class(project))
+  saveRDS(project, file = paste0(newDirPath, "/project.RDS"))
   project
 }
 
@@ -42,16 +45,14 @@ makeProject = function(newProjectName, ...){
 #' @export
 #' @examples
 #' \dontrun{
-#' project = loadProject("projects/my_project", group_by = "user")
+#' project = loadProject("projects/my_project")
 #' }
-loadProject = function(file.dir, group_by) {
+loadProject = function(file.dir) {
   checkmate::assertTRUE(file.exists(paste0(file.dir, "/feature_functions")))
   checkmate::assertTRUE(file.exists(paste0(file.dir, "/raw_rds_files")))
-  project = list(dir = file.dir)
-  class(project) = c("fxtract_project", class(project))
+  project = readRDS(paste0(file.dir, "/project.RDS"))
   reg = batchtools::loadRegistry(paste0(project$dir, "/reg"), writeable = TRUE)
   project[["reg"]] = reg
-  project[["group_by"]] = group_by
   project
 }
 
@@ -63,7 +64,6 @@ loadProject = function(file.dir, group_by) {
 #' @param project fxtract_project object created by \code{\link{makeProject}}
 #' @param file.dir character. The file directory of the SQL database.
 #' @param tbl_name character. The table name required by \code{\link[dplyr]{tbl}}.
-#' @param group_by character. The grouping variable.
 #' @return fxtract_project
 #' @importFrom foreach "%dopar%"
 #' @importFrom magrittr "%>%"
@@ -71,14 +71,15 @@ loadProject = function(file.dir, group_by) {
 #' @examples
 #' \dontrun{
 #' project = sqlToRds(project, "projects/myProject/SQL_database.sql",
-#'   tbl_name = "table", group_by = "user")
+#'   tbl_name = "table")
 #' }
-sqlToRds = function(project, file.dir, tbl_name, group_by){
+sqlToRds = function(project, file.dir, tbl_name){
   i = NULL
   checkmate::assertClass(project, "fxtract_project")
   checkmate::assertCharacter(tbl_name)
   db = dplyr::src_sqlite(file.dir, create = FALSE)
   logs = dplyr::tbl(db, from = tbl_name)
+  group_by = project$group_by
   gb = logs %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
   foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
@@ -87,8 +88,7 @@ sqlToRds = function(project, file.dir, tbl_name, group_by){
     logs_i = logs %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
     saveRDS(logs_i, file = paste0(project$dir, "/raw_rds_files/", i, ".RDS"))
   }
-  project[["group_by"]] = group_by
-  project
+  return(invisible(project))
 }
 
 

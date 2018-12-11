@@ -4,7 +4,7 @@
 \alias{sqlToRds}
 \title{Writes single RDS files from an SQL database.}
 \usage{
-sqlToRds(project, file.dir, tbl_name, group_by)
+sqlToRds(project, file.dir, tbl_name)
 }
 \arguments{
 \item{project}{fxtract_project object created by \code{\link{makeProject}}}
@@ -12,8 +12,6 @@ sqlToRds(project, file.dir, tbl_name, group_by)
 \item{file.dir}{character. The file directory of the SQL database.}
 
 \item{tbl_name}{character. The table name required by \code{\link[dplyr]{tbl}}.}
-
-\item{group_by}{character. The grouping variable.}
 }
 \value{
 fxtract_project
@@ -25,6 +23,6 @@ and saves these as dataframes in RDS files. Parallelization is available via \li
 \examples{
 \dontrun{
 project = sqlToRds(project, "projects/myProject/SQL_database.sql",
-  tbl_name = "table", group_by = "user")
+  tbl_name = "table")
 }
 }

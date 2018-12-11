@@ -4,12 +4,10 @@
 \alias{loadProject}
 \title{Loads fxtract project.}
 \usage{
-loadProject(file.dir, group_by)
+loadProject(file.dir)
 }
 \arguments{
 \item{file.dir}{character. The project's directory.}
-
-\item{group_by}{character. The grouping variable needs to be defined again.}
 }
 \value{
 fxtract_project object
@@ -19,6 +17,6 @@ In order to restart feature extraction, the fxtract project needs to be loaded w
 }
 \examples{
 \dontrun{
-project = loadProject("projects/my_project", group_by = "user")
+project = loadProject("projects/my_project")
 }
 }
