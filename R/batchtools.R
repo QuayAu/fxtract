@@ -40,7 +40,6 @@ makeProject = function(newProjectName, group_by, ...){
 #'
 #' In order to restart feature extraction, the fxtract project needs to be loaded with this function.
 #' @param file.dir character. The project's directory.
-#' @param group_by character. The grouping variable needs to be defined again.
 #' @return fxtract_project object
 #' @export
 #' @examples

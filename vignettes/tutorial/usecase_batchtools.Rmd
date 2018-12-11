@@ -29,7 +29,7 @@ Now that we have a local SQL database, we can start demonstrating the batchtools
 
 # Make a Project
 ```{r, message = FALSE, warning = FALSE}
-project = makeProject("my_project")
+project = makeProject("my_project", group_by = "userId")
 ```
 
 Because of automation reasons and usage of our planned shiny app, it is mandatory to write single .R scripts for functions.
@@ -62,8 +62,8 @@ close(fileConn)
 # Saving RDS Files 
 Now we need to save single RDS files for each user:
 ```{r, warning = FALSE, message = FALSE}
-project = sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_00", group_by = "userId")
-project = sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_rest", group_by = "userId")
+project = sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_00")
+project = sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_rest")
 ```
 
 # Add batchtools Problems and Algorithms
@@ -109,7 +109,7 @@ rm(list = ls())
 
 Now we can load the project and submit the remaining jobs:
 ```{r, message = FALSE}
-project = loadProject("projects/my_project", group_by = "userId")
+project = loadProject("projects/my_project")
 batchtools::submitJobs(5:6)
 batchtools::getStatus()
 ```

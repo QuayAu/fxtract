@@ -149,7 +149,7 @@ and saves these as dataframes in RDS files. Parallelization is available via for
     
     </div>
 
-    <pre class="usage"><span class='fu'>sqlToRds</span>(<span class='no'>project</span>, <span class='no'>file.dir</span>, <span class='no'>tbl_name</span>, <span class='no'>group_by</span>)</pre>
+    <pre class="usage"><span class='fu'>sqlToRds</span>(<span class='no'>project</span>, <span class='no'>file.dir</span>, <span class='no'>tbl_name</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,10 +166,6 @@ and saves these as dataframes in RDS files. Parallelization is available via for
       <th>tbl_name</th>
       <td><p>character. The table name required by <code><a href='http://dplyr.tidyverse.org/reference/tbl.html'>tbl</a></code>.</p></td>
     </tr>
-    <tr>
-      <th>group_by</th>
-      <td><p>character. The grouping variable.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -180,7 +176,7 @@ and saves these as dataframes in RDS files. Parallelization is available via for
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='no'>project</span> <span class='kw'>=</span> <span class='fu'>sqlToRds</span>(<span class='no'>project</span>, <span class='st'>"projects/myProject/SQL_database.sql"</span>,
-  <span class='kw'>tbl_name</span> <span class='kw'>=</span> <span class='st'>"table"</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"user"</span>)
+  <span class='kw'>tbl_name</span> <span class='kw'>=</span> <span class='st'>"table"</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
