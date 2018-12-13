@@ -62,8 +62,8 @@ close(fileConn)
 # Saving RDS Files 
 Now we need to save single RDS files for each user:
 ```{r, warning = FALSE, message = FALSE}
-project = sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_00")
-project = sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_rest")
+sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_00")
+sqlToRds(project = project, file.dir = "SQL_database_studentlife.sql", tbl_name = "studentlife_small_rest")
 ```
 
 # Add batchtools Problems and Algorithms

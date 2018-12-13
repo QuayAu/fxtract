@@ -79,6 +79,8 @@ sqlToRds = function(project, file.dir, tbl_name){
   db = dplyr::src_sqlite(file.dir, create = FALSE)
   logs = dplyr::tbl(db, from = tbl_name)
   group_by = project$group_by
+  checkmate::assert_subset(group_by, colnames(logs))
+
   gb = logs %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
   foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
@@ -90,7 +92,35 @@ sqlToRds = function(project, file.dir, tbl_name){
   return(invisible(project))
 }
 
+#' Writes single RDS files from an R dataframe.
+#'
+#' Given an R dataframe with a grouping variable (defined by the project object), this function saves single RDS files for every grouping variable.
+#' Parallelization is available via \link{foreach}.
+#'
+#' @param project fxtract_project object created by \code{\link{makeProject}}
+#' @param dataframe R dataframe.
+#' @return fxtract_project
+#' @importFrom foreach "%dopar%"
+#' @importFrom magrittr "%>%"
+#' @export
+#' @examples
+#' \dontrun{
+#' dataframeToRds(project, studenlife.small)
+#' }
+dataframeToRds = function(project, dataframe){
+  i = NULL
+  checkmate::assertClass(project, "fxtract_project")
+  checkmate::assertDataFrame(dataframe)
+  group_by = project$group_by
+  checkmate::assert_subset(group_by, colnames(dataframe))
+  gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
+  foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
+    dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
+    saveRDS(dataframe_i, file = paste0(project$dir, "/raw_rds_files/", i, ".RDS"))
+  }
+  return(invisible(project))
+}
 
 #' Adds batchtools problems.
 #'

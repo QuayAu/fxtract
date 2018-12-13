@@ -5,3 +5,5 @@
 #docs/*
 .project
 data_gitignore/
+SQL_database_iris.sql
+projects/
