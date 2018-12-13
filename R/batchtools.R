@@ -137,6 +137,7 @@ dataframeToRds = function(project, dataframe){
 #' }
 addBatchtoolsProblems = function(project, n.chunks) {
   chunk = files = f = NULL
+
   rds_files = list.files(path = paste0(project$dir, "/raw_rds_files"))
   rds_files = data.frame(files = rds_files)
   if (missing(n.chunks)) n.chunks = nrow(rds_files)
@@ -145,6 +146,7 @@ addBatchtoolsProblems = function(project, n.chunks) {
   chunks = unique(rds_files$chunk)
   for (z in chunks) {
     files = rds_files %>% dplyr::filter(chunk == z) %>% dplyr::pull(files) %>% as.character()
+
     x = foreach::foreach(f = files) %dopar% {
       data_id = readRDS(paste0(project$dir, "/raw_rds_files/", f))
     }
@@ -201,6 +203,7 @@ getProjectStatus = function(project) {
   batchtools::assertRegistry(reg, "ExperimentRegistry")
   jt = batchtools::getJobTable(reg = reg)
   jt = data.frame(jt)
+
   jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
 
   dcast_formula = as.formula("problem ~ algorithm")
@@ -239,7 +242,7 @@ getAllProblems = function(project) {
 #' @importFrom magrittr "%>%"
 collectResults = function(project) {
   feature = NULL
-  all_features = job.id = problem = algorithm = NULL
+  job.id = problem = algorithm = NULL
   reg = project$reg
   batchtools::assertRegistry(reg, "ExperimentRegistry")
   res = batchtools::reduceResultsDataTable(reg = reg)
@@ -248,6 +251,7 @@ collectResults = function(project) {
 
   features = getProjectStatus(project)$feature_wise
   features = names(features[features != 0])
+
 
   results = foreach::foreach(feature = features) %dopar% {
     ids = lookup %>% filter(algorithm %in% feature)
