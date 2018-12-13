@@ -124,20 +124,32 @@ dataframeToRds = function(project, dataframe){
 
 #' Adds batchtools problems.
 #'
-#' Every grouping variable's dataframe is added as a batchtools problem.
+#' Every grouping variable's dataframe is added as a batchtools problem. These problems can contain chunked dataframes.
+#' Parallelization is available for reading the RDS-files via \link{foreach}.
 #'
 #' @param project fxtract_project file created by \code{\link{makeProject}}
+#' @param n.chunks integer. Number of chunks the dataframes will be chunked with \code{dplyr::bind_rows()}. Defaults to number of unique grouping variables.
+#' @importFrom magrittr "%>%"
 #' @export
 #' @examples
 #' \dontrun{
-#' addBatchtoolsProblems(project = project)
+#' addBatchtoolsProblems(project = project, n.chunks = 2)
 #' }
-addBatchtoolsProblems = function(project) {
+addBatchtoolsProblems = function(project, n.chunks) {
+  chunk = files = f = NULL
   rds_files = list.files(path = paste0(project$dir, "/raw_rds_files"))
-  for (id in rds_files) {
-    data_id = readRDS(paste0(project$dir, "/raw_rds_files/", id))
-    name = gsub(".RDS", "", id)
-    batchtools::addProblem(name = name, data = data_id, reg = project$reg)
+  rds_files = data.frame(files = rds_files)
+  if (missing(n.chunks)) n.chunks = nrow(rds_files)
+  rds_files$chunk = batchtools::chunk(1:nrow(rds_files), n.chunks = n.chunks)
+
+  chunks = unique(rds_files$chunk)
+  for (z in chunks) {
+    files = rds_files %>% dplyr::filter(chunk == z) %>% dplyr::pull(files) %>% as.character()
+    x = foreach::foreach(f = files) %dopar% {
+      data_id = readRDS(paste0(project$dir, "/raw_rds_files/", f))
+    }
+    data_chunk = dplyr::bind_rows(x)
+    batchtools::addProblem(name = paste0("chunk_", z), data = data_chunk, reg = project$reg)
   }
 }
 
@@ -154,12 +166,19 @@ addBatchtoolsProblems = function(project) {
 #' }
 addBatchtoolsAlgorithms = function(project) {
   feature_functions = list.files(path = paste0(project$dir, "/feature_functions"))
+  batchtools::batchExport(export = list(calcFeature = fxtract::calcFeature))
   for (feat_fun in feature_functions) {
     fun = source(paste0(project$dir, "/feature_functions/", feat_fun))
     name = gsub(".R", "", feat_fun)
     eval(parse(text = paste0(name, " = fun$value")))
     eval(parse(text = paste0("batchtools::batchExport(export = list(", name, " =", name, "))")))
-    eval(parse(text = paste0("batchtools::addAlgorithm(name, fun = function(job, data, instance) ", name, "(data))")))
+    eval(parse(text = paste0(
+          "batchtools::addAlgorithm(name, fun = function(job, data, instance) fxtract::calcFeature(data, group_col = project$group_by, fun = ",
+          name,
+          "))"
+        )
+      )
+    )
   }
   batchtools::addExperiments()
 }
@@ -180,13 +199,16 @@ getProjectStatus = function(project) {
   problem = vars = funs = NULL
   reg = project$reg
   batchtools::assertRegistry(reg, "ExperimentRegistry")
-  res = batchtools::reduceResultsDataTable(reg = reg)
   jt = batchtools::getJobTable(reg = reg)
   jt = data.frame(jt)
+  jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
+
   dcast_formula = as.formula("problem ~ algorithm")
-  res = data.table::dcast(data.table::setDT(jt), dcast_formula, value.var = "done")
+
+  res = data.table::dcast(data.table::setDT(jt), dcast_formula, value.var = "really_done")
   doneFun = function(x) ifelse(!is.na(x), 1, 0)
   res = res %>% dplyr::mutate_at(dplyr::vars(-problem), dplyr::funs(doneFun))
+
   res2 = list(detailed = res)
   res2[["problem_wise"]] = data.frame(problem = res$problem,
     finished = res %>% dplyr::select(-problem) %>% rowMeans())
@@ -195,13 +217,11 @@ getProjectStatus = function(project) {
 }
 
 getAllFeatureFunctions = function(project) {
-  feature_functions = list.files(path = paste0(project$dir, "/feature_functions"))
-  gsub(".R", replacement = "", feature_functions)
+  unique(batchtools::getJobTable(reg = project$reg)$algorithm)
 }
 
 getAllProblems = function(project) {
-  rds_files = list.files(path = paste0(project$dir, "/raw_rds_files"))
-  gsub(".RDS", "", rds_files)
+  unique(batchtools::getJobTable(reg = project$reg)$problem)
 }
 
 #' Collects results.
@@ -210,6 +230,7 @@ getAllProblems = function(project) {
 #'
 #' @param project fxtract_project object created by \code{\link{makeProject}}
 #' @return dataframe.
+#' @importFrom foreach "%dopar%"
 #' @export
 #' @examples
 #' \dontrun{
@@ -217,6 +238,7 @@ getAllProblems = function(project) {
 #' }
 #' @importFrom magrittr "%>%"
 collectResults = function(project) {
+  feature = NULL
   all_features = job.id = problem = algorithm = NULL
   reg = project$reg
   batchtools::assertRegistry(reg, "ExperimentRegistry")
@@ -224,18 +246,21 @@ collectResults = function(project) {
   jt = batchtools::getJobTable(reg = reg)
   lookup = jt %>% select(job.id, problem, algorithm)
 
-  features = getAllFeatureFunctions(project)
+  features = getProjectStatus(project)$feature_wise
+  features = names(features[features != 0])
 
-  results = getAllProblems(project) %>% data.frame(stringsAsFactors = FALSE) %>% setNames("problem")
-  for (feature in features) {
+  results = foreach::foreach(feature = features) %dopar% {
     ids = lookup %>% filter(algorithm %in% feature)
     res_feat = res[job.id %in% ids$job.id]
     listOfDataframes = res_feat$result %>% setNames(res_feat$job.id)
-    df = data.frame(do.call("rbind", listOfDataframes))
-    df$job.id = res_feat$job.id
-    df = df %>% dplyr::left_join(lookup, by = "job.id") %>% dplyr::select(-job.id, -algorithm)
-    results = results %>% dplyr::left_join(df, by = "problem")
+    dplyr::bind_rows(listOfDataframes)
   }
-  colnames(results)[which(colnames(results) == "problem")] = project$group_by
-  results
+
+  final_result = results[[1]]
+  if (length(results) >= 2) {
+    for (i in 2:length(results)) {
+     final_result = final_result %>% dplyr::full_join(results[[i]])
+    }
+  }
+  final_result
 }
