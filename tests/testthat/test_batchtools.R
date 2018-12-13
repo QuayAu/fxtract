@@ -28,6 +28,8 @@ test_that("makeProject", {
 })
 
 test_that("save rds files", {
+  skip_on_cran()
+  skip_on_travis()
   #sql data base
   unlink("projects", recursive = TRUE)
   project = makeProject("my_project", group_by = "Species")
@@ -60,4 +62,8 @@ test_that("save rds files", {
   unlink("projects", recursive = TRUE)
   project = makeProject("my_project2", group_by = "Species2")
   expect_error(dataframeToRds(project, iris))
+})
+
+test_that("add batchtools problems", {
+
 })
