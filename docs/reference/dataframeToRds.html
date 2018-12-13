@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds batchtools problems. — addBatchtoolsProblems • fxtract</title>
+<title>Writes single RDS files from an R dataframe. — dataframeToRds • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Adds batchtools problems. — addBatchtoolsProblems" />
+<meta property="og:title" content="Writes single RDS files from an R dataframe. — dataframeToRds" />
 
-<meta property="og:description" content="Every grouping variable's dataframe is added as a batchtools problem. These problems can contain chunked dataframes.
-Parallelization is available for reading the RDS-files via foreach." />
+<meta property="og:description" content="Given an R dataframe with a grouping variable (defined by the project object), this function saves single RDS files for every grouping variable.
+Parallelization is available via foreach." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -137,44 +137,50 @@ Parallelization is available for reading the RDS-files via foreach." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds batchtools problems.</h1>
+    <h1>Writes single RDS files from an R dataframe.</h1>
     <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/batchtools.R'><code>R/batchtools.R</code></a></small>
-    <div class="hidden name"><code>addBatchtoolsProblems.Rd</code></div>
+    <div class="hidden name"><code>dataframeToRds.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Every grouping variable's dataframe is added as a batchtools problem. These problems can contain chunked dataframes.
-Parallelization is available for reading the RDS-files via foreach.</p>
+    <p>Given an R dataframe with a grouping variable (defined by the project object), this function saves single RDS files for every grouping variable.
+Parallelization is available via foreach.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>addBatchtoolsProblems</span>(<span class='no'>project</span>, <span class='no'>n.chunks</span>)</pre>
+    <pre class="usage"><span class='fu'>dataframeToRds</span>(<span class='no'>project</span>, <span class='no'>dataframe</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>project</th>
-      <td><p>fxtract_project file created by <code><a href='makeProject.html'>makeProject</a></code></p></td>
+      <td><p>fxtract_project object created by <code><a href='makeProject.html'>makeProject</a></code></p></td>
     </tr>
     <tr>
-      <th>n.chunks</th>
-      <td><p>integer. Number of chunks the dataframes will be chunked with <code><a href='http://dplyr.tidyverse.org/reference/bind.html'>dplyr::bind_rows()</a></code>. Defaults to number of unique grouping variables.</p></td>
+      <th>dataframe</th>
+      <td><p>R dataframe.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>fxtract_project</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>addBatchtoolsProblems</span>(<span class='kw'>project</span> <span class='kw'>=</span> <span class='no'>project</span>, <span class='kw'>n.chunks</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='fu'>dataframeToRds</span>(<span class='no'>project</span>, <span class='no'>studenlife.small</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#value">Value</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -4,16 +4,19 @@
 \alias{addBatchtoolsProblems}
 \title{Adds batchtools problems.}
 \usage{
-addBatchtoolsProblems(project)
+addBatchtoolsProblems(project, n.chunks)
 }
 \arguments{
 \item{project}{fxtract_project file created by \code{\link{makeProject}}}
+
+\item{n.chunks}{integer. Number of chunks the dataframes will be chunked with \code{dplyr::bind_rows()}. Defaults to number of unique grouping variables.}
 }
 \description{
-Every grouping variable's dataframe is added as a batchtools problem.
+Every grouping variable's dataframe is added as a batchtools problem. These problems can contain chunked dataframes.
+Parallelization is available for reading the RDS-files via \link{foreach}.
 }
 \examples{
 \dontrun{
-addBatchtoolsProblems(project = project)
+addBatchtoolsProblems(project = project, n.chunks = 2)
 }
 }

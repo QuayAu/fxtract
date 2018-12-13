@@ -106,7 +106,7 @@
       <h1>Use Cases</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/usecase_batchtools.Rmd"><code>vignettes/tutorial/usecase_batchtools.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/../fxtract_personality_prediction_functions/vignettes/tutorial/usecase_batchtools.Rmd"><code>../fxtract_personality_prediction_functions/vignettes/tutorial/usecase_batchtools.Rmd</code></a></small>
       <div class="hidden name"><code>usecase_batchtools.Rmd</code></div>
 
     </div>
@@ -157,8 +157,8 @@ my_database =<span class="st"> </span><span class="kw">src_sqlite</span>(<span c
 <h1 class="hasAnchor">
 <a href="#saving-rds-files" class="anchor"></a>Saving RDS Files</h1>
 <p>Now we need to save single RDS files for each user:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project =<span class="st"> </span><span class="kw"><a href="../../reference/sqlToRds.html">sqlToRds</a></span>(<span class="dt">project =</span> project, <span class="dt">file.dir =</span> <span class="st">"SQL_database_studentlife.sql"</span>, <span class="dt">tbl_name =</span> <span class="st">"studentlife_small_00"</span>)
-project =<span class="st"> </span><span class="kw"><a href="../../reference/sqlToRds.html">sqlToRds</a></span>(<span class="dt">project =</span> project, <span class="dt">file.dir =</span> <span class="st">"SQL_database_studentlife.sql"</span>, <span class="dt">tbl_name =</span> <span class="st">"studentlife_small_rest"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/sqlToRds.html">sqlToRds</a></span>(<span class="dt">project =</span> project, <span class="dt">file.dir =</span> <span class="st">"SQL_database_studentlife.sql"</span>, <span class="dt">tbl_name =</span> <span class="st">"studentlife_small_00"</span>)
+<span class="kw"><a href="../../reference/sqlToRds.html">sqlToRds</a></span>(<span class="dt">project =</span> project, <span class="dt">file.dir =</span> <span class="st">"SQL_database_studentlife.sql"</span>, <span class="dt">tbl_name =</span> <span class="st">"studentlife_small_rest"</span>)</code></pre></div>
 </div>
 <div id="add-batchtools-problems-and-algorithms" class="section level1">
 <h1 class="hasAnchor">
@@ -185,7 +185,7 @@ project =<span class="st"> </span><span class="kw"><a href="../../reference/sqlT
 <a href="#calculating-features" class="anchor"></a>Calculating features</h1>
 <p>We have 3 users and 2 feature functions. Remember, this scales well for large data and many functions, since every feature function is calculated for each user separately. These jobs can easily be parallelized. Here we have 6 jobs in total:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
-<pre><code>## Status for 6 jobs at 2018-12-11 18:00:39:
+<pre><code>## Status for 6 jobs at 2018-12-13 19:31:32:
 ##   Submitted    : 0 (  0.0%)
 ##   -- Queued    : 0 (  0.0%)
 ##   -- Started   : 0 (  0.0%)
@@ -195,7 +195,7 @@ project =<span class="st"> </span><span class="kw"><a href="../../reference/sqlT
 ##   ---- Expired : 0 (  0.0%)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
-<pre><code>## Status for 6 jobs at 2018-12-11 18:00:44:
+<pre><code>## Status for 6 jobs at 2018-12-13 19:31:40:
 ##   Submitted    : 4 ( 66.7%)
 ##   -- Queued    : 0 (  0.0%)
 ##   -- Started   : 4 ( 66.7%)
@@ -231,7 +231,7 @@ project =<span class="st"> </span><span class="kw"><a href="../../reference/sqlT
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project =<span class="st"> </span><span class="kw"><a href="../../reference/loadProject.html">loadProject</a></span>(<span class="st">"projects/my_project"</span>)
 batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(<span class="dv">5</span><span class="op">:</span><span class="dv">6</span>)
 batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
-<pre><code>## Status for 6 jobs at 2018-12-11 18:00:47:
+<pre><code>## Status for 6 jobs at 2018-12-13 19:31:45:
 ##   Submitted    : 6 (100.0%)
 ##   -- Queued    : 0 (  0.0%)
 ##   -- Started   : 6 (100.0%)
