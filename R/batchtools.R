@@ -2,9 +2,8 @@
 #'
 #' This function iniates batchtools functionality of this package.
 #' Check the tutorial on the github page!
-#' Every desired function will be calculated for each member
-#' of a grouping variable (e.g. each participant of a study).
-#' The data will be saved as an RDS-file for each member of a grouping variable.
+#' Every desired function will be calculated for each grouping variable (e.g. each participant of a study).
+#' The data will be saved as an RDS-file for each grouping variable.
 #' This enables the possibility to calculate features even if all raw data cannot be loaded into RAM.
 #' Feature extraction can be paused and restarted at a later time, even on a different machine.
 #' Parallelization can be done via \cite{batchtools}.
@@ -16,7 +15,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' project = makeProject("my_project")
+#' project = makeProject("my_project", group_by = "userId")
 #' }
 makeProject = function(newProjectName, group_by, ...){
   checkmate::assertCharacter(newProjectName)
