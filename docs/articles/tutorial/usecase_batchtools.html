@@ -106,7 +106,7 @@
       <h1>Use Cases</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/../fxtract_personality_prediction_functions/vignettes/tutorial/usecase_batchtools.Rmd"><code>../fxtract_personality_prediction_functions/vignettes/tutorial/usecase_batchtools.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/usecase_batchtools.Rmd"><code>vignettes/tutorial/usecase_batchtools.Rmd</code></a></small>
       <div class="hidden name"><code>usecase_batchtools.Rmd</code></div>
 
     </div>
@@ -165,27 +165,28 @@ my_database =<span class="st"> </span><span class="kw">src_sqlite</span>(<span c
 <a href="#add-batchtools-problems-and-algorithms" class="anchor"></a>Add batchtools Problems and Algorithms</h1>
 <p>Now we can add batchtools problems and algorithms. The static parts are each dataframe for the users. The algorithms are the feature functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/addBatchtoolsProblems.html">addBatchtoolsProblems</a></span>(<span class="dt">project =</span> project)</code></pre></div>
-<pre><code>## Adding problem '00'</code></pre>
-<pre><code>## Adding problem '01'</code></pre>
-<pre><code>## Adding problem '02'</code></pre>
+<pre><code>## Adding problem 'chunk_2'</code></pre>
+<pre><code>## Adding problem 'chunk_1'</code></pre>
+<pre><code>## Adding problem 'chunk_3'</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/addBatchtoolsAlgorithms.html">addBatchtoolsAlgorithms</a></span>(<span class="dt">project =</span> project)</code></pre></div>
+<pre><code>## Exporting new objects: 'calcFeature' ...</code></pre>
 <pre><code>## Exporting new objects: 'App_features' ...</code></pre>
 <pre><code>## Adding algorithm 'App_features'</code></pre>
 <pre><code>## Exporting new objects: 'GPS_features' ...</code></pre>
 <pre><code>## Adding algorithm 'GPS_features'</code></pre>
-<pre><code>## Adding 1 experiments ('00'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('00'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('01'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('01'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('02'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('02'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('chunk_2'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('chunk_2'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('chunk_1'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('chunk_1'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('chunk_3'[1] x 'App_features'[1] x repls[1]) ...</code></pre>
+<pre><code>## Adding 1 experiments ('chunk_3'[1] x 'GPS_features'[1] x repls[1]) ...</code></pre>
 </div>
 <div id="calculating-features" class="section level1">
 <h1 class="hasAnchor">
 <a href="#calculating-features" class="anchor"></a>Calculating features</h1>
 <p>We have 3 users and 2 feature functions. Remember, this scales well for large data and many functions, since every feature function is calculated for each user separately. These jobs can easily be parallelized. Here we have 6 jobs in total:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
-<pre><code>## Status for 6 jobs at 2018-12-13 19:31:32:
+<pre><code>## Status for 6 jobs at 2018-12-13 19:49:15:
 ##   Submitted    : 0 (  0.0%)
 ##   -- Queued    : 0 (  0.0%)
 ##   -- Started   : 0 (  0.0%)
@@ -195,7 +196,7 @@ my_database =<span class="st"> </span><span class="kw">src_sqlite</span>(<span c
 ##   ---- Expired : 0 (  0.0%)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
-<pre><code>## Status for 6 jobs at 2018-12-13 19:31:40:
+<pre><code>## Status for 6 jobs at 2018-12-13 19:49:23:
 ##   Submitted    : 4 ( 66.7%)
 ##   -- Queued    : 0 (  0.0%)
 ##   -- Started   : 4 ( 66.7%)
@@ -211,15 +212,15 @@ my_database =<span class="st"> </span><span class="kw">src_sqlite</span>(<span c
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/getProjectStatus.html">getProjectStatus</a></span>(project)</code></pre></div>
 <pre><code>## $detailed
 ##   problem App_features GPS_features
-## 1      00            1            1
-## 2      01            1            1
-## 3      02            0            0
+## 1 chunk_1            1            1
+## 2 chunk_2            1            1
+## 3 chunk_3            0            0
 ## 
 ## $problem_wise
 ##   problem finished
-## 1      00        1
-## 2      01        1
-## 3      02        0
+## 1 chunk_1        1
+## 2 chunk_2        1
+## 3 chunk_3        0
 ## 
 ## $feature_wise
 ## App_features GPS_features 
@@ -231,7 +232,7 @@ my_database =<span class="st"> </span><span class="kw">src_sqlite</span>(<span c
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project =<span class="st"> </span><span class="kw"><a href="../../reference/loadProject.html">loadProject</a></span>(<span class="st">"projects/my_project"</span>)
 batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(<span class="dv">5</span><span class="op">:</span><span class="dv">6</span>)
 batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>()</code></pre></div>
-<pre><code>## Status for 6 jobs at 2018-12-13 19:31:45:
+<pre><code>## Status for 6 jobs at 2018-12-13 19:49:27:
 ##   Submitted    : 6 (100.0%)
 ##   -- Queued    : 0 (  0.0%)
 ##   -- Started   : 6 (100.0%)
@@ -242,22 +243,23 @@ batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocume
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/getProjectStatus.html">getProjectStatus</a></span>(project)</code></pre></div>
 <pre><code>## $detailed
 ##   problem App_features GPS_features
-## 1      00            1            1
-## 2      01            1            1
-## 3      02            1            1
+## 1 chunk_1            1            1
+## 2 chunk_2            1            1
+## 3 chunk_3            1            1
 ## 
 ## $problem_wise
 ##   problem finished
-## 1      00        1
-## 2      01        1
-## 3      02        1
+## 1 chunk_1        1
+## 2 chunk_2        1
+## 3 chunk_3        1
 ## 
 ## $feature_wise
 ## App_features GPS_features 
 ##            1            1</code></pre>
 <p>All done. Now we can collect the desired result:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res =<span class="st"> </span><span class="kw"><a href="../../reference/collectResults.html">collectResults</a></span>(project)
-res</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res =<span class="st"> </span><span class="kw"><a href="../../reference/collectResults.html">collectResults</a></span>(project)</code></pre></div>
+<pre><code>## Joining, by = "userId"</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res</code></pre></div>
 <pre><code>##   userId numberDiffApps totalDist mean_long mean_lat
 ## 1     00             93 621719.25 -69.71850 43.80746
 ## 2     01             43  44649.62 -72.28900 43.70594
