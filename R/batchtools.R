@@ -136,7 +136,6 @@ dataframeToRds = function(project, dataframe){
 #' }
 addBatchtoolsProblems = function(project, n.chunks) {
   chunk = files = f = NULL
-  checkmate::assertIntegerish(n.chunks)
   rds_files = list.files(path = paste0(project$dir, "/raw_rds_files"))
   rds_files = data.frame(files = rds_files)
   if (missing(n.chunks)) {
@@ -146,6 +145,7 @@ addBatchtoolsProblems = function(project, n.chunks) {
       batchtools::addProblem(name = name, data = data_id, reg = project$reg)
     }  
   } else {
+    checkmate::assertIntegerish(n.chunks)
     rds_files$chunk = batchtools::chunk(1:nrow(rds_files), n.chunks = n.chunks)
   
     chunks = unique(rds_files$chunk)
