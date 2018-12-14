@@ -42,11 +42,8 @@ slidingWindow(data, fun = fun, time_in_sec = 60 * 60,
   utc_col = "timestamp") #mean accuracy of last hour
 }
 \seealso{
-Other helper functions: \code{\link{addColumnByGroup}},
-  \code{\link{addColumn}}, \code{\link{addDateTime}},
-  \code{\link{addDate}}, \code{\link{addStudyDayByGroup}},
-  \code{\link{addStudyDay}}, \code{\link{addTime}},
-  \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
-  \code{\link{divideDataIntoIntervals}}
+Other helper functions: \code{\link{addDateTime}},
+  \code{\link{addDate}}, \code{\link{addTime}},
+  \code{\link{addWeekday}}
 }
 \concept{helper functions}

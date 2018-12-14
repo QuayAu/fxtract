@@ -42,7 +42,7 @@ addWeekday = function(data, utc_col = character(1), tz = "UTC", unit = "s", week
   checkmate::assertCharacter(utc_col, len = 1)
   if (nchar(utc_col) == 0) stop("please specify timestamp column")
   checkmate::assertSubset(utc_col, names(data))
-    
+
   if (is.character(data[[utc_col]])) {
     data[[utc_col]] = as.numeric(data[[utc_col]])
     message("timestamp was converted from character to numeric")
@@ -76,7 +76,7 @@ addTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertCharacter(utc_col, len = 1)
   if (nchar(utc_col) == 0) stop("please specify timestamp column")
   checkmate::assertSubset(utc_col, names(data))
-    
+
   if (is.character(data[[utc_col]])) {
     data[[utc_col]] = as.numeric(data[[utc_col]])
     message("timestamp was converted from character to numeric")
@@ -107,7 +107,7 @@ addDate = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertCharacter(utc_col, len = 1)
   if (nchar(utc_col) == 0) stop("please specify timestamp column")
   checkmate::assertSubset(utc_col, names(data))
-  
+
   if (is.character(data[[utc_col]])) {
     data[[utc_col]] = as.numeric(data[[utc_col]])
     message("timestamp was converted from character to numeric")
@@ -138,7 +138,7 @@ addDateTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertCharacter(utc_col, len = 1)
   if (nchar(utc_col) == 0) stop("please specify timestamp column")
   checkmate::assertSubset(utc_col, names(data))
-    
+
   if (is.character(data[[utc_col]])) {
     data[[utc_col]] = as.numeric(data[[utc_col]])
     message("timestamp was converted from character to numeric")
@@ -149,4 +149,95 @@ addDateTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   if ("date_time" %in% names(data)) warning("Your dataset already has a column named 'date_time'. It will be overwritten!")
   data$date_time = dt
   return(data)
+}
+
+#' Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
+#' The dataset needs an ordered factor variable named 'weekday'.
+#'
+#' @template param_data
+#' @param from_day character. Day of the week where filtering should start. Please check the machines locale for correct usage. Defaults to "Mon".
+#' @param from_time character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".
+#' @param until_day character. Day of the week where filtering should end. Please check the machines locale for correct usage. Defaults to "Sun".
+#' @param until_time character. Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".
+#' @family filter functions
+#' @return filtered dataframe by weekday and time.
+#' @importFrom dplyr filter select
+#' @importFrom magrittr "%>%"
+#' @export
+filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_day = "Sun", until_time = "23:59:59") {
+  weekday = time_in_sec = NULL
+  # check inputs
+  checkmate::assertDataFrame(data)
+  checkmate::assertCharacter(from_day)
+  checkmate::assertCharacter(from_time)
+  checkmate::assertCharacter(until_day)
+  checkmate::assertCharacter(until_time)
+  checkTimeFormat(from_time)
+  checkTimeFormat(until_time)
+
+  # check data
+  lw = levels(data$weekday)
+  if (!"weekday" %in% colnames(data)) stop("Your data set needs a column named 'weekday'. See function addWeekday().")
+  if (!"time" %in% colnames(data)) stop("Your data set needs a column named 'time'. See function addTime().")
+  if (!is.ordered(data$weekday)) stop("The variable 'weekday' must be an ordered factor, e.g. Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun")
+  # if (length(lw) != 7) warning("The variable 'weekday' does not have 7 levels. Please check your data!") #do we need this check?
+
+  # convert from_day and until_day into ordered factors
+  from_day = factor(from_day, levels = lw, ordered = TRUE)
+  until_day = factor(until_day, levels = lw, ordered = TRUE)
+
+  # filter dataset according to from_day and until_day
+  if (from_day <= until_day) {
+    df_res = data %>% dplyr::filter(weekday >= from_day, weekday <= until_day)
+  } else {
+    df_res = data %>% dplyr::filter(weekday >= from_day | weekday <= until_day)
+  }
+  if (nrow(df_res) == 0) stop("there are no dataset entries within the chosen time interval")
+
+  # convert timestamp character string input and time variable of dataset into numeric (in seconds) starting from time 00:00:00
+  ft = timeToSec(from_time)
+  ut = timeToSec(until_time)
+  df_res$time_in_sec = timeToSec(df_res$time)
+
+  # filter dataset according to from_time and until_time
+  df_res = df_res %>% dplyr::filter(time_in_sec >= ft | weekday != from_day, time_in_sec <= ut | weekday != until_day) %>% dplyr::select(-time_in_sec)
+
+  return(df_res)
+}
+
+#' Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
+#' The dataset needs an ordered factor variable named 'weekday'.
+#'
+#' @template param_data
+#' @param from_time character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".
+#' @param until_time character. Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".
+#' @family filter functions
+#' @return The dataset filtered according to the given time constraints.
+#' @importFrom dplyr filter select
+#' @importFrom magrittr "%>%"
+#' @export
+filterDaytime = function(data, from_time = "07:00:00", until_time = "18:00:00") {
+  time_in_sec = NULL
+  # check inputs
+  checkmate::assertDataFrame(data)
+  checkmate::assertCharacter(from_time)
+  checkmate::assertCharacter(until_time)
+  checkTimeFormat(from_time)
+  checkTimeFormat(until_time)
+
+  if (!"time" %in% colnames(data)) stop("Your data set needs a column named 'time'. See function addTime().")
+
+  # convert timestamp character string input and time variable of dataset into numeric (in seconds) starting from time 00:00:00
+  ft = timeToSec(from_time)
+  ut = timeToSec(until_time)
+
+  res = data
+  res$time_in_sec = timeToSec(res$time)
+
+  if (ft <= ut) {
+    res = res %>% filter(time_in_sec >= ft & time_in_sec <= ut) %>% select(-time_in_sec)
+  } else {
+    res = res %>% filter(time_in_sec >= ft | time_in_sec <= ut) %>% select(-time_in_sec)
+  }
+  res
 }

@@ -22,12 +22,8 @@ dataframe with added variable 'date_time'.
 Adds column 'date_time' to a dataframe containing a timestamp variable.
 }
 \seealso{
-Other helper functions: \code{\link{addColumnByGroup}},
-  \code{\link{addColumn}}, \code{\link{addDate}},
-  \code{\link{addStudyDayByGroup}},
-  \code{\link{addStudyDay}}, \code{\link{addTime}},
-  \code{\link{addWeekday}}, \code{\link{calcStudyDay}},
-  \code{\link{divideDataIntoIntervals}},
+Other helper functions: \code{\link{addDate}},
+  \code{\link{addTime}}, \code{\link{addWeekday}},
   \code{\link{slidingWindow}}
 }
 \concept{helper functions}

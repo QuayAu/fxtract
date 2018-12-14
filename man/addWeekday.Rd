@@ -27,12 +27,8 @@ dataframe with added ordered factor variable 'weekday'.
 Adds column 'weekday' to a dataframe containing a timestamp variable.
 }
 \seealso{
-Other helper functions: \code{\link{addColumnByGroup}},
-  \code{\link{addColumn}}, \code{\link{addDateTime}},
-  \code{\link{addDate}}, \code{\link{addStudyDayByGroup}},
-  \code{\link{addStudyDay}}, \code{\link{addTime}},
-  \code{\link{calcStudyDay}},
-  \code{\link{divideDataIntoIntervals}},
+Other helper functions: \code{\link{addDateTime}},
+  \code{\link{addDate}}, \code{\link{addTime}},
   \code{\link{slidingWindow}}
 }
 \concept{helper functions}

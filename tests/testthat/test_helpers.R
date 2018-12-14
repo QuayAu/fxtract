@@ -27,8 +27,6 @@ test_that("test_wrong_inputs", {
   expect_error(addTime(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
   expect_error(addDate(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
   expect_error(addDateTime(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
-  expect_error(calcStudyDay(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
-  expect_error(addColumnByGroup(data = "test", fun = "mean", colname = "cn"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
 
   #tz
   expect_error(addWeekday(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
@@ -41,12 +39,12 @@ test_that("test_wrong_inputs", {
   expect_error(addTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
   expect_error(addDate(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
   expect_error(addDateTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
-  
+
   expect_error(addWeekday(data = td, unit = "S"))
   expect_error(addTime(data = td, unit = "S"))
   expect_error(addDate(data = td, unit = "S"))
   expect_error(addDateTime(data = td, unit = "S"))
-  
+
   #utc_col
   expect_error(addWeekday(data = td, utc_col = "ts"))
   expect_error(addTime(data = td, utc_col = "ts"))
@@ -89,14 +87,14 @@ test_that("add_time_variables", {
   td3$timestamp = as.character(td3$timestamp)
   #different timestamp name
   td4$utc = td4$timestamp
-  td4$timestamp = NULL 
-  
+  td4$timestamp = NULL
+
   #character timestamp
   expect_message(addWeekday(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
   expect_message(addTime(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
   expect_message(addDate(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
   expect_message(addDateTime(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
-  
+
   #check addWeekday
   expected = c("Thu", "Fri", "Sun")
   x = addWeekday(td, utc_col = "timestamp")
@@ -104,13 +102,13 @@ test_that("add_time_variables", {
 
   x = addWeekday(td2, utc_col = "timestamp", unit = "ms")
   expect_equal(as.character(x$weekday), expected)
-  
+
   x = addWeekday(td3, utc_col = "timestamp")
   expect_equal(as.character(x$weekday), expected)
 
   x = addWeekday(td4, utc_col = "utc")
   expect_equal(as.character(x$weekday), expected)
-  
+
   ##change locale
   expect_message(addWeekday(data = td, utc_col = "timestamp", locale = "Deu"), regexp = "locale was changed. Use at own risk.")
   expect_message(addWeekday(data = td, utc_col = "timestamp", locale = "Esp"), regexp = "locale was changed. Use at own risk.")
@@ -129,7 +127,7 @@ test_that("add_time_variables", {
 
   x = addTime(td4, utc_col = "utc")
   expect_equal(as.character(x$time), expected)
-  
+
   #check addDateTime
   expected = c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")
 
@@ -141,19 +139,19 @@ test_that("add_time_variables", {
 
   x = addDateTime(td3, utc_col = "timestamp")
   expect_equal(as.character(x$date_time), expected)
-  
+
   x = addDateTime(td4, utc_col = "utc")
   expect_equal(as.character(x$date_time), expected)
-  
+
   #check addDate
   expected = c("2018-07-12", "1999-01-01", "1950-01-01")
-  
+
   x = addDate(td, utc_col = "timestamp")
   expect_equal(as.character(x$date), expected)
-  
+
   x = addDate(td2, utc_col = "timestamp", unit = "ms")
   expect_equal(as.character(x$date), expected)
-  
+
   x = addDate(td3, utc_col = "timestamp")
   expect_equal(as.character(x$date), expected)
 
@@ -161,85 +159,9 @@ test_that("add_time_variables", {
   expect_equal(as.character(x$date), expected)
 })
 
-
-test_that("calcStudyDay", {
-  #check dataframe without 'date' variable
-  td = data.frame(timestamp = c(1531393277, 915152461, -631144492))
-  expect_error(calcStudyDay(td), regexp = "data needs a column named 'date'. Consider adding 'date' by using addDate().")
-
-  #check equality
-  td = addDate(td, utc_col = "timestamp")
-  expect_equal(as.character(calcStudyDay(td)), c("day25030", "day17898", "day1"))
-
-  d1 = 123456789
-  td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
-  #11/29/1973, 11/29/1973, 11/29/1973,  11/30/1973,  11/30/1973, 12/01/1973, 12/01/1973, 12/01/1973, 12/03/1973
-  #day1, day1, day1, day2, day2, day3, day3, day3, day5
-  td = addDate(td, utc_col = "timestamp")
-  expect_equal(as.character(calcStudyDay(td)), c("day1", "day1", "day1", "day2", "day2", "day3", "day3", "day3", "day5"))
-
-  #check only one day
-  d1 = 123456789
-  td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2))
-  td = addDate(td, utc_col = "timestamp")
-  expect_equal(as.character(calcStudyDay(td)), c("day1", "day1", "day1"))
-})
-
-
-test_that("addColumnByGroup", {
-  td = data.frame(timestamp = c(1, 2, 3, 4, 5, 6), userId = c(rep("1", 3), rep("2", 3)))
-
-  #colname already in dataset
-  myFun = function(data) rep(mean(data$timestamp), nrow(data))
-  expect_error(addColumnByGroup(data = td, group_col = "userId", fun = myFun, colname = "timestamp"),
-    regexp = "colname is already in dataset. Please choose a different colname!")
-
-  #no group_col in dataset
-  myFun = function(data) rep(mean(data$timestamp), nrow(data))
-  expect_error(addColumnByGroup(data = td, group_col = "x", fun = myFun, colname = "meanTimestamp"))
-
-  #wrong function
-  myFun = function(data) mean(data$timestamp)
-  expect_error(addColumnByGroup(data = td, group_col = "userId", fun = myFun, colname = "meanTimestamp"),
-    regexp = "fun must return a vector of length: nrow data")
-
-  #right function
-  myFun = function(data) rep(mean(data$timestamp), nrow(data))
-  expect_equal(addColumnByGroup(data = td, group_col = "userId", fun = myFun, colname = "meanTimestamp")$meanTimestamp, c(2, 2, 2, 5, 5, 5))
-
-  #test calcStudyDay
-  d1 = 123456789
-  td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
-  td$userId = userId = c(rep("1", 4), rep("2", 5))
-  td = addDate(td, utc_col = "timestamp")
-  #expect: c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
-  res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
-  expect_equal(addColumnByGroup(data = td, group_col = "userId", fun = calcStudyDay, colname = "studyDay")$studyDay, res)
-
-  #test add column two times by new group
-})
-
-
-test_that("addColumn", {
-  td = data.frame(x = c(1, 2, 3, 4, 5, 6), y = c(rep("1", 3), rep("2", 3)))
-
-  #colname already in dataset
-  myFun = function(data) rep(mean(data$x), nrow(data))
-  expect_error(addColumn(data = td, fun = myFun, colname = "x"),
-    regexp = "colname is already in dataset. Please choose a different colname!")
-
-  #wrong function
-  myFun = function(data) mean(data$x)
-  expect_error(addColumn(data = td, fun = myFun, colname = "meanX"), regexp = "fun must return a vector of length: nrow data")
-
-  #right function
-  myFun = function(data) rep(mean(data$x), nrow(data))
-  expect_equal(addColumn(data = td, fun = myFun, colname = "meanX")$meanX, rep(3.5, 6))
-})
-
 test_that("slidingWindow", {
   td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
-  
+
   fun = function(data) data.frame(sum_x_last3 = sum(data$x), max_x_last3 = max(data$x))
 
   #test steps
@@ -248,7 +170,7 @@ test_that("slidingWindow", {
   expect_equal(x$sum_x_last3[1:3], c(NA_integer_, NA_integer_, NA_integer_))
   expect_equal(x$sum_x_last3[4:21], c(6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57))
   expect_equal(x$max_x_last3[4:21], 3:20)
-  
+
   ##test eval_at_rows
   x = slidingWindow(td, fun = fun, steps = 3, eval_at_rows = c(5, 10, 15, 20))
   expect_equal(x$sum_x_last3[4:21], c(NA, 9, NA, NA, NA, NA, 24, NA, NA, NA, NA, 39, NA, NA, NA, NA, 54, NA))
@@ -262,117 +184,113 @@ test_that("slidingWindow", {
   expect_error(slidingWindow(td, fun = fun, time_in_sec = 5, steps = 2), regexp = "Pass either steps or time_in_sec, but not both!")
   expect_error(slidingWindow(td, fun = fun, time_in_sec = 5, utc_col = "wrong timestamp"))
   expect_error(slidingWindow(td, fun = fun, time_in_sec = 5, utc_col = "timestamp", unit = "wrong unit"))
-  
+
   #test time in seconds
   x = slidingWindow(td, fun = fun, time_in_sec = 3, utc_col = "timestamp")
-  
+
   expect_equal(x$sum_x_last3, c(NA_integer_, 1, 3, 5, 7, 9, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
   expect_equal(x$max_x_last3, c(NA_integer_, 1:9, -Inf, 11:20))
-  
+
   #test time in milliseconds
   td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
   td$timestamp[2] = 1.5
-  td$timestamp[4] = 3.5  
+  td$timestamp[4] = 3.5
   td$timestamp = td$timestamp * 1000
   x = slidingWindow(td, fun = fun, time_in_sec = 2.4, utc_col = "timestamp", unit = "ms")
   expect_equal(x$sum_x_last3, c(NA_integer_, 1, 3, 5, 7, 5, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
-  
+
   ##test eval_at_rows
   td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
   x = slidingWindow(td, fun = fun, time_in_sec = 3, utc_col = "timestamp", eval_at_rows = c(5, 10, 15, 20))
-  
+
   expect_equal(x$sum_x_last3, c(rep(NA_integer_, 4), 7, rep(NA_integer_, 4), 17, rep(NA_integer_, 4), 27, rep(NA_integer_, 4), 37, NA))
 })
 
-test_that("addStudyDay", {
-  #check dataframe without 'date' variable
-  td = data.frame(timestamp = c(1531393277, 915152461, -631144492))
-  expect_error(calcStudyDay(td), regexp = "data needs a column named 'date'. Consider adding 'date' by using addDate().")
-  #check equality
-  td = addDate(td, utc_col = "timestamp")
-  expect_equal(as.character(addStudyDay(td, ordered = FALSE)$studyDay), c("day25030", "day17898", "day1"))
-  expect_equal(levels(addStudyDay(td, ordered = TRUE)$studyDay), paste0("day", 1:25030))
-  #check filters
-  td = addStudyDay(td, ordered = TRUE)
-  studyDay = NULL
-  td2 = td %>% dplyr::filter(studyDay <= "day20000")
-  expect_equal(as.character(unique(td2$studyDay)), c("day17898", "day1"))
-  td2 = td %>% dplyr::filter(studyDay >= "day2")
-  expect_equal(as.character(unique(td2$studyDay)), c("day25030", "day17898"))
+test_that("filterWeekday", {
+  td = data.frame(timestamp = 1:10)
+
+  #test checks
+  expect_error(filterWeekday(td), regexp = "Your data set needs a column named 'weekday'. See function addWeekday().")
+  td = addWeekday(td, utc_col = "timestamp")
+  expect_error(filterWeekday(td), regexp = "Your data set needs a column named 'time'. See function addTime().")
+  td = addTime(td, utc_col = "timestamp")
+  expect_error(filterWeekday(td, from_day = "Fri", until_day = "Sun"), regexp = "there are no dataset entries within the chosen time interval")
+  td$weekday = as.character(td$weekday)
+  expect_error(filterWeekday(td), regexp = "The variable 'weekday' must be an ordered factor, e.g. Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun")
+
+  #test functionality
+  i = 3
+  days = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+  td = data.frame(weekday = c(rep(days, i), days[1:3]), time = c("00:18:49", "01:12:45",
+    "02:18:23", "03:29:56", "04:37:39", "05:01:31", "06:54:09", "07:43:16", "08:30:57", "09:56:20",
+    "10:27:13", "11:53:02", "12:36:21", "13:48:01", "14:02:41", "15:29:14", "16:44:57", "17:36:26",
+    "18:11:30", "19:01:27", "20:34:04", "21:37:53", "22:06:12", "23:33:30"), stringsAsFactors = FALSE)
+  td$weekday = factor(td$weekday, levels = days, ordered = TRUE)
+
+  # test correct filtering according to the given days
+  expect_equal(days %in% unique(filterWeekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Wed",
+    until_time = "23:59:59")$weekday), c(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(days %in% unique(filterWeekday(data = td, from_day = "Sat", from_time = "00:00:00", until_day = "Tue",
+    until_time = "23:59:59")$weekday), c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE))
+  expect_equal(days %in% unique(filterWeekday(data = td, from_day = "Tue", from_time = "11:15:23", until_day = "Thu",
+    until_time = "18:36:17")$weekday), c(FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE))
+  expect_equal(days %in% unique(filterWeekday(data = td, from_day = "Sun", from_time = "11:15:23", until_day = "Mon",
+    until_time = "18:36:17")$weekday), c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE))
+
+  # test correct filtering according to the given times
+  time1 = "11:00:00"
+  time2 = "19:00:00"
+  df1 = filterWeekday(data = td, from_day = "Mon", from_time = time1, until_day = "Wed",
+    until_time = time2)
+
+  time1_in_sec = timeToSec(time1)
+  time2_in_sec = timeToSec(time2)
+  df1$time_in_sec = timeToSec(df1$time)
+  expect_true(min(df1$time_in_sec[df1$weekday == "Mon"]) >= time1_in_sec)
+  expect_true(max(df1$time_in_sec[df1$weekday == "Wed"]) <= time2_in_sec)
+
+  # test wrong format for from_time and until_time
+  expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:0a:00", until_day = "Sun",
+    until_time = "23:59:59"))
+  expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Sun",
+    until_time = "23:59:5z"))
+  expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "30:00:00", until_day = "Sun",
+    until_time = "23:59:59"))
+  expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Sun",
+    until_time = "23:70:59"))
 })
 
-test_that("addStudyDayByGroup", {
-  d1 = 123456789
-  td = data.frame(timestamp = c(d1, d1 + 1, d1 + 2, d1 + 10000, d1 + 10001, d1 + 100000, d1 + 100001, d1 + 100001, d1 + 300001))
-  td$userId = userId = c(rep("1", 4), rep("2", 5))
-  td = addDate(td, utc_col = "timestamp")
-  res =  c("day1", "day1", "day1", "day2", "day1", "day2", "day2", "day2", "day4")
-  #check equality
-  expect_equal(as.character(addStudyDayByGroup(data = td, group_col = "userId", ordered = FALSE)$studyDay), res)
-  expect_equal(levels(addStudyDayByGroup(td, group_col = "userId", ordered = TRUE)$studyDay), paste0("day", 1:4))
-  #check filters
-  td = addStudyDayByGroup(td, group_col = "userId", ordered = TRUE)
-  studyDay = NULL
-  td2 = td %>% dplyr::filter(studyDay <= "day2")
-  expect_equal(as.character(unique(td2$studyDay)), c("day1", "day2"))
-  td2 = td %>% dplyr::filter(studyDay >= "day2")
-  expect_equal(as.character(unique(td2$studyDay)), c("day2", "day4"))
+test_that("filterDaytime", {
+  i = 3
+  td = data.frame(time = c("00:18:49", "01:12:45",
+    "02:18:23", "03:29:56", "04:37:39", "05:01:31", "06:54:09", "07:43:16", "08:30:57", "09:56:20",
+    "10:27:13", "11:53:02", "12:36:21", "13:48:01", "14:02:41", "15:29:14", "16:44:57", "17:36:26",
+    "18:11:30", "19:01:27", "20:34:04", "21:37:53", "22:06:12", "23:33:30"), stringsAsFactors = FALSE)
+
+  # test correct filtering according to the given times
+  time1 = "11:00:00"
+  time2 = "19:00:00"
+  df1 = filterDaytime(data = td, from_time = time1, until_time = time2)
+
+  time1_in_sec = timeToSec(time1)
+  time2_in_sec = timeToSec(time2)
+  df1$time_in_sec = timeToSec(df1$time)
+  expect_true(min(df1$time_in_sec) >= time1_in_sec)
+  expect_true(max(df1$time_in_sec) <= time2_in_sec)
+
+
+  time1 = "19:00:00"
+  time2 = "10:00:00"
+  df1 = filterDaytime(data = td, from_time = time1, until_time = time2)
+
+  time1_in_sec = timeToSec(time1)
+  time2_in_sec = timeToSec(time2)
+  df1$time_in_sec = timeToSec(df1$time)
+  expect_true(all(df1$time_in_sec >= time1_in_sec | df1$time_in_sec <= time2_in_sec))
+
+  # test wrong format for from_time and until_time
+  expect_error(filterDaytime(data = td, from_time = "00:0a:00", until_time = "23:59:59"))
+  expect_error(filterDaytime(data = td, from_time = "00:00:00", until_time = "23:59:5z"))
+  expect_error(filterDaytime(data = td, from_time = "30:00:00", until_time = "23:59:59"))
+  expect_error(filterDaytime(data = td, from_time = "00:00:00", until_time = "23:70:59"))
 })
-
-test_that("divideDataIntoIntervals", {
-  d1 = 100
-  td = data.frame(timestamp = c(d1 + c(0, 0, 0, 1:7)))
-  td$x = 1:nrow(td)
-
-  #check duplicate timestamps == start timestamp
-  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
-  expect_equal(c(rep("interval1", 8), rep("interval2", 2)), y)
-
-  #check duplicate timestamps == end timestamp
-  td$timestamp = c(1:7, 8, 8, 8)
-  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
-  expect_equal(c(rep("interval1", 6), rep("interval2", 4)), y)
-
-  #check duplicate timestamps in between
-  td$timestamp = c(1, 2, 2, 2, 3:8)
-  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
-  expect_equal(c(rep("interval1", 8), rep("interval2", 2)), y)
-
-  #check duplicate timestamps everywhere
-  td$timestamp = c(1, 1, 1, 2, 7, 7, 7, 16, 24, 24)
-  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
-  expect_equal(c(rep("interval1", 4), rep("interval2", 3), "interval3", rep("interval5", 2)), y)
-
-  #check data not ordered by timestamp
-  td$timestamp = c(1, 24, 1, 2, 24, 7, 7, 16, 7, 1)
-  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "s")
-  expect_equal(c("interval1", "interval5", rep("interval1", 2), "interval5", rep("interval2", 2),
-    "interval3", "interval2", "interval1"), y)
-
-  #check different unit
-  td$timestamp = c(1, 24, 1, 2, 24, 7, 7, 16, 7, 1) * 1000
-  y = divideDataIntoIntervals(data = td, time_in_sec = 5, unit = "ms")
-  expect_equal(c("interval1", "interval5", rep("interval1", 2), "interval5", rep("interval2", 2),
-    "interval3", "interval2", "interval1"), y)
-
-  #check steps + time_in_sec
-  expect_error(divideDataIntoIntervals(data = td, steps = 5, time_in_sec = 5),
-    regexp = "Pass either steps or time_in_sec, but not both!")
-
-  #check steps
-  td$timestamp = 1:10
-  y = divideDataIntoIntervals(data = td, steps = 5)
-  expect_equal(c(rep("interval1", 6), rep("interval2", 4)), y)
-
-  y = divideDataIntoIntervals(data = td, steps = 4)
-  expect_equal(c(rep("interval1", 5), rep("interval2", 4), "interval3"), y)
-
-  #check timestamp NA
-  td$timestamp = c(NA, 2:10)
-  y = divideDataIntoIntervals(data = td, steps = 4)
-  expect_equal(c(rep("interval1", 5), rep("interval2", 4), "interval3"), y)
-  expect_error(divideDataIntoIntervals(data = td, time_in_sec = 3), regexp = "your dataset contains NA in the timestamp variable")
-  
-  #different timestamp name
-})
-
