@@ -4,12 +4,14 @@
 \alias{useDataframe}
 \title{Writes single RDS files from an R dataframe.}
 \usage{
-useDataframe(project, dataframe)
+useDataframe(project, dataframe, group_by)
 }
 \arguments{
-\item{project}{fxtract_project object created by \code{\link{makeProject}}}
+\item{project}{fxtract_project object created by \code{\link{makeProject}}.}
 
 \item{dataframe}{R dataframe.}
+
+\item{group_by}{character. The grouping variable.}
 }
 \value{
 fxtract_project

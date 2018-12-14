@@ -8,16 +8,15 @@
 #' Feature extraction can be paused and restarted at a later time, even on a different machine.
 #' Parallelization can be done via \cite{batchtools}.
 #' @param newProjectName character. The new project name. A subfolder under the (created) folder `projects` will be created.
-#' @param group_by character. The grouping variable.
 #' @param ... other arguments passed to \code{batchtools::makeExperimentRegistry}
 #' @return fxtract_project object.
 #' @importFrom magrittr "%>%"
 #' @export
 #' @examples
 #' \dontrun{
-#' project = makeProject("my_project", group_by = "userId")
+#' project = makeProject("my_project")
 #' }
-makeProject = function(newProjectName, group_by, ...){
+makeProject = function(newProjectName, ...){
   checkmate::assertCharacter(newProjectName)
   newDirPath = paste0("projects/", newProjectName)
   if (dir.exists("projects")) print("The project folder 'projects' already exists. The new project will be saved in this folder")
@@ -29,7 +28,6 @@ makeProject = function(newProjectName, group_by, ...){
   project = list(dir = newDirPath)
   reg = batchtools::makeExperimentRegistry(paste0(project$dir, "/reg"), ...)
   project[["reg"]] = reg
-  project[["group_by"]] = group_by
   class(project) = c("fxtract_project", class(project))
   saveRDS(project, file = paste0(newDirPath, "/project.RDS"))
   project
@@ -59,9 +57,10 @@ loadProject = function(file.dir) {
 #' Given an SQL database with a grouping variable, this function loads the SQL database into RAM for each grouping variable
 #' and saves these as dataframes in RDS files. Parallelization is available via \link{foreach}.
 #'
-#' @param project fxtract_project object created by \code{\link{makeProject}}
+#' @param project fxtract_project object created by \code{\link{makeProject}}.
 #' @param file.dir character. The file directory of the SQL database.
 #' @param tbl_name character. The table name required by \code{\link[dplyr]{tbl}}.
+#' @param group_by character. The grouping variable.
 #' @return fxtract_project
 #' @importFrom foreach "%dopar%"
 #' @importFrom magrittr "%>%"
@@ -71,15 +70,17 @@ loadProject = function(file.dir) {
 #' project = useSqlDatabase(project, "projects/myProject/SQL_database.sql",
 #'   tbl_name = "table")
 #' }
-useSqlDatabase = function(project, file.dir, tbl_name){
+useSqlDatabase = function(project, file.dir, tbl_name, group_by){
   i = NULL
   checkmate::assertClass(project, "fxtract_project")
   checkmate::assertCharacter(tbl_name)
+  checkmate::assertCharacter(group_by)
+
   db = dplyr::src_sqlite(file.dir, create = FALSE)
   logs = dplyr::tbl(db, from = tbl_name)
-  group_by = project$group_by
   checkmate::assert_subset(group_by, colnames(logs))
 
+  project$group_by = group_by
   gb = logs %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
   foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
@@ -88,7 +89,8 @@ useSqlDatabase = function(project, file.dir, tbl_name){
     logs_i = logs %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
     saveRDS(logs_i, file = paste0(project$dir, "/raw_rds_files/", i, ".RDS"))
   }
-  return(invisible(project))
+  saveRDS(project, file = paste0(project$dir, "/project.RDS"))
+  return(project)
 }
 
 #' Writes single RDS files from an R dataframe.
@@ -96,8 +98,9 @@ useSqlDatabase = function(project, file.dir, tbl_name){
 #' Given an R dataframe with a grouping variable (defined by the project object), this function saves single RDS files for every grouping variable.
 #' Parallelization is available via \link{foreach}.
 #'
-#' @param project fxtract_project object created by \code{\link{makeProject}}
+#' @param project fxtract_project object created by \code{\link{makeProject}}.
 #' @param dataframe R dataframe.
+#' @param group_by character. The grouping variable.
 #' @return fxtract_project
 #' @importFrom foreach "%dopar%"
 #' @importFrom magrittr "%>%"
@@ -106,11 +109,11 @@ useSqlDatabase = function(project, file.dir, tbl_name){
 #' \dontrun{
 #' useDataframe(project, studenlife.small)
 #' }
-useDataframe = function(project, dataframe){
+useDataframe = function(project, dataframe, group_by){
   i = NULL
   checkmate::assertClass(project, "fxtract_project")
   checkmate::assertDataFrame(dataframe)
-  group_by = project$group_by
+  project$group_by = group_by
   checkmate::assert_subset(group_by, colnames(dataframe))
   gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
@@ -118,7 +121,8 @@ useDataframe = function(project, dataframe){
     dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
     saveRDS(dataframe_i, file = paste0(project$dir, "/raw_rds_files/", i, ".RDS"))
   }
-  return(invisible(project))
+  saveRDS(project, file = paste0(project$dir, "/project.RDS"))
+  return(project)
 }
 
 #' Adds batchtools problems.

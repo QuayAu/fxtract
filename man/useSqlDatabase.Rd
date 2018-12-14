@@ -4,14 +4,16 @@
 \alias{useSqlDatabase}
 \title{Writes single RDS files from an SQL database.}
 \usage{
-useSqlDatabase(project, file.dir, tbl_name)
+useSqlDatabase(project, file.dir, tbl_name, group_by)
 }
 \arguments{
-\item{project}{fxtract_project object created by \code{\link{makeProject}}}
+\item{project}{fxtract_project object created by \code{\link{makeProject}}.}
 
 \item{file.dir}{character. The file directory of the SQL database.}
 
 \item{tbl_name}{character. The table name required by \code{\link[dplyr]{tbl}}.}
+
+\item{group_by}{character. The grouping variable.}
 }
 \value{
 fxtract_project

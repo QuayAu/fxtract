@@ -4,12 +4,10 @@
 \alias{makeProject}
 \title{Iniates batchtools functionality}
 \usage{
-makeProject(newProjectName, group_by, ...)
+makeProject(newProjectName, ...)
 }
 \arguments{
 \item{newProjectName}{character. The new project name. A subfolder under the (created) folder `projects` will be created.}
-
-\item{group_by}{character. The grouping variable.}
 
 \item{...}{other arguments passed to \code{batchtools::makeExperimentRegistry}}
 }
@@ -27,6 +25,6 @@ Parallelization can be done via \cite{batchtools}.
 }
 \examples{
 \dontrun{
-project = makeProject("my_project", group_by = "userId")
+project = makeProject("my_project")
 }
 }
