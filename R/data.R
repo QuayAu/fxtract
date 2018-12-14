@@ -1,12 +1,3 @@
-#' phonedata
-#'
-#' Contains exemplary raw phone logs.
-#'
-#' @name phonedata
-#' @keywords data
-#' @docType data
-"phonedata"
-
 #' studentlife_small
 #'
 #' Contains exemplary gps and app data from the studentlife dataset (users: u00, u01, u02)
