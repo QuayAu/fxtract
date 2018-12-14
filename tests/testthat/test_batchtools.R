@@ -28,8 +28,7 @@ test_that("makeProject", {
 })
 
 test_that("save rds files", {
-  skip_on_cran()
-  skip_on_travis()
+  skip("this one is skipped")
   #sql data base
   unlink("projects", recursive = TRUE)
   project = makeProject("my_project", group_by = "Species")
