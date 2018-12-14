@@ -68,10 +68,10 @@ loadProject = function(file.dir) {
 #' @export
 #' @examples
 #' \dontrun{
-#' project = sqlToRds(project, "projects/myProject/SQL_database.sql",
+#' project = useSqlDatabase(project, "projects/myProject/SQL_database.sql",
 #'   tbl_name = "table")
 #' }
-sqlToRds = function(project, file.dir, tbl_name){
+useSqlDatabase = function(project, file.dir, tbl_name){
   i = NULL
   checkmate::assertClass(project, "fxtract_project")
   checkmate::assertCharacter(tbl_name)
@@ -104,9 +104,9 @@ sqlToRds = function(project, file.dir, tbl_name){
 #' @export
 #' @examples
 #' \dontrun{
-#' dataframeToRds(project, studenlife.small)
+#' useDataframe(project, studenlife.small)
 #' }
-dataframeToRds = function(project, dataframe){
+useDataframe = function(project, dataframe){
   i = NULL
   checkmate::assertClass(project, "fxtract_project")
   checkmate::assertDataFrame(dataframe)
@@ -143,15 +143,15 @@ addBatchtoolsProblems = function(project, n.chunks) {
       data_id = readRDS(paste0(project$dir, "/raw_rds_files/", id))
       name = gsub(".RDS", "", id)
       batchtools::addProblem(name = name, data = data_id, reg = project$reg)
-    }  
+    }
   } else {
     checkmate::assertIntegerish(n.chunks)
     rds_files$chunk = batchtools::chunk(1:nrow(rds_files), n.chunks = n.chunks)
-  
+
     chunks = unique(rds_files$chunk)
     for (z in chunks) {
       files = rds_files %>% dplyr::filter(chunk == z) %>% dplyr::pull(files) %>% as.character()
-  
+
       x = foreach::foreach(f = files) %dopar% {
         readRDS(paste0(project$dir, "/raw_rds_files/", f))
       }

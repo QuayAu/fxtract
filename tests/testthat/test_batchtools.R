@@ -34,7 +34,7 @@ test_that("save rds files", {
   project = makeProject("my_project", group_by = "Species")
   my_database = dplyr::src_sqlite("SQL_database_iris.sql", create = TRUE)
   dplyr::copy_to(my_database, df = iris, temporary = FALSE, overwrite = TRUE)
-  sqlToRds(project = project, file.dir = "SQL_database_iris.sql", tbl_name = "iris")
+  useSqlDatabase(project = project, file.dir = "SQL_database_iris.sql", tbl_name = "iris")
   expect_true(file.exists("projects/my_project/raw_rds_files/setosa.RDS"))
   expect_true(file.exists("projects/my_project/raw_rds_files/versicolor.RDS"))
   expect_true(file.exists("projects/my_project/raw_rds_files/virginica.RDS"))
@@ -44,7 +44,7 @@ test_that("save rds files", {
   project = makeProject("my_project", group_by = "Species2")
   my_database = dplyr::src_sqlite("SQL_database_iris.sql", create = TRUE)
   dplyr::copy_to(my_database, df = iris, temporary = FALSE, overwrite = TRUE)
-  expect_error(sqlToRds(project = project, file.dir = "SQL_database_iris.sql", tbl_name = "iris"))
+  expect_error(useSqlDatabase(project = project, file.dir = "SQL_database_iris.sql", tbl_name = "iris"))
 
   # RPostgreSQL::dbDisconnect(my_database$con)
   # file.remove("SQL_database_iris.sql")
@@ -52,7 +52,7 @@ test_that("save rds files", {
   #dataframe
   unlink("projects", recursive = TRUE)
   project = makeProject("my_project", group_by = "Species")
-  dataframeToRds(project, iris)
+  useDataframe(project, iris)
   expect_true(file.exists("projects/my_project/raw_rds_files/setosa.RDS"))
   expect_true(file.exists("projects/my_project/raw_rds_files/versicolor.RDS"))
   expect_true(file.exists("projects/my_project/raw_rds_files/virginica.RDS"))
@@ -60,7 +60,7 @@ test_that("save rds files", {
   ## test wrong group_by argument
   unlink("projects", recursive = TRUE)
   project = makeProject("my_project2", group_by = "Species2")
-  expect_error(dataframeToRds(project, iris))
+  expect_error(useDataframe(project, iris))
 })
 
 test_that("add batchtools problems", {
