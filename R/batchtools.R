@@ -136,21 +136,28 @@ dataframeToRds = function(project, dataframe){
 #' }
 addBatchtoolsProblems = function(project, n.chunks) {
   chunk = files = f = NULL
-
+  checkmate::assertIntegerish(n.chunks)
   rds_files = list.files(path = paste0(project$dir, "/raw_rds_files"))
   rds_files = data.frame(files = rds_files)
-  if (missing(n.chunks)) n.chunks = nrow(rds_files)
-  rds_files$chunk = batchtools::chunk(1:nrow(rds_files), n.chunks = n.chunks)
-
-  chunks = unique(rds_files$chunk)
-  for (z in chunks) {
-    files = rds_files %>% dplyr::filter(chunk == z) %>% dplyr::pull(files) %>% as.character()
-
-    x = foreach::foreach(f = files) %dopar% {
-      data_id = readRDS(paste0(project$dir, "/raw_rds_files/", f))
+  if (missing(n.chunks)) {
+    for (id in rds_files$files) {
+      data_id = readRDS(paste0(project$dir, "/raw_rds_files/", id))
+      name = gsub(".RDS", "", id)
+      batchtools::addProblem(name = name, data = data_id, reg = project$reg)
+    }  
+  } else {
+    rds_files$chunk = batchtools::chunk(1:nrow(rds_files), n.chunks = n.chunks)
+  
+    chunks = unique(rds_files$chunk)
+    for (z in chunks) {
+      files = rds_files %>% dplyr::filter(chunk == z) %>% dplyr::pull(files) %>% as.character()
+  
+      x = foreach::foreach(f = files) %dopar% {
+        readRDS(paste0(project$dir, "/raw_rds_files/", f))
+      }
+      data_chunk = dplyr::bind_rows(x)
+      batchtools::addProblem(name = paste0("chunk_", z), data = data_chunk, reg = project$reg)
     }
-    data_chunk = dplyr::bind_rows(x)
-    batchtools::addProblem(name = paste0("chunk_", z), data = data_chunk, reg = project$reg)
   }
 }
 
