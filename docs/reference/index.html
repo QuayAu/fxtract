@@ -166,19 +166,6 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="addColumn.html">addColumn()</a></code> </p>
-        </td>
-        <td><p>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="addColumnByGroup.html">addColumnByGroup()</a></code> </p>
-        </td>
-        <td><p>Helper function. Needs a function, which has a dataframe as input and a vector of length nrow(dataframe) as output.
-This function will be evaluated grouped by <code>group_col</code>.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="addDate.html">addDate()</a></code> </p>
         </td>
         <td><p>Adds column 'date' to a dataframe containing a timestamp variable.</p></td>
@@ -188,18 +175,6 @@ This function will be evaluated grouped by <code>group_col</code>.</p></td>
           <p><code><a href="addDateTime.html">addDateTime()</a></code> </p>
         </td>
         <td><p>Adds column 'date_time' to a dataframe containing a timestamp variable.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="addStudyDay.html">addStudyDay()</a></code> </p>
-        </td>
-        <td><p>Helper function. It takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="addStudyDayByGroup.html">addStudyDayByGroup()</a></code> </p>
-        </td>
-        <td><p>Helper function. For each group variable it takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p></td>
       </tr><tr>
         
         <td>
@@ -221,12 +196,6 @@ This function will be evaluated grouped by <code>group_col</code>.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="calcStudyDay.html">calcStudyDay()</a></code> </p>
-        </td>
-        <td><p>Helper function. Takes the mininum of timestamp as first day and labels oncoming days with the time difference to this day.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="checkTimeFormat.html">checkTimeFormat()</a></code> </p>
         </td>
         <td><p>Helper function. Checks if character has correct time format 'hh:mm:ss'.</p></td>
@@ -236,20 +205,6 @@ This function will be evaluated grouped by <code>group_col</code>.</p></td>
           <p><code><a href="collectResults.html">collectResults()</a></code> </p>
         </td>
         <td><p>Collects results.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dataframeToRds.html">dataframeToRds()</a></code> </p>
-        </td>
-        <td><p>Writes single RDS files from an R dataframe.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="divideDataIntoIntervals.html">divideDataIntoIntervals()</a></code> </p>
-        </td>
-        <td><p>Helper function. Adds a new column, which divides the dataset into intervals of a given length.
-The base R function <code>cut</code> is used with <code>include.lowest = TRUE</code>.
-Values larger than the biggest cut point will be assigned a new interval.</p></td>
       </tr><tr>
         
         <td>
@@ -285,21 +240,9 @@ The dataset needs an ordered factor variable named 'weekday'.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="phonedata.html">phonedata</a></code> </p>
-        </td>
-        <td><p>phonedata</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="slidingWindow.html">slidingWindow()</a></code> </p>
         </td>
         <td><p>Adds a variable (or a set of variables) to a dataset by a sliding window approach.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="sqlToRds.html">sqlToRds()</a></code> </p>
-        </td>
-        <td><p>Writes single RDS files from an SQL database.</p></td>
       </tr><tr>
         
         <td>
@@ -312,6 +255,18 @@ The dataset needs an ordered factor variable named 'weekday'.</p></td>
           <p><code><a href="timeToSec.html">timeToSec()</a></code> </p>
         </td>
         <td><p>Helper function. Converts "hh:mm:ss" into number of seconds.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="useDataframe.html">useDataframe()</a></code> </p>
+        </td>
+        <td><p>Writes single RDS files from an R dataframe.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="useSqlDatabase.html">useSqlDatabase()</a></code> </p>
+        </td>
+        <td><p>Writes single RDS files from an SQL database.</p></td>
       </tr>
     </tbody>
     </table>

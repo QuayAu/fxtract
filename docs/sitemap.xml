@@ -10,22 +10,10 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addBatchtoolsProblems.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addColumn.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addColumnByGroup.html</loc>
-  </url>
-  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addDate.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addDateTime.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addStudyDay.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addStudyDayByGroup.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addTime.html</loc>
@@ -37,19 +25,10 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/calcFeature.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/calcStudyDay.html</loc>
-  </url>
-  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/checkTimeFormat.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/collectResults.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/dataframeToRds.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/divideDataIntoIntervals.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filterDaytime.html</loc>
@@ -67,19 +46,19 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/makeProject.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/phonedata.html</loc>
-  </url>
-  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/slidingWindow.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/sqlToRds.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/studentlife_small.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/timeToSec.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/useDataframe.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/useSqlDatabase.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/fxtract.html</loc>

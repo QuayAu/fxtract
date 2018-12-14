@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Iniates batchtools functionality — makeProject • fxtract</title>
+<title>Writes single RDS files from an R dataframe. — useDataframe • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,15 +30,10 @@
 
 
 
-<meta property="og:title" content="Iniates batchtools functionality — makeProject" />
+<meta property="og:title" content="Writes single RDS files from an R dataframe. — useDataframe" />
 
-<meta property="og:description" content="This function iniates batchtools functionality of this package.
-Check the tutorial on the github page!
-Every desired function will be calculated for each grouping variable (e.g. each participant of a study).
-The data will be saved as an RDS-file for each grouping variable.
-This enables the possibility to calculate features even if all raw data cannot be loaded into RAM.
-Feature extraction can be paused and restarted at a later time, even on a different machine.
-Parallelization can be done via batchtools." />
+<meta property="og:description" content="Given an R dataframe with a grouping variable (defined by the project object), this function saves single RDS files for every grouping variable.
+Parallelization is available via foreach." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -142,46 +137,45 @@ Parallelization can be done via batchtools." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Iniates batchtools functionality</h1>
+    <h1>Writes single RDS files from an R dataframe.</h1>
     <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/batchtools.R'><code>R/batchtools.R</code></a></small>
-    <div class="hidden name"><code>makeProject.Rd</code></div>
+    <div class="hidden name"><code>useDataframe.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function iniates batchtools functionality of this package.
-Check the tutorial on the github page!
-Every desired function will be calculated for each grouping variable (e.g. each participant of a study).
-The data will be saved as an RDS-file for each grouping variable.
-This enables the possibility to calculate features even if all raw data cannot be loaded into RAM.
-Feature extraction can be paused and restarted at a later time, even on a different machine.
-Parallelization can be done via <cite>batchtools</cite>.</p>
+    <p>Given an R dataframe with a grouping variable (defined by the project object), this function saves single RDS files for every grouping variable.
+Parallelization is available via foreach.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>makeProject</span>(<span class='no'>newProjectName</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>useDataframe</span>(<span class='no'>project</span>, <span class='no'>dataframe</span>, <span class='no'>group_by</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>newProjectName</th>
-      <td><p>character. The new project name. A subfolder under the (created) folder `projects` will be created.</p></td>
+      <th>project</th>
+      <td><p>fxtract_project object created by <code><a href='makeProject.html'>makeProject</a></code>.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>other arguments passed to <code><a href='http://www.rdocumentation.org/packages/batchtools/topics/makeExperimentRegistry'>batchtools::makeExperimentRegistry</a></code></p></td>
+      <th>dataframe</th>
+      <td><p>R dataframe.</p></td>
+    </tr>
+    <tr>
+      <th>group_by</th>
+      <td><p>character. The grouping variable.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>fxtract_project object.</p>
+    <p>fxtract_project</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>project</span> <span class='kw'>=</span> <span class='fu'>makeProject</span>(<span class='st'>"my_project"</span>)
+<span class='fu'>useDataframe</span>(<span class='no'>project</span>, <span class='no'>studenlife.small</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
