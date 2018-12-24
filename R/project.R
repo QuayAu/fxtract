@@ -106,6 +106,51 @@ Project = R6Class("Project",
     submit_jobs = function(ids = NULL, resources = list(), sleep = NULL) {
       batchtools::submitJobs(ids = ids, resources = resources, sleep = sleep, reg = self$reg)
       return(invisible(self))
+    },
+    get_project_status = function() {
+      problem = vars = funs = NULL
+      reg = self$reg
+      jt = batchtools::getJobTable(reg = reg)
+      jt = data.frame(jt)
+    
+      jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
+    
+      dcast_formula = as.formula("problem ~ algorithm")
+    
+      res = data.table::dcast(data.table::setDT(jt), dcast_formula, value.var = "really_done")
+      doneFun = function(x) ifelse(!is.na(x), 1, 0)
+      res = res %>% dplyr::mutate_at(dplyr::vars(-problem), dplyr::funs(doneFun))
+    
+      res2 = list(detailed = res)
+      res2[["problem_wise"]] = data.frame(problem = res$problem,
+        finished = res %>% dplyr::select(-problem) %>% rowMeans())
+      res2[["feature_wise"]] = res %>% dplyr::select(-problem) %>% colMeans()
+      res2
+    },
+    collect_results = function() {
+      feature = job.id = problem = algorithm = NULL
+      reg = self$reg
+      res = batchtools::reduceResultsDataTable(reg = reg)
+      jt = batchtools::getJobTable(reg = reg)
+      lookup = jt %>% select(job.id, problem, algorithm)
+    
+      features = getProjectStatus(project)$feature_wise
+      features = names(features[features != 0])
+    
+      results = foreach::foreach(feature = features) %dopar% {
+        ids = lookup %>% filter(algorithm %in% feature)
+        res_feat = res[job.id %in% ids$job.id]
+        listOfDataframes = res_feat$result %>% setNames(res_feat$job.id)
+        dplyr::bind_rows(listOfDataframes)
+      }
+    
+      final_result = results[[1]]
+      if (length(results) >= 2) {
+        for (i in 2:length(results)) {
+         final_result = final_result %>% dplyr::full_join(results[[i]])
+        }
+      }
+      final_result
     }
   )
 )
