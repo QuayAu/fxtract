@@ -70,9 +70,10 @@ Project = R6Class("Project",
       }
       return(invisible(self))
     },
-    remove_batchtools_problems = function(problem) {
+    remove_batchtools_problem = function(problem) {
       problem = sub('.*\\/', '', problem) #regex: removes everything before "/", makes auto completion possible by listing files under batchtools_problems
       batchtools::removeProblems(problem, reg = self$reg)
+      unlink(paste0(self$dir, "/batchtools_problems/", problem))
       return(invisible(self))
     },
     add_feature = function(fun) {
@@ -87,9 +88,10 @@ Project = R6Class("Project",
       batchtools::addExperiments(algo.designs = algo.designs)
       return(invisible(self))
     },
-    remove_feature = function(feature) {
-      feature = sub('.*\\/', '', feature) #regex: removes everything before "/", makes auto completion possible by listing files under batchtools_algorithms
-      batchtools::removeAlgorithms(feature, reg = self$reg)
+    remove_batchtools_algorithm = function(algorithm) {
+      algorithm = sub('.*\\/', '', algorithm) #regex: removes everything before "/", makes auto completion possible by listing files under batchtools_algorithms
+      batchtools::removeAlgorithms(algorithm, reg = self$reg)
+      unlink(paste0(self$dir, "/batchtools_algorithms/", algorithm))
       return(invisible(self))
     },
     get_project_status = function() {

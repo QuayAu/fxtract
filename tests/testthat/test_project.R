@@ -86,3 +86,48 @@ test_that("add_batchtools_problems", {
   x$use_dataframe(iris, group_by = "Species")
   expect_error(x$add_batchtools_problems(n.chunks = 4), regexp = "n.chunks > number of different grouping variables!")
 })
+
+test_that("remove_batchtools_problem", {
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$use_dataframe(iris, group_by = "Species")
+  x$add_batchtools_problems()
+  x$remove_batchtools_problem("projects/my_project/batchtools_problems/setosa")
+  expect_equal(x$reg$problems, c("versicolor", "virginica"))
+  expect_equal(list.files("projects/my_project/batchtools_problems/"), c("versicolor", "virginica"))
+  x$remove_batchtools_problem("versicolor")
+  expect_equal(x$reg$problems, c("virginica"))
+  expect_equal(list.files("projects/my_project/batchtools_problems/"), c("virginica"))
+})
+
+test_that("add_feature", {
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$use_dataframe(iris, group_by = "Species")
+  x$add_batchtools_problems()
+  
+  sepal_length_fun = function(data) {
+    c(mean_sepal_length = mean(data$Sepal.Length),
+      max_sepal_length = max(data$Sepal.Length),
+      sd_sepal_length = sd(data$Sepal.Length)
+    )
+  }
+  sepal_width_fun = function(data) {
+    c(mean_sepal_width = mean(data$Sepal.Width),
+      max_sepal_width = max(data$Sepal.Width),
+      sd_sepal_width = sd(data$Sepal.Width)
+    )
+  }
+  
+  x$add_feature(sepal_length_fun)
+  x$add_feature(sepal_width_fun)  
+  expect_equal(x$reg$algorithms, c("sepal_length_fun", "sepal_width_fun"))
+
+  #test remove features
+  x$remove_batchtools_algorithm("projects/my_project/batchtools_algorithms/sepal_length_fun")
+  expect_equal(x$reg$algorithms, c("sepal_width_fun"))
+
+  x$add_feature(sepal_length_fun)
+  x$remove_batchtools_algorithm("sepal_length_fun")
+  expect_equal(x$reg$algorithms, c("sepal_width_fun"))
+})
