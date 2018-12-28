@@ -4,6 +4,7 @@
 #' @import R6
 #' @import dplyr
 #' @import batchtools
+#' @importFrom foreach "%dopar%"
 NULL
 
 #' @export
@@ -25,13 +26,15 @@ Project = R6Class("Project",
       if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
       dir.create(newDirPath)
       dir.create(paste0(newDirPath, "/raw_rds_files"))
+      dir.create(paste0(newDirPath, "/batchtools_problems"))
+      dir.create(paste0(newDirPath, "/batchtools_algorithms"))
       self$dir = newDirPath
       self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"), ...)
       self$data = list()
     },
     use_dataframe = function(dataframe, group_by) {
       i = NULL
-      checkmate::assertDataFrame(dataframe)
+      checkmate::assert_data_frame(dataframe)
       checkmate::assert_subset(group_by, colnames(dataframe))
       gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
       foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
@@ -68,6 +71,7 @@ Project = R6Class("Project",
         for (id in rds_files$files) {
           data_id = readRDS(paste0(self$dir, "/raw_rds_files/", id))
           name = gsub(".RDS", "", id)
+          write.table(NULL, file = paste0(self$dir, "/batchtools_problems/", name))
           batchtools::addProblem(name = name, data = data_id, reg = self$reg)
         }  
       } else {
@@ -80,18 +84,21 @@ Project = R6Class("Project",
             readRDS(paste0(self$dir, "/raw_rds_files/", f))
           }
           data_chunk = dplyr::bind_rows(x)
-          batchtools::addProblem(name = paste0("chunk_", z), data = data_chunk, reg = self$reg)
+          name = paste0("chunk_", z)
+          write.table(NULL, file = paste0(self$dir, "/batchtools_problems/", name))
+          batchtools::addProblem(name = name, data = data_chunk, reg = self$reg)
         }
       }
       return(invisible(self))
     },
     add_feature = function(fun) {
+      write.table(NULL, file = paste0(self$dir, "/batchtools_algorithms/", deparse(substitute(fun))))
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))))
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
         fun = function(job, data, instance) fxtract::calc_feature(data, group_col = self$group_by, fun = fun)
       )
-      algo.designs = replicate(1L, data.table(), simplify = FALSE)
+      algo.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
       names(algo.designs) = deparse(substitute(fun))
       batchtools::addExperiments(algo.designs = algo.designs)
       return(invisible(self))
@@ -122,7 +129,7 @@ Project = R6Class("Project",
       res = batchtools::reduceResultsDataTable(reg = reg)
       jt = batchtools::getJobTable(reg = reg)
       lookup = jt %>% select(job.id, problem, algorithm)
-      features = getProjectStatus(project)$feature_wise
+      features = self$get_project_status(self)$feature_wise
       features = names(features[features != 0])
       results = foreach::foreach(feature = features) %dopar% {
         ids = lookup %>% filter(algorithm %in% feature)
