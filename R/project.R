@@ -30,18 +30,24 @@ Project = R6Class("Project",
       i = NULL
       checkmate::assert_data_frame(dataframe)
       checkmate::assert_subset(group_by, colnames(dataframe))
+      if (is.null(self$group_by)) self$group_by = group_by
+      if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by, 
+        ". Only one group_by variable is allowed per project!"))
       gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
       foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
         dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
         saveRDS(dataframe_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
+        message(paste0("Saving raw RDS file " , i, ".RDS ", "on disk."))
       }
-      self$group_by = group_by
       return(invisible(self))
     },
     use_sql_database = function(file.dir, tbl_name, group_by) {
       i = NULL
       checkmate::assert_character(tbl_name)
       checkmate::assert_character(group_by)
+      if (is.null(self$group_by)) self$group_by = group_by
+      if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by, 
+        ". Only one group_by variable is allowed per project!"))
       db = dplyr::src_sqlite(file.dir, create = FALSE)
       logs = dplyr::tbl(db, from = tbl_name)
       checkmate::assert_subset(group_by, colnames(logs))
@@ -52,7 +58,6 @@ Project = R6Class("Project",
         logs_i = logs %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
         saveRDS(logs_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
       }
-      self$group_by = group_by
       return(invisible(self))
     },
     add_batchtools_problems = function(n.chunks) {
