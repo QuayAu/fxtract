@@ -41,25 +41,6 @@ Project = R6Class("Project",
       }
       return(invisible(self))
     },
-    use_sql_database = function(file.dir, tbl_name, group_by) {
-      i = NULL
-      checkmate::assert_character(tbl_name)
-      checkmate::assert_character(group_by)
-      if (is.null(self$group_by)) self$group_by = group_by
-      if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by, 
-        ". Only one group_by variable is allowed per project!"))
-      db = dplyr::src_sqlite(file.dir, create = FALSE)
-      logs = dplyr::tbl(db, from = tbl_name)
-      checkmate::assert_subset(group_by, colnames(logs))
-      gb = logs %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
-      foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
-        db = dplyr::src_sqlite(file.dir, create = FALSE)
-        logs = dplyr::tbl(db, from = tbl_name)
-        logs_i = logs %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(logs_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
-      }
-      return(invisible(self))
-    },
     add_batchtools_problems = function(n.chunks) {
       chunk = files = f = NULL
       rds_files = list.files(path = paste0(self$dir, "/raw_rds_files"))
@@ -108,10 +89,6 @@ Project = R6Class("Project",
     remove_feature = function(feature) {
       feature = sub('.*\\/', '', feature) #regex: remove everything before "/", makes auto completion possible by listing files under batchtools_algorithms
       batchtools::removeAlgorithms(feature, reg = self$reg)
-      return(invisible(self))
-    },
-    submit_jobs = function(ids = NULL, resources = list(), sleep = NULL) {
-      batchtools::submitJobs(ids = ids, resources = resources, sleep = sleep, reg = self$reg)
       return(invisible(self))
     },
     get_project_status = function() {

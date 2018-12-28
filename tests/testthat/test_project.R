@@ -52,4 +52,8 @@ test_that("use_dataframe", {
   
   #test second dataframe different group by error
   expect_error(x$use_dataframe(iris, group_by = "Petal.Length"), regexp = "he group_by variable was set to Species. Only one group_by variable is allowed per project!")
+
+  unlink("projects", recursive = TRUE)
 })
+
+
