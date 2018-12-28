@@ -12,16 +12,11 @@ Project = R6Class("Project",
   public = list(
     project_name = NULL,
     dir = NULL,
-    data = NULL,
-    features = NULL,
-    project_status = NULL,
     group_by = NULL,
     reg = NULL,
-    result = NULL,
     initialize = function(project_name, ...) {
       self$project_name = checkmate::assert_character(project_name)
       newDirPath = paste0("projects/", project_name)
-      if (dir.exists("projects")) print("The project folder 'projects' already exists. The new project will be saved in this folder")
       if (!dir.exists("projects")) dir.create("projects")
       if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
       dir.create(newDirPath)
@@ -30,7 +25,6 @@ Project = R6Class("Project",
       dir.create(paste0(newDirPath, "/batchtools_algorithms"))
       self$dir = newDirPath
       self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"), ...)
-      self$data = list()
     },
     use_dataframe = function(dataframe, group_by) {
       i = NULL
@@ -42,7 +36,6 @@ Project = R6Class("Project",
         saveRDS(dataframe_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
       }
       self$group_by = group_by
-      self$data = c(self$data, as.character(gb))
       return(invisible(self))
     },
     use_sql_database = function(file.dir, tbl_name, group_by) {
@@ -60,7 +53,6 @@ Project = R6Class("Project",
         saveRDS(logs_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
       }
       self$group_by = group_by
-      self$data = c(self$data, as.character(gb))
       return(invisible(self))
     },
     add_batchtools_problems = function(n.chunks) {
