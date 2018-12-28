@@ -91,6 +91,11 @@ Project = R6Class("Project",
       }
       return(invisible(self))
     },
+    remove_batchtools_problems = function(problem) {
+      problem = sub('.*\\/', '', problem) #regex: remove everything before "/", makes auto completion possible by listing files under batchtools_problems
+      batchtools::removeProblems(problem, reg = self$reg)
+      return(invisible(self))
+    },
     add_feature = function(fun) {
       write.table(NULL, file = paste0(self$dir, "/batchtools_algorithms/", deparse(substitute(fun))))
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))))
@@ -101,6 +106,11 @@ Project = R6Class("Project",
       algo.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
       names(algo.designs) = deparse(substitute(fun))
       batchtools::addExperiments(algo.designs = algo.designs)
+      return(invisible(self))
+    },
+    remove_feature = function(feature) {
+      feature = sub('.*\\/', '', feature) #regex: remove everything before "/", makes auto completion possible by listing files under batchtools_algorithms
+      batchtools::removeAlgorithms(feature, reg = self$reg)
       return(invisible(self))
     },
     submit_jobs = function(ids = NULL, resources = list(), sleep = NULL) {
@@ -129,13 +139,13 @@ Project = R6Class("Project",
       res = batchtools::reduceResultsDataTable(reg = reg)
       jt = batchtools::getJobTable(reg = reg)
       lookup = jt %>% select(job.id, problem, algorithm)
-      features = self$get_project_status(self)$feature_wise
+      features = self$get_project_status()$feature_wise
       features = names(features[features != 0])
       results = foreach::foreach(feature = features) %dopar% {
         ids = lookup %>% filter(algorithm %in% feature)
         res_feat = res[job.id %in% ids$job.id]
-        listOfDataframes = res_feat$result %>% setNames(res_feat$job.id)
-        dplyr::bind_rows(listOfDataframes)
+        list_of_dataframes = res_feat$result %>% setNames(res_feat$job.id)
+        dplyr::bind_rows(list_of_dataframes)
       }
       final_result = results[[1]]
       if (length(results) >= 2) {
