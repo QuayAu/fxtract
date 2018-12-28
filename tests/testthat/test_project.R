@@ -51,9 +51,38 @@ test_that("use_dataframe", {
   expect_equal(x$group_by, "Species")
   
   #test second dataframe different group by error
-  expect_error(x$use_dataframe(iris, group_by = "Petal.Length"), regexp = "he group_by variable was set to Species. Only one group_by variable is allowed per project!")
+  expect_error(x$use_dataframe(iris, group_by = "Petal.Length"), regexp = "The group_by variable was set to Species. Only one group_by variable is allowed per project!")
 
   unlink("projects", recursive = TRUE)
 })
 
-
+test_that("add_batchtools_problems", {
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$use_dataframe(iris, group_by = "Species")
+  x$add_batchtools_problems()
+  expect_equal(x$reg$problems, c("setosa", "versicolor", "virginica"))
+  
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$use_dataframe(iris, group_by = "Species")
+  x$add_batchtools_problems(n.chunks = 1)
+  expect_equal(x$reg$problems, c("chunk_1"))
+  
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$use_dataframe(iris, group_by = "Species")
+  x$add_batchtools_problems(n.chunks = 2)
+  expect_setequal(x$reg$problems, c("chunk_1", "chunk_2"))
+  
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$use_dataframe(iris, group_by = "Species")
+  x$add_batchtools_problems(n.chunks = 3)
+  expect_setequal(x$reg$problems, c("chunk_1", "chunk_2", "chunk_3"))
+  
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$use_dataframe(iris, group_by = "Species")
+  expect_error(x$add_batchtools_problems(n.chunks = 4), regexp = "n.chunks > number of different grouping variables!")
+})

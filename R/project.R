@@ -56,6 +56,7 @@ Project = R6Class("Project",
         checkmate::assertIntegerish(n.chunks)
         rds_files$chunk = batchtools::chunk(1:nrow(rds_files), n.chunks = n.chunks)
         chunks = unique(rds_files$chunk)
+        if (n.chunks > length(chunks)) stop("n.chunks > number of different grouping variables!")
         for (z in chunks) {
           files = rds_files %>% dplyr::filter(chunk == z) %>% dplyr::pull(files) %>% as.character()
           x = foreach::foreach(f = files) %dopar% {
@@ -70,7 +71,7 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     remove_batchtools_problems = function(problem) {
-      problem = sub('.*\\/', '', problem) #regex: remove everything before "/", makes auto completion possible by listing files under batchtools_problems
+      problem = sub('.*\\/', '', problem) #regex: removes everything before "/", makes auto completion possible by listing files under batchtools_problems
       batchtools::removeProblems(problem, reg = self$reg)
       return(invisible(self))
     },
@@ -87,7 +88,7 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     remove_feature = function(feature) {
-      feature = sub('.*\\/', '', feature) #regex: remove everything before "/", makes auto completion possible by listing files under batchtools_algorithms
+      feature = sub('.*\\/', '', feature) #regex: removes everything before "/", makes auto completion possible by listing files under batchtools_algorithms
       batchtools::removeAlgorithms(feature, reg = self$reg)
       return(invisible(self))
     },
