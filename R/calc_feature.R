@@ -1,12 +1,11 @@
-#' Calculates a given function grouped by \code{group_col}.
+#' Calculates a given function for each grouping variable.
 #'
 #' @template param_data
 #' @template param_group_col
 #' @param fun function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.
 #' @template param_check_fun
-#' @param summarize function. If more than one value is returned for each group, this function summarizes these values to one value or more values. E.g. mean or/and sd.
-#' @param colname character. If one variable is returned for each group, you can specify a custom column name for this new column.
-#' @family feature functions
+#' @param summarize function. If more than one value is returned for each grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.
+#' @param colname character. If one variable is returned for each grouping variable, you can specify a custom column name for this new column.
 #' @return dataframe
 #' @importFrom dplyr group_by do one_of
 #' @importFrom magrittr "%>%"
@@ -19,8 +18,8 @@
 #'     dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
 #'   )
 #' }
-#' calcFeature(data = studentlife_small, group_col = "userId", fun = fun)
-calcFeature = function(data, group_col, fun, check_fun = TRUE, summarize, colname) {
+#' calc_feature(data = studentlife_small, group_col = "userId", fun = fun)
+calc_feature = function(data, group_col, fun, check_fun = TRUE, summarize, colname) {
   . = NULL
   checkmate::assertDataFrame(data)
   checkmate::assertNames(names(data), must.include = group_col)

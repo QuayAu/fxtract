@@ -1,6 +1,6 @@
 #' Helper function. Checks if character has correct time format 'hh:mm:ss'.
 #' @param x character vector.
-checkTimeFormat = function(x) {
+check_time_format = function(x) {
   for (i in 1:length(x)) {
     if (as.numeric(substr(x[i], 1, 2)) >= 24) stop("hours cannot exceed 23.")
     if (!grepl(pattern = "[012][[:digit:]]:[012345][[:digit:]]:[012345][[:digit:]]", x = x[i])) stop("character must be a time format like '15:21:30'")
@@ -11,8 +11,8 @@ checkTimeFormat = function(x) {
 #' @param x character vector.
 #' @return numeric vector. Number of seconds.
 #' @export
-timeToSec = function(x) {
-  checkTimeFormat(x)
+time_to_sec = function(x) {
+  check_time_format(x)
   y = strsplit(x, ":")
   y = lapply(y, as.numeric)
   f = function(z) 3600*z[1] + 60*z[2] + z[3]
@@ -32,7 +32,7 @@ timeToSec = function(x) {
 #' @return dataframe with added ordered factor variable 'weekday'.
 #' @importFrom lubridate wday as_datetime
 #' @export
-addWeekday = function(data, utc_col = character(1), tz = "UTC", unit = "s", week_start = 1, locale = "English_United States.1252") {
+add_weekday = function(data, utc_col = character(1), tz = "UTC", unit = "s", week_start = 1, locale = "English_United States.1252") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
@@ -68,7 +68,7 @@ addWeekday = function(data, utc_col = character(1), tz = "UTC", unit = "s", week
 #' @return dataframe with added variable 'time'.
 #' @importFrom lubridate as_datetime
 #' @export
-addTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
+add_time = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
@@ -99,7 +99,7 @@ addTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
 #' @return dataframe with added variable 'date'.
 #' @importFrom lubridate as_datetime as_date
 #' @export
-addDate = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
+add_date = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
@@ -130,7 +130,7 @@ addDate = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
 #' @return dataframe with added variable 'date_time'.
 #' @importFrom lubridate as_datetime
 #' @export
-addDateTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
+add_date_time = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(tz)
   checkmate::assertCharacter(unit)
@@ -164,7 +164,7 @@ addDateTime = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
 #' @importFrom dplyr filter select
 #' @importFrom magrittr "%>%"
 #' @export
-filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_day = "Sun", until_time = "23:59:59") {
+filter_weekday = function(data, from_day = "Mon", from_time = "00:00:00", until_day = "Sun", until_time = "23:59:59") {
   weekday = time_in_sec = NULL
   # check inputs
   checkmate::assertDataFrame(data)
@@ -172,13 +172,13 @@ filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_d
   checkmate::assertCharacter(from_time)
   checkmate::assertCharacter(until_day)
   checkmate::assertCharacter(until_time)
-  checkTimeFormat(from_time)
-  checkTimeFormat(until_time)
+  check_time_format(from_time)
+  check_time_format(until_time)
 
   # check data
   lw = levels(data$weekday)
-  if (!"weekday" %in% colnames(data)) stop("Your data set needs a column named 'weekday'. See function addWeekday().")
-  if (!"time" %in% colnames(data)) stop("Your data set needs a column named 'time'. See function addTime().")
+  if (!"weekday" %in% colnames(data)) stop("Your data set needs a column named 'weekday'. See function add_weekday().")
+  if (!"time" %in% colnames(data)) stop("Your data set needs a column named 'time'. See function add_time().")
   if (!is.ordered(data$weekday)) stop("The variable 'weekday' must be an ordered factor, e.g. Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun")
   # if (length(lw) != 7) warning("The variable 'weekday' does not have 7 levels. Please check your data!") #do we need this check?
 
@@ -195,13 +195,12 @@ filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_d
   if (nrow(df_res) == 0) stop("there are no dataset entries within the chosen time interval")
 
   # convert timestamp character string input and time variable of dataset into numeric (in seconds) starting from time 00:00:00
-  ft = timeToSec(from_time)
-  ut = timeToSec(until_time)
-  df_res$time_in_sec = timeToSec(df_res$time)
+  ft = time_to_sec(from_time)
+  ut = time_to_sec(until_time)
+  df_res$time_in_sec = time_to_sec(df_res$time)
 
   # filter dataset according to from_time and until_time
   df_res = df_res %>% dplyr::filter(time_in_sec >= ft | weekday != from_day, time_in_sec <= ut | weekday != until_day) %>% dplyr::select(-time_in_sec)
-
   return(df_res)
 }
 
@@ -216,23 +215,23 @@ filterWeekday = function(data, from_day = "Mon", from_time = "00:00:00", until_d
 #' @importFrom dplyr filter select
 #' @importFrom magrittr "%>%"
 #' @export
-filterDaytime = function(data, from_time = "07:00:00", until_time = "18:00:00") {
+filter_daytime = function(data, from_time = "07:00:00", until_time = "18:00:00") {
   time_in_sec = NULL
   # check inputs
   checkmate::assertDataFrame(data)
   checkmate::assertCharacter(from_time)
   checkmate::assertCharacter(until_time)
-  checkTimeFormat(from_time)
-  checkTimeFormat(until_time)
+  check_time_format(from_time)
+  check_time_format(until_time)
 
-  if (!"time" %in% colnames(data)) stop("Your data set needs a column named 'time'. See function addTime().")
+  if (!"time" %in% colnames(data)) stop("Your data set needs a column named 'time'. See function add_time().")
 
   # convert timestamp character string input and time variable of dataset into numeric (in seconds) starting from time 00:00:00
-  ft = timeToSec(from_time)
-  ut = timeToSec(until_time)
+  ft = time_to_sec(from_time)
+  ut = time_to_sec(until_time)
 
   res = data
-  res$time_in_sec = timeToSec(res$time)
+  res$time_in_sec = time_to_sec(res$time)
 
   if (ft <= ut) {
     res = res %>% filter(time_in_sec >= ft & time_in_sec <= ut) %>% select(-time_in_sec)

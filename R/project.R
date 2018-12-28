@@ -89,7 +89,7 @@ Project = R6Class("Project",
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))))
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
-        fun = function(job, data, instance) fxtract::calcFeature(data, group_col = self$group_by, fun = fun)
+        fun = function(job, data, instance) fxtract::calc_feature(data, group_col = self$group_by, fun = fun)
       )
       algo.designs = replicate(1L, data.table(), simplify = FALSE)
       names(algo.designs) = deparse(substitute(fun))

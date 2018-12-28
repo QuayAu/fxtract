@@ -2,76 +2,76 @@ context("Helpers")
 
 test_that("test_non_exported", {
   x = "23:14:21"
-  expect_silent(checkTimeFormat(x))
+  expect_silent(check_time_format(x))
 
   x = c(x, x)
-  expect_silent(checkTimeFormat(x))
+  expect_silent(check_time_format(x))
 
   x = "25:14:22"
-  expect_error(checkTimeFormat(x), regexp = "hours cannot exceed 23.")
+  expect_error(check_time_format(x), regexp = "hours cannot exceed 23.")
 
   x = c("01:02:02", x)
-  expect_error(checkTimeFormat(x), regexp = "hours cannot exceed 23.")
+  expect_error(check_time_format(x), regexp = "hours cannot exceed 23.")
 
   x = "14:96:53"
-  expect_error(checkTimeFormat(x), regexp = "character must be a time format like '15:21:30'")
+  expect_error(check_time_format(x), regexp = "character must be a time format like '15:21:30'")
 
   x = "13:42:60"
-  expect_error(checkTimeFormat(x), regexp = "character must be a time format like '15:21:30'")
+  expect_error(check_time_format(x), regexp = "character must be a time format like '15:21:30'")
 })
 
 test_that("test_wrong_inputs", {
   td = data.frame(timestamp = c(1, 2, 3))
   #data
-  expect_error(addWeekday(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
-  expect_error(addTime(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
-  expect_error(addDate(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
-  expect_error(addDateTime(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(add_weekday(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(add_time(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(add_date(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
+  expect_error(add_date_time(data = "test"), regexp = "Assertion on 'data' failed: Must be of type 'data.frame', not 'character'.")
 
   #tz
-  expect_error(addWeekday(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
-  expect_error(addTime(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
-  expect_error(addDate(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
-  expect_error(addDateTime(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
+  expect_error(add_weekday(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
+  expect_error(add_time(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
+  expect_error(add_date(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
+  expect_error(add_date_time(data = td, tz = 1), regexp = "Assertion on 'tz' failed: Must be of type 'character', not 'double'.")
 
   #unit
-  expect_error(addWeekday(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
-  expect_error(addTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
-  expect_error(addDate(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
-  expect_error(addDateTime(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
+  expect_error(add_weekday(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
+  expect_error(add_time(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
+  expect_error(add_date(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
+  expect_error(add_date_time(data = td, unit = 1), regexp = "Assertion on 'unit' failed: Must be of type 'character', not 'double'.")
 
-  expect_error(addWeekday(data = td, unit = "S"))
-  expect_error(addTime(data = td, unit = "S"))
-  expect_error(addDate(data = td, unit = "S"))
-  expect_error(addDateTime(data = td, unit = "S"))
+  expect_error(add_weekday(data = td, unit = "S"))
+  expect_error(add_time(data = td, unit = "S"))
+  expect_error(add_date(data = td, unit = "S"))
+  expect_error(add_date_time(data = td, unit = "S"))
 
   #utc_col
-  expect_error(addWeekday(data = td, utc_col = "ts"))
-  expect_error(addTime(data = td, utc_col = "ts"))
-  expect_error(addDate(data = td, utc_col = "ts"))
-  expect_error(addDateTime(data = td, utc_col = "ts"))
+  expect_error(add_weekday(data = td, utc_col = "ts"))
+  expect_error(add_time(data = td, utc_col = "ts"))
+  expect_error(add_date(data = td, utc_col = "ts"))
+  expect_error(add_date_time(data = td, utc_col = "ts"))
 
-  expect_error(addWeekday(data = td), regexp = "please specify timestamp column")
-  expect_error(addTime(data = td), regexp = "please specify timestamp column")
-  expect_error(addDate(data = td), regexp = "please specify timestamp column")
-  expect_error(addDateTime(data = td), regexp = "please specify timestamp column")
+  expect_error(add_weekday(data = td), regexp = "please specify timestamp column")
+  expect_error(add_time(data = td), regexp = "please specify timestamp column")
+  expect_error(add_date(data = td), regexp = "please specify timestamp column")
+  expect_error(add_date_time(data = td), regexp = "please specify timestamp column")
 
-  #addWeekday
-  expect_error(addWeekday(data = td, week_start = "Mon"), regexp = "Assertion on 'week_start' failed: Must be of type 'numeric', not 'character'.")
+  #add_weekday
+  expect_error(add_weekday(data = td, week_start = "Mon"), regexp = "Assertion on 'week_start' failed: Must be of type 'numeric', not 'character'.")
   td$weekday = c("Mon", "Tue", "Wed")
-  expect_warning(addWeekday(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'weekday'. It will be overwritten!")
+  expect_warning(add_weekday(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'weekday'. It will be overwritten!")
 
-  #addTime
+  #add_time
   td$time = c("11:01:17", "01:01:01", "02:05:08")
-  expect_warning(addTime(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'time'. It will be overwritten!")
+  expect_warning(add_time(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'time'. It will be overwritten!")
 
-  #addDate
+  #add_date
   td$date = c("2018-07-12", "1999-01-01", "1950-01-01")
-  expect_warning(addDate(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'date'. It will be overwritten!")
+  expect_warning(add_date(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'date'. It will be overwritten!")
 
-  #addDate
+  #add_date
   td$date_time = c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")
-  expect_warning(addDateTime(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'date_time'. It will be overwritten!")
+  expect_warning(add_date_time(td, utc_col = "timestamp"), regexp = "Your dataset already has a column named 'date_time'. It will be overwritten!")
 })
 
 
@@ -90,103 +90,103 @@ test_that("add_time_variables", {
   td4$timestamp = NULL
 
   #character timestamp
-  expect_message(addWeekday(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
-  expect_message(addTime(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
-  expect_message(addDate(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
-  expect_message(addDateTime(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
+  expect_message(add_weekday(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
+  expect_message(add_time(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
+  expect_message(add_date(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
+  expect_message(add_date_time(td3, utc_col = "timestamp"), regexp = "timestamp was converted from character to numeric")
 
-  #check addWeekday
+  #check add_weekday
   expected = c("Thu", "Fri", "Sun")
-  x = addWeekday(td, utc_col = "timestamp")
+  x = add_weekday(td, utc_col = "timestamp")
   expect_equal(as.character(x$weekday), expected)
 
-  x = addWeekday(td2, utc_col = "timestamp", unit = "ms")
+  x = add_weekday(td2, utc_col = "timestamp", unit = "ms")
   expect_equal(as.character(x$weekday), expected)
 
-  x = addWeekday(td3, utc_col = "timestamp")
+  x = add_weekday(td3, utc_col = "timestamp")
   expect_equal(as.character(x$weekday), expected)
 
-  x = addWeekday(td4, utc_col = "utc")
+  x = add_weekday(td4, utc_col = "utc")
   expect_equal(as.character(x$weekday), expected)
 
   ##change locale
-  expect_message(addWeekday(data = td, utc_col = "timestamp", locale = "Deu"), regexp = "locale was changed. Use at own risk.")
-  expect_message(addWeekday(data = td, utc_col = "timestamp", locale = "Esp"), regexp = "locale was changed. Use at own risk.")
+  expect_message(add_weekday(data = td, utc_col = "timestamp", locale = "Deu"), regexp = "locale was changed. Use at own risk.")
+  expect_message(add_weekday(data = td, utc_col = "timestamp", locale = "Esp"), regexp = "locale was changed. Use at own risk.")
 
-  #check addTime
+  #check add_time
   expected = c("11:01:17", "01:01:01", "02:05:08")
 
-  x = addTime(td, utc_col = "timestamp")
+  x = add_time(td, utc_col = "timestamp")
   expect_equal(as.character(x$time), expected)
 
-  x = addTime(td2, utc_col = "timestamp", unit = "ms")
+  x = add_time(td2, utc_col = "timestamp", unit = "ms")
   expect_equal(as.character(x$time), expected)
 
-  x = addTime(td3, utc_col = "timestamp")
+  x = add_time(td3, utc_col = "timestamp")
   expect_equal(as.character(x$time), expected)
 
-  x = addTime(td4, utc_col = "utc")
+  x = add_time(td4, utc_col = "utc")
   expect_equal(as.character(x$time), expected)
 
-  #check addDateTime
+  #check add_date_time
   expected = c("2018-07-12 11:01:17", "1999-01-01 01:01:01", "1950-01-01 02:05:08")
 
-  x = addDateTime(td, utc_col = "timestamp")
+  x = add_date_time(td, utc_col = "timestamp")
   expect_equal(as.character(x$date_time), expected)
 
-  x = addDateTime(td2, utc_col = "timestamp", unit = "ms")
+  x = add_date_time(td2, utc_col = "timestamp", unit = "ms")
   expect_equal(as.character(x$date_time), expected)
 
-  x = addDateTime(td3, utc_col = "timestamp")
+  x = add_date_time(td3, utc_col = "timestamp")
   expect_equal(as.character(x$date_time), expected)
 
-  x = addDateTime(td4, utc_col = "utc")
+  x = add_date_time(td4, utc_col = "utc")
   expect_equal(as.character(x$date_time), expected)
 
-  #check addDate
+  #check add_date
   expected = c("2018-07-12", "1999-01-01", "1950-01-01")
 
-  x = addDate(td, utc_col = "timestamp")
+  x = add_date(td, utc_col = "timestamp")
   expect_equal(as.character(x$date), expected)
 
-  x = addDate(td2, utc_col = "timestamp", unit = "ms")
+  x = add_date(td2, utc_col = "timestamp", unit = "ms")
   expect_equal(as.character(x$date), expected)
 
-  x = addDate(td3, utc_col = "timestamp")
+  x = add_date(td3, utc_col = "timestamp")
   expect_equal(as.character(x$date), expected)
 
-  x = addDate(td4, utc_col = "utc")
+  x = add_date(td4, utc_col = "utc")
   expect_equal(as.character(x$date), expected)
 })
 
-test_that("slidingWindow", {
+test_that("sliding_window", {
   td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
 
   fun = function(data) data.frame(sum_x_last3 = sum(data$x), max_x_last3 = max(data$x))
 
   #test steps
-  x = slidingWindow(td, fun = fun, steps = 3)
+  x = sliding_window(td, fun = fun, steps = 3)
   expect_equal(dim(x), c(21, 4))
   expect_equal(x$sum_x_last3[1:3], c(NA_integer_, NA_integer_, NA_integer_))
   expect_equal(x$sum_x_last3[4:21], c(6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57))
   expect_equal(x$max_x_last3[4:21], 3:20)
 
   ##test eval_at_rows
-  x = slidingWindow(td, fun = fun, steps = 3, eval_at_rows = c(5, 10, 15, 20))
+  x = sliding_window(td, fun = fun, steps = 3, eval_at_rows = c(5, 10, 15, 20))
   expect_equal(x$sum_x_last3[4:21], c(NA, 9, NA, NA, NA, NA, 24, NA, NA, NA, NA, 39, NA, NA, NA, NA, 54, NA))
 
   ###test steps > interval at eval_at_rows
-  x = slidingWindow(td, fun = fun, steps = 6, eval_at_rows = c(5, 10, 15, 20))
+  x = sliding_window(td, fun = fun, steps = 6, eval_at_rows = c(5, 10, 15, 20))
   expect_equal(x$sum_x_last3[4:21], c(NA, NA, NA, NA, NA, NA, 39, NA, NA, NA, NA, 69, NA, NA, NA, NA, 19 + 18 + 17 + 16 + 15 + 14, NA))
 
   ##test wrong inputs
-  expect_error(slidingWindow(td, fun = fun, time_in_sec = 5), regexp = "please specify timestamp column")
-  expect_error(slidingWindow(td, fun = fun, time_in_sec = 5, steps = 2), regexp = "Pass either steps or time_in_sec, but not both!")
-  expect_error(slidingWindow(td, fun = fun, time_in_sec = 5, utc_col = "wrong timestamp"))
-  expect_error(slidingWindow(td, fun = fun, time_in_sec = 5, utc_col = "timestamp", unit = "wrong unit"))
+  expect_error(sliding_window(td, fun = fun, time_in_sec = 5), regexp = "please specify timestamp column")
+  expect_error(sliding_window(td, fun = fun, time_in_sec = 5, steps = 2), regexp = "Pass either steps or time_in_sec, but not both!")
+  expect_error(sliding_window(td, fun = fun, time_in_sec = 5, utc_col = "wrong timestamp"))
+  expect_error(sliding_window(td, fun = fun, time_in_sec = 5, utc_col = "timestamp", unit = "wrong unit"))
 
   #test time in seconds
-  x = slidingWindow(td, fun = fun, time_in_sec = 3, utc_col = "timestamp")
+  x = sliding_window(td, fun = fun, time_in_sec = 3, utc_col = "timestamp")
 
   expect_equal(x$sum_x_last3, c(NA_integer_, 1, 3, 5, 7, 9, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
   expect_equal(x$max_x_last3, c(NA_integer_, 1:9, -Inf, 11:20))
@@ -196,27 +196,27 @@ test_that("slidingWindow", {
   td$timestamp[2] = 1.5
   td$timestamp[4] = 3.5
   td$timestamp = td$timestamp * 1000
-  x = slidingWindow(td, fun = fun, time_in_sec = 2.4, utc_col = "timestamp", unit = "ms")
+  x = sliding_window(td, fun = fun, time_in_sec = 2.4, utc_col = "timestamp", unit = "ms")
   expect_equal(x$sum_x_last3, c(NA_integer_, 1, 3, 5, 7, 5, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
 
   ##test eval_at_rows
   td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
-  x = slidingWindow(td, fun = fun, time_in_sec = 3, utc_col = "timestamp", eval_at_rows = c(5, 10, 15, 20))
+  x = sliding_window(td, fun = fun, time_in_sec = 3, utc_col = "timestamp", eval_at_rows = c(5, 10, 15, 20))
 
   expect_equal(x$sum_x_last3, c(rep(NA_integer_, 4), 7, rep(NA_integer_, 4), 17, rep(NA_integer_, 4), 27, rep(NA_integer_, 4), 37, NA))
 })
 
-test_that("filterWeekday", {
+test_that("filter_weekday", {
   td = data.frame(timestamp = 1:10)
 
   #test checks
-  expect_error(filterWeekday(td), regexp = "Your data set needs a column named 'weekday'. See function addWeekday().")
-  td = addWeekday(td, utc_col = "timestamp")
-  expect_error(filterWeekday(td), regexp = "Your data set needs a column named 'time'. See function addTime().")
-  td = addTime(td, utc_col = "timestamp")
-  expect_error(filterWeekday(td, from_day = "Fri", until_day = "Sun"), regexp = "there are no dataset entries within the chosen time interval")
+  expect_error(filter_weekday(td), regexp = "Your data set needs a column named 'weekday'. See function add_weekday().")
+  td = add_weekday(td, utc_col = "timestamp")
+  expect_error(filter_weekday(td), regexp = "Your data set needs a column named 'time'. See function add_time().")
+  td = add_time(td, utc_col = "timestamp")
+  expect_error(filter_weekday(td, from_day = "Fri", until_day = "Sun"), regexp = "there are no dataset entries within the chosen time interval")
   td$weekday = as.character(td$weekday)
-  expect_error(filterWeekday(td), regexp = "The variable 'weekday' must be an ordered factor, e.g. Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun")
+  expect_error(filter_weekday(td), regexp = "The variable 'weekday' must be an ordered factor, e.g. Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun")
 
   #test functionality
   i = 3
@@ -228,39 +228,39 @@ test_that("filterWeekday", {
   td$weekday = factor(td$weekday, levels = days, ordered = TRUE)
 
   # test correct filtering according to the given days
-  expect_equal(days %in% unique(filterWeekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Wed",
+  expect_equal(days %in% unique(filter_weekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Wed",
     until_time = "23:59:59")$weekday), c(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE))
-  expect_equal(days %in% unique(filterWeekday(data = td, from_day = "Sat", from_time = "00:00:00", until_day = "Tue",
+  expect_equal(days %in% unique(filter_weekday(data = td, from_day = "Sat", from_time = "00:00:00", until_day = "Tue",
     until_time = "23:59:59")$weekday), c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE))
-  expect_equal(days %in% unique(filterWeekday(data = td, from_day = "Tue", from_time = "11:15:23", until_day = "Thu",
+  expect_equal(days %in% unique(filter_weekday(data = td, from_day = "Tue", from_time = "11:15:23", until_day = "Thu",
     until_time = "18:36:17")$weekday), c(FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE))
-  expect_equal(days %in% unique(filterWeekday(data = td, from_day = "Sun", from_time = "11:15:23", until_day = "Mon",
+  expect_equal(days %in% unique(filter_weekday(data = td, from_day = "Sun", from_time = "11:15:23", until_day = "Mon",
     until_time = "18:36:17")$weekday), c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE))
 
   # test correct filtering according to the given times
   time1 = "11:00:00"
   time2 = "19:00:00"
-  df1 = filterWeekday(data = td, from_day = "Mon", from_time = time1, until_day = "Wed",
+  df1 = filter_weekday(data = td, from_day = "Mon", from_time = time1, until_day = "Wed",
     until_time = time2)
 
-  time1_in_sec = timeToSec(time1)
-  time2_in_sec = timeToSec(time2)
-  df1$time_in_sec = timeToSec(df1$time)
+  time1_in_sec = time_to_sec(time1)
+  time2_in_sec = time_to_sec(time2)
+  df1$time_in_sec = time_to_sec(df1$time)
   expect_true(min(df1$time_in_sec[df1$weekday == "Mon"]) >= time1_in_sec)
   expect_true(max(df1$time_in_sec[df1$weekday == "Wed"]) <= time2_in_sec)
 
   # test wrong format for from_time and until_time
-  expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:0a:00", until_day = "Sun",
+  expect_error(filter_weekday(data = td, from_day = "Mon", from_time = "00:0a:00", until_day = "Sun",
     until_time = "23:59:59"))
-  expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Sun",
+  expect_error(filter_weekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Sun",
     until_time = "23:59:5z"))
-  expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "30:00:00", until_day = "Sun",
+  expect_error(filter_weekday(data = td, from_day = "Mon", from_time = "30:00:00", until_day = "Sun",
     until_time = "23:59:59"))
-  expect_error(filterWeekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Sun",
+  expect_error(filter_weekday(data = td, from_day = "Mon", from_time = "00:00:00", until_day = "Sun",
     until_time = "23:70:59"))
 })
 
-test_that("filterDaytime", {
+test_that("filter_daytime", {
   i = 3
   td = data.frame(time = c("00:18:49", "01:12:45",
     "02:18:23", "03:29:56", "04:37:39", "05:01:31", "06:54:09", "07:43:16", "08:30:57", "09:56:20",
@@ -270,27 +270,27 @@ test_that("filterDaytime", {
   # test correct filtering according to the given times
   time1 = "11:00:00"
   time2 = "19:00:00"
-  df1 = filterDaytime(data = td, from_time = time1, until_time = time2)
+  df1 = filter_daytime(data = td, from_time = time1, until_time = time2)
 
-  time1_in_sec = timeToSec(time1)
-  time2_in_sec = timeToSec(time2)
-  df1$time_in_sec = timeToSec(df1$time)
+  time1_in_sec = time_to_sec(time1)
+  time2_in_sec = time_to_sec(time2)
+  df1$time_in_sec = time_to_sec(df1$time)
   expect_true(min(df1$time_in_sec) >= time1_in_sec)
   expect_true(max(df1$time_in_sec) <= time2_in_sec)
 
 
   time1 = "19:00:00"
   time2 = "10:00:00"
-  df1 = filterDaytime(data = td, from_time = time1, until_time = time2)
+  df1 = filter_daytime(data = td, from_time = time1, until_time = time2)
 
-  time1_in_sec = timeToSec(time1)
-  time2_in_sec = timeToSec(time2)
-  df1$time_in_sec = timeToSec(df1$time)
+  time1_in_sec = time_to_sec(time1)
+  time2_in_sec = time_to_sec(time2)
+  df1$time_in_sec = time_to_sec(df1$time)
   expect_true(all(df1$time_in_sec >= time1_in_sec | df1$time_in_sec <= time2_in_sec))
 
   # test wrong format for from_time and until_time
-  expect_error(filterDaytime(data = td, from_time = "00:0a:00", until_time = "23:59:59"))
-  expect_error(filterDaytime(data = td, from_time = "00:00:00", until_time = "23:59:5z"))
-  expect_error(filterDaytime(data = td, from_time = "30:00:00", until_time = "23:59:59"))
-  expect_error(filterDaytime(data = td, from_time = "00:00:00", until_time = "23:70:59"))
+  expect_error(filter_daytime(data = td, from_time = "00:0a:00", until_time = "23:59:59"))
+  expect_error(filter_daytime(data = td, from_time = "00:00:00", until_time = "23:59:5z"))
+  expect_error(filter_daytime(data = td, from_time = "30:00:00", until_time = "23:59:59"))
+  expect_error(filter_daytime(data = td, from_time = "00:00:00", until_time = "23:70:59"))
 })

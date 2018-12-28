@@ -15,7 +15,7 @@ makeProject(newProjectName, ...)
 fxtract_project object.
 }
 \description{
-This function iniates batchtools functionality of this package.
+This function initiates batchtools functionality of this package.
 Check the tutorial on the github page!
 Every desired function will be calculated for each grouping variable (e.g. each participant of a study).
 The data will be saved as an RDS-file for each grouping variable.

@@ -1,6 +1,6 @@
 #' Iniates batchtools functionality
 #'
-#' This function iniates batchtools functionality of this package.
+#' This function initiates batchtools functionality of this package.
 #' Check the tutorial on the github page!
 #' Every desired function will be calculated for each grouping variable (e.g. each participant of a study).
 #' The data will be saved as an RDS-file for each grouping variable.
@@ -178,14 +178,14 @@ addBatchtoolsProblems = function(project, n.chunks) {
 #' }
 addBatchtoolsAlgorithms = function(project) {
   feature_functions = list.files(path = paste0(project$dir, "/feature_functions"))
-  batchtools::batchExport(export = list(calcFeature = fxtract::calcFeature))
+  batchtools::batchExport(export = list(calc_feature = fxtract::calc_feature))
   for (feat_fun in feature_functions) {
     fun = source(paste0(project$dir, "/feature_functions/", feat_fun))
     name = gsub(".R", "", feat_fun)
     eval(parse(text = paste0(name, " = fun$value")))
     eval(parse(text = paste0("batchtools::batchExport(export = list(", name, " =", name, "))")))
     eval(parse(text = paste0(
-          "batchtools::addAlgorithm(name, fun = function(job, data, instance) fxtract::calcFeature(data, group_col = project$group_by, fun = ",
+          "batchtools::addAlgorithm(name, fun = function(job, data, instance) fxtract::calc_feature(data, group_col = project$group_by, fun = ",
           name,
           "))"
         )
