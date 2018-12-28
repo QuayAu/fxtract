@@ -18,13 +18,12 @@ Project = R6Class("Project",
     reg = NULL,
     result = NULL,
     initialize = function(project_name, ...) {
-      self$project_name = assert_character(project_name)
+      self$project_name = checkmate::assert_character(project_name)
       newDirPath = paste0("projects/", project_name)
       if (dir.exists("projects")) print("The project folder 'projects' already exists. The new project will be saved in this folder")
       if (!dir.exists("projects")) dir.create("projects")
       if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
       dir.create(newDirPath)
-      dir.create(paste0(newDirPath, "/feature_functions"))
       dir.create(paste0(newDirPath, "/raw_rds_files"))
       self$dir = newDirPath
       self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"), ...)
@@ -33,13 +32,11 @@ Project = R6Class("Project",
     use_dataframe = function(dataframe, group_by) {
       i = NULL
       checkmate::assertDataFrame(dataframe)
-      # self$group_by = group_by
       checkmate::assert_subset(group_by, colnames(dataframe))
       gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
-
       foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
         dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(dataframe_i, file = paste0(project$dir, "/raw_rds_files/", i, ".RDS"))
+        saveRDS(dataframe_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
       }
       self$group_by = group_by
       self$data = c(self$data, as.character(gb))
@@ -49,17 +46,15 @@ Project = R6Class("Project",
       i = NULL
       checkmate::assert_character(tbl_name)
       checkmate::assert_character(group_by)
-    
       db = dplyr::src_sqlite(file.dir, create = FALSE)
       logs = dplyr::tbl(db, from = tbl_name)
       checkmate::assert_subset(group_by, colnames(logs))
-    
       gb = logs %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
       foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
         db = dplyr::src_sqlite(file.dir, create = FALSE)
         logs = dplyr::tbl(db, from = tbl_name)
         logs_i = logs %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(logs_i, file = paste0(project$dir, "/raw_rds_files/", i, ".RDS"))
+        saveRDS(logs_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
       }
       self$group_by = group_by
       self$data = c(self$data, as.character(gb))
@@ -71,23 +66,21 @@ Project = R6Class("Project",
       rds_files = data.frame(files = rds_files)
       if (missing(n.chunks)) {
         for (id in rds_files$files) {
-          data_id = readRDS(paste0(project$dir, "/raw_rds_files/", id))
+          data_id = readRDS(paste0(self$dir, "/raw_rds_files/", id))
           name = gsub(".RDS", "", id)
-          batchtools::addProblem(name = name, data = data_id, reg = project$reg)
+          batchtools::addProblem(name = name, data = data_id, reg = self$reg)
         }  
       } else {
         checkmate::assertIntegerish(n.chunks)
         rds_files$chunk = batchtools::chunk(1:nrow(rds_files), n.chunks = n.chunks)
-      
         chunks = unique(rds_files$chunk)
         for (z in chunks) {
           files = rds_files %>% dplyr::filter(chunk == z) %>% dplyr::pull(files) %>% as.character()
-      
           x = foreach::foreach(f = files) %dopar% {
-            readRDS(paste0(project$dir, "/raw_rds_files/", f))
+            readRDS(paste0(self$dir, "/raw_rds_files/", f))
           }
           data_chunk = dplyr::bind_rows(x)
-          batchtools::addProblem(name = paste0("chunk_", z), data = data_chunk, reg = project$reg)
+          batchtools::addProblem(name = paste0("chunk_", z), data = data_chunk, reg = self$reg)
         }
       }
       return(invisible(self))
@@ -112,15 +105,11 @@ Project = R6Class("Project",
       reg = self$reg
       jt = batchtools::getJobTable(reg = reg)
       jt = data.frame(jt)
-    
       jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
-    
       dcast_formula = as.formula("problem ~ algorithm")
-    
       res = data.table::dcast(data.table::setDT(jt), dcast_formula, value.var = "really_done")
       doneFun = function(x) ifelse(!is.na(x), 1, 0)
       res = res %>% dplyr::mutate_at(dplyr::vars(-problem), dplyr::funs(doneFun))
-    
       res2 = list(detailed = res)
       res2[["problem_wise"]] = data.frame(problem = res$problem,
         finished = res %>% dplyr::select(-problem) %>% rowMeans())
@@ -133,17 +122,14 @@ Project = R6Class("Project",
       res = batchtools::reduceResultsDataTable(reg = reg)
       jt = batchtools::getJobTable(reg = reg)
       lookup = jt %>% select(job.id, problem, algorithm)
-    
       features = getProjectStatus(project)$feature_wise
       features = names(features[features != 0])
-    
       results = foreach::foreach(feature = features) %dopar% {
         ids = lookup %>% filter(algorithm %in% feature)
         res_feat = res[job.id %in% ids$job.id]
         listOfDataframes = res_feat$result %>% setNames(res_feat$job.id)
         dplyr::bind_rows(listOfDataframes)
       }
-    
       final_result = results[[1]]
       if (length(results) >= 2) {
         for (i in 2:length(results)) {
