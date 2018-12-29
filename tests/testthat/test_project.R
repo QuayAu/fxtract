@@ -100,7 +100,7 @@ test_that("remove_batchtools_problem", {
   expect_equal(list.files("projects/my_project/batchtools_problems/"), c("virginica"))
 })
 
-test_that("add_feature", {
+test_that("add_batchtools_algorithm", {
   unlink("projects", recursive = TRUE)
   x = Project$new(project_name = "my_project")
   x$use_dataframe(iris, group_by = "Species")
@@ -119,15 +119,56 @@ test_that("add_feature", {
     )
   }
   
-  x$add_feature(sepal_length_fun)
-  x$add_feature(sepal_width_fun)  
+  x$add_batchtools_algorithm(sepal_length_fun)
+  x$add_batchtools_algorithm(sepal_width_fun)  
   expect_equal(x$reg$algorithms, c("sepal_length_fun", "sepal_width_fun"))
 
   #test remove features
   x$remove_batchtools_algorithm("projects/my_project/batchtools_algorithms/sepal_length_fun")
   expect_equal(x$reg$algorithms, c("sepal_width_fun"))
 
-  x$add_feature(sepal_length_fun)
+  x$add_batchtools_algorithm(sepal_length_fun)
   x$remove_batchtools_algorithm("sepal_length_fun")
   expect_equal(x$reg$algorithms, c("sepal_width_fun"))
 })
+
+test_that("calculate features", {
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$use_dataframe(iris, group_by = "Species")
+  x$add_batchtools_problems()
+  
+  sepal_length_fun = function(data) {
+    c(mean_sepal_length = mean(data$Sepal.Length),
+      max_sepal_length = max(data$Sepal.Length),
+      sd_sepal_length = sd(data$Sepal.Length)
+    )
+  }
+  sepal_width_fun = function(data) {
+    c(mean_sepal_width = mean(data$Sepal.Width),
+      max_sepal_width = max(data$Sepal.Width),
+      sd_sepal_width = sd(data$Sepal.Width)
+    )
+  }
+  
+  x$add_batchtools_algorithm(sepal_length_fun)
+  x$add_batchtools_algorithm(sepal_width_fun)  
+  
+  #test meaningful error message $collect_results()
+  expect_error(x$collect_results(), regexp = "No features have been calculated yet. Start calculating with method submit_jobs().")
+  
+  #test submitting jobs by batchtools
+  batchtools::submitJobs(1:2, reg = x$reg)
+  expect_equal(x$get_project_status()$perc_done, 1/3)
+  
+  #test submitting jobs by R6 method
+  x$submit_jobs(3:4)
+  expect_equal(x$get_project_status()$perc_done, 2/3)
+  
+  #calculate rest
+  x$submit_jobs()
+  expect_true(!anyNA(x$collect_results()))
+})  
+  
+  
+  

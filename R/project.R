@@ -76,7 +76,7 @@ Project = R6Class("Project",
       unlink(paste0(self$dir, "/batchtools_problems/", problem))
       return(invisible(self))
     },
-    add_feature = function(fun) {
+    add_batchtools_algorithm = function(fun) {
       write.table(NULL, file = paste0(self$dir, "/batchtools_algorithms/", deparse(substitute(fun))))
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))))
       batchtools::addAlgorithm(
@@ -94,6 +94,10 @@ Project = R6Class("Project",
       unlink(paste0(self$dir, "/batchtools_algorithms/", algorithm))
       return(invisible(self))
     },
+    submit_jobs = function(ids = NULL, resources = list(), sleep = NULL) {
+      batchtools::submitJobs(ids = ids, resources = resources, sleep = sleep, reg = self$reg)
+      return(invisible(self))
+    },
     get_project_status = function() {
       problem = vars = funs = NULL
       reg = self$reg
@@ -108,12 +112,14 @@ Project = R6Class("Project",
       res2[["problem_wise"]] = data.frame(problem = res$problem,
         finished = res %>% dplyr::select(-problem) %>% rowMeans())
       res2[["feature_wise"]] = res %>% dplyr::select(-problem) %>% colMeans()
+      res2[["perc_done"]] = mean(unlist(res2$detailed %>% dplyr::select(-problem)))
       res2
     },
     collect_results = function() {
       feature = job.id = problem = algorithm = NULL
       reg = self$reg
       res = batchtools::reduceResultsDataTable(reg = reg)
+      if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method submit_jobs().")
       jt = batchtools::getJobTable(reg = reg)
       lookup = jt %>% select(job.id, problem, algorithm)
       features = self$get_project_status()$feature_wise
