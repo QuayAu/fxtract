@@ -167,6 +167,7 @@ test_that("calculate features", {
   
   #calculate rest
   x$submit_jobs()
+  expect_equal(x$get_project_status()$perc_done, 1)
   expect_true(!anyNA(x$collect_results()))
 })  
   

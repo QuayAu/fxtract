@@ -20,8 +20,8 @@ Use this for data with fixed sample rate.}
 \item{time_in_sec}{integer. Number of seconds which the sliding window should go back.
 Use this for data with variable sample rate.}
 
-\item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked, 
-if the outcome is of correct form. Set to \code{FALSE}, if evaluation on the whole dataset takes too long.}
+\item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked if the outcome is of correct form. Set to \code{FALSE}
+if evaluation on the whole dataset takes too long.}
 
 \item{eval_at_rows}{integer. Integer vector at which rows the function should be executed. Defaults to `1:nrow(data)`.}
 

@@ -8,7 +8,7 @@ add_weekday(data, utc_col = character(1), tz = "UTC", unit = "s",
   week_start = 1, locale = "English_United States.1252")
 }
 \arguments{
-\item{data}{dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).}
+\item{data}{dataframe containing a UTC timestamp variable (in seconds or milliseconds).}
 
 \item{utc_col}{character. Column name of the UTC timestamp.}
 

@@ -1,6 +1,7 @@
 #' @title Project Class
 #' @format [R6Class] object
 #' @name Project
+#' @import data.table
 #' @import R6
 #' @import dplyr
 #' @import batchtools
@@ -125,7 +126,7 @@ Project = R6Class("Project",
       features = self$get_project_status()$feature_wise
       features = names(features[features != 0])
       results = foreach::foreach(feature = features) %dopar% {
-        ids = lookup %>% filter(algorithm %in% feature)
+        ids = lookup %>% dplyr::filter(algorithm %in% feature)
         res_feat = res[job.id %in% ids$job.id]
         list_of_dataframes = res_feat$result %>% setNames(res_feat$job.id)
         dplyr::bind_rows(list_of_dataframes)
@@ -133,7 +134,7 @@ Project = R6Class("Project",
       final_result = results[[1]]
       if (length(results) >= 2) {
         for (i in 2:length(results)) {
-         final_result = final_result %>% dplyr::full_join(results[[i]])
+         final_result = final_result %>% dplyr::full_join(results[[i]], by = self$group_by)
         }
       }
       final_result

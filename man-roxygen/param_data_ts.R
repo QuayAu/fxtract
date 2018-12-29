@@ -1,1 +1,1 @@
-#' @param data dataframe containing column named 'timestamp', which should be a Unix Timestamp (in seconds or milliseconds).
+#' @param data dataframe containing a UTC timestamp variable (in seconds or milliseconds).
