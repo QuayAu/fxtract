@@ -1,7 +1,6 @@
 #' @title Project Class
 #' @format [R6Class] object
 #' @name Project
-#' @import data.table
 #' @import R6
 #' @import dplyr
 #' @import batchtools
@@ -119,17 +118,17 @@ Project = R6Class("Project",
     collect_results = function() {
       feature = job.id = problem = algorithm = NULL
       reg = self$reg
-      res = batchtools::reduceResultsDataTable(reg = reg)
-      if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method submit_jobs().")
+      res = batchtools::reduceResultsList(reg = reg)
+      if (length(res) == 0) stop("No features have been calculated yet. Start calculating with method submit_jobs().")
       jt = batchtools::getJobTable(reg = reg)
+      res = setNames(res, jt$job.id)
       lookup = jt %>% select(job.id, problem, algorithm)
       features = self$get_project_status()$feature_wise
       features = names(features[features != 0])
       results = foreach::foreach(feature = features) %dopar% {
         ids = lookup %>% dplyr::filter(algorithm %in% feature)
-        res_feat = res[job.id %in% ids$job.id]
-        list_of_dataframes = res_feat$result %>% setNames(res_feat$job.id)
-        dplyr::bind_rows(list_of_dataframes)
+        res_feat = res[names(res) %in% ids$job.id]
+        dplyr::bind_rows(res_feat)
       }
       final_result = results[[1]]
       if (length(results) >= 2) {

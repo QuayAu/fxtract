@@ -168,7 +168,10 @@ test_that("calculate features", {
   #calculate rest
   x$submit_jobs()
   expect_equal(x$get_project_status()$perc_done, 1)
-  expect_true(!anyNA(x$collect_results()))
+  res = x$collect_results()
+  expect_true(!anyNA(res))
+  cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
+  expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
 })  
   
   
