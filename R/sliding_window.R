@@ -88,7 +88,6 @@ sliding_window = function(data, utc_col = character(1), fun, steps, time_in_sec,
   res2 = res2 %>% dplyr::left_join(res, by = "rn")
   res2$rn = NULL
 
-  if (nrow(res2) != nrow(data)) stop("something went wrong")
   data = data.frame(data, res2)
   return(data)
 }
