@@ -162,8 +162,12 @@ test_that("add_time_variables", {
 test_that("sliding_window", {
   td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
 
-  fun = function(data) data.frame(sum_x_last3 = sum(data$x), max_x_last3 = max(data$x))
+  #test checks
+  fun = function(data) data.frame(x = data$x, x2 = data$x * 2)
+  expect_error(sliding_window(data = td, fun = fun, steps = 5))
 
+  
+  fun = function(data) c(sum_x_last3 = sum(data$x), max_x_last3 = max(data$x))
   #test steps
   x = sliding_window(td, fun = fun, steps = 3)
   expect_equal(dim(x), c(21, 4))
@@ -266,7 +270,9 @@ test_that("filter_daytime", {
     "02:18:23", "03:29:56", "04:37:39", "05:01:31", "06:54:09", "07:43:16", "08:30:57", "09:56:20",
     "10:27:13", "11:53:02", "12:36:21", "13:48:01", "14:02:41", "15:29:14", "16:44:57", "17:36:26",
     "18:11:30", "19:01:27", "20:34:04", "21:37:53", "22:06:12", "23:33:30"), stringsAsFactors = FALSE)
-
+  # test data without time column
+  expect_error(filter_daytime(iris), regexp = "Your data set needs a column named 'time'. See function add_time()")
+  
   # test correct filtering according to the given times
   time1 = "11:00:00"
   time2 = "19:00:00"

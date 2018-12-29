@@ -18,7 +18,7 @@
 #' @export
 #' @examples
 #' library(dplyr)
-#' fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
+#' fun = function(x) c(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
 #'   max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
 #' data = studentlife_small %>% filter(!is.na(latitude)) %>% slice(1:30) #needs date_time variable
 #' sliding_window(data, fun = fun, time_in_sec = 60 * 60,
@@ -34,11 +34,7 @@ sliding_window = function(data, utc_col = character(1), fun, steps, time_in_sec,
   if (!missing(steps)) checkmate::assertNumber(steps)
   if (!missing(time_in_sec)) checkmate::assertNumber(time_in_sec)
 
-  if (check_fun) {
-    fd = do.call(fun, list(data))
-    if (nrow(fd) != 1) stop("fun must have a dataframe with 1 row as output!")
-    if (length(intersect(names(fd), names(data))) > 0) stop("calculated column has a column name already present in data!")
-  }
+  if (check_fun) checkmate::assertAtomicVector(fun(data))
 
   if (!xor(missing(steps), missing(time_in_sec)))
     stop("Pass either steps or time_in_sec, but not both!")
@@ -58,7 +54,7 @@ sliding_window = function(data, utc_col = character(1), fun, steps, time_in_sec,
       time_row = data[[utc_col]][i]
       diff_times = (data[[utc_col]] - time_row) / conv
       res_i = data %>% dplyr::filter(diff_times < 0 & abs(diff_times) < time_in_sec) %>%
-        dplyr::do(do.call(fun, list(.)) %>% data.frame())
+        dplyr::do(data.frame(t(fun(.))))
       res_i = data.frame(rn = i, res_i)
       if (i == setdiff(eval_at_rows, 1)[1]) {
         res = res_i
@@ -73,10 +69,10 @@ sliding_window = function(data, utc_col = character(1), fun, steps, time_in_sec,
     for (i in eval_at_rows) {
       if (i - steps <= 0) next
       if (!exists("res", inherits = FALSE)) {
-        res = data[(i - steps):(i - 1), ] %>% dplyr::do(do.call(fun, list(.)) %>% data.frame())
+        res = data[(i - steps):(i - 1), ] %>% dplyr::do(data.frame(t(fun(.))))
         res = data.frame(rn = i, res)
       } else {
-        res_i = data[(i - steps):(i - 1), ] %>% dplyr::do(do.call(fun, list(.)) %>% data.frame())
+        res_i = data[(i - steps):(i - 1), ] %>% dplyr::do(data.frame(t(fun(.))))
         res_i = data.frame(rn = i, res_i)
         res = dplyr::bind_rows(res, res_i)
         rm(res_i)
@@ -88,7 +84,6 @@ sliding_window = function(data, utc_col = character(1), fun, steps, time_in_sec,
   res2 = res2 %>% dplyr::left_join(res, by = "rn")
   res2$rn = NULL
 
-  if (nrow(res2) != nrow(data)) stop("something went wrong")
   data = data.frame(data, res2)
   return(data)
 }

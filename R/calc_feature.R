@@ -24,9 +24,7 @@ calc_feature = function(data, group_col, fun, check_fun = TRUE, summarize, colna
   checkmate::assertDataFrame(data)
   checkmate::assertNames(names(data), must.include = group_col)
   checkmate::assertLogical(check_fun)
-  if (check_fun) {
-    checkmate::assertAtomicVector(fun(data))
-  }
+  if (check_fun) checkmate::assertAtomicVector(fun(data))
 
   if (!missing(summarize)) checkmate::assertFunction(summarize)
   if (!missing(colname)) checkmate::assertCharacter(colname)

@@ -35,7 +35,7 @@ Adds a variable (or a set of variables) to a dataset by a sliding window approac
 }
 \examples{
 library(dplyr)
-fun = function(x) data.frame(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
+fun = function(x) c(mean.accuracy.last30 = mean(x$accuracy, na.rm = TRUE),
   max.accuracy.last30 = max(x$accuracy, na.rm = TRUE))
 data = studentlife_small \%>\% filter(!is.na(latitude)) \%>\% slice(1:30) #needs date_time variable
 sliding_window(data, fun = fun, time_in_sec = 60 * 60,
