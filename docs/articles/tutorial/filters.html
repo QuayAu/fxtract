@@ -118,21 +118,20 @@
     
 <!-- write something about why it's useful to use our filters -->
 <p>We included some preprocessing functions which help filtering a dataset by time and weekday. This is especially useful for analyzing behavioral data, since human behavior tends to differ between weekday and weekends and also between different times.</p>
-<div id="filter-functions" class="section level1">
+<div id="filter_daytime" class="section level1">
 <h1 class="hasAnchor">
-<a href="#filter-functions" class="anchor"></a>Filter functions</h1>
-<div id="filterdaytime" class="section level2">
-<h2 class="hasAnchor">
-<a href="#filterdaytime" class="anchor"></a>filterDaytime</h2>
+<a href="#filter_daytime" class="anchor"></a>filter_daytime</h1>
+<p>You can filter your dataset by time. You will get every day with times inside the interval:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df =<span class="st"> </span><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(studentlife_small, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)
+<span class="kw"><a href="../../reference/filter_daytime.html">filter_daytime</a></span>(df, <span class="dt">from_time =</span> <span class="st">"06:00:00"</span>, <span class="dt">until_time =</span> <span class="st">"09:00:00"</span>)</code></pre></div>
 </div>
-<div id="filterweekday" class="section level2">
-<h2 class="hasAnchor">
-<a href="#filterweekday" class="anchor"></a>filterWeekday</h2>
-</div>
-<div id="combination-of-these-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#combination-of-these-functions" class="anchor"></a>Combination of these functions</h2>
-</div>
+<div id="filter_weekday" class="section level1">
+<h1 class="hasAnchor">
+<a href="#filter_weekday" class="anchor"></a>filter_weekday</h1>
+<p>You can filter your dataset by a given timeframe (e.g. from Monday 6am to Friday 6pm):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df =<span class="st"> </span><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(studentlife_small, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)
+df =<span class="st"> </span><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)
+<span class="kw"><a href="../../reference/filter_weekday.html">filter_weekday</a></span>(df, <span class="dt">from_day =</span> <span class="st">"Mon"</span>, <span class="dt">from_time =</span> <span class="st">"06:00:00"</span>, <span class="dt">until_day =</span> <span class="st">"Fri"</span>, <span class="dt">until_time =</span> <span class="st">"18:00:00"</span>)</code></pre></div>
 </div>
   </div>
 
@@ -141,13 +140,8 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li>
-<a href="#filter-functions">Filter functions</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#filterdaytime">filterDaytime</a></li>
-      <li><a href="#filterweekday">filterWeekday</a></li>
-      <li><a href="#combination-of-these-functions">Combination of these functions</a></li>
-      </ul>
-</li>
+<li><a href="#filter_daytime">filter_daytime</a></li>
+      <li><a href="#filter_weekday">filter_weekday</a></li>
       </ul>
 </div>
       </div>

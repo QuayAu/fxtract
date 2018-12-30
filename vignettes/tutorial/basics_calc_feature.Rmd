@@ -10,7 +10,7 @@ editor_options:
 ---
 
 # calc_feature
-This is the main function of this package. Given a **user-defined** function `fun`, it calculates this function for each member of a group variable (e.g. participants in a study). 
+This is the main function of this package. Given a **user-defined** function `fun`, it calculates this function for each unique grouping variable (e.g. participants in a study). 
 The function `fun` needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.
 
 ## Example data

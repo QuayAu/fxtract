@@ -36,7 +36,7 @@ test_that("use_dataframe", {
   x = Project$new(project_name = "my_project")
   
   #test wrong inputs
-  expect_error(x$use_dataframe(iris), regexp = "argument \"group_by\" is missing, with no default")
+  expect_error(x$use_dataframe(iris), regexp = "Argument 'group_by' is missing")
   expect_error(x$use_dataframe(iris, group_by = "test"))
   
   #test right data

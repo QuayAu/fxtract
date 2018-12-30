@@ -140,16 +140,17 @@
 </li>
 <li>Or with the R6 Class <code>project</code>.
 <ul>
-<li>For larger projects (many participants, lots of data, many features), it is highly advised to use the R6 class and its methods</li>
+<li>For larger projects (many participants, lots of data, many features), it is highly advised to use the R6 class and its methods.</li>
 <li>Advantages:
 <ul>
 <li>No more code bloat thanks to R6.</li>
-<li>Very large datasets are supported, since data is only be read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.</li>
+<li>Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.</li>
 <li>Internally, <a href="https://mllg.github.io/batchtools/articles/batchtools.html">batchtools</a> is used for parallelization and error handling.</li>
 <li>Features can be calculated for each participant individually or in chunks.</li>
 <li>If one feature on one participant throws an error, this will not stop the whole process (like in a traditional R script). A log file with the error message is created (by batchtools), and the remaining features will still be calculated.</li>
 <li>Individual features can be deleted or updated easily.</li>
 <li>Calculation of features can be done in parallel and the process can be monitored. It is also possible to stop and return the calculation at a later time.</li>
+<li>Results can be easily collected in one final dataframe.</li>
 </ul>
 </li>
 </ul>

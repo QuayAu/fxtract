@@ -119,7 +119,7 @@
 <div id="calc_feature" class="section level1">
 <h1 class="hasAnchor">
 <a href="#calc_feature" class="anchor"></a>calc_feature</h1>
-<p>This is the main function of this package. Given a <strong>user-defined</strong> function <code>fun</code>, it calculates this function for each member of a group variable (e.g. participants in a study). The function <code>fun</code> needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.</p>
+<p>This is the main function of this package. Given a <strong>user-defined</strong> function <code>fun</code>, it calculates this function for each unique grouping variable (e.g. participants in a study). The function <code>fun</code> needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.</p>
 <div id="example-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-data" class="anchor"></a>Example data</h2>
@@ -130,27 +130,27 @@ df<span class="op">$</span>task =<span class="st"> </span><span class="kw">rep</
 df<span class="op">$</span>hour =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">"hour1"</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="st">"hour2"</span>, <span class="dv">2</span>), <span class="kw">rep</span>(<span class="st">"hour1"</span>, <span class="dv">2</span>), <span class="kw">rep</span>(<span class="st">"hour2"</span>, <span class="dv">3</span>)), <span class="dv">2</span>)
 df<span class="op">$</span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>)
 df</code></pre></div>
-<pre><code>##    id  task  hour          x
-## 1   1 task1 hour1 -0.2782151
-## 2   1 task1 hour1  0.7328660
-## 3   1 task1 hour1  0.5482508
-## 4   1 task1 hour2  1.5294626
-## 5   1 task1 hour2 -0.2294908
-## 6   1 task2 hour1  0.5949878
-## 7   1 task2 hour1  1.7508395
-## 8   1 task2 hour2  0.4952066
-## 9   1 task2 hour2 -1.6039217
-## 10  1 task2 hour2 -1.1122699
-## 11  2 task1 hour1  1.3498620
-## 12  2 task1 hour1 -0.8891365
-## 13  2 task1 hour1 -0.7422924
-## 14  2 task1 hour2 -3.0400985
-## 15  2 task1 hour2  0.1173445
-## 16  2 task2 hour1  1.1206063
-## 17  2 task2 hour1 -1.7927060
-## 18  2 task2 hour2  0.7573558
-## 19  2 task2 hour2  0.1787195
-## 20  2 task2 hour2  1.0829448</code></pre>
+<pre><code>##    id  task  hour           x
+## 1   1 task1 hour1  0.37081630
+## 2   1 task1 hour1 -0.24618085
+## 3   1 task1 hour1 -1.42156938
+## 4   1 task1 hour2 -0.78994617
+## 5   1 task1 hour2  0.61405948
+## 6   1 task2 hour1  0.31279754
+## 7   1 task2 hour1  0.20319084
+## 8   1 task2 hour2  0.65978090
+## 9   1 task2 hour2 -0.42626859
+## 10  1 task2 hour2 -0.53810238
+## 11  2 task1 hour1 -1.19440370
+## 12  2 task1 hour1 -0.30070320
+## 13  2 task1 hour1  1.10672027
+## 14  2 task1 hour2  1.43999248
+## 15  2 task1 hour2 -0.85009104
+## 16  2 task2 hour1 -0.06058284
+## 17  2 task2 hour1 -0.26618417
+## 18  2 task2 hour2 -0.13384332
+## 19  2 task2 hour2 -1.72645837
+## 20  2 task2 hour2 -0.10326671</code></pre>
 <div id="return-1-value-each" class="section level3">
 <h3 class="hasAnchor">
 <a href="#return-1-value-each" class="anchor"></a>Return 1 value each</h3>
@@ -160,9 +160,9 @@ df</code></pre></div>
 }</code></pre></div>
 <p>Now we can calculate the desired outcome:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> fun)</code></pre></div>
-<pre><code>##   id    max_x
-## 1  1 1.750840
-## 2  2 1.349862</code></pre>
+<pre><code>##   id     max_x
+## 1  1 0.6597809
+## 2  2 1.4399925</code></pre>
 </div>
 <div id="return-more-values-at-once" class="section level3">
 <h3 class="hasAnchor">
@@ -172,31 +172,31 @@ df</code></pre></div>
   <span class="kw">c</span>(<span class="dt">max_x =</span> <span class="kw">max</span>(data<span class="op">$</span>x), <span class="dt">sd_x =</span> <span class="kw">sd</span>(data<span class="op">$</span>x))
 }
 <span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> more_features)</code></pre></div>
-<pre><code>##   id    max_x     sd_x
-## 1  1 1.750840 1.064164
-## 2  2 1.349862 1.426827</code></pre>
+<pre><code>##   id     max_x      sd_x
+## 1  1 0.6597809 0.6754943
+## 2  2 1.4399925 0.9536788</code></pre>
 </div>
 <div id="group-by-two-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#group-by-two-columns" class="anchor"></a>group by two columns</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1 max_x_task2 sd_x_task1 sd_x_task2
-## 1  1    1.529463    1.750840  0.7493917   1.366681
-## 2  2    1.349862    1.120606  1.6098232   1.212952</code></pre>
+## 1  1   0.6140595  0.65978090  0.8345977  0.5091073
+## 2  2   1.4399925 -0.06058284  1.1757938  0.7132029</code></pre>
 </div>
 <div id="group-by-three-colums" class="section level3">
 <h3 class="hasAnchor">
 <a href="#group-by-three-colums" class="anchor"></a>group by three colums</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>, <span class="st">"hour"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1_hour1 max_x_task1_hour2 max_x_task2_hour1
-## 1  1          0.732866         1.5294626          1.750840
-## 2  2          1.349862         0.1173445          1.120606
+## 1  1         0.3708163         0.6140595        0.31279754
+## 2  2         1.1067203         1.4399925       -0.06058284
 ##   max_x_task2_hour2 sd_x_task1_hour1 sd_x_task1_hour2 sd_x_task2_hour1
-## 1         0.4952066        0.5384257         1.243768        0.8173106
-## 2         1.0829448        1.2524501         2.232649        2.0600229
+## 1         0.6597809         0.910574        0.9927819       0.07750365
+## 2        -0.1032667         1.160080        1.6193336       0.14538209
 ##   sd_x_task2_hour2
-## 1        1.0978799
-## 2        0.4579759</code></pre>
+## 1        0.6616815
+## 2        0.9284493</code></pre>
 </div>
 </div>
 </div>
