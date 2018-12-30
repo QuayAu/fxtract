@@ -96,7 +96,7 @@ feat_data
 ```
 
 
-For small projects (small datasets, few features) it's ok to calculate the features like above and join the resulting dataframes with `dplyr::left_join` (or your preferred method). But it becomes very burdensome, if datasets get too big for memory and features (possibly many different ones) must be calculated in chunks and be joined afterwards. We made the experience that single errors (e.g. one feature throws an error on one participant) can stop the whole process. Updating this feature and calculate it again can be quite convoluted because of loops and code bloat (many joins). For larger projects, please use the R6 class `Project`. A use case can be found [here](https://quayau.github.io/fxtract/articles/tutorial/usecase_big_data.html).
+For small projects (small datasets, few features) it's ok to calculate the features like above and join the resulting dataframes with `dplyr::left_join` (or your preferred method). But it becomes very burdensome, if datasets get too big for memory and features (possibly many different ones) must be calculated in chunks and be joined afterwards. We made the experience that single errors (e.g. one feature throws an error on one participant) can stop the whole process. Updating this feature and calculate it again can be quite convoluted because of loops and code bloat (many joins). For larger projects, please use the R6 class `Project`. A use case can be found [here](https://quayau.github.io/fxtract/docs/articles/tutorial/usecase_big_data.html).
 
 
 
