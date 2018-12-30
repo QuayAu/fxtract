@@ -9,36 +9,41 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Date functions
+# Add Date Information
 
-## addDateTime
-<img src="img/addDateTime.svg" width="790">
-
-Given a dataset with a timestamp variable, `addDateTime()` adds a date_time variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package.
-
-## addDate
-<img src="img/addDate.svg" width="790">
-
-Given a dataset with a timestamp variable, `addDate()` adds a date variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package.
-
-## addWeekday
-<img src="img/addWeekday.svg" width="790">
-
-Given a dataset with a timestamp variable, `addWeekday()` adds an ordered weekday variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day) package.
-
-With this new variable you can filter your dataset very easily. E.g., if you want to filter working days from your dataset, you can easily do this:
-```{r, message = FALSE, warning = FALSE}
+We included some handy timestamp converters which enrich datasets with useful information.
+Let's demonstrate it with a simple example:
+```{r, message = FALSE}
 library(fxtract)
-library(dplyr)
-data = studentlife_small %>% addWeekday(utc_col = "timestamp") %>% filter(weekday >= "Mon" & weekday <= "Fri")
-unique(data$weekday)
+df = data.frame(timestamp = c(946733820, 946733821, 946733822), x = "some_data")
+#corresponds to 2000-01-01 13:37, 2000-01-01 13:37:01, 2000-01-01 13:37:02
+df
 ```
 
-## addTime
-<img src="img/addTime.svg" width="790">
 
-Given a dataset with a timestamp variable, `addDate()` adds a time variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package.
+## add_date_time
+This function adds a date_time variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package to your dataset:
+```{r}
+add_date_time(data = df, utc_col = "timestamp")
+```
 
-<!-- ## addStudyDay -->
 
-<!-- ## addStudyDayPerUserId -->
+## add_date
+This function adds a date variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package to your dataset:
+
+```{r}
+add_date(data = df, utc_col = "timestamp")
+```
+
+
+## add_weekday
+This funciton adds an ordered weekday variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day) package to your dataset:
+```{r, message = FALSE, warning = FALSE}
+add_weekday(data = df, utc_col = "timestamp")
+```
+
+## add_time
+This funciton adds a time variable [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package to your dataset:
+```{r}
+add_time(data = df, utc_col = "timestamp")
+```

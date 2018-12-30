@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# calcFeature
+# calc_feature
 This is the main function of this package. Given a **user-defined** function `fun`, it calculates this function for each member of a group variable (e.g. participants in a study). 
 The function `fun` needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.
 
@@ -37,7 +37,7 @@ fun = function(data) {
 ```
 Now we can calculate the desired outcome:
 ```{r}
-calcFeature(df, group_col = "id", fun = fun)
+calc_feature(df, group_col = "id", fun = fun)
 ```
 
 
@@ -47,17 +47,17 @@ Sometimes calculations can take a long time (e.g. clustering of GPS points) and 
 more_features = function(data) {
   c(max_x = max(data$x), sd_x = sd(data$x))
 }
-calcFeature(df, group_col = "id", fun = more_features)
+calc_feature(df, group_col = "id", fun = more_features)
 ```
 
 ### group by two columns
 ```{r}
-calcFeature(df, group_col = c("id", "task"), fun = more_features)
+calc_feature(df, group_col = c("id", "task"), fun = more_features)
 ```
 
 ### group by three colums
 ```{r}
-calcFeature(df, group_col = c("id", "task", "hour"), fun = more_features)
+calc_feature(df, group_col = c("id", "task", "hour"), fun = more_features)
 ```
 
 

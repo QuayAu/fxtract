@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • fxtract</title>
+<title>Adds column 'weekday' to a dataframe containing a timestamp variable. — add_weekday • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Adds column 'weekday' to a dataframe containing a timestamp variable. — add_weekday" />
+
+<meta property="og:description" content="Adds column 'weekday' to a dataframe containing a timestamp variable." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -136,24 +139,71 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Adds column 'weekday' to a dataframe containing a timestamp variable.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/helpers_timestamp.R'><code>R/helpers_timestamp.R</code></a></small>
+    <div class="hidden name"><code>add_weekday.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="fxtract.html">fxtract</a></li>
-        <li><a href="tutorial/basics_calc_feature.html">Basics</a></li>
-        <li><a href="tutorial/basics_project.html">Basics</a></li>
-        <li><a href="tutorial/basics_sliding_window.html">Basics</a></li>
-        <li><a href="tutorial/filters.html">Preprocessing Helpers</a></li>
-        <li><a href="tutorial/helpers.html">Preprocessing Helpers</a></li>
-        <li><a href="tutorial/usecase_big_data.html">Use Cases</a></li>
-        <li><a href="tutorial/usecase_studentlife.html">Use Cases</a></li>
-      </ul>
+    <div class="ref-description">
+    
+    <p>Adds column 'weekday' to a dataframe containing a timestamp variable.</p>
+    
     </div>
+
+    <pre class="usage"><span class='fu'>add_weekday</span>(<span class='no'>data</span>, <span class='kw'>utc_col</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>1</span>), <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"s"</span>,
+  <span class='kw'>week_start</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>locale</span> <span class='kw'>=</span> <span class='st'>"English_United States.1252"</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>dataframe containing a UTC timestamp variable (in seconds or milliseconds).</p></td>
+    </tr>
+    <tr>
+      <th>utc_col</th>
+      <td><p>character. Column name of the UTC timestamp.</p></td>
+    </tr>
+    <tr>
+      <th>tz</th>
+      <td><p>timezone. Defaults to using 'UTC'. See <code><a href='http://lubridate.tidyverse.org/reference/as_date.html'>as_datetime</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>unit</th>
+      <td><p>unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).</p></td>
+    </tr>
+    <tr>
+      <th>week_start</th>
+      <td><p>day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default). See <code><a href='http://lubridate.tidyverse.org/reference/day.html'>wday</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>locale</th>
+      <td><p>locale to use for day names. Defaults to 'English_United States.1252'. See <code><a href='http://lubridate.tidyverse.org/reference/day.html'>wday</a></code>.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>dataframe with added ordered factor variable 'weekday'.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other helper functions: <code><a href='add_date_time.html'>add_date_time</a></code>,
+  <code><a href='add_date.html'>add_date</a></code>, <code><a href='add_time.html'>add_time</a></code>,
+  <code><a href='sliding_window.html'>sliding_window</a></code></p></div>
+    
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
+
   </div>
 </div>
 

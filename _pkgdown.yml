@@ -14,18 +14,20 @@ navbar:
       href: articles/tutorial/helpers.html
     - text: filters
       href: articles/tutorial/filters.html
+    - text: sliding_window
+      href: articles/tutorial/basics_sliding_window.html
   - text: Basics
     menu:
-    - text: slidingWindow
-      href: articles/tutorial/basics_slidingWindow.html
-    - text: calcFeature
-      href: articles/tutorial/basics_calcFeature.html
+    - text: calc_feature
+      href: articles/tutorial/basics_calc_feature.html
+    - text: project
+      href: articles/tutorial/basics_project.html
   - text: Use Cases
     menu:
     - text: StudentLife
       href: articles/tutorial/usecase_studentlife.html
-    - text: StudentLife batchtools
-      href: articles/tutorial/usecase_batchtools.html
+    - text: Big Data
+      href: articles/tutorial/usecase_big_data.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

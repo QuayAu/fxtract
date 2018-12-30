@@ -3,8 +3,10 @@ title: "Use Cases"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Introduction to Dataset
@@ -31,14 +33,14 @@ str(studentlife_small)
 This is a very straightforward function: 
 ```{r}
 numberDiffApps = function(data) {
-  length(unique(data$RUNNING_TASKS_topActivity_mPackage))
+  c(numberDiffApps = length(unique(data$RUNNING_TASKS_topActivity_mPackage)))
 }
 ```
 
-That's all we need to calculate the number of different apps used in the morning for each participant:
+That's all we need to calculate the number of different apps used for each participant:
 
 ```{r}
-feat_data = calcFeature(data = studentlife_small, fun = numberDiffApps, group_col = "userId")
+feat_data = calc_feature(data = studentlife_small, fun = numberDiffApps, group_col = "userId")
 feat_data
 ```
 
@@ -46,9 +48,9 @@ feat_data
 For this feature, we need to filter the dataset from Monday until Friday:
 ```{r, message = FALSE, warning = FALSE}
 studentlife_small_weekday = studentlife_small %>% 
-  addWeekday(utc_col = "timestamp") %>%
+  add_weekday(utc_col = "timestamp") %>%
   filter(weekday >= "Mon" & weekday <= "Fri")
-x = calcFeature(data = studentlife_small_weekday, fun = numberDiffApps, group_col = "userId", colname = "numberDiffAppsWeekday")
+x = calc_feature(data = studentlife_small_weekday, fun = numberDiffApps, group_col = "userId", colname = "numberDiffAppsWeekday")
 feat_data = feat_data %>% left_join(x)
 feat_data
 ```
@@ -56,25 +58,25 @@ feat_data
 ### Number of different used apps per day
 To calculate this feature per day, we need to add date information to the dataset:
 ```{r, message = FALSE, warning = FALSE}
-studentlife_small_date = studentlife_small %>% addDate(utc_col = "timestamp")
+studentlife_small_date = studentlife_small %>% add_date(utc_col = "timestamp")
 ```
 
 Now we can calculate this feature per day:
 ```{r}
-x = calcFeature(data = studentlife_small_date, fun = numberDiffApps, group_col = c("userId", "date"))
+x = calc_feature(data = studentlife_small_date, fun = numberDiffApps, group_col = c("userId", "date"))
 x[, 1:6]
 ```
 
 All there is left to do is to apply a mean function on the rows of this dataset. You can do this by specifying a `summarize`-function:
 ```{r}
-x = calcFeature(data = studentlife_small_date, fun = numberDiffApps, group_col = c("userId", "date"), 
+x = calc_feature(data = studentlife_small_date, fun = numberDiffApps, group_col = c("userId", "date"), 
   summarize = function(x) mean(x, na.rm = TRUE), colname = "dailyNumberDiffApps")
 feat_data = feat_data %>% left_join(x)
 feat_data
 ```
 
 
-## Some GPS features {.tabset}
+## GPS features
 ### Total distance covered
 Again, we need to define a function, which calculates the total distance covered by the GPS points in a given dataset `data`:
 
@@ -83,41 +85,19 @@ library(geosphere)
 totalDist = function(data) {
   long = data$longitude
   lat = data$latitude
-  sum(geosphere::distHaversine(cbind(long, lat)), na.rm = TRUE)
+  c(totalDist = sum(geosphere::distHaversine(cbind(long, lat)), na.rm = TRUE))
 }
 ```
 
 ```{r}
-x = calcFeature(data = studentlife_small, group_col = "userId", fun = totalDist)
+x = calc_feature(data = studentlife_small, group_col = "userId", fun = totalDist)
 feat_data = feat_data %>% left_join(x, by = "userId")
 feat_data 
 ```
 
 
-<!-- ##  -->
+For small projects (small datasets, few features) it's ok to calculate the features like above and join the resulting dataframes with `dplyr::left_join` (or your preferred method). But it becomes very burdensome, if datasets get too big for memory and features (possibly many different ones) must be calculated in chunks and be joined afterwards. We made the experience that single errors (e.g. one feature throws an error on one participant) can stop the whole process. Updating this feature and calculate it again can be quite convoluted because of loops and code bloat (many joins). For larger projects, please use the R6 class `Project`. A use case can be found [here](https://quayau.github.io/fxtract/articles/tutorial/usecase_big_data.html).
 
 
-<!-- ## Mean number of different used apps in the morning per day -->
-<!-- Let us define "morning" by 6am until 9am. The dataset does not have any information of the time of the day, but it is available via the UTC timestamp. We also need date information, to calculate this feature per day. -->
 
-<!-- ```{r, message = FALSE, warning = FALSE} -->
-<!-- library(dplyr) -->
-<!-- studentlife_small = studentlife_small %>% addTime(utc_col = "timestamp") %>% addDate(utc_col = "timestamp") -->
-<!-- studentlife_small_morning = studentlife_small %>% filterDaytime(from_time = "06:00:00", until_time = "09:00:00") -->
-<!-- ``` -->
 
-<!-- Now we need a function, which calculates the number of different used apps from a given dataset `data`: -->
-
-<!-- ```{r} -->
-<!-- numberDiffApps = function(data) { -->
-<!--   length(unique(data$RUNNING_TASKS_topActivity_mPackage)) -->
-<!-- } -->
-<!-- ``` -->
-
-<!-- That's all we need to calculate the number of different apps used in the morning for each participant: -->
-
-<!-- ```{r} -->
-<!-- feat_data = calcFeature(data = studentlife_small_morning, group_col = c("userId", "date"), fun = numberDiffApps,  -->
-<!--   summarize = function(x) mean(x, na.rm = TRUE), colname = "dailyMeanNumDiffAppsMorning") -->
-<!-- feat_data -->
-<!-- ``` -->

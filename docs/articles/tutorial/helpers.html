@@ -48,6 +48,9 @@
     <li>
       <a href="../../articles/tutorial/filters.html">filters</a>
     </li>
+    <li>
+      <a href="../../articles/tutorial/basics_sliding_window.html">sliding_window</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -58,10 +61,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/tutorial/basics_slidingWindow.html">slidingWindow</a>
+      <a href="../../articles/tutorial/basics_calc_feature.html">calc_feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_calcFeature.html">calcFeature</a>
+      <a href="../../articles/tutorial/basics_project.html">project</a>
     </li>
   </ul>
 </li>
@@ -76,7 +79,7 @@
       <a href="../../articles/tutorial/usecase_studentlife.html">StudentLife</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/usecase_batchtools.html">StudentLife batchtools</a>
+      <a href="../../articles/tutorial/usecase_big_data.html">Big Data</a>
     </li>
   </ul>
 </li>
@@ -113,41 +116,57 @@
 
     
     
-<div id="date-functions" class="section level1">
+<div id="add-date-information" class="section level1">
 <h1 class="hasAnchor">
-<a href="#date-functions" class="anchor"></a>Date functions</h1>
-<div id="adddatetime" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adddatetime" class="anchor"></a>addDateTime</h2>
-<p><img src="img/addDateTime.svg" width="790"></p>
-<p>Given a dataset with a timestamp variable, <code><a href="../../reference/addDateTime.html">addDateTime()</a></code> adds a date_time variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package.</p>
-</div>
-<div id="adddate" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adddate" class="anchor"></a>addDate</h2>
-<p><img src="img/addDate.svg" width="790"></p>
-<p>Given a dataset with a timestamp variable, <code><a href="../../reference/addDate.html">addDate()</a></code> adds a date variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package.</p>
-</div>
-<div id="addweekday" class="section level2">
-<h2 class="hasAnchor">
-<a href="#addweekday" class="anchor"></a>addWeekday</h2>
-<p><img src="img/addWeekday.svg" width="790"></p>
-<p>Given a dataset with a timestamp variable, <code><a href="../../reference/addWeekday.html">addWeekday()</a></code> adds an ordered weekday variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day">lubridate</a> package.</p>
-<p>With this new variable you can filter your dataset very easily. E.g., if you want to filter working days from your dataset, you can easily do this:</p>
+<a href="#add-date-information" class="anchor"></a>Add Date Information</h1>
+<p>We included some handy timestamp converters which enrich datasets with useful information. Let’s demonstrate it with a simple example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
-<span class="kw">library</span>(dplyr)
-data =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../../reference/addWeekday.html">addWeekday</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)
-<span class="kw">unique</span>(data<span class="op">$</span>weekday)</code></pre></div>
-<pre><code>## [1] Mon Tue Wed Thu Fri
-## Levels: Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat &lt; Sun</code></pre>
-</div>
-<div id="addtime" class="section level2">
+df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">timestamp =</span> <span class="kw">c</span>(<span class="dv">946733820</span>, <span class="dv">946733821</span>, <span class="dv">946733822</span>), <span class="dt">x =</span> <span class="st">"some_data"</span>)
+<span class="co">#corresponds to 2000-01-01 13:37, 2000-01-01 13:37:01, 2000-01-01 13:37:02</span>
+df</code></pre></div>
+<pre><code>##   timestamp         x
+## 1 946733820 some_data
+## 2 946733821 some_data
+## 3 946733822 some_data</code></pre>
+<div id="add_date_time" class="section level2">
 <h2 class="hasAnchor">
-<a href="#addtime" class="anchor"></a>addTime</h2>
-<p><img src="img/addTime.svg" width="790"></p>
-<p>Given a dataset with a timestamp variable, <code><a href="../../reference/addDate.html">addDate()</a></code> adds a time variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package.</p>
-<!-- ## addStudyDay -->
-<!-- ## addStudyDayPerUserId -->
+<a href="#add_date_time" class="anchor"></a>add_date_time</h2>
+<p>This function adds a date_time variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_date_time.html">add_date_time</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<pre><code>##   timestamp         x           date_time
+## 1 946733820 some_data 2000-01-01 13:37:00
+## 2 946733821 some_data 2000-01-01 13:37:01
+## 3 946733822 some_data 2000-01-01 13:37:02</code></pre>
+</div>
+<div id="add_date" class="section level2">
+<h2 class="hasAnchor">
+<a href="#add_date" class="anchor"></a>add_date</h2>
+<p>This function adds a date variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<pre><code>##   timestamp         x       date
+## 1 946733820 some_data 2000-01-01
+## 2 946733821 some_data 2000-01-01
+## 3 946733822 some_data 2000-01-01</code></pre>
+</div>
+<div id="add_weekday" class="section level2">
+<h2 class="hasAnchor">
+<a href="#add_weekday" class="anchor"></a>add_weekday</h2>
+<p>This funciton adds an ordered weekday variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day">lubridate</a> package to your dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<pre><code>##   timestamp         x weekday
+## 1 946733820 some_data     Sat
+## 2 946733821 some_data     Sat
+## 3 946733822 some_data     Sat</code></pre>
+</div>
+<div id="add_time" class="section level2">
+<h2 class="hasAnchor">
+<a href="#add_time" class="anchor"></a>add_time</h2>
+<p>This funciton adds a time variable <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<pre><code>##   timestamp         x     time
+## 1 946733820 some_data 13:37:00
+## 2 946733821 some_data 13:37:01
+## 3 946733822 some_data 13:37:02</code></pre>
 </div>
 </div>
   </div>
@@ -158,11 +177,11 @@ data =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li>
-<a href="#date-functions">Date functions</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#adddatetime">addDateTime</a></li>
-      <li><a href="#adddate">addDate</a></li>
-      <li><a href="#addweekday">addWeekday</a></li>
-      <li><a href="#addtime">addTime</a></li>
+<a href="#add-date-information">Add Date Information</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#add_date_time">add_date_time</a></li>
+      <li><a href="#add_date">add_date</a></li>
+      <li><a href="#add_weekday">add_weekday</a></li>
+      <li><a href="#add_time">add_time</a></li>
       </ul>
 </li>
       </ul>

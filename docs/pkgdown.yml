@@ -3,11 +3,12 @@ pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
   fxtract: fxtract.html
-  basics_calcFeature: tutorial/basics_calcFeature.html
-  basics_slidingWindow: tutorial/basics_slidingWindow.html
+  basics_calc_feature: tutorial/basics_calc_feature.html
+  basics_project: tutorial/basics_project.html
+  basics_sliding_window: tutorial/basics_sliding_window.html
   filters: tutorial/filters.html
   helpers: tutorial/helpers.html
-  usecase_batchtools: tutorial/usecase_batchtools.html
+  usecase_big_data: tutorial/usecase_big_data.html
   usecase_studentlife: tutorial/usecase_studentlife.html
 urls:
   reference: https://quayau.github.io/fxtract/docs/index.html/reference

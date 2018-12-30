@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • fxtract</title>
+<title>Calculates a given function for each grouping variable. — calc_feature • fxtract</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Calculates a given function for each grouping variable. — calc_feature" />
+
+<meta property="og:description" content="Calculates a given function for each grouping variable." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -136,24 +139,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Calculates a given function for each grouping variable.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/calc_feature.R'><code>R/calc_feature.R</code></a></small>
+    <div class="hidden name"><code>calc_feature.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="fxtract.html">fxtract</a></li>
-        <li><a href="tutorial/basics_calc_feature.html">Basics</a></li>
-        <li><a href="tutorial/basics_project.html">Basics</a></li>
-        <li><a href="tutorial/basics_sliding_window.html">Basics</a></li>
-        <li><a href="tutorial/filters.html">Preprocessing Helpers</a></li>
-        <li><a href="tutorial/helpers.html">Preprocessing Helpers</a></li>
-        <li><a href="tutorial/usecase_big_data.html">Use Cases</a></li>
-        <li><a href="tutorial/usecase_studentlife.html">Use Cases</a></li>
-      </ul>
+    <div class="ref-description">
+    
+    <p>Calculates a given function for each grouping variable.</p>
+    
     </div>
+
+    <pre class="usage"><span class='fu'>calc_feature</span>(<span class='no'>data</span>, <span class='no'>group_col</span>, <span class='no'>fun</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>summarize</span>, <span class='no'>colname</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>dataframe.</p></td>
+    </tr>
+    <tr>
+      <th>group_col</th>
+      <td><p>character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.</p></td>
+    </tr>
+    <tr>
+      <th>fun</th>
+      <td><p>function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.</p></td>
+    </tr>
+    <tr>
+      <th>check_fun</th>
+      <td><p>logical. If <code>TRUE</code>, fun(data) will be evaluated and checked if the outcome is of correct form. Set to <code>FALSE</code>
+if evaluation on the whole dataset takes too long.</p></td>
+    </tr>
+    <tr>
+      <th>summarize</th>
+      <td><p>function. If more than one value is returned for each grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.</p></td>
+    </tr>
+    <tr>
+      <th>colname</th>
+      <td><p>character. If one variable is returned for each grouping variable, you can specify a custom column name for this new column.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>dataframe</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
+  <span class='fu'>c</span>(<span class='kw'>uses_chrome</span> <span class='kw'>=</span> <span class='fu'>nrow</span>(
+    <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>data</span>, <span class='no'>RUNNING_TASKS_baseActivity_mPackage</span> <span class='kw'>==</span> <span class='st'>"com.android.chrome"</span>))
+  )
+}
+<span class='fu'>calc_feature</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>studentlife_small</span>, <span class='kw'>group_col</span> <span class='kw'>=</span> <span class='st'>"userId"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>)</div><div class='output co'>#&gt;   userId uses_chrome
+#&gt; 1     00        3104
+#&gt; 2     01        1635
+#&gt; 3     02        2811</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 

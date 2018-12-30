@@ -4,70 +4,52 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/index.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addBatchtoolsAlgorithms.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/add_date.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addBatchtoolsProblems.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/add_date_time.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addDate.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/add_time.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addDateTime.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/add_weekday.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addTime.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/calc_feature.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/addWeekday.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/check_time_format.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/calcFeature.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filter_daytime.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/checkTimeFormat.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filter_weekday.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/collectResults.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/Project.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filterDaytime.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filterWeekday.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/getProjectStatus.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/loadProject.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/makeProject.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/slidingWindow.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/sliding_window.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/studentlife_small.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/timeToSec.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/useDataframe.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/useSqlDatabase.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/time_to_sec.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/fxtract.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_calcFeature.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_calc_feature.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_slidingWindow.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_sliding_window.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/filters.html</loc>
@@ -76,7 +58,7 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helpers.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_batchtools.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_big_data.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_studentlife.html</loc>
