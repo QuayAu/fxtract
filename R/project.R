@@ -11,7 +11,6 @@ NULL
 Project = R6Class("Project",
   public = list(
     project_name = NULL,
-    dir = NULL,
     group_by = NULL,
     reg = NULL,
     initialize = function(project_name, ...) {
@@ -20,87 +19,69 @@ Project = R6Class("Project",
       if (!dir.exists("projects")) dir.create("projects")
       if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
       dir.create(newDirPath)
-      dir.create(paste0(newDirPath, "/raw_rds_files"))
-      dir.create(paste0(newDirPath, "/batchtools_problems"))
-      dir.create(paste0(newDirPath, "/batchtools_algorithms"))
-      self$dir = newDirPath
       self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"), ...)
     },
-    use_dataframe = function(dataframe, group_by) {
-      i = NULL
+    add_data = function(dataframe, group_by) {
+      id = NULL
       checkmate::assert_data_frame(dataframe)
       checkmate::assert_subset(group_by, colnames(dataframe))
+      checkmate::assert_character(group_by, len = 1)
       if (is.null(self$group_by)) self$group_by = group_by
-      if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by, 
+      if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by,
         ". Only one group_by variable is allowed per project!"))
+
+      #add batchtools problems
       gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
-      foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
-        dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(dataframe_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
-        message(paste0("Saving raw RDS file " , i, ".RDS ", "on disk."))
+      for (id in gb) { #cannot be parallelized, because of batchtools
+        data_id = dataframe %>% dplyr::filter(!!as.name(group_by) == id) %>% data.frame()
+        batchtools::addProblem(name = id, data = data_id, reg = self$reg)
+
+        #add experiments
+        prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
+        names(prob.designs) = id
+        private$add_experiments(prob.designs = prob.designs)
       }
       return(invisible(self))
     },
-    add_batchtools_problems = function(n.chunks) {
-      chunk = files = f = NULL
-      rds_files = list.files(path = paste0(self$dir, "/raw_rds_files"))
-      rds_files = data.frame(files = rds_files)
-      if (missing(n.chunks)) {
-        for (id in rds_files$files) {
-          data_id = readRDS(paste0(self$dir, "/raw_rds_files/", id))
-          name = gsub(".RDS", "", id)
-          write.table(NULL, file = paste0(self$dir, "/batchtools_problems/", name))
-          batchtools::addProblem(name = name, data = data_id, reg = self$reg)
-        }  
-      } else {
-        checkmate::assertIntegerish(n.chunks)
-        rds_files$chunk = batchtools::chunk(1:nrow(rds_files), n.chunks = n.chunks)
-        chunks = unique(rds_files$chunk)
-        if (n.chunks > length(chunks)) stop("n.chunks > number of different grouping variables!")
-        for (z in chunks) {
-          files = rds_files %>% dplyr::filter(chunk == z) %>% dplyr::pull(files) %>% as.character()
-          x = foreach::foreach(f = files) %dopar% {
-            readRDS(paste0(self$dir, "/raw_rds_files/", f))
-          }
-          data_chunk = dplyr::bind_rows(x)
-          name = paste0("chunk_", z)
-          write.table(NULL, file = paste0(self$dir, "/batchtools_problems/", name))
-          batchtools::addProblem(name = name, data = data_chunk, reg = self$reg)
-        }
-      }
+    remove_problems = function(problems) {
+      checkmate::assert_character(problems)
+      checkmate::assert_subset(problems, self$reg$problems)
+      batchtools::removeProblems(problems, reg = self$reg)
       return(invisible(self))
     },
-    remove_batchtools_problem = function(problem) {
-      problem = sub('.*\\/', '', problem) #regex: removes everything before "/", makes auto completion possible by listing files under batchtools_problems
-      batchtools::removeProblems(problem, reg = self$reg)
-      unlink(paste0(self$dir, "/batchtools_problems/", problem))
-      return(invisible(self))
-    },
-    add_batchtools_algorithm = function(fun) {
-      write.table(NULL, file = paste0(self$dir, "/batchtools_algorithms/", deparse(substitute(fun))))
+    add_feature = function(fun) {
+      checkmate::assert_function(fun)
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))))
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
         fun = function(job, data, instance) fxtract::calc_feature(data, group_col = self$group_by, fun = fun)
       )
+
+      #add experiments
       algo.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
       names(algo.designs) = deparse(substitute(fun))
-      batchtools::addExperiments(algo.designs = algo.designs)
+      private$add_experiments(algo.designs = algo.designs)
+
       return(invisible(self))
     },
-    remove_batchtools_algorithm = function(algorithm) {
-      algorithm = sub('.*\\/', '', algorithm) #regex: removes everything before "/", makes auto completion possible by listing files under batchtools_algorithms
-      batchtools::removeAlgorithms(algorithm, reg = self$reg)
-      unlink(paste0(self$dir, "/batchtools_algorithms/", algorithm))
+    remove_feature = function(fun) {
+      fun = as.character(substitute(fun))
+      jt = batchtools::getJobTable(reg = self$reg)
+      checkmate::assert_subset(fun, unique(jt$algorithm))
+      batchtools::removeAlgorithms(fun, reg = self$reg)
       return(invisible(self))
     },
-    submit_jobs = function(ids = NULL, resources = list(), sleep = NULL) {
-      batchtools::submitJobs(ids = ids, resources = resources, sleep = sleep, reg = self$reg)
+    calc_features = function() {
+      private$submit_jobs()
       return(invisible(self))
     },
     get_project_status = function() {
       problem = vars = funs = NULL
       reg = self$reg
+      if (nrow(batchtools::findDone(reg = reg)) == 0) {
+        message("No features have been calculated yet. Start calculating with method $submit_jobs(). Added data and features:")
+        return(list(data = reg$problems, features = reg$algorithms))
+      }
       jt = batchtools::getJobTable(reg = reg)
       jt = data.frame(jt)
       jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
@@ -119,7 +100,7 @@ Project = R6Class("Project",
       feature = job.id = problem = algorithm = NULL
       reg = self$reg
       res = batchtools::reduceResultsList(reg = reg)
-      if (length(res) == 0) stop("No features have been calculated yet. Start calculating with method submit_jobs().")
+      if (length(res) == 0) stop("No features have been calculated yet. Start calculating with method $submit_jobs().")
       jt = batchtools::getJobTable(reg = reg)
       res = setNames(res, jt$job.id)
       lookup = jt %>% select(job.id, problem, algorithm)
@@ -137,6 +118,16 @@ Project = R6Class("Project",
         }
       }
       final_result
+    }
+  ),
+  private = list(
+    add_experiments = function(prob.designs = NULL, algo.designs = NULL) {
+      batchtools::addExperiments(reg = self$reg, prob.designs = prob.designs, algo.designs = algo.designs)
+      return(invisible(self))
+    },
+    submit_jobs = function(ids = NULL, resources = list(), sleep = NULL) {
+      batchtools::submitJobs(ids = ids, resources = resources, sleep = sleep, reg = self$reg)
+      return(invisible(self))
     }
   )
 )
