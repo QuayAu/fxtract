@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Basics • fxtract</title>
+<title>Function calc_feature • fxtract</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../pkgdown.js"></script><meta property="og:title" content="Basics">
+<script src="../../pkgdown.js"></script><meta property="og:title" content="Function calc_feature">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -79,7 +79,7 @@
       <a href="../../articles/tutorial/usecase_studentlife.html">StudentLife</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/usecase_big_data.html">Big Data</a>
+      <a href="../../articles/tutorial/usecase_large_project.html">Large Project</a>
     </li>
   </ul>
 </li>
@@ -106,7 +106,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Basics</h1>
+      <h1>Function calc_feature</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/basics_calc_feature.Rmd"><code>vignettes/tutorial/basics_calc_feature.Rmd</code></a></small>
@@ -116,9 +116,6 @@
 
     
     
-<div id="calc_feature" class="section level1">
-<h1 class="hasAnchor">
-<a href="#calc_feature" class="anchor"></a>calc_feature</h1>
 <p>This is the main function of this package. Given a <strong>user-defined</strong> function <code>fun</code>, it calculates this function for each unique grouping variable (e.g. participants in a study). The function <code>fun</code> needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.</p>
 <div id="example-data" class="section level2">
 <h2 class="hasAnchor">
@@ -131,26 +128,26 @@ df<span class="op">$</span>hour =<span class="st"> </span><span class="kw">rep</
 df<span class="op">$</span>x =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>)
 df</code></pre></div>
 <pre><code>##    id  task  hour           x
-## 1   1 task1 hour1  0.37081630
-## 2   1 task1 hour1 -0.24618085
-## 3   1 task1 hour1 -1.42156938
-## 4   1 task1 hour2 -0.78994617
-## 5   1 task1 hour2  0.61405948
-## 6   1 task2 hour1  0.31279754
-## 7   1 task2 hour1  0.20319084
-## 8   1 task2 hour2  0.65978090
-## 9   1 task2 hour2 -0.42626859
-## 10  1 task2 hour2 -0.53810238
-## 11  2 task1 hour1 -1.19440370
-## 12  2 task1 hour1 -0.30070320
-## 13  2 task1 hour1  1.10672027
-## 14  2 task1 hour2  1.43999248
-## 15  2 task1 hour2 -0.85009104
-## 16  2 task2 hour1 -0.06058284
-## 17  2 task2 hour1 -0.26618417
-## 18  2 task2 hour2 -0.13384332
-## 19  2 task2 hour2 -1.72645837
-## 20  2 task2 hour2 -0.10326671</code></pre>
+## 1   1 task1 hour1 -0.09293468
+## 2   1 task1 hour1 -0.19525194
+## 3   1 task1 hour1  0.65650360
+## 4   1 task1 hour2 -0.45777942
+## 5   1 task1 hour2  0.65073759
+## 6   1 task2 hour1  0.74241176
+## 7   1 task2 hour1  0.68327550
+## 8   1 task2 hour2 -1.54016442
+## 9   1 task2 hour2 -0.67435527
+## 10  1 task2 hour2 -1.59360598
+## 11  2 task1 hour1 -0.22247221
+## 12  2 task1 hour1 -1.23600274
+## 13  2 task1 hour1 -1.27985692
+## 14  2 task1 hour2 -1.82743911
+## 15  2 task1 hour2 -0.75731738
+## 16  2 task2 hour1  1.07460633
+## 17  2 task2 hour1 -1.27646972
+## 18  2 task2 hour2  0.60865280
+## 19  2 task2 hour2  0.04286562
+## 20  2 task2 hour2  0.35311362</code></pre>
 <div id="return-1-value-each" class="section level3">
 <h3 class="hasAnchor">
 <a href="#return-1-value-each" class="anchor"></a>Return 1 value each</h3>
@@ -159,10 +156,10 @@ df</code></pre></div>
   <span class="kw">c</span>(<span class="dt">max_x =</span> <span class="kw">max</span>(data<span class="op">$</span>x))
 }</code></pre></div>
 <p>Now we can calculate the desired outcome:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> fun)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> fun)</code></pre></div>
 <pre><code>##   id     max_x
-## 1  1 0.6597809
-## 2  2 1.4399925</code></pre>
+## 1  1 0.7424118
+## 2  2 1.0746063</code></pre>
 </div>
 <div id="return-more-values-at-once" class="section level3">
 <h3 class="hasAnchor">
@@ -171,33 +168,32 @@ df</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">more_features =<span class="st"> </span><span class="cf">function</span>(data) {
   <span class="kw">c</span>(<span class="dt">max_x =</span> <span class="kw">max</span>(data<span class="op">$</span>x), <span class="dt">sd_x =</span> <span class="kw">sd</span>(data<span class="op">$</span>x))
 }
-<span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_col =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> more_features)</code></pre></div>
+<span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id     max_x      sd_x
-## 1  1 0.6597809 0.6754943
-## 2  2 1.4399925 0.9536788</code></pre>
+## 1  1 0.7424118 0.8921632
+## 2  2 1.0746063 0.9641406</code></pre>
 </div>
 <div id="group-by-two-columns" class="section level3">
 <h3 class="hasAnchor">
-<a href="#group-by-two-columns" class="anchor"></a>group by two columns</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
+<a href="#group-by-two-columns" class="anchor"></a>Group by two columns</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1 max_x_task2 sd_x_task1 sd_x_task2
-## 1  1   0.6140595  0.65978090  0.8345977  0.5091073
-## 2  2   1.4399925 -0.06058284  1.1757938  0.7132029</code></pre>
+## 1  1   0.6565036   0.7424118  0.5118038   1.145565
+## 2  2  -0.2224722   1.0746063  0.6044088   0.887729</code></pre>
 </div>
 <div id="group-by-three-colums" class="section level3">
 <h3 class="hasAnchor">
-<a href="#group-by-three-colums" class="anchor"></a>group by three colums</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>, <span class="st">"hour"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
+<a href="#group-by-three-colums" class="anchor"></a>Group by three colums</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="kw">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>, <span class="st">"hour"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1_hour1 max_x_task1_hour2 max_x_task2_hour1
-## 1  1         0.3708163         0.6140595        0.31279754
-## 2  2         1.1067203         1.4399925       -0.06058284
+## 1  1         0.6565036         0.6507376         0.7424118
+## 2  2        -0.2224722        -0.7573174         1.0746063
 ##   max_x_task2_hour2 sd_x_task1_hour1 sd_x_task1_hour2 sd_x_task2_hour1
-## 1         0.6597809         0.910574        0.9927819       0.07750365
-## 2        -0.1032667         1.160080        1.6193336       0.14538209
+## 1        -0.6743553        0.4650473        0.7838399       0.04181565
+## 2         0.6086528        0.5982237        0.7566903       1.66246182
 ##   sd_x_task2_hour2
-## 1        0.6616815
-## 2        0.9284493</code></pre>
-</div>
+## 1        0.5159947
+## 2        0.2833341</code></pre>
 </div>
 </div>
   </div>
@@ -207,11 +203,7 @@ df</code></pre></div>
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li>
-<a href="#calc_feature">calc_feature</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#example-data">Example data</a></li>
-      </ul>
-</li>
       </ul>
 </div>
       </div>

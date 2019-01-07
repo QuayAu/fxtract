@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Use Cases • fxtract</title>
+<title>Studentlife • fxtract</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../pkgdown.js"></script><meta property="og:title" content="Use Cases">
+<script src="../../pkgdown.js"></script><meta property="og:title" content="Studentlife">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -79,7 +79,7 @@
       <a href="../../articles/tutorial/usecase_studentlife.html">StudentLife</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/usecase_big_data.html">Big Data</a>
+      <a href="../../articles/tutorial/usecase_large_project.html">Large Project</a>
     </li>
   </ul>
 </li>
@@ -106,7 +106,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Use Cases</h1>
+      <h1>Studentlife</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/usecase_studentlife.Rmd"><code>vignettes/tutorial/usecase_studentlife.Rmd</code></a></small>
@@ -160,7 +160,7 @@
   <span class="kw">c</span>(<span class="dt">numberDiffApps =</span> <span class="kw">length</span>(<span class="kw">unique</span>(data<span class="op">$</span>RUNNING_TASKS_topActivity_mPackage)))
 }</code></pre></div>
 <p>That’s all we need to calculate the number of different apps used for each participant:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feat_data =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="st">"userId"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feat_data =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_by =</span> <span class="st">"userId"</span>)
 feat_data</code></pre></div>
 <pre><code>##   userId numberDiffApps
 ## 1     00             93
@@ -173,7 +173,7 @@ feat_data</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">studentlife_small_weekday =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)
-x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_weekday, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="st">"userId"</span>, <span class="dt">colname =</span> <span class="st">"numberDiffAppsWeekday"</span>)
+x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_weekday, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_by =</span> <span class="st">"userId"</span>, <span class="dt">colname =</span> <span class="st">"numberDiffAppsWeekday"</span>)
 feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)
 feat_data</code></pre></div>
 <pre><code>##   userId numberDiffApps numberDiffAppsWeekday
@@ -187,14 +187,14 @@ feat_data</code></pre></div>
 <p>To calculate this feature per day, we need to add date information to the dataset:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">studentlife_small_date =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
 <p>Now we can calculate this feature per day:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_by =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>))
 x[, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</code></pre></div>
 <pre><code>##   userId X2013.03.24 X2013.03.25 X2013.03.26 X2013.03.27 X2013.03.28
 ## 1     00          22          21          12          20          26
 ## 2     01           6           5          10          18           9
 ## 3     02           7           3          17          28          24</code></pre>
 <p>All there is left to do is to apply a mean function on the rows of this dataset. You can do this by specifying a <code>summarize</code>-function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_col =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> numberDiffApps, <span class="dt">group_by =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>), 
   <span class="dt">summarize =</span> <span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dt">colname =</span> <span class="st">"dailyNumberDiffApps"</span>)
 feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)</code></pre></div>
 <pre><code>## Joining, by = "userId"</code></pre>
@@ -218,7 +218,7 @@ totalDist =<span class="st"> </span><span class="cf">function</span>(data) {
   lat =<span class="st"> </span>data<span class="op">$</span>latitude
   <span class="kw">c</span>(<span class="dt">totalDist =</span> <span class="kw">sum</span>(geosphere<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/geosphere/topics/distHaversine">distHaversine</a></span>(<span class="kw">cbind</span>(long, lat)), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">group_col =</span> <span class="st">"userId"</span>, <span class="dt">fun =</span> totalDist)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">group_by =</span> <span class="st">"userId"</span>, <span class="dt">fun =</span> totalDist)
 feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x, <span class="dt">by =</span> <span class="st">"userId"</span>)
 feat_data </code></pre></div>
 <pre><code>##   userId numberDiffApps numberDiffAppsWeekday dailyNumberDiffApps
@@ -229,7 +229,7 @@ feat_data </code></pre></div>
 ## 1 621719.25
 ## 2  44649.62
 ## 3 108303.26</code></pre>
-<p>For small projects (small datasets, few features) it’s ok to calculate the features like above and join the resulting dataframes with <code><a href="http://dplyr.tidyverse.org/reference/join.html">dplyr::left_join</a></code> (or your preferred method). But it becomes very burdensome, if datasets get too big for memory and features (possibly many different ones) must be calculated in chunks and be joined afterwards. We made the experience that single errors (e.g. one feature throws an error on one participant) can stop the whole process. Updating this feature and calculate it again can be quite convoluted because of loops and code bloat (many joins). For larger projects, please use the R6 class <code>Project</code>. A use case can be found <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/usecase_big_data.html">here</a>.</p>
+<p>For small projects (small datasets, few features) it’s ok to calculate the features like above and join the resulting dataframes with <code><a href="https://dplyr.tidyverse.org/reference/join.html">dplyr::left_join</a></code> (or your preferred method). But it becomes very burdensome, if datasets get too big for memory and features (possibly many different ones) must be calculated in chunks and be joined afterwards. We made the experience that single errors (e.g. one feature throws an error on one participant) can stop the whole process. Updating this feature and calculate it again can be quite convoluted because of loops and code bloat (many joins). For larger projects use the R6 class <code>Project</code>. A use case can be found <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/usecase_large_project.html">here</a>.</p>
 </div>
 </div>
 </div>

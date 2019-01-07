@@ -8,7 +8,7 @@ articles:
   basics_sliding_window: tutorial/basics_sliding_window.html
   filters: tutorial/filters.html
   helpers: tutorial/helpers.html
-  usecase_big_data: tutorial/usecase_big_data.html
+  usecase_large_project: tutorial/usecase_large_project.html
   usecase_studentlife: tutorial/usecase_studentlife.html
 urls:
   reference: https://quayau.github.io/fxtract/docs/index.html/reference

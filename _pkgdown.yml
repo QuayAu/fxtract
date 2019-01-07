@@ -26,8 +26,8 @@ navbar:
     menu:
     - text: StudentLife
       href: articles/tutorial/usecase_studentlife.html
-    - text: Big Data
-      href: articles/tutorial/usecase_big_data.html
+    - text: Large Project
+      href: articles/tutorial/usecase_large_project.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

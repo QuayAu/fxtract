@@ -1,5 +1,5 @@
 ---
-title: "Preprocessing Helpers"
+title: "Add Date Information"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
@@ -8,9 +8,6 @@ vignette: >
 editor_options: 
   chunk_output_type: console
 ---
-
-# Add Date Information
-
 We included some handy timestamp converters which enrich datasets with useful information.
 Let's demonstrate it with a simple example:
 ```{r, message = FALSE}

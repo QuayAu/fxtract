@@ -1,5 +1,5 @@
 ---
-title: "Preprocessing Helpers"
+title: "Filters"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}

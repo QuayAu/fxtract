@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Date Information • fxtract</title>
+<title>Large Project • fxtract</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../pkgdown.js"></script><meta property="og:title" content="Add Date Information">
+<script src="../../pkgdown.js"></script><meta property="og:title" content="Large Project">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -106,78 +106,20 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Add Date Information</h1>
+      <h1>Large Project</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/helpers.Rmd"><code>vignettes/tutorial/helpers.Rmd</code></a></small>
-      <div class="hidden name"><code>helpers.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/usecase_large_project.Rmd"><code>vignettes/tutorial/usecase_large_project.Rmd</code></a></small>
+      <div class="hidden name"><code>usecase_large_project.Rmd</code></div>
 
     </div>
 
     
     
-<p>We included some handy timestamp converters which enrich datasets with useful information. Let’s demonstrate it with a simple example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
-df =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">timestamp =</span> <span class="kw">c</span>(<span class="dv">946733820</span>, <span class="dv">946733821</span>, <span class="dv">946733822</span>), <span class="dt">x =</span> <span class="st">"some_data"</span>)
-<span class="co">#corresponds to 2000-01-01 13:37, 2000-01-01 13:37:01, 2000-01-01 13:37:02</span>
-df</code></pre></div>
-<pre><code>##   timestamp         x
-## 1 946733820 some_data
-## 2 946733821 some_data
-## 3 946733822 some_data</code></pre>
-<div id="add_date_time" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add_date_time" class="anchor"></a>add_date_time</h2>
-<p>This function adds a date_time variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_date_time.html">add_date_time</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
-<pre><code>##   timestamp         x           date_time
-## 1 946733820 some_data 2000-01-01 13:37:00
-## 2 946733821 some_data 2000-01-01 13:37:01
-## 3 946733822 some_data 2000-01-01 13:37:02</code></pre>
-</div>
-<div id="add_date" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add_date" class="anchor"></a>add_date</h2>
-<p>This function adds a date variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
-<pre><code>##   timestamp         x       date
-## 1 946733820 some_data 2000-01-01
-## 2 946733821 some_data 2000-01-01
-## 3 946733822 some_data 2000-01-01</code></pre>
-</div>
-<div id="add_weekday" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add_weekday" class="anchor"></a>add_weekday</h2>
-<p>This funciton adds an ordered weekday variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day">lubridate</a> package to your dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
-<pre><code>##   timestamp         x weekday
-## 1 946733820 some_data     Sat
-## 2 946733821 some_data     Sat
-## 3 946733822 some_data     Sat</code></pre>
-</div>
-<div id="add_time" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add_time" class="anchor"></a>add_time</h2>
-<p>This funciton adds a time variable <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
-<pre><code>##   timestamp         x     time
-## 1 946733820 some_data 13:37:00
-## 2 946733821 some_data 13:37:01
-## 3 946733822 some_data 13:37:02</code></pre>
-</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#add_date_time">add_date_time</a></li>
-      <li><a href="#add_date">add_date</a></li>
-      <li><a href="#add_weekday">add_weekday</a></li>
-      <li><a href="#add_time">add_time</a></li>
-      </ul>
-</div>
       </div>
 
 </div>
