@@ -21,10 +21,10 @@ test_that("initialize", {
 
   #test same project name
   expect_error(Project$new(project_name = "my_project"), regexp = "The project name already exists. Please choose another name or delete the existing project and try again!")
-  
+
   #test wrong input
   expect_error(Project$new(1), regexp = "Assertion on 'project_name' failed: Must be of type 'character', not 'double'.")
-  
+
   #check R6 slots
   expect_equal(x$dir, "projects/my_project")
   expect_equal(x$project_name, "my_project")
@@ -34,11 +34,11 @@ test_that("initialize", {
 test_that("use_dataframe", {
   unlink("projects", recursive = TRUE)
   x = Project$new(project_name = "my_project")
-  
+
   #test wrong inputs
-  expect_error(x$use_dataframe(iris), regexp = "Argument 'group_by' is missing")
+  expect_error(x$use_dataframe(iris))
   expect_error(x$use_dataframe(iris, group_by = "test"))
-  
+
   #test right data
   x$use_dataframe(iris, group_by = "Species")
   expect_true(file.exists("projects/my_project/raw_rds_files/setosa.RDS"))
@@ -49,7 +49,7 @@ test_that("use_dataframe", {
   d3 = readRDS("projects/my_project/raw_rds_files/virginica.RDS")
   expect_equal(iris, rbind(d1, d2, d3))
   expect_equal(x$group_by, "Species")
-  
+
   #test second dataframe different group by error
   expect_error(x$use_dataframe(iris, group_by = "Petal.Length"), regexp = "The group_by variable was set to Species. Only one group_by variable is allowed per project!")
 
@@ -62,25 +62,25 @@ test_that("add_batchtools_problems", {
   x$use_dataframe(iris, group_by = "Species")
   x$add_batchtools_problems()
   expect_equal(x$reg$problems, c("setosa", "versicolor", "virginica"))
-  
+
   unlink("projects", recursive = TRUE)
   x = Project$new(project_name = "my_project")
   x$use_dataframe(iris, group_by = "Species")
   x$add_batchtools_problems(n.chunks = 1)
   expect_equal(x$reg$problems, c("chunk_1"))
-  
+
   unlink("projects", recursive = TRUE)
   x = Project$new(project_name = "my_project")
   x$use_dataframe(iris, group_by = "Species")
   x$add_batchtools_problems(n.chunks = 2)
   expect_setequal(x$reg$problems, c("chunk_1", "chunk_2"))
-  
+
   unlink("projects", recursive = TRUE)
   x = Project$new(project_name = "my_project")
   x$use_dataframe(iris, group_by = "Species")
   x$add_batchtools_problems(n.chunks = 3)
   expect_setequal(x$reg$problems, c("chunk_1", "chunk_2", "chunk_3"))
-  
+
   unlink("projects", recursive = TRUE)
   x = Project$new(project_name = "my_project")
   x$use_dataframe(iris, group_by = "Species")
@@ -105,7 +105,7 @@ test_that("add_batchtools_algorithm", {
   x = Project$new(project_name = "my_project")
   x$use_dataframe(iris, group_by = "Species")
   x$add_batchtools_problems()
-  
+
   sepal_length_fun = function(data) {
     c(mean_sepal_length = mean(data$Sepal.Length),
       max_sepal_length = max(data$Sepal.Length),
@@ -118,9 +118,9 @@ test_that("add_batchtools_algorithm", {
       sd_sepal_width = sd(data$Sepal.Width)
     )
   }
-  
+
   x$add_batchtools_algorithm(sepal_length_fun)
-  x$add_batchtools_algorithm(sepal_width_fun)  
+  x$add_batchtools_algorithm(sepal_width_fun)
   expect_equal(x$reg$algorithms, c("sepal_length_fun", "sepal_width_fun"))
 
   #test remove features
@@ -137,7 +137,7 @@ test_that("calculate features", {
   x = Project$new(project_name = "my_project")
   x$use_dataframe(iris, group_by = "Species")
   x$add_batchtools_problems()
-  
+
   sepal_length_fun = function(data) {
     c(mean_sepal_length = mean(data$Sepal.Length),
       max_sepal_length = max(data$Sepal.Length),
@@ -150,21 +150,21 @@ test_that("calculate features", {
       sd_sepal_width = sd(data$Sepal.Width)
     )
   }
-  
+
   x$add_batchtools_algorithm(sepal_length_fun)
-  x$add_batchtools_algorithm(sepal_width_fun)  
-  
+  x$add_batchtools_algorithm(sepal_width_fun)
+
   #test meaningful error message $collect_results()
   expect_error(x$collect_results(), regexp = "No features have been calculated yet. Start calculating with method submit_jobs().")
-  
+
   #test submitting jobs by batchtools
   batchtools::submitJobs(1:2, reg = x$reg)
   expect_equal(x$get_project_status()$perc_done, 1/3)
-  
+
   #test submitting jobs by R6 method
   x$submit_jobs(3:4)
   expect_equal(x$get_project_status()$perc_done, 2/3)
-  
+
   #calculate rest
   x$submit_jobs()
   expect_equal(x$get_project_status()$perc_done, 1)
@@ -172,7 +172,6 @@ test_that("calculate features", {
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
   expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
-})  
-  
-  
-  
+})
+
+
