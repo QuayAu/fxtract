@@ -1,7 +1,7 @@
 #' Calculates a given function for each grouping variable.
 #'
 #' @template param_data
-#' @param group_col character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.
+#' @param group_by character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.
 #' @param fun function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.
 #' @template param_check_fun
 #' @param summarize function. If more than one value is returned for each grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.
@@ -18,29 +18,29 @@
 #'     dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
 #'   )
 #' }
-#' calc_feature(data = studentlife_small, group_col = "userId", fun = fun)
-calc_feature = function(data, group_col, fun, check_fun = TRUE, summarize, colname) {
+#' calc_feature(data = studentlife_small, group_by = "userId", fun = fun)
+calc_feature = function(data, group_by, fun, check_fun = TRUE, summarize, colname) {
   . = NULL
   checkmate::assertDataFrame(data)
-  checkmate::assertNames(names(data), must.include = group_col)
+  checkmate::assertNames(names(data), must.include = group_by)
   checkmate::assertLogical(check_fun)
   if (check_fun) checkmate::assertAtomicVector(fun(data))
 
   if (!missing(summarize)) checkmate::assertFunction(summarize)
   if (!missing(colname)) checkmate::assertCharacter(colname)
 
-  if (length(group_col) == 1) res = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(data.frame(t(fun(.))))
-  if (length(group_col) >= 2) {
-    res = data %>% dplyr::group_by_(.dots = group_col) %>% dplyr::do(data.frame(t(fun(.))))
-    dcast_formula = as.formula(paste(group_col[1], "~", paste(group_col[-1], collapse = "+")))
-    res = data.table::dcast(data.table::setDT(res), dcast_formula, value.var = setdiff(colnames(res), group_col))
+  if (length(group_by) == 1) res = data %>% dplyr::group_by_(.dots = group_by) %>% dplyr::do(data.frame(t(fun(.))))
+  if (length(group_by) >= 2) {
+    res = data %>% dplyr::group_by_(.dots = group_by) %>% dplyr::do(data.frame(t(fun(.))))
+    dcast_formula = as.formula(paste(group_by[1], "~", paste(group_by[-1], collapse = "+")))
+    res = data.table::dcast(data.table::setDT(res), dcast_formula, value.var = setdiff(colnames(res), group_by))
   }
 
   if (!missing(colname) & ncol(res) == 2) colnames(res)[2] = ifelse(missing(colname), deparse(substitute(fun)), colname)
   res = data.frame(res)
 
   if (!missing(summarize)) {
-    res0 = res %>% select(-one_of(group_col[1]))
+    res0 = res %>% select(-one_of(group_by[1]))
     for (i in 1:nrow(res0)) {
       if (i == 1) res1 = do.call(summarize, list(unlist(res0[i, ])))
       if (i >= 2) res1 = rbind(res1, do.call(summarize, list(unlist(res0[i, ]))))
@@ -49,7 +49,7 @@ calc_feature = function(data, group_col, fun, check_fun = TRUE, summarize, colna
     rownames(res1) = NULL
     if (ncol(res1) == 1) colnames(res1) = deparse(substitute(summarize))
     if (!missing(colname) & ncol(res1) == 1) colnames(res1) = colname
-    res = data.frame(res %>% select(one_of(group_col[1])), res1)
+    res = data.frame(res %>% select(one_of(group_by[1])), res1)
   }
   return(res)
 }

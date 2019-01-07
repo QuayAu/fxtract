@@ -4,7 +4,7 @@
 #' @import R6
 #' @import dplyr
 #' @import batchtools
-#' @importFrom foreach "%dopar%"
+#' @importFrom foreach "%dopar%" "%do%"
 NULL
 
 #' @export
@@ -54,7 +54,7 @@ Project = R6Class("Project",
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))))
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
-        fun = function(job, data, instance) fxtract::calc_feature(data, group_col = self$group_by, fun = fun)
+        fun = function(job, data, instance) fxtract::calc_feature(data, group_by = self$group_by, fun = fun)
       )
 
       #add experiments
@@ -106,7 +106,7 @@ Project = R6Class("Project",
       lookup = jt %>% select(job.id, problem, algorithm)
       features = self$get_project_status()$feature_wise
       features = names(features[features != 0])
-      results = foreach::foreach(feature = features) %dopar% {
+      results = foreach::foreach(feature = features) %do% {
         ids = lookup %>% dplyr::filter(algorithm %in% feature)
         res_feat = res[names(res) %in% ids$job.id]
         dplyr::bind_rows(res_feat)

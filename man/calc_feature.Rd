@@ -4,12 +4,12 @@
 \alias{calc_feature}
 \title{Calculates a given function for each grouping variable.}
 \usage{
-calc_feature(data, group_col, fun, check_fun = TRUE, summarize, colname)
+calc_feature(data, group_by, fun, check_fun = TRUE, summarize, colname)
 }
 \arguments{
 \item{data}{dataframe.}
 
-\item{group_col}{character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.}
+\item{group_by}{character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.}
 
 \item{fun}{function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.}
 
@@ -32,5 +32,5 @@ fun = function(data) {
     dplyr::filter(data, RUNNING_TASKS_baseActivity_mPackage == "com.android.chrome"))
   )
 }
-calc_feature(data = studentlife_small, group_col = "userId", fun = fun)
+calc_feature(data = studentlife_small, group_by = "userId", fun = fun)
 }
