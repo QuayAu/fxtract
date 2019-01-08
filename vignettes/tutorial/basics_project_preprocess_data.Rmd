@@ -1,0 +1,13 @@
+---
+title: "R6 Class Project - Preprocess Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+One can perform dataset preprocessing inside the feature functions (e.g. clustering GPS points).
+But if this takes a long time and is done again and again for different feature functions, it can be useful to perform preprocessing on the dataset once. 
+To make sure that this is done for each grouping variable individually, it is safer to use the method shown here.
+

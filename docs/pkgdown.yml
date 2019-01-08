@@ -1,15 +1,7 @@
 pandoc: 1.19.2.1
-pkgdown: 1.1.0
+pkgdown: 1.3.0
 pkgdown_sha: ~
-articles:
-  fxtract: fxtract.html
-  basics_calc_feature: tutorial/basics_calc_feature.html
-  basics_project: tutorial/basics_project.html
-  basics_sliding_window: tutorial/basics_sliding_window.html
-  filters: tutorial/filters.html
-  helpers: tutorial/helpers.html
-  usecase_large_project: tutorial/usecase_large_project.html
-  usecase_studentlife: tutorial/usecase_studentlife.html
+articles: []
 urls:
   reference: https://quayau.github.io/fxtract/docs/index.html/reference
   article: https://quayau.github.io/fxtract/docs/index.html/articles

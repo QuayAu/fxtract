@@ -1,0 +1,28 @@
+On how to use the R6 class `Project`, click [here](https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html). 
+
+Setup script:
+
+```{r, echo = FALSE}
+unlink("projects", recursive = TRUE)
+```
+
+```{r}
+library(fxtract)
+my_project = Project$new("my_project")
+my_project$add_data(iris, group_by = "Species")
+
+fun1 = function(data) {
+  c(mean_sepal_length = mean(data$Sepal.Length),
+    sd_sepal_length = sd(data$Sepal.Length))
+}
+
+fun2 = function(data) {
+  c(mean_petal_length = mean(data$Petal.Length),
+    sd_petal_length = sd(data$Petal.Length))
+}
+
+my_project$add_feature(fun1)
+my_project$add_feature(fun2)
+my_project$calc_features()
+```
+

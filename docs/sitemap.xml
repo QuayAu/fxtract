@@ -49,6 +49,15 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project.html</loc>
   </url>
   <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_preprocess_data.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_update_data.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_update_feature.html</loc>
+  </url>
+  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_sliding_window.html</loc>
   </url>
   <url>
@@ -56,6 +65,9 @@
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helpers.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/project_setup_child.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_large_project.html</loc>

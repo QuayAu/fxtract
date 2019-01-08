@@ -1,0 +1,107 @@
+---
+title: "R6 Class Project - Utilize batchtools"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+Use case:
+
+- Useful for projects with large datasets and many features.
+- When some features fail on some datasets, one can get individual error messages.
+- Get overview of current calculation status (if feature extraction takes a long time).
+- Easy parallelization.
+
+Setup script:
+
+```{r, echo = FALSE}
+unlink("projects", recursive = TRUE)
+```
+```{r, message = FALSE}
+library(fxtract)
+my_project = Project$new("my_project")
+my_project$add_data(iris, group_by = "Species")
+```
+
+Let's write functions, which fail on different datasets:
+
+```{r, message = FALSE}
+fun1 = function(data) {
+  if ("versicolor" %in% data$Species) stop("fun1 not compatible on versicolor")
+  c(mean_sepal_length = mean(data$Sepal.Length),
+    sd_sepal_length = sd(data$Sepal.Length))
+}
+
+fun2 = function(data) {
+  if ("virginica" %in% data$Species) stop("fun2 not compatible on virginica")
+  c(mean_petal_length = mean(data$Petal.Length),
+    sd_petal_length = sd(data$Petal.Length))
+}
+
+my_project$add_feature(fun1)
+my_project$add_feature(fun2)
+my_project$calc_features()
+```
+
+One can still get the resulting dataframe:
+```{r}
+my_project$collect_results()
+```
+
+## Get Error Messages
+This is done by using batchtools functions directly on the project's registry:
+
+```{r, message = FALSE, warning = FALSE}
+library(batchtools)
+batchtools::getErrorMessages(reg = my_project$reg)
+```
+
+## Project Status
+We have implemented a method `$get_project_status()` which gives an overview over which features have already been calculated on which datasets (1 done, 0 not done):
+
+```{r, message = FALSE}
+my_project$get_project_status()
+```
+
+## Fix Features
+```{r, message = FALSE}
+fun1_fixed = function(data) {
+  c(mean_sepal_length = mean(data$Sepal.Length),
+    sd_sepal_length = sd(data$Sepal.Length))
+}
+
+fun2_fixed = function(data) {
+  c(mean_petal_length = mean(data$Petal.Length),
+    sd_petal_length = sd(data$Petal.Length))
+}
+
+my_project$remove_feature(fun1)
+my_project$remove_feature(fun2)
+my_project$add_feature(fun1_fixed)
+my_project$add_feature(fun2_fixed)
+```
+
+
+## Parallelization
+Parallelization is done via setting the cluster functions via batchtools. See [here](https://mllg.github.io/batchtools/articles/batchtools.html).
+
+E.g. on a windows machine:
+```{r}
+my_project$reg$cluster.functions = batchtools::makeClusterFunctionsSocket(2)
+```
+
+## Submit Jobs via batchtools
+It is also possible to submit jobs via batchtools:
+```{r}
+batchtools::submitJobs()
+```
+
+```{r, echo = FALSE}
+Sys.sleep(1)
+```
+
+```{r}
+my_project$collect_results()
+```

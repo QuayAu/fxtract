@@ -1,0 +1,61 @@
+---
+title: "R6 Class Project - How to Update a Feature"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+Use case:
+
+- Features have been added or even been calculated.
+- One wants to edit a feature function.
+
+```{r test-main, child = 'project_setup_child.Rmd', message = FALSE}
+```
+
+All features have been calculated:
+```{r, message = FALSE}
+my_project$collect_results()
+```
+
+## Write Updated Feature Functions
+Let's say we want to edit our features to use the robust measures `median()` and `mad()`.
+
+First we need to write the functions:
+```{r, message = FALSE}
+fun1_robust = function(data) {
+  c(median_sepal_length = median(data$Sepal.Length),
+    mad_sepal_length = mad(data$Sepal.Length))
+}
+
+fun2_robust = function(data) {
+  c(median_petal_length = median(data$Petal.Length),
+    mad_petal_length = mad(data$Petal.Length))
+}
+```
+
+## Delete Old Feature Functions
+```{r, message = FALSE}
+my_project$remove_feature(fun1)
+```
+This deletes all calculated features corresponding to `fun1`.
+
+It's also possible to pass a character string:
+```{r, message = FALSE}
+my_project$remove_feature("fun2")
+```
+
+## Add New Feature Functions
+All there is left to do is to add the new feature functions and to execute the calculation process:
+
+```{r, message = FALSE}
+my_project$add_feature(fun1_robust)
+my_project$add_feature(fun2_robust)
+```
+```{r, message = FALSE}
+my_project$calc_features()
+my_project$collect_results()
+```
+

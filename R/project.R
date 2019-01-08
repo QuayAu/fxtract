@@ -51,10 +51,11 @@ Project = R6Class("Project",
     },
     add_feature = function(fun) {
       checkmate::assert_function(fun)
-      batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))))
+      batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))), reg = self$reg)
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
-        fun = function(job, data, instance) fxtract::calc_feature(data, group_by = self$group_by, fun = fun)
+        fun = function(job, data, instance) fxtract::calc_feature(data, group_by = self$group_by, fun = fun),
+        reg = self$reg  
       )
 
       #add experiments
@@ -72,7 +73,7 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     calc_features = function() {
-      private$submit_jobs()
+      batchtools::submitJobs(reg = self$reg)
       return(invisible(self))
     },
     get_project_status = function() {
@@ -99,10 +100,12 @@ Project = R6Class("Project",
     collect_results = function() {
       feature = job.id = problem = algorithm = NULL
       reg = self$reg
-      res = batchtools::reduceResultsList(reg = reg)
-      if (length(res) == 0) stop("No features have been calculated yet. Start calculating with method $submit_jobs().")
+      res = batchtools::reduceResultsDataTable(reg = reg)
+      if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $submit_jobs().")
+      done_id = res$job.id
+      res = setNames(res$result, done_id)
+      
       jt = batchtools::getJobTable(reg = reg)
-      res = setNames(res, jt$job.id)
       lookup = jt %>% select(job.id, problem, algorithm)
       features = self$get_project_status()$feature_wise
       features = names(features[features != 0])
@@ -123,10 +126,6 @@ Project = R6Class("Project",
   private = list(
     add_experiments = function(prob.designs = NULL, algo.designs = NULL) {
       batchtools::addExperiments(reg = self$reg, prob.designs = prob.designs, algo.designs = algo.designs)
-      return(invisible(self))
-    },
-    submit_jobs = function(ids = NULL, resources = list(), sleep = NULL) {
-      batchtools::submitJobs(ids = ids, resources = resources, sleep = sleep, reg = self$reg)
       return(invisible(self))
     }
   )

@@ -1,0 +1,48 @@
+---
+title: "R6 Class Project - How to Update Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+Use case:
+
+- Data from some grouping variables changes.
+- One wants to update the datasets.
+
+```{r test-main, child = 'project_setup_child.Rmd', message = FALSE}
+```
+
+All features have been calculated:
+```{r, message = FALSE}
+my_project$collect_results()
+```
+
+Let's change the dataset for the species `virginica`:
+```{r, warning = FALSE, message = FALSE}
+library(dplyr)
+iris_vers = iris %>% filter(Species == "virginica")
+iris_vers$Sepal.Length = abs(rnorm(nrow(iris_vers)))
+```
+
+## Delete Old Data
+Datasets are saved as batchtools problems (one problem for each grouping variable). Single problems can be removed:
+```{r, message = FALSE}
+my_project$remove_problems("virginica")
+```
+
+## Add New Data
+```{r, message = FALSE}
+my_project$add_data(iris_vers, group_by = "Species")
+```
+
+## Calculate Features 
+```{r, message = FALSE}
+my_project$calc_features()
+my_project$collect_results()
+```
+
+
+
+
