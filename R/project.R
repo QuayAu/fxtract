@@ -13,13 +13,14 @@ Project = R6Class("Project",
     project_name = NULL,
     group_by = NULL,
     reg = NULL,
+    dir = NULL,
     initialize = function(project_name, ...) {
       self$project_name = checkmate::assert_character(project_name)
       newDirPath = paste0("projects/", project_name)
       if (!dir.exists("projects")) dir.create("projects")
       if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
       dir.create(newDirPath)
-      private$dir = newDirPath
+      self$dir = newDirPath
       dir.create(paste0(newDirPath, "/raw_rds_files"))
       self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"), ...)
     },
@@ -36,7 +37,7 @@ Project = R6Class("Project",
       #save rds files
       foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
         dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(dataframe_i, file = paste0(private$dir, "/raw_rds_files/", i, ".RDS"))
+        saveRDS(dataframe_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
         message(paste0("Saving raw RDS file " , i, ".RDS ", "on disk."))
       }
 
@@ -52,10 +53,20 @@ Project = R6Class("Project",
       }
       return(invisible(self))
     },
-    remove_problems = function(problems) {
-      checkmate::assert_character(problems)
-      checkmate::assert_subset(problems, self$reg$problems)
-      batchtools::removeProblems(problems, reg = self$reg)
+    preprocess_data = function(fun) {
+      datasets = list.files(paste0(self$dir, "/raw_rds_files/"))
+      foreach::foreach(i = datasets, .packages = c("dplyr")) %dopar% {
+        dataframe_i = readRDS(paste0(self$dir, "/raw_rds_files/", i))
+        data_preproc = fun(dataframe_i)
+        saveRDS(data_preproc, file = paste0(self$dir, "/raw_rds_files/", i))
+        message(paste0("Updating raw RDS file " , i, ".RDS "))
+      }
+      return(invisible(self))
+    },
+    remove_data = function(data) {
+      checkmate::assert_character(data)
+      checkmate::assert_subset(data, self$reg$problems)
+      batchtools::removeProblems(data, reg = self$reg)
       return(invisible(self))
     },
     add_feature = function(fun) {
@@ -136,7 +147,6 @@ Project = R6Class("Project",
     add_experiments = function(prob.designs = NULL, algo.designs = NULL) {
       batchtools::addExperiments(reg = self$reg, prob.designs = prob.designs, algo.designs = algo.designs)
       return(invisible(self))
-    },
-    dir = NULL
+    }
   )
 )

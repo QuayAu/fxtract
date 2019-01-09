@@ -52,6 +52,31 @@ test_that("add_data", {
   unlink("projects", recursive = TRUE)
 })
 
+test_that("preprocess_data", {
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  x$add_data(iris, group_by = "Species")
+
+  fun = function(data) {
+    data$new_col = max(data$Sepal.Length) + max(data$Petal.Length)
+    data
+  }
+  x$preprocess_data(fun = fun)
+
+  #test right data
+  expect_true(file.exists("projects/my_project/raw_rds_files/setosa.RDS"))
+  expect_true(file.exists("projects/my_project/raw_rds_files/versicolor.RDS"))
+  expect_true(file.exists("projects/my_project/raw_rds_files/virginica.RDS"))
+  d1 = readRDS("projects/my_project/raw_rds_files/setosa.RDS")
+  d2 = readRDS("projects/my_project/raw_rds_files/versicolor.RDS")
+  d3 = readRDS("projects/my_project/raw_rds_files/virginica.RDS")
+  iris2 = rbind(d1, d2, d3)
+  iris3 = iris %>% dplyr::group_by(Species) %>% dplyr::mutate(new_col = max(Sepal.Length) + max(Petal.Length)) %>% data.frame()
+  expect_equal(iris3, iris2)
+
+  unlink("projects", recursive = TRUE)
+})
+
 test_that("remove_problems", {
   unlink("projects", recursive = TRUE)
   x = Project$new(project_name = "my_project")
