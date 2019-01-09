@@ -6,14 +6,14 @@ test_that("initialize", {
   expect_true(dir.exists("projects"))
   expect_true(dir.exists("projects/my_project"))
   expect_true(dir.exists("projects/my_project/reg"))
-  expect_true(dir.exists("projects/my_project/raw_rds_files"))
+  expect_true(dir.exists("projects/my_project/rds_files"))
 
   #test second project
   y = Project$new(project_name = "my_project2")
   expect_true(dir.exists("projects"))
   expect_true(dir.exists("projects/my_project2"))
   expect_true(dir.exists("projects/my_project2/reg"))
-  expect_true(dir.exists("projects/my_project2/raw_rds_files"))
+  expect_true(dir.exists("projects/my_project2/rds_files"))
 
   #test same project name
   expect_error(Project$new(project_name = "my_project"), regexp = "The project name already exists. Please choose another name or delete the existing project and try again!")
@@ -36,12 +36,12 @@ test_that("add_data", {
 
   #test right data
   x$add_data(iris, group_by = "Species")
-  expect_true(file.exists("projects/my_project/raw_rds_files/setosa.RDS"))
-  expect_true(file.exists("projects/my_project/raw_rds_files/versicolor.RDS"))
-  expect_true(file.exists("projects/my_project/raw_rds_files/virginica.RDS"))
-  d1 = readRDS("projects/my_project/raw_rds_files/setosa.RDS")
-  d2 = readRDS("projects/my_project/raw_rds_files/versicolor.RDS")
-  d3 = readRDS("projects/my_project/raw_rds_files/virginica.RDS")
+  expect_true(file.exists("projects/my_project/rds_files/setosa.RDS"))
+  expect_true(file.exists("projects/my_project/rds_files/versicolor.RDS"))
+  expect_true(file.exists("projects/my_project/rds_files/virginica.RDS"))
+  d1 = readRDS("projects/my_project/rds_files/setosa.RDS")
+  d2 = readRDS("projects/my_project/rds_files/versicolor.RDS")
+  d3 = readRDS("projects/my_project/rds_files/virginica.RDS")
   expect_equal(iris, rbind(d1, d2, d3))
   expect_equal(x$group_by, "Species")
   expect_equal(x$reg$problems, c("setosa", "versicolor", "virginica"))
@@ -64,12 +64,12 @@ test_that("preprocess_data", {
   x$preprocess_data(fun = fun)
 
   #test right data
-  expect_true(file.exists("projects/my_project/raw_rds_files/setosa.RDS"))
-  expect_true(file.exists("projects/my_project/raw_rds_files/versicolor.RDS"))
-  expect_true(file.exists("projects/my_project/raw_rds_files/virginica.RDS"))
-  d1 = readRDS("projects/my_project/raw_rds_files/setosa.RDS")
-  d2 = readRDS("projects/my_project/raw_rds_files/versicolor.RDS")
-  d3 = readRDS("projects/my_project/raw_rds_files/virginica.RDS")
+  expect_true(file.exists("projects/my_project/rds_files/setosa.RDS"))
+  expect_true(file.exists("projects/my_project/rds_files/versicolor.RDS"))
+  expect_true(file.exists("projects/my_project/rds_files/virginica.RDS"))
+  d1 = readRDS("projects/my_project/rds_files/setosa.RDS")
+  d2 = readRDS("projects/my_project/rds_files/versicolor.RDS")
+  d3 = readRDS("projects/my_project/rds_files/virginica.RDS")
   iris2 = rbind(d1, d2, d3)
   iris3 = iris %>% dplyr::group_by(Species) %>% dplyr::mutate(new_col = max(Sepal.Length) + max(Petal.Length)) %>% data.frame()
   expect_equal(iris3, iris2)
@@ -77,13 +77,15 @@ test_that("preprocess_data", {
   unlink("projects", recursive = TRUE)
 })
 
-test_that("remove_problems", {
+test_that("remove_data", {
   unlink("projects", recursive = TRUE)
   x = Project$new(project_name = "my_project")
   x$add_data(iris, group_by = "Species")
-  x$remove_problems("setosa")
+  x$remove_data("setosa")
+  expect_equal(list.files(paste0(x$dir, "/rds_files/")), c("versicolor.RDS", "virginica.RDS"))
   expect_equal(x$reg$problems, c("versicolor", "virginica"))
-  x$remove_problems(c("versicolor", "virginica"))
+  x$remove_data(c("versicolor", "virginica"))
+  expect_equal(list.files(paste0(x$dir, "/rds_files/")), character(0))
   expect_equal(x$reg$problems, character(0))
 })
 

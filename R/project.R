@@ -21,7 +21,7 @@ Project = R6Class("Project",
       if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
       dir.create(newDirPath)
       self$dir = newDirPath
-      dir.create(paste0(newDirPath, "/raw_rds_files"))
+      dir.create(paste0(newDirPath, "/rds_files"))
       self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"), ...)
     },
     add_data = function(dataframe, group_by) {
@@ -37,7 +37,7 @@ Project = R6Class("Project",
       #save rds files
       foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
         dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(dataframe_i, file = paste0(self$dir, "/raw_rds_files/", i, ".RDS"))
+        saveRDS(dataframe_i, file = paste0(self$dir, "/rds_files/", i, ".RDS"))
         message(paste0("Saving raw RDS file " , i, ".RDS ", "on disk."))
       }
 
@@ -54,11 +54,11 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     preprocess_data = function(fun) {
-      datasets = list.files(paste0(self$dir, "/raw_rds_files/"))
+      datasets = list.files(paste0(self$dir, "/rds_files/"))
       foreach::foreach(i = datasets, .packages = c("dplyr")) %dopar% {
-        dataframe_i = readRDS(paste0(self$dir, "/raw_rds_files/", i))
+        dataframe_i = readRDS(paste0(self$dir, "/rds_files/", i))
         data_preproc = fun(dataframe_i)
-        saveRDS(data_preproc, file = paste0(self$dir, "/raw_rds_files/", i))
+        saveRDS(data_preproc, file = paste0(self$dir, "/rds_files/", i))
         message(paste0("Updating raw RDS file " , i, ".RDS "))
       }
       return(invisible(self))
@@ -66,6 +66,8 @@ Project = R6Class("Project",
     remove_data = function(data) {
       checkmate::assert_character(data)
       checkmate::assert_subset(data, self$reg$problems)
+      message("Deleting RDS file ", data, ".RDS")
+      unlink(paste0(paste0(self$dir, "/rds_files/", data, ".RDS")))
       batchtools::removeProblems(data, reg = self$reg)
       return(invisible(self))
     },
