@@ -23,6 +23,10 @@ test_that("initialize", {
 
   #check R6 slots
   expect_equal(x$project_name, "my_project")
+
+  #test loading project
+  z = Project$new("my_project", load = TRUE)
+  expect_equal(z, x)
   unlink("projects", recursive = TRUE)
 })
 

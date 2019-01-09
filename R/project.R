@@ -14,15 +14,20 @@ Project = R6Class("Project",
     group_by = NULL,
     reg = NULL,
     dir = NULL,
-    initialize = function(project_name, ...) {
+    initialize = function(project_name, load = FALSE) {
       self$project_name = checkmate::assert_character(project_name)
       newDirPath = paste0("projects/", project_name)
-      if (!dir.exists("projects")) dir.create("projects")
-      if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
-      dir.create(newDirPath)
       self$dir = newDirPath
-      dir.create(paste0(newDirPath, "/rds_files"))
-      self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"), ...)
+      if (!load) {
+        if (!dir.exists("projects")) dir.create("projects")
+        if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
+        dir.create(newDirPath)
+        dir.create(paste0(newDirPath, "/rds_files"))
+        self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"))
+      } else {
+        checkmate::assert_subset(project_name, list.files("projects/"))
+        self$reg = batchtools::loadRegistry(paste0(newDirPath, "/reg"), writeable = TRUE)
+      }
     },
     add_data = function(dataframe, group_by) {
       id = NULL
