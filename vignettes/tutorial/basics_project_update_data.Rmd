@@ -9,7 +9,7 @@ vignette: >
 Use case:
 
 - Data from some grouping variables changes.
-- One wants to update the datasets.
+- We want to update the datasets.
 
 ```{r test-main, child = 'project_setup_child.Rmd', message = FALSE}
 ```

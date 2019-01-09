@@ -10,7 +10,7 @@ vignette: >
 Use case:
 
 - Useful for projects with large datasets and many features.
-- When some features fail on some datasets, one can get individual error messages.
+- When some features fail on some datasets, we can get individual error messages.
 - Get overview of current calculation status (if feature extraction takes a long time).
 - Easy parallelization.
 
@@ -45,7 +45,7 @@ my_project$add_feature(fun2)
 my_project$calc_features()
 ```
 
-One can still get the resulting dataframe:
+We can still get the resulting dataframe:
 ```{r}
 my_project$collect_results()
 ```
@@ -63,6 +63,11 @@ We have implemented a method `$get_project_status()` which gives an overview ove
 
 ```{r, message = FALSE}
 my_project$get_project_status()
+```
+We can also use the corresponding batchtools function:
+
+```{r}
+batchtools::getStatus(reg = my_project$reg)
 ```
 
 ## Fix Features
@@ -85,7 +90,7 @@ my_project$add_feature(fun2_fixed)
 
 
 ## Parallelization
-Parallelization is done via setting the cluster functions via batchtools. See [here](https://mllg.github.io/batchtools/articles/batchtools.html).
+Parallelization is done by setting the cluster functions via batchtools. See [here](https://mllg.github.io/batchtools/articles/batchtools.html).
 
 E.g. on a windows machine:
 ```{r}
@@ -95,7 +100,7 @@ my_project$reg$cluster.functions = batchtools::makeClusterFunctionsSocket(2)
 ## Submit Jobs via batchtools
 It is also possible to submit jobs via batchtools:
 ```{r}
-batchtools::submitJobs()
+batchtools::submitJobs(reg = my_project$reg)
 ```
 
 ```{r, echo = FALSE}

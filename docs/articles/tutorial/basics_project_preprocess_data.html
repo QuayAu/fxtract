@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R6 Class Project • fxtract</title>
+<title>R6 Class Project - Preprocess Data • fxtract</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../pkgdown.js"></script><meta property="og:title" content="R6 Class Project">
+<script src="../../pkgdown.js"></script><meta property="og:title" content="R6 Class Project - Preprocess Data">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -118,84 +118,20 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>R6 Class Project</h1>
+      <h1>R6 Class Project - Preprocess Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/basics_project.Rmd"><code>vignettes/tutorial/basics_project.Rmd</code></a></small>
-      <div class="hidden name"><code>basics_project.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/basics_project_preprocess_data.Rmd"><code>vignettes/tutorial/basics_project_preprocess_data.Rmd</code></a></small>
+      <div class="hidden name"><code>basics_project_preprocess_data.Rmd</code></div>
 
     </div>
 
     
     
-<ul>
-<li>Designed for large projects.</li>
-<li>Data and features can be updated easily.</li>
-<li>Data can be preprocessed.</li>
-<li>Features are calculated on each grouping variable individually with batchtools.</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
-my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</code></pre></div>
-<div id="add-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add-data" class="anchor"></a>Add Data</h2>
-<p>Data must be added as dataframes with <code>$add_data</code>, where the grouping variable must be specified. You can also add dataframes for each grouping variable individually. This is especially helpful for large datasets.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-iris1 =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Species <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>))
-iris2 =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Species <span class="op">==</span><span class="st"> "virginica"</span>)
-my_project<span class="op">$</span><span class="kw">add_data</span>(iris1, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</code></pre></div>
-<pre><code>## Warning: executing %dopar% sequentially: no parallel backend registered</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">add_data</span>(iris2, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</code></pre></div>
-</div>
-<div id="add-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add-features" class="anchor"></a>Add Features</h2>
-<p>Features can be added as functions. These functions must have a dataframe as input and a named vector as output. This function will be calculated for each grouping variable individually.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),
-    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))
-}
-
-fun2 =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),
-    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))
-}</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)
-my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</code></pre></div>
-</div>
-<div id="calculate-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#calculate-features" class="anchor"></a>Calculate Features</h2>
-<p>Features are calculated by the method <code>$calc_features()</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
-</div>
-<div id="collect-results" class="section level2">
-<h2 class="hasAnchor">
-<a href="#collect-results" class="anchor"></a>Collect Results</h2>
-<p>The desired final dataframe can be generated by the method <code>$collect_results()</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">collect_results</span>()</code></pre></div>
-<pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
-## 1     setosa             5.006       0.3524897             1.462
-## 2 versicolor             5.936       0.5161711             4.260
-## 3  virginica             6.588       0.6358796             5.552
-##   sd_petal_length
-## 1       0.1736640
-## 2       0.4699110
-## 3       0.5518947</code></pre>
-</div>
+<p>One can perform dataset preprocessing inside the feature functions (e.g. clustering GPS points). But if this takes a long time and is done again and again for different feature functions, it can be useful to perform preprocessing on the dataset once. To make sure that this is done for each grouping variable individually, it is safer to use the method shown here.</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#add-data">Add Data</a></li>
-      <li><a href="#add-features">Add Features</a></li>
-      <li><a href="#calculate-features">Calculate Features</a></li>
-      <li><a href="#collect-results">Collect Results</a></li>
-      </ul>
-</div>
       </div>
 
 </div>

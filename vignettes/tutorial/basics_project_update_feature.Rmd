@@ -9,8 +9,8 @@ vignette: >
 
 Use case:
 
-- Features have been added or even been calculated.
-- One wants to edit a feature function.
+- Features have been added (or have already been calculated).
+- We want to edit a feature function.
 
 ```{r test-main, child = 'project_setup_child.Rmd', message = FALSE}
 ```

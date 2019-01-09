@@ -22,6 +22,14 @@ navbar:
       href: articles/tutorial/basics_calc_feature.html
     - text: project
       href: articles/tutorial/basics_project.html
+    - text: project - preprocess data
+      href: articles/tutorial/basics_project_preprocess_data.html
+    - text: project - update data
+      href: articles/tutorial/basics_project_update_data.html
+    - text: project - update feature
+      href: articles/tutorial/basics_project_update_feature.html
+    - text: project - utilize batchtools
+      href: articles/tutorial/basics_project_utilize_batchtools.html
   - text: Use Cases
     menu:
     - text: StudentLife

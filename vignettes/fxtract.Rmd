@@ -14,8 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# remove.packages("fxtract")
-# devtools::install_github("QuayAu/fxtract")
+# devtools::install()
 library(fxtract)
 ```
 

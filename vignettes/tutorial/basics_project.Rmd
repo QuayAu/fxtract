@@ -16,7 +16,6 @@ unlink("projects", recursive = TRUE)
 - Data can be preprocessed.
 - Features are calculated on each grouping variable individually with batchtools.
 
-Core usage: 
 ```{r, message = FALSE}
 library(fxtract)
 my_project = Project$new("my_project")
