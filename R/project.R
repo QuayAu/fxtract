@@ -19,6 +19,8 @@ Project = R6Class("Project",
       if (!dir.exists("projects")) dir.create("projects")
       if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
       dir.create(newDirPath)
+      private$dir = newDirPath
+      dir.create(paste0(newDirPath, "/raw_rds_files"))
       self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"), ...)
     },
     add_data = function(dataframe, group_by) {
@@ -29,9 +31,16 @@ Project = R6Class("Project",
       if (is.null(self$group_by)) self$group_by = group_by
       if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by,
         ". Only one group_by variable is allowed per project!"))
+      gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
+
+      #save rds files
+      foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
+        dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
+        saveRDS(dataframe_i, file = paste0(private$dir, "/raw_rds_files/", i, ".RDS"))
+        message(paste0("Saving raw RDS file " , i, ".RDS ", "on disk."))
+      }
 
       #add batchtools problems
-      gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
       for (id in gb) { #cannot be parallelized, because of batchtools
         data_id = dataframe %>% dplyr::filter(!!as.name(group_by) == id) %>% data.frame()
         batchtools::addProblem(name = id, data = data_id, reg = self$reg)
@@ -55,7 +64,7 @@ Project = R6Class("Project",
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
         fun = function(job, data, instance) fxtract::calc_feature(data, group_by = self$group_by, fun = fun),
-        reg = self$reg  
+        reg = self$reg
       )
 
       #add experiments
@@ -104,7 +113,7 @@ Project = R6Class("Project",
       if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $submit_jobs().")
       done_id = res$job.id
       res = setNames(res$result, done_id)
-      
+
       jt = batchtools::getJobTable(reg = reg)
       lookup = jt %>% select(job.id, problem, algorithm)
       features = self$get_project_status()$feature_wise
@@ -127,6 +136,7 @@ Project = R6Class("Project",
     add_experiments = function(prob.designs = NULL, algo.designs = NULL) {
       batchtools::addExperiments(reg = self$reg, prob.designs = prob.designs, algo.designs = algo.designs)
       return(invisible(self))
-    }
+    },
+    dir = NULL
   )
 )

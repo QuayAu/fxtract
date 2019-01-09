@@ -6,12 +6,14 @@ test_that("initialize", {
   expect_true(dir.exists("projects"))
   expect_true(dir.exists("projects/my_project"))
   expect_true(dir.exists("projects/my_project/reg"))
+  expect_true(dir.exists("projects/my_project/raw_rds_files"))
 
   #test second project
   y = Project$new(project_name = "my_project2")
   expect_true(dir.exists("projects"))
   expect_true(dir.exists("projects/my_project2"))
   expect_true(dir.exists("projects/my_project2/reg"))
+  expect_true(dir.exists("projects/my_project2/raw_rds_files"))
 
   #test same project name
   expect_error(Project$new(project_name = "my_project"), regexp = "The project name already exists. Please choose another name or delete the existing project and try again!")
@@ -34,8 +36,15 @@ test_that("add_data", {
 
   #test right data
   x$add_data(iris, group_by = "Species")
-  expect_equal(x$reg$problems, c("setosa", "versicolor", "virginica"))
+  expect_true(file.exists("projects/my_project/raw_rds_files/setosa.RDS"))
+  expect_true(file.exists("projects/my_project/raw_rds_files/versicolor.RDS"))
+  expect_true(file.exists("projects/my_project/raw_rds_files/virginica.RDS"))
+  d1 = readRDS("projects/my_project/raw_rds_files/setosa.RDS")
+  d2 = readRDS("projects/my_project/raw_rds_files/versicolor.RDS")
+  d3 = readRDS("projects/my_project/raw_rds_files/virginica.RDS")
+  expect_equal(iris, rbind(d1, d2, d3))
   expect_equal(x$group_by, "Species")
+  expect_equal(x$reg$problems, c("setosa", "versicolor", "virginica"))
 
   #test second dataframe different group by error
   expect_error(x$add_data(iris, group_by = "Petal.Length"), regexp = "The group_by variable was set to Species. Only one group_by variable is allowed per project!")
@@ -125,5 +134,3 @@ test_that("calculate features", {
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
   expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
 })
-
-
