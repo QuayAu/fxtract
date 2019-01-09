@@ -7,7 +7,43 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-One can perform dataset preprocessing inside the feature functions (e.g. clustering GPS points).
-But if this takes a long time and is done again and again for different feature functions, it can be useful to perform preprocessing on the dataset once. 
+Although we can perform dataset preprocessing inside the feature functions (e.g. clustering GPS points), it can be useful to perform preprocessing on the dataset once. 
+Especially, if this takes a long time and is done again and again for different feature functions.
 To make sure that this is done for each grouping variable individually, it is safer to use the method shown here.
+
+## Studentlife Data
+Let's perform some dataset preprocessing on the Studentlife dataset. 
+First we cluster the gps points and then we add a column which indicates, if a given GPS coordinate lies within the biggest cluster.
+
+For simplicity reasons, we only use the gps data of this dataset:
+```{r, message = FALSE, warning = FALSE}
+library(fxtract)
+library(dplyr)
+gps_data = studentlife_small %>% select(userId, latitude, longitude) %>% filter(!is.na(latitude))
+head(gps_data)
+```
+
+```{r, echo = FALSE}
+unlink("projects", recursive = TRUE)
+```
+
+```{r, message = FALSE, warning = FALSE}
+library(fxtract)
+my_project = Project$new("my_project")
+my_project$add_data(gps_data, group_by = "userId")
+```
+
+
+## Define a Function
+We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method `$preprocess_data` will then read the RDS files for each grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated.
+
+```{r, message = FALSE, warning = FALSE}
+library(fpc)
+fun = function(data) {
+  lat = data$latitude
+  lon = data$longitude
+  clust = dbscan(cbind(lat, lon), eps = 1.5, MinPts = 3)
+  
+}
+```
 

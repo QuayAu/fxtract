@@ -55,11 +55,24 @@ Project = R6Class("Project",
     },
     preprocess_data = function(fun) {
       datasets = list.files(paste0(self$dir, "/rds_files/"))
+      #update RDS files
       foreach::foreach(i = datasets, .packages = c("dplyr")) %dopar% {
         dataframe_i = readRDS(paste0(self$dir, "/rds_files/", i))
         data_preproc = fun(dataframe_i)
         saveRDS(data_preproc, file = paste0(self$dir, "/rds_files/", i))
         message(paste0("Updating raw RDS file " , i, ".RDS "))
+      }
+
+      #update batchtools problems
+      gb = gsub(".RDS", "", datasets)
+      for (id in gb) { #cannot be parallelized, because of batchtools
+        batchtools::removeProblems(id, reg = self$reg)
+        data_id = readRDS(paste0(self$dir, "/rds_files/", id, ".RDS"))
+        batchtools::addProblem(name = id, data = data_id, reg = self$reg)
+        #add experiments
+        prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
+        names(prob.designs) = id
+        private$add_experiments(prob.designs = prob.designs)
       }
       return(invisible(self))
     },
@@ -70,6 +83,9 @@ Project = R6Class("Project",
       unlink(paste0(paste0(self$dir, "/rds_files/", data, ".RDS")))
       batchtools::removeProblems(data, reg = self$reg)
       return(invisible(self))
+    },
+    load_data = function(data) {
+      return(readRDS(paste0(self$dir, "/rds_files/", data)))
     },
     add_feature = function(fun) {
       checkmate::assert_function(fun)

@@ -57,6 +57,14 @@ test_that("preprocess_data", {
   x = Project$new(project_name = "my_project")
   x$add_data(iris, group_by = "Species")
 
+  fun2 = function(data) {
+    c(sum = data$new_col[1])
+  }
+  x$add_feature(fun2)
+  x$calc_features()
+  expect_equal(nrow(batchtools::findErrors(reg = x$reg)), 3)
+
+  #preprocess data
   fun = function(data) {
     data$new_col = max(data$Sepal.Length) + max(data$Petal.Length)
     data
@@ -73,6 +81,10 @@ test_that("preprocess_data", {
   iris2 = rbind(d1, d2, d3)
   iris3 = iris %>% dplyr::group_by(Species) %>% dplyr::mutate(new_col = max(Sepal.Length) + max(Petal.Length)) %>% data.frame()
   expect_equal(iris3, iris2)
+
+  #test updated batchtools problems
+  x$calc_features()
+  expect_equal(x$collect_results()$sum, c(7.7, 12.1, 14.8))
 
   unlink("projects", recursive = TRUE)
 })
