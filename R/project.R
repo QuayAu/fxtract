@@ -65,7 +65,7 @@ Project = R6Class("Project",
         dataframe_i = readRDS(paste0(self$dir, "/rds_files/", i))
         data_preproc = fun(dataframe_i)
         saveRDS(data_preproc, file = paste0(self$dir, "/rds_files/", i))
-        message(paste0("Updating raw RDS file " , i, ".RDS "))
+        message(paste0("Updating raw RDS file " , i))
       }
 
       #update batchtools problems
@@ -88,9 +88,6 @@ Project = R6Class("Project",
       unlink(paste0(paste0(self$dir, "/rds_files/", data, ".RDS")))
       batchtools::removeProblems(data, reg = self$reg)
       return(invisible(self))
-    },
-    load_data = function(data) {
-      return(readRDS(paste0(self$dir, "/rds_files/", data)))
     },
     add_feature = function(fun) {
       checkmate::assert_function(fun)

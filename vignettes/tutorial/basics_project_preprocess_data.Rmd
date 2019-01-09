@@ -12,8 +12,7 @@ Especially, if this takes a long time and is done again and again for different 
 To make sure that this is done for each grouping variable individually, it is safer to use the method shown here.
 
 ## Studentlife Data
-Let's perform some dataset preprocessing on the Studentlife dataset. 
-First we cluster the gps points and then we add a column which indicates, if a given GPS coordinate lies within the biggest cluster.
+In thie example we cluster the gps points and add a new column with the clusters.
 
 For simplicity reasons, we only use the gps data of this dataset:
 ```{r, message = FALSE, warning = FALSE}
@@ -43,7 +42,21 @@ fun = function(data) {
   lat = data$latitude
   lon = data$longitude
   clust = dbscan(cbind(lat, lon), eps = 1.5, MinPts = 3)
-  
+  data$cluster = clust$cluster
+  return(data)
 }
 ```
+
+## Perform Preprocessing
+```{r}
+my_project$preprocess_data(fun = fun)
+```
+
+The data has successfully been preprocessed:
+```{r}
+gps_data_00 = readRDS("projects/my_project/rds_files/00.RDS")
+str(gps_data_00)
+```
+
+
 
