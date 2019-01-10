@@ -1,12 +1,10 @@
-On how to use the R6 class `Project`, click [here](https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html). 
-
-Setup script:
+Click [here](https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html) on how to use the R6 class `Project`.
 
 ```{r, echo = FALSE}
 unlink("projects", recursive = TRUE)
 ```
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(fxtract)
 my_project = Project$new("my_project")
 my_project$add_data(iris, group_by = "Species")

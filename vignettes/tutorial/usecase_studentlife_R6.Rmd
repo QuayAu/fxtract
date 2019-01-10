@@ -1,5 +1,5 @@
 ---
-title: "Large Project"
+title: "Studentlife R6"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
@@ -91,7 +91,7 @@ batchtools::getErrorMessages(reg = my_project$reg)
 ```
 
 Because we calculated the functions in parallel, we need to make sure the workers have access to functions and packages.
-In most of our feature functions we used `library()` inside the functions or directly used `::` operator. 
+In most of our feature functions we used `library()` inside the functions or directly used the `::` operator. 
 
 Our function `number_diff_apps_weekday` uses `dplyr` functions without calling `library(dplyr)` within the function. 
 We could update this feature function (see [here](https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project_update_feature.html)),

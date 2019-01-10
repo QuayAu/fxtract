@@ -125,29 +125,12 @@
 
     
     
-<p>On how to use the R6 class <code>Project</code>, click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html">here</a>.</p>
-<p>Setup script:</p>
+<p>Click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html">here</a> on how to use the R6 class <code>Project</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
-my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</code></pre></div>
-<pre><code>## No readable configuration file found</code></pre>
-<pre><code>## Created registry in 'L:/Users/auj/Desktop/Git/fxtract/vignettes/tutorial/projects/my_project/reg' using cluster functions 'Interactive'</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</code></pre></div>
-<pre><code>## Warning: executing %dopar% sequentially: no parallel backend registered</code></pre>
-<pre><code>## 
-## Attache Paket: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre><code>## Saving raw RDS file setosa.RDS on disk.</code></pre>
-<pre><code>## Saving raw RDS file versicolor.RDS on disk.</code></pre>
-<pre><code>## Saving raw RDS file virginica.RDS on disk.</code></pre>
-<pre><code>## Adding problem 'setosa'</code></pre>
-<pre><code>## Adding problem 'versicolor'</code></pre>
-<pre><code>## Adding problem 'virginica'</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
+my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)
+my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
+
+fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
   <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),
     <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))
 }
@@ -157,32 +140,9 @@ fun2 =<span class="st"> </span><span class="cf">function</span>(data) {
     <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))
 }
 
-my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)</code></pre></div>
-<pre><code>## Exporting new objects: 'fun1' ...</code></pre>
-<pre><code>## Adding algorithm 'fun1'</code></pre>
-<pre><code>## Adding 1 experiments ('setosa'[1] x 'fun1'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('versicolor'[1] x 'fun1'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('virginica'[1] x 'fun1'[1] x repls[1]) ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</code></pre></div>
-<pre><code>## Exporting new objects: 'fun2' ...</code></pre>
-<pre><code>## Adding algorithm 'fun2'</code></pre>
-<pre><code>## Adding 1 experiments ('setosa'[1] x 'fun2'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('versicolor'[1] x 'fun2'[1] x repls[1]) ...</code></pre>
-<pre><code>## Adding 1 experiments ('virginica'[1] x 'fun2'[1] x repls[1]) ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
-<pre><code>## Submitting 6 jobs in 6 chunks using cluster functions 'Interactive' ...</code></pre>
-<pre><code>## ### [bt]: Generating problem instance for problem 'setosa' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'setosa' for job 1 (seed = 14730) ...</code></pre>
-<pre><code>## ### [bt]: Generating problem instance for problem 'versicolor' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'versicolor' for job 2 (seed = 14731) ...</code></pre>
-<pre><code>## ### [bt]: Generating problem instance for problem 'virginica' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'virginica' for job 3 (seed = 14732) ...</code></pre>
-<pre><code>## ### [bt]: Generating problem instance for problem 'setosa' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'setosa' for job 4 (seed = 14733) ...</code></pre>
-<pre><code>## ### [bt]: Generating problem instance for problem 'versicolor' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'versicolor' for job 5 (seed = 14734) ...</code></pre>
-<pre><code>## ### [bt]: Generating problem instance for problem 'virginica' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'virginica' for job 6 (seed = 14735) ...</code></pre>
+my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)
+my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)
+my_project<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

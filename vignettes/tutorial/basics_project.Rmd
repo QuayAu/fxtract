@@ -24,7 +24,7 @@ my_project = Project$new("my_project")
 ## Add Data
 Data must be added as dataframes with `$add_data`, where the grouping variable must be specified.
 You can also add dataframes for each grouping variable individually. This is especially helpful for large datasets.
-```{r, message = FALSE}
+```{r, message = FALSE, warning = FALSE}
 library(dplyr)
 iris1 = iris %>% filter(Species %in% c("setosa", "versicolor"))
 iris2 = iris %>% filter(Species == "virginica")

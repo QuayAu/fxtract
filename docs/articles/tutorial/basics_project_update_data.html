@@ -130,13 +130,12 @@
 <li>Data from some grouping variables changes.</li>
 <li>We want to update the datasets.</li>
 </ul>
-<p>On how to use the R6 class <code>Project</code>, click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html">here</a>.</p>
-<p>Setup script:</p>
+<p>Click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html">here</a> on how to use the R6 class <code>Project</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
 my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)
-my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</code></pre></div>
-<pre><code>## Warning: executing %dopar% sequentially: no parallel backend registered</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
+my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
+
+fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
   <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),
     <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))
 }
@@ -180,9 +179,9 @@ iris_vers<span class="op">$</span>Sepal.Length =<span class="st"> </span><span c
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">calc_features</span>()
 my_project<span class="op">$</span><span class="kw">collect_results</span>()</code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
-## 1     setosa         5.0060000       0.3524897             1.462
-## 2 versicolor         5.9360000       0.5161711             4.260
-## 3  virginica         0.8501379       0.6589339             5.552
+## 1     setosa          5.006000       0.3524897             1.462
+## 2 versicolor          5.936000       0.5161711             4.260
+## 3  virginica          0.762316       0.5567080             5.552
 ##   sd_petal_length
 ## 1       0.1736640
 ## 2       0.4699110
