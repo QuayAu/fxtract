@@ -20,7 +20,7 @@ Project = R6Class("Project",
       self$dir = newDirPath
       if (!load) {
         if (!dir.exists("projects")) dir.create("projects")
-        if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name or delete the existing project and try again!")
+        if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name, delete the existing project, or set load = TRUE, if you want to load the old project.")
         dir.create(newDirPath)
         dir.create(paste0(newDirPath, "/rds_files"))
         self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"))

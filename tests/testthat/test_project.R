@@ -16,7 +16,7 @@ test_that("initialize", {
   expect_true(dir.exists("projects/my_project2/rds_files"))
 
   #test same project name
-  expect_error(Project$new(project_name = "my_project"), regexp = "The project name already exists. Please choose another name or delete the existing project and try again!")
+  expect_error(Project$new(project_name = "my_project"))
 
   #test wrong input
   expect_error(Project$new(1), regexp = "Assertion on 'project_name' failed: Must be of type 'character', not 'double'.")
@@ -173,6 +173,17 @@ test_that("calculate features", {
   x$calc_features()
   expect_equal(x$get_project_status()$perc_done, 1)
   res = x$collect_results()
+  expect_true(!anyNA(res))
+  cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
+  expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
+
+  #test load data and continue calculate
+  x$remove_feature(sepal_length_fun)
+  x$add_feature(sepal_length_fun)
+  y = Project$new("my_project", load = TRUE)
+  y$calc_features()
+  expect_equal(y$get_project_status()$perc_done, 1)
+  res = y$collect_results()
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
   expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
