@@ -48,9 +48,6 @@
     <li>
       <a href="../../articles/tutorial/filters.html">filters</a>
     </li>
-    <li>
-      <a href="../../articles/tutorial/basics_sliding_window.html">sliding_window</a>
-    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -91,7 +88,7 @@
       <a href="../../articles/tutorial/usecase_studentlife.html">StudentLife</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/usecase_large_project.html">Large Project</a>
+      <a href="../../articles/tutorial/usecase_studentlife_R6.html">StudentLife with R6</a>
     </li>
   </ul>
 </li>
@@ -128,17 +125,81 @@
 
     
     
-<p>One can perform dataset preprocessing inside the feature functions (e.g. clustering GPS points). But if this takes a long time and is done again and again for different feature functions, it can be useful to perform preprocessing on the dataset once. To make sure that this is done for each grouping variable individually, it is safer to use the method shown here.</p>
+<p>Although we can perform dataset preprocessing inside the feature functions (e.g. clustering GPS points), it can be useful to perform preprocessing on the dataset once. Especially, if this takes a long time and is done again and again for different feature functions. To make sure that this is done for each grouping variable individually, it is safer to use the method shown here.</p>
+<div id="studentlife-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#studentlife-data" class="anchor"></a>Studentlife Data</h2>
+<p>In thie example we cluster the gps points and add a new column with the clusters.</p>
+<p>For simplicity reasons, we only use the gps data of this dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
+<span class="kw">library</span>(dplyr)
+gps_data =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(userId, latitude, longitude) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(latitude))
+<span class="kw">head</span>(gps_data)</code></pre></div>
+<pre><code>##   userId latitude longitude
+## 1     00 43.75913 -72.32924
+## 2     00 43.75950 -72.32902
+## 3     00 43.75913 -72.32924
+## 4     00 43.75913 -72.32924
+## 5     00 43.75913 -72.32924
+## 6     00 43.75913 -72.32924</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
+my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)
+my_project<span class="op">$</span><span class="kw">add_data</span>(gps_data, <span class="dt">group_by =</span> <span class="st">"userId"</span>)</code></pre></div>
+</div>
+<div id="define-a-function" class="section level2">
+<h2 class="hasAnchor">
+<a href="#define-a-function" class="anchor"></a>Define a Function</h2>
+<p>We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method <code>$preprocess_data</code> will then read the RDS files for each grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fpc)
+fun =<span class="st"> </span><span class="cf">function</span>(data) {
+  lat =<span class="st"> </span>data<span class="op">$</span>latitude
+  lon =<span class="st"> </span>data<span class="op">$</span>longitude
+  clust =<span class="st"> </span><span class="kw">dbscan</span>(<span class="kw">cbind</span>(lat, lon), <span class="dt">eps =</span> <span class="fl">1.5</span>, <span class="dt">MinPts =</span> <span class="dv">3</span>)
+  data<span class="op">$</span>cluster =<span class="st"> </span>clust<span class="op">$</span>cluster
+  <span class="kw">return</span>(data)
+}</code></pre></div>
+</div>
+<div id="perform-preprocessing" class="section level2">
+<h2 class="hasAnchor">
+<a href="#perform-preprocessing" class="anchor"></a>Perform Preprocessing</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> fun)</code></pre></div>
+<pre><code>## Updating raw RDS file 00.RDS</code></pre>
+<pre><code>## Updating raw RDS file 01.RDS</code></pre>
+<pre><code>## Updating raw RDS file 02.RDS</code></pre>
+<pre><code>## Removing Problem '00' and 0 corresponding jobs ...</code></pre>
+<pre><code>## Adding problem '00'</code></pre>
+<pre><code>## Removing Problem '01' and 0 corresponding jobs ...</code></pre>
+<pre><code>## Adding problem '01'</code></pre>
+<pre><code>## Removing Problem '02' and 0 corresponding jobs ...</code></pre>
+<pre><code>## Adding problem '02'</code></pre>
+<p>The data has successfully been preprocessed:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gps_data_<span class="dv">00</span> =<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">"projects/my_project/rds_files/00.RDS"</span>)
+<span class="kw">str</span>(gps_data_<span class="dv">00</span>)</code></pre></div>
+<pre><code>## 'data.frame':    4316 obs. of  4 variables:
+##  $ userId   : chr  "00" "00" "00" "00" ...
+##  $ latitude : num  43.8 43.8 43.8 43.8 43.8 ...
+##  $ longitude: num  -72.3 -72.3 -72.3 -72.3 -72.3 ...
+##  $ cluster  : num  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#studentlife-data">Studentlife Data</a></li>
+      <li><a href="#define-a-function">Define a Function</a></li>
+      <li><a href="#perform-preprocessing">Perform Preprocessing</a></li>
+      </ul>
+</div>
       </div>
 
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann, Andreas Hofheinz.</p>
+  <p>Developed by Quay Au, Theresa Ullmann.</p>
 </div>
 
 <div class="pkgdown">

@@ -32,8 +32,8 @@ navbar:
     menu:
     - text: StudentLife
       href: articles/tutorial/usecase_studentlife.html
-    - text: StudentLife with R6 Project
-      href: articles/tutorial/usecase_studentlife_R6html
+    - text: StudentLife with R6
+      href: articles/tutorial/usecase_studentlife_R6.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

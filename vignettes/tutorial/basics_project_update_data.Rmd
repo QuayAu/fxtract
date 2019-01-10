@@ -29,7 +29,7 @@ iris_vers$Sepal.Length = abs(rnorm(nrow(iris_vers)))
 ## Delete Old Data
 Datasets are saved as batchtools problems (one problem for each grouping variable). Single problems can be removed:
 ```{r, message = FALSE}
-my_project$remove_problems("virginica")
+my_project$remove_data("virginica")
 ```
 
 ## Add New Data

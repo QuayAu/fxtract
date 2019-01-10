@@ -7,7 +7,7 @@ Authors@R: c(person("Quay", "Au", email = "quay.au@stat.uni-muenchen.de", role =
   person("Theresa", "Ullmann", email = "theresa_ullmann@gmx.de", role = "aut"),
   person("Clemens", "Stachl", email = "clemens.stachl@psy.lmu.de", role = "ctb"),
   person("Ramona", "Schoedel", email = "ramona.schoedel@psy.lmu.de", role = "ctb"),
-  person("Andreas", "Hofheinz", email = "andreas.hofheinz@outlook.com", role = "aut")
+  person("Andreas", "Hofheinz", email = "andreas.hofheinz@outlook.com", role = "ctb")
   )
 URL: https://github.com/QuayAu/fxtract
 BugReports: https://github.com/QuayAu/fxtract/issues

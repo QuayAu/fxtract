@@ -48,9 +48,6 @@
     <li>
       <a href="../../articles/tutorial/filters.html">filters</a>
     </li>
-    <li>
-      <a href="../../articles/tutorial/basics_sliding_window.html">sliding_window</a>
-    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -91,7 +88,7 @@
       <a href="../../articles/tutorial/usecase_studentlife.html">StudentLife</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/usecase_large_project.html">Large Project</a>
+      <a href="../../articles/tutorial/usecase_studentlife_R6.html">StudentLife with R6</a>
     </li>
   </ul>
 </li>
@@ -170,7 +167,7 @@ iris_vers<span class="op">$</span>Sepal.Length =<span class="st"> </span><span c
 <h2 class="hasAnchor">
 <a href="#delete-old-data" class="anchor"></a>Delete Old Data</h2>
 <p>Datasets are saved as batchtools problems (one problem for each grouping variable). Single problems can be removed:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">remove_problems</span>(<span class="st">"virginica"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">remove_data</span>(<span class="st">"virginica"</span>)</code></pre></div>
 </div>
 <div id="add-new-data" class="section level2">
 <h2 class="hasAnchor">
@@ -185,7 +182,7 @@ my_project<span class="op">$</span><span class="kw">collect_results</span>()</co
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa         5.0060000       0.3524897             1.462
 ## 2 versicolor         5.9360000       0.5161711             4.260
-## 3  virginica         0.8330549       0.5994055             5.552
+## 3  virginica         0.8501379       0.6589339             5.552
 ##   sd_petal_length
 ## 1       0.1736640
 ## 2       0.4699110
@@ -209,7 +206,7 @@ my_project<span class="op">$</span><span class="kw">collect_results</span>()</co
 
 
       <footer><div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann, Andreas Hofheinz.</p>
+  <p>Developed by Quay Au, Theresa Ullmann.</p>
 </div>
 
 <div class="pkgdown">

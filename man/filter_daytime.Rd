@@ -2,8 +2,8 @@
 % Please edit documentation in R/helpers_timestamp.R
 \name{filter_daytime}
 \alias{filter_daytime}
-\title{Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
-The dataset needs an ordered factor variable named 'weekday'.}
+\title{Filter function. Filters the data by daytime. The dataset can e.g. be filtered from "06:00:00" until "09:00:00".
+The dataset needs an ordered factor variable named 'time' (best added by the function add_time).}
 \usage{
 filter_daytime(data, from_time = "07:00:00", until_time = "18:00:00")
 }
@@ -18,8 +18,8 @@ filter_daytime(data, from_time = "07:00:00", until_time = "18:00:00")
 The dataset filtered according to the given time constraints.
 }
 \description{
-Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
-The dataset needs an ordered factor variable named 'weekday'.
+Filter function. Filters the data by daytime. The dataset can e.g. be filtered from "06:00:00" until "09:00:00".
+The dataset needs an ordered factor variable named 'time' (best added by the function add_time).
 }
 \seealso{
 Other filter functions: \code{\link{filter_weekday}}

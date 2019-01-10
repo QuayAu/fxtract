@@ -27,7 +27,7 @@ df
 
 ### Return 1 value each
 Let's say we are interested in the maximum value of **x** for each participant. 
-We need to define a function, which has a dataframe as input and a scalar or vector as output:
+We need to define a function, which has a dataframe as input and a named vector as output:
 ```{r}
 fun = function(data) {
   c(max_x = max(data$x))
@@ -40,7 +40,7 @@ calc_feature(df, group_by = "id", fun = fun)
 
 
 ### Return more values at once
-Sometimes calculations can take a long time (e.g. clustering of GPS points) and we want to calculate more than one value (e.g. **mean** and **sd**). This can be achieved by returning a named vector:
+Sometimes calculations can take a long time (e.g. clustering of GPS points) and we want to calculate more than one value (e.g. `mean` and `sd`). This can be achieved by returning a named vector:
 ```{r}
 more_features = function(data) {
   c(max_x = max(data$x), sd_x = sd(data$x))

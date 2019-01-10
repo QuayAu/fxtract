@@ -88,7 +88,7 @@
       <a href="articles/tutorial/usecase_studentlife.html">StudentLife</a>
     </li>
     <li>
-      <a href="articles/tutorial/usecase_studentlife_R6html">StudentLife with R6 Project</a>
+      <a href="articles/tutorial/usecase_studentlife_R6.html">StudentLife with R6</a>
     </li>
   </ul>
 </li>
@@ -155,7 +155,7 @@
 <li>No more code bloat thanks to R6.</li>
 <li>Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.</li>
 <li>Internally, <a href="https://mllg.github.io/batchtools/articles/batchtools.html">batchtools</a> is used for parallelization and error handling.</li>
-<li>Features can be calculated for each participant individually or in chunks.</li>
+<li>Features will be calculated for each participant individually.</li>
 <li>If one feature on one participant throws an error, this will not stop the whole process (like in a traditional R script). A log file with the error message is created (by batchtools), and the remaining features will still be calculated.</li>
 <li>Individual features can be deleted or updated easily.</li>
 <li>Calculation of features can be done in parallel and the process can be monitored. It is also possible to stop and return the calculation at a later time.</li>
@@ -200,7 +200,6 @@
 <ul class="list-unstyled">
 <li>Quay Au <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Theresa Ullmann <br><small class="roles"> Author </small>  </li>
-<li>Andreas Hofheinz <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -210,7 +209,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann, Andreas Hofheinz.</p>
+  <p>Developed by Quay Au, Theresa Ullmann.</p>
 </div>
 
 <div class="pkgdown">

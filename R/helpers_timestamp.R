@@ -204,8 +204,8 @@ filter_weekday = function(data, from_day = "Mon", from_time = "00:00:00", until_
   return(df_res)
 }
 
-#' Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
-#' The dataset needs an ordered factor variable named 'weekday'.
+#' Filter function. Filters the data by daytime. The dataset can e.g. be filtered from "06:00:00" until "09:00:00".
+#' The dataset needs an ordered factor variable named 'time' (best added by the function add_time).
 #'
 #' @template param_data
 #' @param from_time character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".

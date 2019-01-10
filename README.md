@@ -34,7 +34,7 @@ devtools::install_github("QuayAu/fxtract")
             * No more code bloat thanks to R6.
             * Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.
             * Internally, [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html) is used for parallelization and error handling.
-            * Features can be calculated for each participant individually or in chunks. 
+            * Features will be calculated for each participant individually.
             * If one feature on one participant throws an error, this will not stop the whole process (like in a traditional R script). A log file with the error message is created (by batchtools), and the remaining features will still be calculated. 
             * Individual features can be deleted or updated easily.
             * Calculation of features can be done in parallel and the process can be monitored. It is also possible to stop and return the calculation at a later time.

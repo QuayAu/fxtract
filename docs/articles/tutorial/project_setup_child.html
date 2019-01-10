@@ -48,9 +48,6 @@
     <li>
       <a href="../../articles/tutorial/filters.html">filters</a>
     </li>
-    <li>
-      <a href="../../articles/tutorial/basics_sliding_window.html">sliding_window</a>
-    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -91,7 +88,7 @@
       <a href="../../articles/tutorial/usecase_studentlife.html">StudentLife</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/usecase_large_project.html">Large Project</a>
+      <a href="../../articles/tutorial/usecase_studentlife_R6.html">StudentLife with R6</a>
     </li>
   </ul>
 </li>
@@ -130,23 +127,14 @@
     
 <p>On how to use the R6 class <code>Project</code>, click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html">here</a>.</p>
 <p>Setup script:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)</code></pre></div>
-<pre><code>## Lade nötiges Paket: lubridate</code></pre>
-<pre><code>## 
-## Attache Paket: 'lubridate'</code></pre>
-<pre><code>## The following object is masked from 'package:base':
-## 
-##     date</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
+my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</code></pre></div>
 <pre><code>## No readable configuration file found</code></pre>
 <pre><code>## Created registry in 'L:/Users/auj/Desktop/Git/fxtract/vignettes/tutorial/projects/my_project/reg' using cluster functions 'Interactive'</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</code></pre></div>
 <pre><code>## Warning: executing %dopar% sequentially: no parallel backend registered</code></pre>
 <pre><code>## 
 ## Attache Paket: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:lubridate':
-## 
-##     intersect, setdiff, union</code></pre>
 <pre><code>## The following objects are masked from 'package:stats':
 ## 
 ##     filter, lag</code></pre>
@@ -184,17 +172,17 @@ my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)</co
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
 <pre><code>## Submitting 6 jobs in 6 chunks using cluster functions 'Interactive' ...</code></pre>
 <pre><code>## ### [bt]: Generating problem instance for problem 'setosa' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'setosa' for job 1 (seed = 11923) ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'setosa' for job 1 (seed = 14730) ...</code></pre>
 <pre><code>## ### [bt]: Generating problem instance for problem 'versicolor' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'versicolor' for job 2 (seed = 11924) ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'versicolor' for job 2 (seed = 14731) ...</code></pre>
 <pre><code>## ### [bt]: Generating problem instance for problem 'virginica' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'virginica' for job 3 (seed = 11925) ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'fun1' on problem 'virginica' for job 3 (seed = 14732) ...</code></pre>
 <pre><code>## ### [bt]: Generating problem instance for problem 'setosa' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'setosa' for job 4 (seed = 11926) ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'setosa' for job 4 (seed = 14733) ...</code></pre>
 <pre><code>## ### [bt]: Generating problem instance for problem 'versicolor' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'versicolor' for job 5 (seed = 11927) ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'versicolor' for job 5 (seed = 14734) ...</code></pre>
 <pre><code>## ### [bt]: Generating problem instance for problem 'virginica' ...</code></pre>
-<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'virginica' for job 6 (seed = 11928) ...</code></pre>
+<pre><code>## ### [bt]: Applying algorithm 'fun2' on problem 'virginica' for job 6 (seed = 14735) ...</code></pre>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -204,7 +192,7 @@ my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)</co
 
 
       <footer><div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann, Andreas Hofheinz.</p>
+  <p>Developed by Quay Au, Theresa Ullmann.</p>
 </div>
 
 <div class="pkgdown">

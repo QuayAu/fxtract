@@ -9,9 +9,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Introduction to Dataset
-
-See [official site](http://studentlife.cs.dartmouth.edu/dataset.html) for more information.
+See the [official site](http://studentlife.cs.dartmouth.edu/dataset.html) for more information on the dataset.
 
 ## studentlife_small
 We downloaded gps and app data from three participants of the studentlife dataset.
@@ -32,15 +30,15 @@ str(studentlife_small)
 
 This is a very straightforward function: 
 ```{r}
-numberDiffApps = function(data) {
-  c(numberDiffApps = length(unique(data$RUNNING_TASKS_topActivity_mPackage)))
+number_diff_apps = function(data) {
+  c(number_diff_apps = length(unique(data$RUNNING_TASKS_topActivity_mPackage)))
 }
 ```
 
 That's all we need to calculate the number of different apps used for each participant:
 
 ```{r}
-feat_data = calc_feature(data = studentlife_small, fun = numberDiffApps, group_by = "userId")
+feat_data = calc_feature(data = studentlife_small, fun = number_diff_apps, group_by = "userId")
 feat_data
 ```
 
@@ -50,7 +48,7 @@ For this feature, we need to filter the dataset from Monday until Friday:
 studentlife_small_weekday = studentlife_small %>% 
   add_weekday(utc_col = "timestamp") %>%
   filter(weekday >= "Mon" & weekday <= "Fri")
-x = calc_feature(data = studentlife_small_weekday, fun = numberDiffApps, group_by = "userId", colname = "numberDiffAppsWeekday")
+x = calc_feature(data = studentlife_small_weekday, fun = number_diff_apps, group_by = "userId", colname = "number_diff_apps_weekday")
 feat_data = feat_data %>% left_join(x)
 feat_data
 ```
@@ -63,14 +61,14 @@ studentlife_small_date = studentlife_small %>% add_date(utc_col = "timestamp")
 
 Now we can calculate this feature per day:
 ```{r}
-x = calc_feature(data = studentlife_small_date, fun = numberDiffApps, group_by = c("userId", "date"))
+x = calc_feature(data = studentlife_small_date, fun = number_diff_apps, group_by = c("userId", "date"))
 x[, 1:6]
 ```
 
 All there is left to do is to apply a mean function on the rows of this dataset. You can do this by specifying a `summarize`-function:
 ```{r}
-x = calc_feature(data = studentlife_small_date, fun = numberDiffApps, group_by = c("userId", "date"), 
-  summarize = function(x) mean(x, na.rm = TRUE), colname = "dailyNumberDiffApps")
+x = calc_feature(data = studentlife_small_date, fun = number_diff_apps, group_by = c("userId", "date"), 
+  summarize = function(x) mean(x, na.rm = TRUE), colname = "daily_number_diff_apps")
 feat_data = feat_data %>% left_join(x)
 feat_data
 ```
@@ -82,22 +80,17 @@ Again, we need to define a function, which calculates the total distance covered
 
 ```{r}
 library(geosphere)
-totalDist = function(data) {
+total_dist = function(data) {
   long = data$longitude
   lat = data$latitude
-  c(totalDist = sum(geosphere::distHaversine(cbind(long, lat)), na.rm = TRUE))
+  c(total_dist = sum(geosphere::distHaversine(cbind(long, lat)), na.rm = TRUE))
 }
 ```
 
 ```{r}
-x = calc_feature(data = studentlife_small, group_by = "userId", fun = totalDist)
+x = calc_feature(data = studentlife_small, group_by = "userId", fun = total_dist)
 feat_data = feat_data %>% left_join(x, by = "userId")
 feat_data 
 ```
 
-
-For small projects (small datasets, few features) it's ok to calculate the features like above and join the resulting dataframes with `dplyr::left_join` (or your preferred method). But it becomes very burdensome, if datasets get too big for memory and features (possibly many different ones) must be calculated in chunks and be joined afterwards. We made the experience that single errors (e.g. one feature throws an error on one participant) can stop the whole process. Updating this feature and calculate it again can be quite convoluted because of loops and code bloat (many joins). For larger projects use the R6 class `Project`. A use case can be found [here](https://quayau.github.io/fxtract/docs/articles/tutorial/usecase_large_project.html).
-
-
-
-
+For small projects (small datasets, few features) it's ok to calculate the features like above and join the resulting dataframes with `dplyr::left_join` (or your preferred method). But it becomes very burdensome, if datasets get too big for memory and features (possibly many different ones) must be calculated in chunks and be joined afterwards. We made the experience that single errors (e.g. one feature throws an error on one participant) can stop the whole process. Updating this feature and calculate it again can be quite convoluted because of loops and code bloat (many joins). For larger projects use the R6 class `Project`. A use case can be found [here](https://quayau.github.io/fxtract/docs/articles/tutorial/usecase_studentlife_R6.html).

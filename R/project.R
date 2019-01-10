@@ -113,7 +113,7 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     calc_features = function() {
-      batchtools::submitJobs(reg = self$reg)
+      batchtools::submitJobs(ids = findNotDone(reg = self$reg), reg = self$reg)
       return(invisible(self))
     },
     get_project_status = function() {
