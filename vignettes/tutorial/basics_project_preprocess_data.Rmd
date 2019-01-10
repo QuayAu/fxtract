@@ -48,7 +48,7 @@ fun = function(data) {
 ```
 
 ## Perform Preprocessing
-```{r}
+```{r, message = FALSE}
 my_project$preprocess_data(fun = fun)
 ```
 
@@ -58,5 +58,6 @@ gps_data_00 = readRDS("projects/my_project/rds_files/00.RDS")
 str(gps_data_00)
 ```
 
-
-
+```{r, echo = FALSE}
+unlink("projects", recursive = TRUE)
+```

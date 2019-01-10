@@ -116,3 +116,6 @@ Sys.sleep(3)
 my_project$collect_results()
 ```
 
+```{r, echo = FALSE}
+unlink("projects", recursive = TRUE)
+```

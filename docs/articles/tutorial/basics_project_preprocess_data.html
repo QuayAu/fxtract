@@ -163,15 +163,6 @@ fun =<span class="st"> </span><span class="cf">function</span>(data) {
 <h2 class="hasAnchor">
 <a href="#perform-preprocessing" class="anchor"></a>Perform Preprocessing</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> fun)</code></pre></div>
-<pre><code>## Updating raw RDS file 00.RDS</code></pre>
-<pre><code>## Updating raw RDS file 01.RDS</code></pre>
-<pre><code>## Updating raw RDS file 02.RDS</code></pre>
-<pre><code>## Removing Problem '00' and 0 corresponding jobs ...</code></pre>
-<pre><code>## Adding problem '00'</code></pre>
-<pre><code>## Removing Problem '01' and 0 corresponding jobs ...</code></pre>
-<pre><code>## Adding problem '01'</code></pre>
-<pre><code>## Removing Problem '02' and 0 corresponding jobs ...</code></pre>
-<pre><code>## Adding problem '02'</code></pre>
 <p>The data has successfully been preprocessed:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gps_data_<span class="dv">00</span> =<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">"projects/my_project/rds_files/00.RDS"</span>)
 <span class="kw">str</span>(gps_data_<span class="dv">00</span>)</code></pre></div>

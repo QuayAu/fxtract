@@ -163,7 +163,7 @@ test_that("calculate features", {
 
   #test meaningful error message $collect_results()
   expect_error(x$collect_results(), regexp = "No features have been calculated yet.")
-  expect_message(x$get_project_status())
+  expect_error(x$get_project_status())
 
   #test submitting jobs by batchtools
   batchtools::submitJobs(1:2, reg = x$reg)
