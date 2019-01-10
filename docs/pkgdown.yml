@@ -9,12 +9,11 @@ articles:
   basics_project_update_data: tutorial/basics_project_update_data.html
   basics_project_update_feature: tutorial/basics_project_update_feature.html
   basics_project_utilize_batchtools: tutorial/basics_project_utilize_batchtools.html
-  basics_sliding_window: tutorial/basics_sliding_window.html
   filters: tutorial/filters.html
   helpers: tutorial/helpers.html
   project_setup_child: tutorial/project_setup_child.html
-  usecase_large_project: tutorial/usecase_large_project.html
   usecase_studentlife: tutorial/usecase_studentlife.html
+  usecase_studentlife_R6: tutorial/usecase_studentlife_R6.html
 urls:
   reference: https://quayau.github.io/fxtract/docs/index.html/reference
   article: https://quayau.github.io/fxtract/docs/index.html/articles

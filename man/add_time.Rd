@@ -23,7 +23,6 @@ Adds column 'time' to a dataframe containing a timestamp variable.
 }
 \seealso{
 Other helper functions: \code{\link{add_date_time}},
-  \code{\link{add_date}}, \code{\link{add_weekday}},
-  \code{\link{sliding_window}}
+  \code{\link{add_date}}, \code{\link{add_weekday}}
 }
 \concept{helper functions}

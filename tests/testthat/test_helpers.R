@@ -159,57 +159,6 @@ test_that("add_time_variables", {
   expect_equal(as.character(x$date), expected)
 })
 
-test_that("sliding_window", {
-  td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
-
-  #test checks
-  fun = function(data) data.frame(x = data$x, x2 = data$x * 2)
-  expect_error(sliding_window(data = td, fun = fun, steps = 5))
-
-  
-  fun = function(data) c(sum_x_last3 = sum(data$x), max_x_last3 = max(data$x))
-  #test steps
-  x = sliding_window(td, fun = fun, steps = 3)
-  expect_equal(dim(x), c(21, 4))
-  expect_equal(x$sum_x_last3[1:3], c(NA_integer_, NA_integer_, NA_integer_))
-  expect_equal(x$sum_x_last3[4:21], c(6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57))
-  expect_equal(x$max_x_last3[4:21], 3:20)
-
-  ##test eval_at_rows
-  x = sliding_window(td, fun = fun, steps = 3, eval_at_rows = c(5, 10, 15, 20))
-  expect_equal(x$sum_x_last3[4:21], c(NA, 9, NA, NA, NA, NA, 24, NA, NA, NA, NA, 39, NA, NA, NA, NA, 54, NA))
-
-  ###test steps > interval at eval_at_rows
-  x = sliding_window(td, fun = fun, steps = 6, eval_at_rows = c(5, 10, 15, 20))
-  expect_equal(x$sum_x_last3[4:21], c(NA, NA, NA, NA, NA, NA, 39, NA, NA, NA, NA, 69, NA, NA, NA, NA, 19 + 18 + 17 + 16 + 15 + 14, NA))
-
-  ##test wrong inputs
-  expect_error(sliding_window(td, fun = fun, time_in_sec = 5), regexp = "please specify timestamp column")
-  expect_error(sliding_window(td, fun = fun, time_in_sec = 5, steps = 2), regexp = "Pass either steps or time_in_sec, but not both!")
-  expect_error(sliding_window(td, fun = fun, time_in_sec = 5, utc_col = "wrong timestamp"))
-  expect_error(sliding_window(td, fun = fun, time_in_sec = 5, utc_col = "timestamp", unit = "wrong unit"))
-
-  #test time in seconds
-  x = sliding_window(td, fun = fun, time_in_sec = 3, utc_col = "timestamp")
-
-  expect_equal(x$sum_x_last3, c(NA_integer_, 1, 3, 5, 7, 9, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
-  expect_equal(x$max_x_last3, c(NA_integer_, 1:9, -Inf, 11:20))
-
-  #test time in milliseconds
-  td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
-  td$timestamp[2] = 1.5
-  td$timestamp[4] = 3.5
-  td$timestamp = td$timestamp * 1000
-  x = sliding_window(td, fun = fun, time_in_sec = 2.4, utc_col = "timestamp", unit = "ms")
-  expect_equal(x$sum_x_last3, c(NA_integer_, 1, 3, 5, 7, 5, 11, 13, 15, 17, 0, 11, 23, 25, 27, 29, 31, 33, 35, 37, 39))
-
-  ##test eval_at_rows
-  td = data.frame(timestamp = c(1:10, 15:25), x = 1:21)
-  x = sliding_window(td, fun = fun, time_in_sec = 3, utc_col = "timestamp", eval_at_rows = c(5, 10, 15, 20))
-
-  expect_equal(x$sum_x_last3, c(rep(NA_integer_, 4), 7, rep(NA_integer_, 4), 17, rep(NA_integer_, 4), 27, rep(NA_integer_, 4), 37, NA))
-})
-
 test_that("filter_weekday", {
   td = data.frame(timestamp = 1:10)
 
@@ -272,7 +221,7 @@ test_that("filter_daytime", {
     "18:11:30", "19:01:27", "20:34:04", "21:37:53", "22:06:12", "23:33:30"), stringsAsFactors = FALSE)
   # test data without time column
   expect_error(filter_daytime(iris), regexp = "Your data set needs a column named 'time'. See function add_time()")
-  
+
   # test correct filtering according to the given times
   time1 = "11:00:00"
   time2 = "19:00:00"

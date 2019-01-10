@@ -13,8 +13,7 @@ URL: https://github.com/QuayAu/fxtract
 BugReports: https://github.com/QuayAu/fxtract/issues
 NeedsCompilation: yes
 ByteCompile: yes
-Depends: R (>= 3.4.0),
-  lubridate
+Depends: R (>= 3.4.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -26,7 +25,8 @@ Imports: dplyr,
   data.table,
   batchtools,
   foreach,
-  R6
+  R6,
+  lubridate
 Suggests: testthat,
   knitr,
   covr,

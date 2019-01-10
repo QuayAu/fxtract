@@ -14,8 +14,6 @@ navbar:
       href: articles/tutorial/helpers.html
     - text: filters
       href: articles/tutorial/filters.html
-    - text: sliding_window
-      href: articles/tutorial/basics_sliding_window.html
   - text: Basics
     menu:
     - text: calc_feature
@@ -34,8 +32,8 @@ navbar:
     menu:
     - text: StudentLife
       href: articles/tutorial/usecase_studentlife.html
-    - text: Large Project
-      href: articles/tutorial/usecase_large_project.html
+    - text: StudentLife with R6 Project
+      href: articles/tutorial/usecase_studentlife_R6html
   - text: "Reference"
     href: "reference/index.html"
     contents:

@@ -41,5 +41,3 @@ devtools::install_github("QuayAu/fxtract")
             * Results can be easily collected in one final dataframe.
 * Timestamp to date & time converters:
     * This is useful for filtering datasets, e.g. if one is interested in filtering the morning hours from a dataset, or distinguishing working days from weekends.
-* Sliding window function:
-    * Applies a function within a sliding window of a dataframe. Either step-size (fixed sample rate) or number of seconds (variable sample rate) can be set by the user.
