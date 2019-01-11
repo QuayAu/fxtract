@@ -87,10 +87,12 @@ Project = R6Class("Project",
         if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name, delete the existing project, or set load = TRUE, if you want to load the old project.")
         dir.create(newDirPath)
         dir.create(paste0(newDirPath, "/rds_files"))
+        saveRDS(NULL, file = paste0(self$dir, "/group_by.RDS"))
         self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"))
       } else {
         checkmate::assert_subset(project_name, list.files("projects/"))
         self$reg = batchtools::loadRegistry(paste0(newDirPath, "/reg"), writeable = TRUE)
+        self$group_by = readRDS(paste0(newDirPath, "/group_by.RDS"))
       }
     },
     print = function() {
@@ -122,7 +124,10 @@ Project = R6Class("Project",
       checkmate::assert_data_frame(dataframe)
       checkmate::assert_subset(group_by, colnames(dataframe))
       checkmate::assert_character(group_by, len = 1)
-      if (is.null(self$group_by)) self$group_by = group_by
+      if (is.null(self$group_by)) {
+        self$group_by = group_by
+        saveRDS(group_by, file = paste0(self$dir, "/group_by.RDS"))
+      }
       if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by,
         ". Only one group_by variable is allowed per project!"))
       gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
