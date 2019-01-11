@@ -1,7 +1,10 @@
 Package: fxtract
-Type: Package
 Title: Feature Extraction for Longitudinal Data
-Description: This package contains functions, which calculate features from longitudinal data.
+Type: Package
+Description: This package helps with extracting features from longitudinal data of many different users/IDs/etc.
+    Helpful preprocessing functions are supplied as well. Very large datasets are supported, since data is only read into RAM when needed.
+    Individual features can be deleted or updated easily. Calculation of features can be done in parallel and the process can be monitored.
+    Results can be easily collected in one final dataframe.
 Version: 0.6
 Authors@R: c(person("Quay", "Au", email = "quay.au@stat.uni-muenchen.de", role = c("aut", "cre")),
   person("Theresa", "Ullmann", email = "theresa_ullmann@gmx.de", role = "aut"),
