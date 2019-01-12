@@ -1,7 +1,7 @@
 #' R6 Object for Feature Extraction.
 #'
 #' @description
-#' \code{Project} calculates features from longitudinal data for each grouping variable individually.
+#' \code{Project} calculates features from longitudinal data for each grouping variable individually with batchtools.
 #'
 #' @format \code{\link{R6Class}} object.
 #' @name Project
@@ -206,13 +206,15 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     calc_features = function() {
-      batchtools::submitJobs(ids = batchtools::findNotDone(reg = self$reg), reg = self$reg)
+      running = batchtools::findRunning(reg = self$reg)$job.id
+      not_done = batchtools::findNotDone(reg = self$reg)$job.id
+      batchtools::submitJobs(ids = setdiff(not_done, running), reg = self$reg)
       return(invisible(self))
     },
     get_project_status = function() {
       problem = vars = funs = NULL
       reg = self$reg
-      if (nrow(batchtools::findDone(reg = reg)) == 0) stop("No features have been calculated yet or all functions resulted in errors. Start calculating with method $submit_jobs().")
+      if (nrow(batchtools::findDone(reg = reg)) == 0) stop("No features have been calculated yet or all functions resulted in errors. Start calculating with method $calc_features().")
       jt = batchtools::getJobTable(reg = reg)
       jt = data.frame(jt)
       jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
@@ -231,7 +233,7 @@ Project = R6Class("Project",
       feature = job.id = problem = algorithm = NULL
       reg = self$reg
       res = batchtools::reduceResultsDataTable(reg = reg)
-      if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $submit_jobs().")
+      if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $calc_features().")
       done_id = res$job.id
       res = setNames(res$result, done_id)
 

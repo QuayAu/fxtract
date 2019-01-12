@@ -5,7 +5,7 @@
 \title{R6 Object for Feature Extraction.}
 \format{\code{\link{R6Class}} object.}
 \description{
-\code{Project} calculates features from longitudinal data for each grouping variable individually.
+\code{Project} calculates features from longitudinal data for each grouping variable individually with batchtools.
 }
 \section{Usage}{
 
