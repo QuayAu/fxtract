@@ -92,6 +92,8 @@ test_that("preprocess_data", {
   expect_true(file.exists("projects/my_project/rds_files/data/versicolor.RDS"))
   expect_true(file.exists("projects/my_project/rds_files/data/virginica.RDS"))
   iris2 = x$get_data(datasets = x$datasets)
+  iris2 = x$get_data()
+
   iris3 = iris %>% dplyr::group_by(Species) %>% dplyr::mutate(new_col = max(Sepal.Length) + max(Petal.Length)) %>% data.frame()
   expect_equal(iris3, iris2)
 

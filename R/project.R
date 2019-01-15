@@ -200,8 +200,9 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     get_data = function(datasets) {
+      if (missing(datasets)) datasets = self$datasets
       checkmate::assert_character(datasets, min.len = 1L)
-      checkmate::assert_subset(datasets, self$reg$problems)
+      checkmate::assert_subset(datasets, self$datasets)
       data = foreach::foreach(data = datasets) %dopar% {
         readRDS(paste0(self$dir, "/rds_files/data/", data, ".RDS"))
       }
