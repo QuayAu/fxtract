@@ -65,6 +65,16 @@ test_that("add_data", {
   #test active bindings
   expect_equal(x$datasets, c("setosa", "versicolor", "virginica"))
 
+  #test print with many datasets
+  for (i in 1:10) {
+    iris2 = iris
+    iris2$Species = paste0(iris2$Species, i)
+    x$add_data(iris2, group_by = "Species")
+  }
+  y = capture.output(x$print())
+  expect_true(" ..." %in% strsplit(y[4], ",")[[1]])
+  expect_false(" virginica7" %in% strsplit(y[4], ",")[[1]])
+
   unlink("projects", recursive = TRUE)
 })
 
@@ -78,7 +88,7 @@ test_that("preprocess_data", {
   }
   x$add_feature(fun2)
   x$calc_features()
-  expect_equal(nrow(batchtools::findErrors(reg = x$reg)), 3)
+  expect_equal(nrow(x$error_messages), 3)
 
   #preprocess data
   fun = function(data) {
@@ -92,14 +102,15 @@ test_that("preprocess_data", {
   expect_true(file.exists("projects/my_project/rds_files/data/versicolor.RDS"))
   expect_true(file.exists("projects/my_project/rds_files/data/virginica.RDS"))
   iris2 = x$get_data(datasets = x$datasets)
-  iris2 = x$get_data()
-
   iris3 = iris %>% dplyr::group_by(Species) %>% dplyr::mutate(new_col = max(Sepal.Length) + max(Petal.Length)) %>% data.frame()
+  expect_equal(iris3, iris2)
+
+  iris2 = x$get_data()
   expect_equal(iris3, iris2)
 
   #test updated batchtools problems
   x$calc_features()
-  expect_equal(x$collect_results()$sum, c(7.7, 12.1, 14.8))
+  expect_equal(x$results$sum, c(7.7, 12.1, 14.8))
 
   unlink("projects", recursive = TRUE)
 })
@@ -114,6 +125,7 @@ test_that("remove_data", {
   x$remove_data(c("versicolor", "virginica"))
   expect_equal(list.files(paste0(x$dir, "/rds_files/data/")), character(0))
   expect_equal(x$datasets, character(0))
+  unlink("projects", recursive = TRUE)
 })
 
 test_that("add_feature", {
@@ -162,6 +174,17 @@ test_that("add_feature", {
   expect_equal(y, sepal_length_fun)
 
   expect_error(x$get_feature("abc"), regexp = "Assertion on 'fun' failed: Must be a subset of")
+
+  #test print with many functions
+  for (i in 1:20) {
+    eval(parse(text = paste0("fun", i, " = sepal_length_fun")))
+    eval(parse(text = paste0("x$add_feature(fun", i, ")")))
+  }
+  y = capture.output(x$print())
+  expect_true(" ..." %in% strsplit(y[5], ",")[[1]])
+  expect_false(" fun19" %in% strsplit(y[4], ",")[[1]])
+
+  unlink("projects", recursive = TRUE)
 })
 
 test_that("calculate features", {
@@ -185,21 +208,21 @@ test_that("calculate features", {
   x$add_feature(sepal_length_fun)
   x$add_feature(sepal_width_fun)
 
-  #test meaningful error message $collect_results()
-  expect_error(x$collect_results(), regexp = "No features have been calculated yet.")
-  expect_error(x$get_project_status())
+  #test meaningful error message $results
+  expect_error(x$results, regexp = "No features have been calculated yet.")
+  expect_error(x$project_status)
 
   #test submitting jobs by batchtools
   batchtools::submitJobs(1:2, reg = x$reg)
-  expect_equal(x$get_project_status()$perc_done, 1/3)
+  expect_equal(x$project_status$perc_done, 1/3)
   expect_equal(x$perc_done, 1/3)
   y = capture.output(x)
   expect_equal(y[6], "Percentage calculated: 33%")
 
   #test submitting jobs by R6 method
   x$calc_features()
-  expect_equal(x$get_project_status()$perc_done, 1)
-  res = x$collect_results()
+  expect_equal(x$project_status$perc_done, 1)
+  res = x$results
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
   expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
@@ -209,9 +232,42 @@ test_that("calculate features", {
   x$add_feature(sepal_length_fun)
   y = Project$new("my_project", load = TRUE)
   y$calc_features()
-  expect_equal(y$get_project_status()$perc_done, 1)
-  res = y$collect_results()
+  expect_equal(y$project_status$perc_done, 1)
+  res = y$results
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
   expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
+
+  unlink("projects", recursive = TRUE)
+})
+
+test_that("error handling", {
+  unlink("projects", recursive = TRUE)
+  x = Project$new(project_name = "my_project")
+  expect_error(x$calc_features(), regexp = "Please add datasets with method")
+  x$add_data(iris, group_by = "Species")
+  expect_error(x$calc_features(), regexp = "Please add feature functions with method")
+
+  fun1 = function(data) {
+    if ("versicolor" %in% data$Species) stop("fun1 not compatible on versicolor")
+    c(mean_sepal_length = mean(data$Sepal.Length),
+      sd_sepal_length = sd(data$Sepal.Length))
+  }
+
+  fun2 = function(data) {
+    if ("virginica" %in% data$Species) stop("fun2 not compatible on virginica")
+    c(mean_petal_length = mean(data$Petal.Length),
+      sd_petal_length = sd(data$Petal.Length))
+  }
+
+  x$add_feature(fun1)
+  x$add_feature(fun2)
+
+  x$calc_features()
+  expect_equal(x$error_messages$error[1], "Error in fun(data) : fun1 not compatible on versicolor")
+  expect_equal(x$error_messages$error[2], "Error in fun(data) : fun2 not compatible on virginica")
+  expect_equal(nrow(x$error_messages), 2)
+  expect_equal(length(x$log_files), 2)
+
+  unlink("projects", recursive = TRUE)
 })

@@ -43,6 +43,8 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 \item{log_files: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
 \item{datasets: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
 \item{features: }{(`character()`): Active binding. A character vector with the feature functions which were added.}
+\item{project_status: }{(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.}
+\item{results: }{(`data.frame`): Active binding. A dataframe with all calculated features of all IDs.}
 }
 }
 
@@ -67,8 +69,6 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 \item{get_feature(fun)}{[fun: (`character(1)`)] The name of a function as character. \cr \cr
  This method reads the RDS file of the function. Useful for debugging after loading a project.}
 \item{calc_features()}{This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.}
-\item{get_project_status()}{This method gives an overview over which features are done on which datasets.}
-\item{collect_results()}{This method returns a dataframe with the calculated features.}
 \item{plot()}{[internal] method to print the R6 object.}
 \item{\code{clone()}}{[internal] method to clone the R6 object.}
 \item{\code{initialize()}}{[internal] method to initialize the R6 object.}
@@ -86,7 +86,7 @@ fun = function(data) {
 my_project$add_feature(fun)
 my_project$features
 my_project$calc_features()
-my_project$collect_results()
+my_project$results
 my_project$perc_done
 unlink("projects/my_project", recursive = TRUE)
 }

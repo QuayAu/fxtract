@@ -34,6 +34,8 @@
 #' \item{log_files: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
 #' \item{datasets: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
 #' \item{features: }{(`character()`): Active binding. A character vector with the feature functions which were added.}
+#' \item{project_status: }{(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.}
+#' \item{results: }{(`data.frame`): Active binding. A dataframe with all calculated features of all IDs.}
 #' }
 #'
 #' @section Methods:
@@ -56,8 +58,6 @@
 #' \item{get_feature(fun)}{[fun: (`character(1)`)] The name of a function as character. \cr \cr
 #'  This method reads the RDS file of the function. Useful for debugging after loading a project.}
 #' \item{calc_features()}{This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.}
-#' \item{get_project_status()}{This method gives an overview over which features are done on which datasets.}
-#' \item{collect_results()}{This method returns a dataframe with the calculated features.}
 #' \item{plot()}{[internal] method to print the R6 object.}
 #' \item{\code{clone()}}{[internal] method to clone the R6 object.}
 #' \item{\code{initialize()}}{[internal] method to initialize the R6 object.}
@@ -74,7 +74,7 @@
 #' my_project$add_feature(fun)
 #' my_project$features
 #' my_project$calc_features()
-#' my_project$collect_results()
+#' my_project$results
 #' my_project$perc_done
 #' unlink("projects/my_project", recursive = TRUE)
 #' @import R6
@@ -110,7 +110,7 @@ Project = R6Class("Project",
       }
     },
     print = function() {
-      problems = self$reg$problems[1:20]
+      problems = self$reg$problems
       problems = problems[!is.na(problems)]
       if (length(problems) <= 20) {
         problems = paste0(problems, collapse = ", ")
@@ -118,7 +118,7 @@ Project = R6Class("Project",
         problems = paste0(problems[1:20], collapse = ", ")
         problems = paste0(problems, ", ...")
       }
-      algos = self$reg$algorithms[1:20]
+      algos = self$reg$algorithms
       algos = algos[!is.na(algos)]
       if (length(algos) <= 20) {
         algos = paste0(algos, collapse = ", ")
@@ -243,53 +243,12 @@ Project = R6Class("Project",
       readRDS(paste0(self$dir, "/rds_files/features/", fun, ".RDS"))
     },
     calc_features = function() {
+      if (length(self$datasets) == 0) stop("Please add datasets with method $add_data().")
+      if (length(self$features) == 0) stop("Please add feature functions with method $add_feature().")
       running = batchtools::findRunning(reg = self$reg)$job.id
       not_done = batchtools::findNotDone(reg = self$reg)$job.id
       batchtools::submitJobs(ids = base::setdiff(not_done, running), reg = self$reg)
       return(invisible(self))
-    },
-    get_project_status = function() {
-      problem = vars = funs = NULL
-      reg = self$reg
-      if (nrow(batchtools::findDone(reg = reg)) == 0) stop("No features have been calculated yet or all functions resulted in errors. Start calculating with method $calc_features().")
-      jt = batchtools::getJobTable(reg = reg)
-      jt = data.frame(jt)
-      jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
-      dcast_formula = as.formula("problem ~ algorithm")
-      res = data.table::dcast(data.table::setDT(jt), dcast_formula, value.var = "really_done")
-      doneFun = function(x) ifelse(!is.na(x), 1, 0)
-      res = res %>% dplyr::mutate_at(dplyr::vars(-problem), dplyr::funs(doneFun))
-      res2 = list(detailed = res)
-      res2[["problem_wise"]] = data.frame(problem = res$problem,
-        finished = res %>% dplyr::select(-problem) %>% rowMeans())
-      res2[["feature_wise"]] = res %>% dplyr::select(-problem) %>% colMeans()
-      res2[["perc_done"]] = mean(unlist(res2$detailed %>% dplyr::select(-problem)))
-      res2
-    },
-    collect_results = function() {
-      feature = job.id = problem = algorithm = NULL
-      reg = self$reg
-      res = batchtools::reduceResultsDataTable(reg = reg)
-      if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $calc_features().")
-      done_id = res$job.id
-      res = setNames(res$result, done_id)
-
-      jt = batchtools::getJobTable(reg = reg)
-      lookup = jt %>% select(job.id, problem, algorithm)
-      features = self$get_project_status()$feature_wise
-      features = names(features[features != 0])
-      results = foreach::foreach(feature = features) %dopar% {
-        ids = lookup %>% dplyr::filter(algorithm %in% feature)
-        res_feat = res[names(res) %in% ids$job.id]
-        dplyr::bind_rows(res_feat)
-      }
-      final_result = results[[1]]
-      if (length(results) >= 2) {
-        for (i in 2:length(results)) {
-         final_result = final_result %>% dplyr::full_join(results[[i]], by = self$group_by)
-        }
-      }
-      final_result
     }
   ),
   private = list(
@@ -322,6 +281,49 @@ Project = R6Class("Project",
     },
     features = function() {
       self$reg$algorithms
+    },
+    project_status = function() {
+      problem = vars = funs = NULL
+      reg = self$reg
+      if (nrow(batchtools::findDone(reg = reg)) == 0) stop("No features have been calculated yet or all functions resulted in errors. Start calculating with method $calc_features().")
+      jt = batchtools::getJobTable(reg = reg)
+      jt = data.frame(jt)
+      jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
+      dcast_formula = as.formula("problem ~ algorithm")
+      res = data.table::dcast(data.table::setDT(jt), dcast_formula, value.var = "really_done")
+      doneFun = function(x) ifelse(!is.na(x), 1, 0)
+      res = res %>% dplyr::mutate_at(dplyr::vars(-problem), dplyr::funs(doneFun))
+      res2 = list(detailed = res)
+      res2[["problem_wise"]] = data.frame(problem = res$problem,
+        finished = res %>% dplyr::select(-problem) %>% rowMeans())
+      res2[["feature_wise"]] = res %>% dplyr::select(-problem) %>% colMeans()
+      res2[["perc_done"]] = mean(unlist(res2$detailed %>% dplyr::select(-problem)))
+      res2
+    },
+    results = function() {
+      feature = job.id = problem = algorithm = NULL
+      reg = self$reg
+      res = batchtools::reduceResultsDataTable(reg = reg)
+      if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $calc_features().")
+      done_id = res$job.id
+      res = setNames(res$result, done_id)
+
+      jt = batchtools::getJobTable(reg = reg)
+      lookup = jt %>% select(job.id, problem, algorithm)
+      features = self$project_status$feature_wise
+      features = names(features[features != 0])
+      results = foreach::foreach(feature = features) %dopar% {
+        ids = lookup %>% dplyr::filter(algorithm %in% feature)
+        res_feat = res[names(res) %in% ids$job.id]
+        dplyr::bind_rows(res_feat)
+      }
+      final_result = results[[1]]
+      if (length(results) >= 2) {
+        for (i in 2:length(results)) {
+          final_result = final_result %>% dplyr::full_join(results[[i]], by = self$group_by)
+        }
+      }
+      final_result
     }
   )
 )
