@@ -4,16 +4,14 @@
 [![codecov](https://codecov.io/gh/QuayAu/fxtract/branch/master/graph/badge.svg)](https://codecov.io/gh/QuayAu/fxtract)
 
 # fxtract 
-This is work in progress!
-[Tutorial](https://quayau.github.io/fxtract/docs/index.html)
+See the [Tutorial](https://quayau.github.io/fxtract/docs/index.html) for an introduction into the package.
 
 ## Introduction
 
-fxtract helps you to extract user-defined features from longitudinal data with helpful preprocessing functions.
+fxtract helps you to extract user-defined features from longitudinal data with helpful preprocessing functions. 
 
-![Image description](man/figures/fxtract_main.svg)
-
-The main idea is that the user should only define a function on a dataset which returns a named vector with the desired features. The whole data wrangling (calculating the feature for each ID, possibly in parallel) is handled by `fxtract`. 
+![One dataset per ID](man/figures/fxtract_main.svg)
+The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the feature for each ID, possibly in parallel) is handled by `fxtract`. 
 
 Some helpful functions for preprocessing (timestamped) data are also supplied.
 
@@ -28,6 +26,7 @@ devtools::install_github("QuayAu/fxtract")
 * Extracting features from longitudinal data of many different users/IDs/etc:
     * Either with the function `calc_feature`.
         * Quick and easy calculation of features just by defining a function on the dataset which has a named vector as output.
+        * Suitable for small projects.
     * Or with the R6 Class `project`.
         * For larger projects (many participants, lots of data, many features), it is highly advised to use the R6 class and its methods.
         * Advantages:

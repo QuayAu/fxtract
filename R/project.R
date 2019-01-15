@@ -20,8 +20,8 @@
 #' }
 #' @section Details:
 #' All datasets and feature functions are saved in this R6 object. \code{Project} heavily relies on the R-package batchtools.
-#' Data will be saved as single RDS files (for each grouping variable) and feature functions are calculated on each single dataset.
-#' A big advantage of this method is that it scales nicely for larger datasets. Data is only loaded into RAM, when needed.
+#' Data will be saved as single RDS files (for each ID) and feature functions are calculated on each single dataset.
+#' A big advantage of this method is that it scales nicely for larger datasets. Data is only read into RAM, when needed.
 #'
 #' @section Fields:
 #' \describe{
@@ -29,23 +29,32 @@
 #' \item{dir: }{(`character(1)`): The projects directory.}
 #' \item{group_by: }{(`character(1)`): The column on which to group by.}
 #' \item{reg: }{(`registry`): batchtools registry.}
+#' \item{perc_done: }{(`numeric(1)`): Active binding. Percentage of finished calculations.}
+#' \item{error_messages: }{(`data.frame()`): Active binding. A dataframe with information about error messages.}
+#' \item{log_files: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
+#' \item{datasets: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
+#' \item{features: }{(`character()`): Active binding. A character vector with the feature functions which were added.}
 #' }
 #'
 #' @section Methods:
 #' \describe{
 #' \item{add_data(dataframe, group_by)}{[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. \cr
-#'  [group_by: (`character(1)`)] The grouping variable of the dataframe. \cr \cr
-#'  This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each grouping variable of a dataframe.
+#'  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr \cr
+#'  This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each ID of the grouping variable.
 #'  After that, batchtools experiments will be added too.}
 #' \item{preprocess_data(fun)}{[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. \cr \cr
 #'  This method loads the RDS files and applies this function on them. The old RDS files are overwritten and the batchtools
 #'  problems and experiments are updated.}
-#' \item{remove_data(data)}{[data: (`character(1)`)] The grouping variable's name. \cr \cr
-#'  This method deletes the RDS file and batchtools problem of one single grouping variable.}
+#' \item{remove_data(data)}{[data: (`character(1)`)] An ID of the grouping variable. \cr \cr
+#'  This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.}
+#' \item{get_data(data)}{[data: (`character()`)] One ore many IDs of the grouping variable. \cr \cr
+#'  This method returns one dataframe with the chosen IDs.}#'
 #' \item{add_feature(fun)}{[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. \cr \cr
 #'  This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.}
 #' \item{remove_feature(fun)}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. \cr \cr
 #'  This method removes the batchtools algorithms and experiments corresponding to the given function.}
+#' \item{get_feature(fun)}{[fun: (`character(1)`)] The name of a function as character. \cr \cr
+#'  This method reads the RDS file of the function. Useful for debugging after loading a project.}
 #' \item{calc_features()}{This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.}
 #' \item{get_project_status()}{This method gives an overview over which features are done on which datasets.}
 #' \item{collect_results()}{This method returns a dataframe with the calculated features.}
@@ -58,12 +67,15 @@
 #' unlink("projects/my_project", recursive = TRUE)
 #' my_project = Project$new("my_project")
 #' my_project$add_data(iris, group_by = "Species")
+#' my_project$datasets
 #' fun = function(data) {
 #'   c(mean_sepal_length = mean(data$Sepal.Length))
 #' }
 #' my_project$add_feature(fun)
+#' my_project$features
 #' my_project$calc_features()
 #' my_project$collect_results()
+#' my_project$perc_done
 #' unlink("projects/my_project", recursive = TRUE)
 #' @import R6
 #' @import dplyr
@@ -87,17 +99,18 @@ Project = R6Class("Project",
         if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name, delete the existing project, or set load = TRUE, if you want to load the old project.")
         dir.create(newDirPath)
         dir.create(paste0(newDirPath, "/rds_files"))
-        saveRDS(NULL, file = paste0(self$dir, "/group_by.RDS"))
+        dir.create(paste0(newDirPath, "/rds_files/data"))
+        dir.create(paste0(newDirPath, "/rds_files/features"))
+        saveRDS(NULL, file = paste0(self$dir, "/rds_files/group_by.RDS"))
         self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"))
       } else {
         checkmate::assert_subset(project_name, list.files("projects/"))
         self$reg = batchtools::loadRegistry(paste0(newDirPath, "/reg"), writeable = TRUE)
-        self$group_by = readRDS(paste0(newDirPath, "/group_by.RDS"))
+        self$group_by = readRDS(paste0(newDirPath, "/rds_files/group_by.RDS"))
       }
     },
     print = function() {
       problems = self$reg$problems[1:20]
-      problems = rep(problems, 1000)
       problems = problems[!is.na(problems)]
       if (length(problems) <= 20) {
         problems = paste0(problems, collapse = ", ")
@@ -115,8 +128,10 @@ Project = R6Class("Project",
       }
       cat("R6 Object \n")
       cat(paste0("Project name: ", self$project_name, "\n"))
-      cat(paste0("Grouping variables: ", problems, "\n"))
+      cat(paste0("Grouping variable: ", self$group_by, "\n"))
+      cat(paste0("IDs: ", problems, "\n"))
       cat(paste0("Feature functions: ", algos, "\n"))
+      cat(paste0("Percentage calculated: ", round(self$perc_done, digits = 2) * 100, "%\n"))
       invisible(self)
     },
     add_data = function(dataframe, group_by) {
@@ -135,8 +150,8 @@ Project = R6Class("Project",
       #save rds files
       foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
         dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(dataframe_i, file = paste0(self$dir, "/rds_files/", i, ".RDS"))
-        message(paste0("Saving raw RDS file " , i, ".RDS ", "on disk."))
+        saveRDS(dataframe_i, file = paste0(self$dir, "/rds_files/data/", i, ".RDS"))
+        message(paste0("Saving raw RDS file ", i, ".RDS ", "on disk."))
       }
 
       #add batchtools problems
@@ -152,12 +167,12 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     preprocess_data = function(fun) {
-      datasets = list.files(paste0(self$dir, "/rds_files/"))
+      datasets = list.files(paste0(self$dir, "/rds_files/data"))
       #update RDS files
       foreach::foreach(i = datasets, .packages = c("dplyr")) %dopar% {
-        dataframe_i = readRDS(paste0(self$dir, "/rds_files/", i))
+        dataframe_i = readRDS(paste0(self$dir, "/rds_files/data/", i))
         data_preproc = fun(dataframe_i)
-        saveRDS(data_preproc, file = paste0(self$dir, "/rds_files/", i))
+        saveRDS(data_preproc, file = paste0(self$dir, "/rds_files/data/", i))
         message(paste0("Updating raw RDS file " , i))
       }
 
@@ -165,7 +180,7 @@ Project = R6Class("Project",
       gb = gsub(".RDS", "", datasets)
       for (id in gb) { #cannot be parallelized, because of batchtools
         batchtools::removeProblems(id, reg = self$reg)
-        data_id = readRDS(paste0(self$dir, "/rds_files/", id, ".RDS"))
+        data_id = readRDS(paste0(self$dir, "/rds_files/data/", id, ".RDS"))
         batchtools::addProblem(name = id, data = data_id, reg = self$reg)
         #add experiments
         prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
@@ -174,16 +189,28 @@ Project = R6Class("Project",
       }
       return(invisible(self))
     },
-    remove_data = function(data) {
-      checkmate::assert_character(data)
-      checkmate::assert_subset(data, self$reg$problems)
-      message("Deleting RDS file ", data, ".RDS")
-      unlink(paste0(paste0(self$dir, "/rds_files/", data, ".RDS")))
-      batchtools::removeProblems(data, reg = self$reg)
+    remove_data = function(datasets) {
+      checkmate::assert_character(datasets, min.len = 1L)
+      checkmate::assert_subset(datasets, self$reg$problems)
+      for (data in datasets) {
+        message("Deleting RDS file ", data, ".RDS")
+        unlink(paste0(paste0(self$dir, "/rds_files/data/", data, ".RDS")))
+        batchtools::removeProblems(data, reg = self$reg)
+      }
       return(invisible(self))
+    },
+    get_data = function(datasets) {
+      checkmate::assert_character(datasets, min.len = 1L)
+      checkmate::assert_subset(datasets, self$reg$problems)
+      data = foreach::foreach(data = datasets) %dopar% {
+        readRDS(paste0(self$dir, "/rds_files/data/", data, ".RDS"))
+      }
+      dplyr::bind_rows(data)
     },
     add_feature = function(fun) {
       checkmate::assert_function(fun)
+      message(paste0("Saving raw RDS file ", deparse(substitute(fun)), ".RDS ", "on disk."))
+      saveRDS(fun, file = paste0(self$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))), reg = self$reg)
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
@@ -199,14 +226,25 @@ Project = R6Class("Project",
       return(invisible(self))
     },
     remove_feature = function(fun) {
-      fun = as.character(substitute(fun))
+      if (is.function(fun)) fun = as.character(substitute(fun))
+      checkmate::assert_character(fun, min.len = 1L)
       jt = batchtools::getJobTable(reg = self$reg)
       checkmate::assert_subset(fun, unique(jt$algorithm))
-      batchtools::removeAlgorithms(fun, reg = self$reg)
+      for (f in fun) {
+        batchtools::removeAlgorithms(f, reg = self$reg)
+        unlink(paste0(self$dir, "/rds_files/features/", f, ".RDS"))
+      }
       return(invisible(self))
     },
+    get_feature = function(fun) {
+      checkmate::assert_character(fun, len = 1L)
+      checkmate::assert_subset(fun, self$features)
+      readRDS(paste0(self$dir, "/rds_files/features/", fun, ".RDS"))
+    },
     calc_features = function() {
-      batchtools::submitJobs(ids = batchtools::findNotDone(reg = self$reg), reg = self$reg)
+      running = batchtools::findRunning(reg = self$reg)$job.id
+      not_done = batchtools::findNotDone(reg = self$reg)$job.id
+      batchtools::submitJobs(ids = base::setdiff(not_done, running), reg = self$reg)
       return(invisible(self))
     },
     get_project_status = function() {
@@ -239,7 +277,7 @@ Project = R6Class("Project",
       lookup = jt %>% select(job.id, problem, algorithm)
       features = self$get_project_status()$feature_wise
       features = names(features[features != 0])
-      results = foreach::foreach(feature = features) %do% {
+      results = foreach::foreach(feature = features) %dopar% {
         ids = lookup %>% dplyr::filter(algorithm %in% feature)
         res_feat = res[names(res) %in% ids$job.id]
         dplyr::bind_rows(res_feat)
@@ -257,6 +295,32 @@ Project = R6Class("Project",
     add_experiments = function(prob.designs = NULL, algo.designs = NULL) {
       batchtools::addExperiments(reg = self$reg, prob.designs = prob.designs, algo.designs = algo.designs)
       return(invisible(self))
+    }
+  ),
+  active = list(
+    perc_done = function() {
+      k = nrow(batchtools::getJobTable(reg = self$reg))
+      n = nrow(batchtools::findDone(reg = self$reg)) / nrow(batchtools::getJobTable(reg = self$reg))
+      ifelse(k == 0, 0, n)
+    },
+    error_messages = function() {
+      err = batchtools::getErrorMessages(reg = self$reg)
+      jt = batchtools::getJobTable(ids = err, reg = self$reg)
+      jt[, c("job.id", "error", "problem", "algorithm")]
+    },
+    log_files = function() {
+      err_table = self$error_messages
+      if (nrow(err_table) >= 1) {
+        log_files = lapply(1:nrow(err_table), function(x) batchtools::getLog(self$error_messages$job.id[x]))
+        log_files = setNames(log_files, paste0("job.id ", err_table$job.id))
+        return(log_files)
+      }
+    },
+    datasets = function() {
+      self$reg$problems
+    },
+    features = function() {
+      self$reg$algorithms
     }
   )
 )

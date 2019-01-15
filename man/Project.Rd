@@ -27,8 +27,8 @@ For Project$new():
 \section{Details}{
 
 All datasets and feature functions are saved in this R6 object. \code{Project} heavily relies on the R-package batchtools.
-Data will be saved as single RDS files (for each grouping variable) and feature functions are calculated on each single dataset.
-A big advantage of this method is that it scales nicely for larger datasets. Data is only loaded into RAM, when needed.
+Data will be saved as single RDS files (for each ID) and feature functions are calculated on each single dataset.
+A big advantage of this method is that it scales nicely for larger datasets. Data is only read into RAM, when needed.
 }
 
 \section{Fields}{
@@ -38,6 +38,11 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 \item{dir: }{(`character(1)`): The projects directory.}
 \item{group_by: }{(`character(1)`): The column on which to group by.}
 \item{reg: }{(`registry`): batchtools registry.}
+\item{perc_done: }{(`numeric(1)`): Active binding. Percentage of finished calculations.}
+\item{error_messages: }{(`data.frame()`): Active binding. A dataframe with information about error messages.}
+\item{log_files: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
+\item{datasets: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
+\item{features: }{(`character()`): Active binding. A character vector with the feature functions which were added.}
 }
 }
 
@@ -45,18 +50,22 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 
 \describe{
 \item{add_data(dataframe, group_by)}{[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. \cr
- [group_by: (`character(1)`)] The grouping variable of the dataframe. \cr \cr
- This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each grouping variable of a dataframe.
+ [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr \cr
+ This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each ID of the grouping variable.
  After that, batchtools experiments will be added too.}
 \item{preprocess_data(fun)}{[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. \cr \cr
  This method loads the RDS files and applies this function on them. The old RDS files are overwritten and the batchtools
  problems and experiments are updated.}
-\item{remove_data(data)}{[data: (`character(1)`)] The grouping variable's name. \cr \cr
- This method deletes the RDS file and batchtools problem of one single grouping variable.}
+\item{remove_data(data)}{[data: (`character(1)`)] An ID of the grouping variable. \cr \cr
+ This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.}
+\item{get_data(data)}{[data: (`character()`)] One ore many IDs of the grouping variable. \cr \cr
+ This method returns one dataframe with the chosen IDs.}#'
 \item{add_feature(fun)}{[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. \cr \cr
  This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.}
 \item{remove_feature(fun)}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. \cr \cr
  This method removes the batchtools algorithms and experiments corresponding to the given function.}
+\item{get_feature(fun)}{[fun: (`character(1)`)] The name of a function as character. \cr \cr
+ This method reads the RDS file of the function. Useful for debugging after loading a project.}
 \item{calc_features()}{This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.}
 \item{get_project_status()}{This method gives an overview over which features are done on which datasets.}
 \item{collect_results()}{This method returns a dataframe with the calculated features.}
@@ -70,11 +79,14 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 unlink("projects/my_project", recursive = TRUE)
 my_project = Project$new("my_project")
 my_project$add_data(iris, group_by = "Species")
+my_project$datasets
 fun = function(data) {
   c(mean_sepal_length = mean(data$Sepal.Length))
 }
 my_project$add_feature(fun)
+my_project$features
 my_project$calc_features()
 my_project$collect_results()
+my_project$perc_done
 unlink("projects/my_project", recursive = TRUE)
 }
