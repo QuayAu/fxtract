@@ -4,15 +4,16 @@
 [![codecov](https://codecov.io/gh/QuayAu/fxtract/branch/master/graph/badge.svg)](https://codecov.io/gh/QuayAu/fxtract)
 
 # fxtract 
-See the [Tutorial](https://quayau.github.io/fxtract/docs/index.html) for an introduction into the package.
+See the [tutorial](https://quayau.github.io/fxtract/docs/index.html) for an introduction into the package.
 
 ## Introduction
 
-fxtract helps you to extract user-defined features from longitudinal data with helpful preprocessing functions. 
+fxtract helps you to extract user-defined features from longitudinal data with helpful preprocessing functions.
 
 ![One dataset per ID](man/figures/fxtract_main.svg)
-The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the feature for each ID, possibly in parallel) is handled by `fxtract`. 
-
+This package utilizes the functionality of the [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html)-package while keeping an easy to access API.
+The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the feature for each ID, possibly in parallel) is handled by `fxtract`.
+This package works for very large datasets with many different IDs and the main functionality is written in [R6](https://r6.r-lib.org/articles/Introduction.html).
 Some helpful functions for preprocessing (timestamped) data are also supplied.
 
 # Installation

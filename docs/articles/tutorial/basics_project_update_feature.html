@@ -73,7 +73,7 @@
       <a href="../../articles/tutorial/basics_project_update_feature.html">project - update feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_project_utilize_batchtools.html">project - utilize batchtools</a>
+      <a href="../../articles/tutorial/basics_project_error_handling.html">project - error handling</a>
     </li>
   </ul>
 </li>
@@ -131,25 +131,25 @@
 <li>We want to edit a feature function.</li>
 </ul>
 <p>Click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html">here</a> on how to use the R6 class <code>Project</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
-my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)
-my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
-
-fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),
-    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))
-}
-
-fun2 =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),
-    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))
-}
-
-my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)
-my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)
-my_project<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(fxtract)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">}</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">fun2 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">my_project<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
 <p>All features have been calculated:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">collect_results</span>()</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">my_project<span class="op">$</span>results</a></code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa             5.006       0.3524897             1.462
 ## 2 versicolor             5.936       0.5161711             4.260
@@ -163,32 +163,32 @@ my_project<span class="op">$</span><span class="kw">calc_features</span>()</code
 <a href="#write-updated-feature-functions" class="anchor"></a>Write Updated Feature Functions</h2>
 <p>Let’s say we want to edit our features to use the robust measures <code>median()</code> and <code>mad()</code>.</p>
 <p>First we need to write the functions:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1_robust =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">median_sepal_length =</span> <span class="kw">median</span>(data<span class="op">$</span>Sepal.Length),
-    <span class="dt">mad_sepal_length =</span> <span class="kw">mad</span>(data<span class="op">$</span>Sepal.Length))
-}
-
-fun2_robust =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">median_petal_length =</span> <span class="kw">median</span>(data<span class="op">$</span>Petal.Length),
-    <span class="dt">mad_petal_length =</span> <span class="kw">mad</span>(data<span class="op">$</span>Petal.Length))
-}</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fun1_robust =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="kw">c</span>(<span class="dt">median_sepal_length =</span> <span class="kw">median</span>(data<span class="op">$</span>Sepal.Length),</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="dt">mad_sepal_length =</span> <span class="kw">mad</span>(data<span class="op">$</span>Sepal.Length))</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">fun2_robust =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="kw">c</span>(<span class="dt">median_petal_length =</span> <span class="kw">median</span>(data<span class="op">$</span>Petal.Length),</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="dt">mad_petal_length =</span> <span class="kw">mad</span>(data<span class="op">$</span>Petal.Length))</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">}</a></code></pre></div>
 </div>
 <div id="delete-old-feature-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#delete-old-feature-functions" class="anchor"></a>Delete Old Feature Functions</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">remove_feature</span>(fun1)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">remove_feature</span>(fun1)</a></code></pre></div>
 <p>This deletes all calculated features corresponding to <code>fun1</code>.</p>
 <p>It’s also possible to pass a character string:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">remove_feature</span>(<span class="st">"fun2"</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">remove_feature</span>(<span class="st">"fun2"</span>)</a></code></pre></div>
 </div>
 <div id="add-new-feature-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#add-new-feature-functions" class="anchor"></a>Add New Feature Functions</h2>
 <p>All there is left to do is to add the new feature functions and to execute the calculation process:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1_robust)
-my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2_robust)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">calc_features</span>()
-my_project<span class="op">$</span><span class="kw">collect_results</span>()</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1_robust)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2_robust)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">calc_features</span>()</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">my_project<span class="op">$</span>results</a></code></pre></div>
 <pre><code>##      Species median_sepal_length mad_sepal_length median_petal_length
 ## 1     setosa                 5.0          0.29652                1.50
 ## 2 versicolor                 5.9          0.51891                4.35

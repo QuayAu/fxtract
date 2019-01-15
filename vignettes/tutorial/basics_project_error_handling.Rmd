@@ -1,5 +1,5 @@
 ---
-title: "R6 Class Project - Utilize batchtools"
+title: "R6 Class Project - Error Handling"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
@@ -9,17 +9,14 @@ vignette: >
 
 Use case:
 
-- Useful for projects with large datasets and many features.
-- When some features fail on some datasets, we can get individual error messages.
-- Get overview of current calculation status (if feature extraction takes a long time).
-- Easy parallelization.
+- When some features fail on some datasets, we can get individual error messages and fix the problem.
 
 Setup script:
 
 ```{r, echo = FALSE}
 unlink("projects", recursive = TRUE)
 ```
-```{r, message = FALSE}
+```{r, message = FALSE, warning = FALSE}
 library(fxtract)
 my_project = Project$new("my_project")
 my_project$add_data(iris, group_by = "Species")
@@ -47,22 +44,20 @@ my_project$calc_features()
 
 We can still get the resulting dataframe:
 ```{r}
-my_project$collect_results()
+my_project$results
 ```
 
 ## Get Error Messages
-This is done by using batchtools functions directly on the project's registry:
 
 ```{r, message = FALSE, warning = FALSE}
-library(batchtools)
-batchtools::getErrorMessages(reg = my_project$reg)
+my_project$error_messages
 ```
 
 ## Project Status
-We have implemented a method `$get_project_status()` which gives an overview over which features have already been calculated on which datasets (1 done, 0 not done):
+The slot `$project_status` gives an overview over which features have already been calculated on which datasets (1 done, 0 not done):
 
 ```{r, message = FALSE}
-my_project$get_project_status()
+my_project$project_status
 ```
 We can also use the corresponding batchtools function:
 
@@ -108,7 +103,7 @@ Sys.sleep(1)
 ```
 
 ```{r}
-my_project$collect_results()
+my_project$results
 ```
 
 ```{r, echo = FALSE}

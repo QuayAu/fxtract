@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R6 Class Project - Utilize batchtools • fxtract</title>
+<title>R6 Class Project - Error Handling • fxtract</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../pkgdown.js"></script><meta property="og:title" content="R6 Class Project - Utilize batchtools">
+<script src="../../pkgdown.js"></script><meta property="og:title" content="R6 Class Project - Error Handling">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -73,7 +73,7 @@
       <a href="../../articles/tutorial/basics_project_update_feature.html">project - update feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_project_utilize_batchtools.html">project - utilize batchtools</a>
+      <a href="../../articles/tutorial/basics_project_error_handling.html">project - error handling</a>
     </li>
   </ul>
 </li>
@@ -115,11 +115,11 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>R6 Class Project - Utilize batchtools</h1>
+      <h1>R6 Class Project - Error Handling</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/basics_project_utilize_batchtools.Rmd"><code>vignettes/tutorial/basics_project_utilize_batchtools.Rmd</code></a></small>
-      <div class="hidden name"><code>basics_project_utilize_batchtools.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/basics_project_error_handling.Rmd"><code>vignettes/tutorial/basics_project_error_handling.Rmd</code></a></small>
+      <div class="hidden name"><code>basics_project_error_handling.Rmd</code></div>
 
     </div>
 
@@ -127,35 +127,30 @@
     
 <p>Use case:</p>
 <ul>
-<li>Useful for projects with large datasets and many features.</li>
-<li>When some features fail on some datasets, we can get individual error messages.</li>
-<li>Get overview of current calculation status (if feature extraction takes a long time).</li>
-<li>Easy parallelization.</li>
+<li>When some features fail on some datasets, we can get individual error messages and fix the problem.</li>
 </ul>
 <p>Setup script:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(fxtract)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a></code></pre></div>
-<pre><code>## Warning: executing %dopar% sequentially: no parallel backend registered</code></pre>
-<pre><code>## Warning: Paket 'dplyr' wurde unter R Version 3.5.2 erstellt</code></pre>
 <p>Let’s write functions, which fail on different datasets:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="cf">if</span> (<span class="st">"versicolor"</span> <span class="op">%in%</span><span class="st"> </span>data<span class="op">$</span>Species) <span class="kw">stop</span>(<span class="st">"fun1 not compatible on versicolor"</span>)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">}</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">fun2 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="cf">if</span> (<span class="st">"virginica"</span> <span class="op">%in%</span><span class="st"> </span>data<span class="op">$</span>Species) <span class="kw">stop</span>(<span class="st">"fun2 not compatible on virginica"</span>)</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">}</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">my_project<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="cf">if</span> (<span class="st">"versicolor"</span> <span class="op">%in%</span><span class="st"> </span>data<span class="op">$</span>Species) <span class="kw">stop</span>(<span class="st">"fun1 not compatible on versicolor"</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">}</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">fun2 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">  <span class="cf">if</span> (<span class="st">"virginica"</span> <span class="op">%in%</span><span class="st"> </span>data<span class="op">$</span>Species) <span class="kw">stop</span>(<span class="st">"fun2 not compatible on virginica"</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">}</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">my_project<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
 <p>We can still get the resulting dataframe:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">collect_results</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">my_project<span class="op">$</span>results</a></code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa             5.006       0.3524897             1.462
 ## 2  virginica             6.588       0.6358796                NA
@@ -167,21 +162,19 @@
 <div id="get-error-messages" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-error-messages" class="anchor"></a>Get Error Messages</h2>
-<p>This is done by using batchtools functions directly on the project’s registry:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(batchtools)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getErrorMessages">getErrorMessages</a></span>(<span class="dt">reg =</span> my_project<span class="op">$</span>reg)</a></code></pre></div>
-<pre><code>##    job.id terminated error
-## 1:      2       TRUE  TRUE
-## 2:      6       TRUE  TRUE
-##                                                   message
-## 1: Error in fun(data) : fun1 not compatible on versicolor
-## 2:  Error in fun(data) : fun2 not compatible on virginica</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">my_project<span class="op">$</span>error_messages</a></code></pre></div>
+<pre><code>##    job.id                                                  error
+## 1:      2 Error in fun(data) : fun1 not compatible on versicolor
+## 2:      6  Error in fun(data) : fun2 not compatible on virginica
+##       problem algorithm
+## 1: versicolor      fun1
+## 2:  virginica      fun2</code></pre>
 </div>
 <div id="project-status" class="section level2">
 <h2 class="hasAnchor">
 <a href="#project-status" class="anchor"></a>Project Status</h2>
-<p>We have implemented a method <code>$get_project_status()</code> which gives an overview over which features have already been calculated on which datasets (1 done, 0 not done):</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">get_project_status</span>()</a></code></pre></div>
+<p>The slot <code>$project_status</code> gives an overview over which features have already been calculated on which datasets (1 done, 0 not done):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">my_project<span class="op">$</span>project_status</a></code></pre></div>
 <pre><code>## $detailed
 ##      problem fun1 fun2
 ## 1     setosa    1    1
@@ -201,8 +194,8 @@
 ## $perc_done
 ## [1] 0.6666667</code></pre>
 <p>We can also use the corresponding batchtools function:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>(<span class="dt">reg =</span> my_project<span class="op">$</span>reg)</a></code></pre></div>
-<pre><code>## Status for 6 jobs at 2019-01-15 15:18:34:
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>(<span class="dt">reg =</span> my_project<span class="op">$</span>reg)</a></code></pre></div>
+<pre><code>## Status for 6 jobs at 2019-01-15 16:59:52:
 ##   Submitted    : 6 (100.0%)
 ##   -- Queued    : 0 (  0.0%)
 ##   -- Started   : 6 (100.0%)
@@ -214,35 +207,35 @@
 <div id="fix-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fix-features" class="anchor"></a>Fix Features</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">fun1_fixed =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">fun2_fixed =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7">  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),</a>
-<a class="sourceLine" id="cb13-8" data-line-number="8">    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))</a>
-<a class="sourceLine" id="cb13-9" data-line-number="9">}</a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11">my_project<span class="op">$</span><span class="kw">remove_feature</span>(fun1)</a>
-<a class="sourceLine" id="cb13-12" data-line-number="12">my_project<span class="op">$</span><span class="kw">remove_feature</span>(fun2)</a>
-<a class="sourceLine" id="cb13-13" data-line-number="13">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1_fixed)</a>
-<a class="sourceLine" id="cb13-14" data-line-number="14">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2_fixed)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">fun1_fixed =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">fun2_fixed =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),</a>
+<a class="sourceLine" id="cb11-8" data-line-number="8">    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))</a>
+<a class="sourceLine" id="cb11-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11">my_project<span class="op">$</span><span class="kw">remove_feature</span>(fun1)</a>
+<a class="sourceLine" id="cb11-12" data-line-number="12">my_project<span class="op">$</span><span class="kw">remove_feature</span>(fun2)</a>
+<a class="sourceLine" id="cb11-13" data-line-number="13">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1_fixed)</a>
+<a class="sourceLine" id="cb11-14" data-line-number="14">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2_fixed)</a></code></pre></div>
 </div>
 <div id="parallelization" class="section level2">
 <h2 class="hasAnchor">
 <a href="#parallelization" class="anchor"></a>Parallelization</h2>
 <p>Parallelization is done by setting the cluster functions via batchtools. See <a href="https://mllg.github.io/batchtools/articles/batchtools.html">here</a>.</p>
 <p>E.g. on a windows machine:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">my_project<span class="op">$</span>reg<span class="op">$</span>cluster.functions =<span class="st"> </span>batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/makeClusterFunctionsSocket">makeClusterFunctionsSocket</a></span>(<span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">my_project<span class="op">$</span>reg<span class="op">$</span>cluster.functions =<span class="st"> </span>batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/makeClusterFunctionsSocket">makeClusterFunctionsSocket</a></span>(<span class="dv">2</span>)</a></code></pre></div>
 </div>
 <div id="submit-jobs-via-batchtools" class="section level2">
 <h2 class="hasAnchor">
 <a href="#submit-jobs-via-batchtools" class="anchor"></a>Submit Jobs via batchtools</h2>
 <p>It is also possible to submit jobs via batchtools:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(<span class="dt">reg =</span> my_project<span class="op">$</span>reg)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">batchtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(<span class="dt">reg =</span> my_project<span class="op">$</span>reg)</a></code></pre></div>
 <pre><code>## Submitting 6 jobs in 6 chunks using cluster functions 'Socket' ...</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">collect_results</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">my_project<span class="op">$</span>results</a></code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa             5.006       0.3524897             1.462
 ## 2 versicolor             5.936       0.5161711             4.260

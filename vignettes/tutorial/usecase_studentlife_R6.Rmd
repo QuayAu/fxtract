@@ -64,6 +64,11 @@ my_project$add_feature(daily_number_diff_apps)
 my_project$add_feature(total_dist)
 ```
 
+## Get an Overview
+```{r}
+print(my_project)
+```
+
 ## Calculate Features 
 Let's calculate the features in parallel (here on a windows machine):
 ```{r}
@@ -113,7 +118,7 @@ Sys.sleep(3)
 ```
 
 ```{r}
-my_project$collect_results()
+my_project$results
 ```
 
 ```{r, echo = FALSE}

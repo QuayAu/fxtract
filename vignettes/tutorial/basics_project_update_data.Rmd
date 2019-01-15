@@ -16,7 +16,7 @@ Use case:
 
 All features have been calculated:
 ```{r, message = FALSE}
-my_project$collect_results()
+my_project$results
 ```
 
 Let's change the dataset for the species `virginica`:
@@ -40,7 +40,7 @@ my_project$add_data(iris_vers, group_by = "Species")
 ## Calculate Features 
 ```{r, message = FALSE}
 my_project$calc_features()
-my_project$collect_results()
+my_project$results
 ```
 
 ```{r, echo = FALSE}

@@ -73,7 +73,7 @@
       <a href="../../articles/tutorial/basics_project_update_feature.html">project - update feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_project_utilize_batchtools.html">project - utilize batchtools</a>
+      <a href="../../articles/tutorial/basics_project_error_handling.html">project - error handling</a>
     </li>
   </ul>
 </li>
@@ -130,9 +130,9 @@
 <h2 class="hasAnchor">
 <a href="#studentlife_small" class="anchor"></a>studentlife_small</h2>
 <p>We downloaded gps and app data from three participants of the studentlife dataset.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
-<span class="kw">library</span>(dplyr)
-<span class="kw">str</span>(studentlife_small)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(fxtract)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">str</span>(studentlife_small)</a></code></pre></div>
 <pre><code>## 'data.frame':    162154 obs. of  19 variables:
 ##  $ provider                           : Factor w/ 2 levels "gps","network": NA NA NA NA NA NA NA NA NA NA ...
 ##  $ network_type                       : chr  NA NA NA NA ...
@@ -162,12 +162,12 @@
 <h2 class="hasAnchor">
 <a href="#number-of-different-used-apps" class="anchor"></a>Number of different used apps</h2>
 <p>This is a very straightforward function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">number_diff_apps =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">number_diff_apps =</span> <span class="kw">length</span>(<span class="kw">unique</span>(data<span class="op">$</span>RUNNING_TASKS_topActivity_mPackage)))
-}</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">number_diff_apps =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw">c</span>(<span class="dt">number_diff_apps =</span> <span class="kw">length</span>(<span class="kw">unique</span>(data<span class="op">$</span>RUNNING_TASKS_topActivity_mPackage)))</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">}</a></code></pre></div>
 <p>That’s all we need to calculate the number of different apps used for each participant:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feat_data =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">fun =</span> number_diff_apps, <span class="dt">group_by =</span> <span class="st">"userId"</span>)
-feat_data</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">feat_data =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">fun =</span> number_diff_apps, <span class="dt">group_by =</span> <span class="st">"userId"</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">feat_data</a></code></pre></div>
 <pre><code>##   userId number_diff_apps
 ## 1     00               93
 ## 2     01               43
@@ -176,12 +176,12 @@ feat_data</code></pre></div>
 <h3 class="hasAnchor">
 <a href="#number-of-different-used-apps-from-monday-until-friday" class="anchor"></a>Number of different used apps from Monday until Friday</h3>
 <p>For this feature, we need to filter the dataset from Monday until Friday:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">studentlife_small_weekday =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)
-x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_weekday, <span class="dt">fun =</span> number_diff_apps, <span class="dt">group_by =</span> <span class="st">"userId"</span>, <span class="dt">colname =</span> <span class="st">"number_diff_apps_weekday"</span>)
-feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)
-feat_data</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">studentlife_small_weekday =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_weekday, <span class="dt">fun =</span> number_diff_apps, <span class="dt">group_by =</span> <span class="st">"userId"</span>, <span class="dt">colname =</span> <span class="st">"number_diff_apps_weekday"</span>)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">feat_data</a></code></pre></div>
 <pre><code>##   userId number_diff_apps number_diff_apps_weekday
 ## 1     00               93                       91
 ## 2     01               43                       43
@@ -191,20 +191,20 @@ feat_data</code></pre></div>
 <h3 class="hasAnchor">
 <a href="#number-of-different-used-apps-per-day" class="anchor"></a>Number of different used apps per day</h3>
 <p>To calculate this feature per day, we need to add date information to the dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">studentlife_small_date =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">studentlife_small_date =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(<span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</a></code></pre></div>
 <p>Now we can calculate this feature per day:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> number_diff_apps, <span class="dt">group_by =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>))
-x[, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> number_diff_apps, <span class="dt">group_by =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>))</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">x[, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</a></code></pre></div>
 <pre><code>##   userId X2013.03.24 X2013.03.25 X2013.03.26 X2013.03.27 X2013.03.28
 ## 1     00          22          21          12          20          26
 ## 2     01           6           5          10          18           9
 ## 3     02           7           3          17          28          24</code></pre>
 <p>All there is left to do is to apply a mean function on the rows of this dataset. You can do this by specifying a <code>summarize</code>-function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> number_diff_apps, <span class="dt">group_by =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>), 
-  <span class="dt">summarize =</span> <span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dt">colname =</span> <span class="st">"daily_number_diff_apps"</span>)
-feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small_date, <span class="dt">fun =</span> number_diff_apps, <span class="dt">group_by =</span> <span class="kw">c</span>(<span class="st">"userId"</span>, <span class="st">"date"</span>), </a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="dt">summarize =</span> <span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dt">colname =</span> <span class="st">"daily_number_diff_apps"</span>)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x)</a></code></pre></div>
 <pre><code>## Joining, by = "userId"</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feat_data</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">feat_data</a></code></pre></div>
 <pre><code>##   userId number_diff_apps number_diff_apps_weekday daily_number_diff_apps
 ## 1     00               93                       91               16.86905
 ## 2     01               43                       43                9.60000
@@ -218,15 +218,15 @@ feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><spa
 <h3 class="hasAnchor">
 <a href="#total-distance-covered" class="anchor"></a>Total distance covered</h3>
 <p>Again, we need to define a function, which calculates the total distance covered by the GPS points in a given dataset <code>data</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(geosphere)
-total_dist =<span class="st"> </span><span class="cf">function</span>(data) {
-  long =<span class="st"> </span>data<span class="op">$</span>longitude
-  lat =<span class="st"> </span>data<span class="op">$</span>latitude
-  <span class="kw">c</span>(<span class="dt">total_dist =</span> <span class="kw">sum</span>(geosphere<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/geosphere/topics/distHaversine">distHaversine</a></span>(<span class="kw">cbind</span>(long, lat)), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
-}</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">group_by =</span> <span class="st">"userId"</span>, <span class="dt">fun =</span> total_dist)
-feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x, <span class="dt">by =</span> <span class="st">"userId"</span>)
-feat_data </code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(geosphere)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">total_dist =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">  long =<span class="st"> </span>data<span class="op">$</span>longitude</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">  lat =<span class="st"> </span>data<span class="op">$</span>latitude</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">  <span class="kw">c</span>(<span class="dt">total_dist =</span> <span class="kw">sum</span>(geosphere<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/geosphere/topics/distHaversine">distHaversine</a></span>(<span class="kw">cbind</span>(long, lat)), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">}</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(<span class="dt">data =</span> studentlife_small, <span class="dt">group_by =</span> <span class="st">"userId"</span>, <span class="dt">fun =</span> total_dist)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">feat_data =<span class="st"> </span>feat_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(x, <span class="dt">by =</span> <span class="st">"userId"</span>)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">feat_data </a></code></pre></div>
 <pre><code>##   userId number_diff_apps number_diff_apps_weekday daily_number_diff_apps
 ## 1     00               93                       91               16.86905
 ## 2     01               43                       43                9.60000

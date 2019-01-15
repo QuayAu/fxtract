@@ -46,6 +46,9 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project.html</loc>
   </url>
   <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_error_handling.html</loc>
+  </url>
+  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_preprocess_data.html</loc>
   </url>
   <url>
@@ -53,9 +56,6 @@
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_update_feature.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_utilize_batchtools.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/filters.html</loc>

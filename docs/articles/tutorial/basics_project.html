@@ -73,7 +73,7 @@
       <a href="../../articles/tutorial/basics_project_update_feature.html">project - update feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_project_utilize_batchtools.html">project - utilize batchtools</a>
+      <a href="../../articles/tutorial/basics_project_error_handling.html">project - error handling</a>
     </li>
   </ul>
 </li>
@@ -131,45 +131,45 @@
 <li>Data can be preprocessed.</li>
 <li>Features are calculated on each grouping variable individually with batchtools.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fxtract)
-my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(fxtract)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</a></code></pre></div>
 <div id="add-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#add-data" class="anchor"></a>Add Data</h2>
-<p>Data must be added as dataframes with <code>$add_data</code>, where the grouping variable must be specified. You can also add dataframes for each grouping variable individually. This is especially helpful for large datasets.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-iris1 =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Species <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>))
-iris2 =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Species <span class="op">==</span><span class="st"> "virginica"</span>)
-my_project<span class="op">$</span><span class="kw">add_data</span>(iris1, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
-my_project<span class="op">$</span><span class="kw">add_data</span>(iris2, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</code></pre></div>
+<p>Data must be added as dataframes with <code>$add_data</code>, where the grouping variable must be specified. You can also add dataframes for each ID individually. This is especially helpful for large datasets.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">iris1 =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Species <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"setosa"</span>, <span class="st">"versicolor"</span>))</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">iris2 =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Species <span class="op">==</span><span class="st"> "virginica"</span>)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">my_project<span class="op">$</span><span class="kw">add_data</span>(iris1, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">my_project<span class="op">$</span><span class="kw">add_data</span>(iris2, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a></code></pre></div>
 </div>
 <div id="add-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#add-features" class="anchor"></a>Add Features</h2>
-<p>Features can be added as functions. These functions must have a dataframe as input and a named vector as output. This function will be calculated for each grouping variable individually.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),
-    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))
-}
-
-fun2 =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),
-    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))
-}</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)
-my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</code></pre></div>
+<p>Features must be added as functions which have a dataframe as input and a named vector as output. This function will be calculated for each grouping variable individually.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">fun2 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="kw">c</span>(<span class="dt">mean_petal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Petal.Length),</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">    <span class="dt">sd_petal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Petal.Length))</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</a></code></pre></div>
 </div>
 <div id="calculate-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#calculate-features" class="anchor"></a>Calculate Features</h2>
 <p>Features are calculated by the method <code>$calc_features()</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
 </div>
 <div id="collect-results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#collect-results" class="anchor"></a>Collect Results</h2>
-<p>The desired final dataframe can be generated by the method <code>$collect_results()</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">collect_results</span>()</code></pre></div>
+<p>The desired final dataframe can be accessed by the slot <code>$results</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">my_project<span class="op">$</span>results</a></code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa             5.006       0.3524897             1.462
 ## 2 versicolor             5.936       0.5161711             4.260
@@ -178,6 +178,14 @@ my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</co
 ## 1       0.1736640
 ## 2       0.4699110
 ## 3       0.5518947</code></pre>
+</div>
+<div id="what-happens-behind-the-scenes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#what-happens-behind-the-scenes" class="anchor"></a>What Happens Behind the Scenes</h2>
+<p>Data will be saved as single RDS files for each ID and each dataset is added as one batchtools problem. Functions are added as batchtools algorithm.</p>
+<p>Everytime a dataset or a function is added to the R6 object, batchtools experiments of all possible combinations (datasets <span class="math inline">\(\times\)</span> functions) are added to the batchtools registry as well.</p>
+<p><img src="img/batchtools.svg"></p>
+<p>A big advantage of this method is that it scales nicely for larger datasets. Data is only read into RAM, when needed.</p>
 </div>
   </div>
 
@@ -190,6 +198,7 @@ my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</co
       <li><a href="#add-features">Add Features</a></li>
       <li><a href="#calculate-features">Calculate Features</a></li>
       <li><a href="#collect-results">Collect Results</a></li>
+      <li><a href="#what-happens-behind-the-scenes">What Happens Behind the Scenes</a></li>
       </ul>
 </div>
       </div>

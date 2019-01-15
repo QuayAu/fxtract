@@ -1,14 +1,14 @@
-pandoc: 1.19.2.1
+pandoc: 2.2.1
 pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
   fxtract: fxtract.html
   basics_calc_feature: tutorial/basics_calc_feature.html
   basics_project: tutorial/basics_project.html
+  basics_project_error_handling: tutorial/basics_project_error_handling.html
   basics_project_preprocess_data: tutorial/basics_project_preprocess_data.html
   basics_project_update_data: tutorial/basics_project_update_data.html
   basics_project_update_feature: tutorial/basics_project_update_feature.html
-  basics_project_utilize_batchtools: tutorial/basics_project_utilize_batchtools.html
   filters: tutorial/filters.html
   helpers: tutorial/helpers.html
   project_setup_child: tutorial/project_setup_child.html

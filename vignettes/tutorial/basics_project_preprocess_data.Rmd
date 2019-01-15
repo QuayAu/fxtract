@@ -34,7 +34,7 @@ my_project$add_data(gps_data, group_by = "userId")
 
 
 ## Define a Function
-We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method `$preprocess_data` will then read the RDS files for each grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated.
+We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method `$preprocess_data` will then read the RDS files for each grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated. Parallelization is available via foreach.
 
 ```{r, message = FALSE, warning = FALSE}
 library(fpc)
@@ -54,8 +54,7 @@ my_project$preprocess_data(fun = fun)
 
 The data has successfully been preprocessed:
 ```{r}
-gps_data_00 = readRDS("projects/my_project/rds_files/00.RDS")
-str(gps_data_00)
+head(my_project$get_data())
 ```
 
 ```{r, echo = FALSE}

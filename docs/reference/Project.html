@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="R6 Object for Feature Extraction. — Project" />
 
-<meta property="og:description" content="Project calculates features from longitudinal data for each grouping variable individually." />
+<meta property="og:description" content="Project calculates features from longitudinal data for each grouping variable individually with batchtools." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -105,7 +105,7 @@
       <a href="../articles/tutorial/basics_project_update_feature.html">project - update feature</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_project_utilize_batchtools.html">project - utilize batchtools</a>
+      <a href="../articles/tutorial/basics_project_error_handling.html">project - error handling</a>
     </li>
   </ul>
 </li>
@@ -155,7 +155,7 @@
 
     <div class="ref-description">
     
-    <p><code>Project</code> calculates features from longitudinal data for each grouping variable individually.</p>
+    <p><code>Project</code> calculates features from longitudinal data for each grouping variable individually with batchtools.</p>
     
     </div>
 
@@ -183,8 +183,8 @@ my_project = Project$new("my_project")
 
     
     <p>All datasets and feature functions are saved in this R6 object. <code>Project</code> heavily relies on the R-package batchtools.
-Data will be saved as single RDS files (for each grouping variable) and feature functions are calculated on each single dataset.
-A big advantage of this method is that it scales nicely for larger datasets. Data is only loaded into RAM, when needed.</p>
+Data will be saved as single RDS files (for each ID) and feature functions are calculated on each single dataset.
+A big advantage of this method is that it scales nicely for larger datasets. Data is only read into RAM, when needed.</p>
     
     <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
 
@@ -194,6 +194,13 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 <dt>dir: </dt><dd><p>(`character(1)`): The projects directory.</p></dd>
 <dt>group_by: </dt><dd><p>(`character(1)`): The column on which to group by.</p></dd>
 <dt>reg: </dt><dd><p>(`registry`): batchtools registry.</p></dd>
+<dt>perc_done: </dt><dd><p>(`numeric(1)`): Active binding. Percentage of finished calculations.</p></dd>
+<dt>error_messages: </dt><dd><p>(`data.frame()`): Active binding. A dataframe with information about error messages.</p></dd>
+<dt>log_files: </dt><dd><p>(`list()`): Active binding. A list with the log files which were created due to errors.</p></dd>
+<dt>datasets: </dt><dd><p>(`character()`): Active binding. A character vector with the IDs of the grouping variable.</p></dd>
+<dt>features: </dt><dd><p>(`character()`): Active binding. A character vector with the feature functions which were added.</p></dd>
+<dt>project_status: </dt><dd><p>(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.</p></dd>
+<dt>results: </dt><dd><p>(`data.frame`): Active binding. A dataframe with all calculated features of all IDs.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -201,21 +208,23 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
     
     <dl class='dl-horizontal'>
 <dt>add_data(dataframe, group_by)</dt><dd><p>[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. <br />
- [group_by: (`character(1)`)] The grouping variable of the dataframe. <br /> <br />
- This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each grouping variable of a dataframe.
+ [group_by: (`character(1)`)] The grouping variable's name of the dataframe. <br /> <br />
+ This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each ID of the grouping variable.
  After that, batchtools experiments will be added too.</p></dd>
 <dt>preprocess_data(fun)</dt><dd><p>[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. <br /> <br />
  This method loads the RDS files and applies this function on them. The old RDS files are overwritten and the batchtools
  problems and experiments are updated.</p></dd>
-<dt>remove_data(data)</dt><dd><p>[data: (`character(1)`)] The grouping variable's name. <br /> <br />
- This method deletes the RDS file and batchtools problem of one single grouping variable.</p></dd>
+<dt>remove_data(data)</dt><dd><p>[data: (`character(1)`)] An ID of the grouping variable. <br /> <br />
+ This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.</p></dd>
+<dt>get_data(data)</dt><dd><p>[data: (`character()`)] One ore many IDs of the grouping variable. <br /> <br />
+ This method returns one dataframe with the chosen IDs.</p></dd>#'
 <dt>add_feature(fun)</dt><dd><p>[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. <br /> <br />
  This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.</p></dd>
 <dt>remove_feature(fun)</dt><dd><p>[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. <br /> <br />
  This method removes the batchtools algorithms and experiments corresponding to the given function.</p></dd>
+<dt>get_feature(fun)</dt><dd><p>[fun: (`character(1)`)] The name of a function as character. <br /> <br />
+ This method reads the RDS file of the function. Useful for debugging after loading a project.</p></dd>
 <dt>calc_features()</dt><dd><p>This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.</p></dd>
-<dt>get_project_status()</dt><dd><p>This method gives an overview over which features are done on which datasets.</p></dd>
-<dt>collect_results()</dt><dd><p>This method returns a dataframe with the calculated features.</p></dd>
 <dt>plot()</dt><dd><p>[internal] method to print the R6 object.</p></dd>
 <dt><code>clone()</code></dt><dd><p>[internal] method to clone the R6 object.</p></dd>
 <dt><code>initialize()</code></dt><dd><p>[internal] method to initialize the R6 object.</p></dd>
@@ -224,18 +233,18 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>unlink</span>(<span class='st'>"projects/my_project"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>my_project</span> <span class='kw'>=</span> <span class='no'>Project</span>$<span class='fu'>new</span>(<span class='st'>"my_project"</span>)</div><div class='output co'>#&gt; <span class='message'>No readable configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in 'L:/Users/auj/Desktop/Git/fxtract/docs/reference/projects/my_project/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>my_project</span>$<span class='fu'>add_data</span>(<span class='no'>iris</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: executing %dopar% sequentially: no parallel backend registered</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attache Paket: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
+<span class='no'>my_project</span> <span class='kw'>=</span> <span class='no'>Project</span>$<span class='fu'>new</span>(<span class='st'>"my_project"</span>)</div><div class='output co'>#&gt; <span class='message'>No readable configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in 'L:/Users/auj/Desktop/Git/fxtract/docs/reference/projects/my_project/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>my_project</span>$<span class='fu'>add_data</span>(<span class='no'>iris</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: executing %dopar% sequentially: no parallel backend registered</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'dplyr' was built under R version 3.5.2</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file setosa.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file versicolor.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file virginica.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'setosa'</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'versicolor'</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'virginica'</span></div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file setosa.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file versicolor.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file virginica.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'setosa'</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'versicolor'</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'virginica'</span></div><div class='input'><span class='no'>my_project</span>$<span class='no'>datasets</span></div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
   <span class='fu'>c</span>(<span class='kw'>mean_sepal_length</span> <span class='kw'>=</span> <span class='fu'>mean</span>(<span class='no'>data</span>$<span class='no'>Sepal.Length</span>))
 }
-<span class='no'>my_project</span>$<span class='fu'>add_feature</span>(<span class='no'>fun</span>)</div><div class='output co'>#&gt; <span class='message'>Exporting new objects: 'fun' ...</span></div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'fun'</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('setosa'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('versicolor'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('virginica'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='input'><span class='no'>my_project</span>$<span class='fu'>calc_features</span>()</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'setosa' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'setosa' for job 1 (seed = 2647) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'versicolor' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'versicolor' for job 2 (seed = 2648) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'virginica' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'virginica' for job 3 (seed = 2649) ...</span></div><div class='input'><span class='no'>my_project</span>$<span class='fu'>collect_results</span>()</div><div class='output co'>#&gt;      Species mean_sepal_length
+<span class='no'>my_project</span>$<span class='fu'>add_feature</span>(<span class='no'>fun</span>)</div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file fun.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Exporting new objects: 'fun' ...</span></div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'fun'</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('setosa'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('versicolor'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('virginica'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='input'><span class='no'>my_project</span>$<span class='no'>features</span></div><div class='output co'>#&gt; [1] "fun"</div><div class='input'><span class='no'>my_project</span>$<span class='fu'>calc_features</span>()</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'setosa' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'setosa' for job 1 (seed = 2647) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'versicolor' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'versicolor' for job 2 (seed = 2648) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'virginica' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'virginica' for job 3 (seed = 2649) ...</span></div><div class='input'><span class='no'>my_project</span>$<span class='no'>results</span></div><div class='output co'>#&gt;      Species mean_sepal_length
 #&gt; 1     setosa             5.006
 #&gt; 2 versicolor             5.936
-#&gt; 3  virginica             6.588</div><div class='input'><span class='fu'>unlink</span>(<span class='st'>"projects/my_project"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
+#&gt; 3  virginica             6.588</div><div class='input'><span class='no'>my_project</span>$<span class='no'>perc_done</span></div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='fu'>unlink</span>(<span class='st'>"projects/my_project"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

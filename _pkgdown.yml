@@ -26,8 +26,8 @@ navbar:
       href: articles/tutorial/basics_project_update_data.html
     - text: project - update feature
       href: articles/tutorial/basics_project_update_feature.html
-    - text: project - utilize batchtools
-      href: articles/tutorial/basics_project_utilize_batchtools.html
+    - text: project - error handling
+      href: articles/tutorial/basics_project_error_handling.html
   - text: Use Cases
     menu:
     - text: StudentLife
