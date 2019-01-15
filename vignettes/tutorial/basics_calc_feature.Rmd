@@ -8,7 +8,7 @@ vignette: >
 editor_options: 
   chunk_output_type: console
 ---
-Given a **user-defined** function `fun`, `calc_features` calculates this function for each unique grouping variable (e.g. participants in a study).
+Given a **user-defined** function `fun`, `calc_features` calculates this function for each ID of a grouping variable (e.g. participants in a study).
 The function `fun` needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.
 The dataframe should contain a grouping variable with all the IDs:
 

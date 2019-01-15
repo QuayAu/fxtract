@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="R6 Object for Feature Extraction. — Project" />
 
-<meta property="og:description" content="Project calculates features from longitudinal data for each grouping variable individually with batchtools." />
+<meta property="og:description" content="Project calculates features from longitudinal data for each ID of a grouping variable individually with batchtools." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -155,7 +155,7 @@
 
     <div class="ref-description">
     
-    <p><code>Project</code> calculates features from longitudinal data for each grouping variable individually with batchtools.</p>
+    <p><code>Project</code> calculates features from longitudinal data for each ID of a grouping variable individually with batchtools.</p>
     
     </div>
 
@@ -175,8 +175,8 @@ my_project = Project$new("my_project")
 
     
     <p>For Project$new():</p><dl class='dl-horizontal'>
-<dt>project_name: </dt><dd><p>('character(1)'): A user defined name of the project. All necessary data will be saved on the path: ./projects/project_name/</p></dd>
-<dt>load: </dt><dd><p>(`logical(1)`): If TRUE, an existing project will be loaded.</p></dd>
+<dt><code>project_name</code>: </dt><dd><p>('character(1)'): A user defined name of the project. All necessary data will be saved on the path: ./projects/project_name/</p></dd>
+<dt><code>load</code>: </dt><dd><p>(`logical(1)`): If TRUE, an existing project will be loaded.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -190,51 +190,51 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 
     
     <dl class='dl-horizontal'>
-<dt>project_name: </dt><dd><p>(`character(1)`): The projects name.</p></dd>
-<dt>dir: </dt><dd><p>(`character(1)`): The projects directory.</p></dd>
-<dt>group_by: </dt><dd><p>(`character(1)`): The column on which to group by.</p></dd>
-<dt>reg: </dt><dd><p>(`registry`): batchtools registry.</p></dd>
-<dt>perc_done: </dt><dd><p>(`numeric(1)`): Active binding. Percentage of finished calculations.</p></dd>
-<dt>error_messages: </dt><dd><p>(`data.frame()`): Active binding. A dataframe with information about error messages.</p></dd>
-<dt>log_files: </dt><dd><p>(`list()`): Active binding. A list with the log files which were created due to errors.</p></dd>
-<dt>datasets: </dt><dd><p>(`character()`): Active binding. A character vector with the IDs of the grouping variable.</p></dd>
-<dt>features: </dt><dd><p>(`character()`): Active binding. A character vector with the feature functions which were added.</p></dd>
-<dt>project_status: </dt><dd><p>(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.</p></dd>
-<dt>results: </dt><dd><p>(`data.frame`): Active binding. A dataframe with all calculated features of all IDs.</p></dd>
+<dt><code>project_name</code>: </dt><dd><p>(`character(1)`): The projects name.</p></dd>
+<dt><code>dir</code>: </dt><dd><p>(`character(1)`): The projects directory.</p></dd>
+<dt><code>group_by</code>: </dt><dd><p>(`character(1)`): The column on which to group by.</p></dd>
+<dt><code>reg</code>: </dt><dd><p>(`registry`): batchtools registry.</p></dd>
+<dt><code>perc_done</code>: </dt><dd><p>(`numeric(1)`): Active binding. Percentage of finished calculations.</p></dd>
+<dt><code>error_messages</code>: </dt><dd><p>(`data.frame()`): Active binding. A dataframe with information about error messages.</p></dd>
+<dt><code>log_files</code>: </dt><dd><p>(`list()`): Active binding. A list with the log files which were created due to errors.</p></dd>
+<dt><code>datasets</code>: </dt><dd><p>(`character()`): Active binding. A character vector with the IDs of the grouping variable.</p></dd>
+<dt><code>features</code>: </dt><dd><p>(`character()`): Active binding. A character vector with the feature functions which were added.</p></dd>
+<dt><code>project_status</code>: </dt><dd><p>(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.</p></dd>
+<dt><code>results</code>: </dt><dd><p>(`data.frame()`): Active binding. A dataframe with all calculated features of all IDs.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
     <dl class='dl-horizontal'>
-<dt>add_data(dataframe, group_by)</dt><dd><p>[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. <br />
- [group_by: (`character(1)`)] The grouping variable's name of the dataframe. <br /> <br />
+<dt><code>add_data(dataframe, group_by)</code></dt><dd><p>[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. <br />
+ [group_by: (`character(1)`)] The grouping variable's name of the dataframe. <br />
  This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each ID of the grouping variable.
- After that, batchtools experiments will be added too.</p></dd>
-<dt>preprocess_data(fun)</dt><dd><p>[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. <br /> <br />
+ After that, batchtools experiments will be added too.</p></dd> 
+<dt><code>preprocess_data(fun)</code></dt><dd><p>[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. <br />
  This method loads the RDS files and applies this function on them. The old RDS files are overwritten and the batchtools
  problems and experiments are updated.</p></dd>
-<dt>remove_data(data)</dt><dd><p>[data: (`character(1)`)] An ID of the grouping variable. <br /> <br />
+<dt><code>remove_data(data)</code></dt><dd><p>[data: (`character(1)`)] An ID of the grouping variable. <br />
  This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.</p></dd>
-<dt>get_data(data)</dt><dd><p>[data: (`character()`)] One ore many IDs of the grouping variable. <br /> <br />
- This method returns one dataframe with the chosen IDs.</p></dd>#'
-<dt>add_feature(fun)</dt><dd><p>[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. <br /> <br />
- This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.</p></dd>
-<dt>remove_feature(fun)</dt><dd><p>[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. <br /> <br />
- This method removes the batchtools algorithms and experiments corresponding to the given function.</p></dd>
-<dt>get_feature(fun)</dt><dd><p>[fun: (`character(1)`)] The name of a function as character. <br /> <br />
- This method reads the RDS file of the function. Useful for debugging after loading a project.</p></dd>
-<dt>calc_features()</dt><dd><p>This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.</p></dd>
-<dt>plot()</dt><dd><p>[internal] method to print the R6 object.</p></dd>
-<dt><code>clone()</code></dt><dd><p>[internal] method to clone the R6 object.</p></dd>
+<dt><code>get_data(data)</code></dt><dd><p>[data: (`character()`)] One ore many IDs of the grouping variable. <br />
+ This method returns one dataframe with the chosen IDs.</p></dd> 
+<dt><code>add_feature(fun)</code></dt><dd><p>[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. <br />
+ This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.</p></dd> 
+<dt><code>remove_feature(fun)</code></dt><dd><p>[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. <br />
+ This method removes the batchtools algorithms and experiments corresponding to the given function.</p></dd> 
+<dt><code>get_feature(fun)</code></dt><dd><p>[fun: (`character(1)`)] The name of a function as character. <br />
+ This method reads the RDS file of the function. Useful for debugging after loading a project.</p></dd> 
+<dt><code>calc_features()</code></dt><dd><p>This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.</p></dd> 
+<dt><code>plot()</code></dt><dd><p>[internal] method to print the R6 object.</p></dd> 
+<dt><code>clone()</code></dt><dd><p>[internal] method to clone the R6 object.</p></dd> 
 <dt><code>initialize()</code></dt><dd><p>[internal] method to initialize the R6 object.</p></dd>
 </dl>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>unlink</span>(<span class='st'>"projects/my_project"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>my_project</span> <span class='kw'>=</span> <span class='no'>Project</span>$<span class='fu'>new</span>(<span class='st'>"my_project"</span>)</div><div class='output co'>#&gt; <span class='message'>No readable configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in 'L:/Users/auj/Desktop/Git/fxtract/docs/reference/projects/my_project/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>my_project</span>$<span class='fu'>add_data</span>(<span class='no'>iris</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: executing %dopar% sequentially: no parallel backend registered</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'dplyr' was built under R version 3.5.2</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
+<span class='no'>my_project</span> <span class='kw'>=</span> <span class='no'>Project</span>$<span class='fu'>new</span>(<span class='st'>"my_project"</span>)</div><div class='output co'>#&gt; <span class='message'>No readable configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in 'L:/Users/auj/Desktop/Git/fxtract/docs/reference/projects/my_project/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>my_project</span>$<span class='fu'>add_data</span>(<span class='no'>iris</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: executing %dopar% sequentially: no parallel backend registered</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Paket 'dplyr' wurde unter R Version 3.5.2 erstellt</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attache Paket: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
 #&gt; <span class='message'></span>

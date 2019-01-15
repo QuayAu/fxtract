@@ -127,7 +127,7 @@
     
 <p>Use case:</p>
 <ul>
-<li>Data from some grouping variables changes.</li>
+<li>Data from some IDS changes.</li>
 <li>We want to update the datasets.</li>
 </ul>
 <p>Click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html">here</a> on how to use the R6 class <code>Project</code>.</p>
@@ -165,7 +165,7 @@
 <div id="delete-old-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#delete-old-data" class="anchor"></a>Delete Old Data</h2>
-<p>Datasets are saved as batchtools problems (one problem for each grouping variable). Single problems can be removed:</p>
+<p>Datasets are saved as batchtools problems (one problem for each ID of the grouping variable). Single problems can be removed:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">remove_data</span>(<span class="st">"virginica"</span>)</a></code></pre></div>
 </div>
 <div id="add-new-data" class="section level2">
@@ -181,7 +181,7 @@
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa         5.0060000       0.3524897             1.462
 ## 2 versicolor         5.9360000       0.5161711             4.260
-## 3  virginica         0.8944864       0.7121722             5.552
+## 3  virginica         0.8762098       0.8054963             5.552
 ##   sd_petal_length
 ## 1       0.1736640
 ## 2       0.4699110

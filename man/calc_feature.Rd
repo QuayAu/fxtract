@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_feature.R
 \name{calc_feature}
 \alias{calc_feature}
-\title{Calculates a given function for each grouping variable.}
+\title{Calculates a given function for each ID of a grouping variable.}
 \usage{
 calc_feature(data, group_by, fun, check_fun = TRUE, summarize, colname)
 }
@@ -16,15 +16,15 @@ calc_feature(data, group_by, fun, check_fun = TRUE, summarize, colname)
 \item{check_fun}{logical. If \code{TRUE}, fun(data) will be evaluated and checked if the outcome is of correct form. Set to \code{FALSE}
 if evaluation on the whole dataset takes too long.}
 
-\item{summarize}{function. If more than one value is returned for each grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.}
+\item{summarize}{function. If more than one value is returned for each ID of a grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.}
 
-\item{colname}{character. If one variable is returned for each grouping variable, you can specify a custom column name for this new column.}
+\item{colname}{character. If one variable is returned for each ID of a grouping variable, you can specify a custom column name for this new column.}
 }
 \value{
 dataframe
 }
 \description{
-Calculates a given function for each grouping variable.
+Calculates a given function for each ID of a grouping variable.
 }
 \examples{
 fun = function(data) {

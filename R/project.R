@@ -1,7 +1,7 @@
 #' R6 Object for Feature Extraction.
 #'
 #' @description
-#' \code{Project} calculates features from longitudinal data for each grouping variable individually with batchtools.
+#' \code{Project} calculates features from longitudinal data for each ID of a grouping variable individually with batchtools.
 #'
 #' @format \code{\link{R6Class}} object.
 #' @name Project
@@ -15,8 +15,8 @@
 #'
 #' For Project$new():
 #' \describe{
-#' \item{project_name: }{('character(1)'): A user defined name of the project. All necessary data will be saved on the path: ./projects/project_name/}
-#' \item{load: }{(`logical(1)`): If TRUE, an existing project will be loaded.}
+#' \item{\code{project_name}: }{('character(1)'): A user defined name of the project. All necessary data will be saved on the path: ./projects/project_name/}
+#' \item{\code{load}: }{(`logical(1)`): If TRUE, an existing project will be loaded.}
 #' }
 #' @section Details:
 #' All datasets and feature functions are saved in this R6 object. \code{Project} heavily relies on the R-package batchtools.
@@ -25,41 +25,41 @@
 #'
 #' @section Fields:
 #' \describe{
-#' \item{project_name: }{(`character(1)`): The projects name.}
-#' \item{dir: }{(`character(1)`): The projects directory.}
-#' \item{group_by: }{(`character(1)`): The column on which to group by.}
-#' \item{reg: }{(`registry`): batchtools registry.}
-#' \item{perc_done: }{(`numeric(1)`): Active binding. Percentage of finished calculations.}
-#' \item{error_messages: }{(`data.frame()`): Active binding. A dataframe with information about error messages.}
-#' \item{log_files: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
-#' \item{datasets: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
-#' \item{features: }{(`character()`): Active binding. A character vector with the feature functions which were added.}
-#' \item{project_status: }{(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.}
-#' \item{results: }{(`data.frame`): Active binding. A dataframe with all calculated features of all IDs.}
+#' \item{\code{project_name}: }{(`character(1)`): The projects name.}
+#' \item{\code{dir}: }{(`character(1)`): The projects directory.}
+#' \item{\code{group_by}: }{(`character(1)`): The column on which to group by.}
+#' \item{\code{reg}: }{(`registry`): batchtools registry.}
+#' \item{\code{perc_done}: }{(`numeric(1)`): Active binding. Percentage of finished calculations.}
+#' \item{\code{error_messages}: }{(`data.frame()`): Active binding. A dataframe with information about error messages.}
+#' \item{\code{log_files}: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
+#' \item{\code{datasets}: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
+#' \item{\code{features}: }{(`character()`): Active binding. A character vector with the feature functions which were added.}
+#' \item{\code{project_status}: }{(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.}
+#' \item{\code{results}: }{(`data.frame()`): Active binding. A dataframe with all calculated features of all IDs.}
 #' }
 #'
 #' @section Methods:
 #' \describe{
-#' \item{add_data(dataframe, group_by)}{[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. \cr
-#'  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr \cr
+#' \item{\code{add_data(dataframe, group_by)}}{[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. \cr
+#'  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr
 #'  This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each ID of the grouping variable.
-#'  After that, batchtools experiments will be added too.}
-#' \item{preprocess_data(fun)}{[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. \cr \cr
+#'  After that, batchtools experiments will be added too.} \cr
+#' \item{\code{preprocess_data(fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. \cr
 #'  This method loads the RDS files and applies this function on them. The old RDS files are overwritten and the batchtools
 #'  problems and experiments are updated.}
-#' \item{remove_data(data)}{[data: (`character(1)`)] An ID of the grouping variable. \cr \cr
+#' \item{\code{remove_data(data)}}{[data: (`character(1)`)] An ID of the grouping variable. \cr
 #'  This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.}
-#' \item{get_data(data)}{[data: (`character()`)] One ore many IDs of the grouping variable. \cr \cr
-#'  This method returns one dataframe with the chosen IDs.}#'
-#' \item{add_feature(fun)}{[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. \cr \cr
-#'  This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.}
-#' \item{remove_feature(fun)}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. \cr \cr
-#'  This method removes the batchtools algorithms and experiments corresponding to the given function.}
-#' \item{get_feature(fun)}{[fun: (`character(1)`)] The name of a function as character. \cr \cr
-#'  This method reads the RDS file of the function. Useful for debugging after loading a project.}
-#' \item{calc_features()}{This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.}
-#' \item{plot()}{[internal] method to print the R6 object.}
-#' \item{\code{clone()}}{[internal] method to clone the R6 object.}
+#' \item{\code{get_data(data)}}{[data: (`character()`)] One ore many IDs of the grouping variable. \cr
+#'  This method returns one dataframe with the chosen IDs.} \cr
+#' \item{\code{add_feature(fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. \cr
+#'  This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.} \cr
+#' \item{\code{remove_feature(fun)}}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. \cr
+#'  This method removes the batchtools algorithms and experiments corresponding to the given function.} \cr
+#' \item{\code{get_feature(fun)}}{[fun: (`character(1)`)] The name of a function as character. \cr
+#'  This method reads the RDS file of the function. Useful for debugging after loading a project.} \cr
+#' \item{\code{calc_features()}}{This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.} \cr
+#' \item{\code{plot()}}{[internal] method to print the R6 object.} \cr
+#' \item{\code{clone()}}{[internal] method to clone the R6 object.} \cr
 #' \item{\code{initialize()}}{[internal] method to initialize the R6 object.}
 #' }
 #'

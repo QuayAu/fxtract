@@ -14,7 +14,7 @@ unlink("projects", recursive = TRUE)
 - Designed for large projects.
 - Data and features can be updated easily.
 - Data can be preprocessed.
-- Features are calculated on each grouping variable individually with batchtools.
+- Features are calculated on each ID of a grouping variable individually with batchtools.
 
 ```{r, message = FALSE}
 library(fxtract)
@@ -34,7 +34,7 @@ my_project$add_data(iris2, group_by = "Species")
 
 ## Add Features
 Features must be added as functions which have a dataframe as input and a named vector as output.
-This function will be calculated for each grouping variable individually.
+This function will be calculated for each ID of a grouping variable individually.
 ```{r, message = FALSE}
 fun1 = function(data) {
   c(mean_sepal_length = mean(data$Sepal.Length),

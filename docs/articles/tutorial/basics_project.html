@@ -129,7 +129,7 @@
 <li>Designed for large projects.</li>
 <li>Data and features can be updated easily.</li>
 <li>Data can be preprocessed.</li>
-<li>Features are calculated on each grouping variable individually with batchtools.</li>
+<li>Features are calculated on each ID of a grouping variable individually with batchtools.</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(fxtract)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</a></code></pre></div>
@@ -146,7 +146,7 @@
 <div id="add-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#add-features" class="anchor"></a>Add Features</h2>
-<p>Features must be added as functions which have a dataframe as input and a named vector as output. This function will be calculated for each grouping variable individually.</p>
+<p>Features must be added as functions which have a dataframe as input and a named vector as output. This function will be calculated for each ID of a grouping variable individually.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw">c</span>(<span class="dt">mean_sepal_length =</span> <span class="kw">mean</span>(data<span class="op">$</span>Sepal.Length),</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">sd_sepal_length =</span> <span class="kw">sd</span>(data<span class="op">$</span>Sepal.Length))</a>
@@ -183,7 +183,7 @@
 <h2 class="hasAnchor">
 <a href="#what-happens-behind-the-scenes" class="anchor"></a>What Happens Behind the Scenes</h2>
 <p>Data will be saved as single RDS files for each ID and each dataset is added as one batchtools problem. Functions are added as batchtools algorithm.</p>
-<p>Everytime a dataset or a function is added to the R6 object, batchtools experiments of all possible combinations (datasets <span class="math inline">\(\times\)</span> functions) are added to the batchtools registry as well.</p>
+<p>Everytime a dataset or a function is added to the R6 object, batchtools experiments of all possible combinations (problems <span class="math inline">\(\times\)</span> algorithms) are added to the batchtools registry as well.</p>
 <p><img src="img/batchtools.svg"></p>
 <p>A big advantage of this method is that it scales nicely for larger datasets. Data is only read into RAM, when needed.</p>
 </div>

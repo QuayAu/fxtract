@@ -8,7 +8,7 @@ vignette: >
 ---
 Use case:
 
-- Data from some grouping variables changes.
+- Data from some IDS changes.
 - We want to update the datasets.
 
 ```{r test-main, child = 'project_setup_child.Rmd', message = FALSE}
@@ -27,7 +27,7 @@ iris_vers$Sepal.Length = abs(rnorm(nrow(iris_vers)))
 ```
 
 ## Delete Old Data
-Datasets are saved as batchtools problems (one problem for each grouping variable). Single problems can be removed:
+Datasets are saved as batchtools problems (one problem for each ID of the grouping variable). Single problems can be removed:
 ```{r, message = FALSE}
 my_project$remove_data("virginica")
 ```
