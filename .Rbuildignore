@@ -9,3 +9,4 @@
 ^Projects
 ^.*[.]sql$
 ^..Rcheck/
+^appveyor\.yml$
