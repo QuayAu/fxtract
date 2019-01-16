@@ -127,10 +127,10 @@
     
     
 <p>We included some handy timestamp converters which enrich datasets with useful information. Let’s demonstrate it with a simple example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
-df =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">946733820</span>, <span class="dv">946733821</span>, <span class="dv">946733822</span>), <span class="dt">x =</span> <span class="st">"some_data"</span>)
-<span class="co">#corresponds to 2000-01-01 13:37, 2000-01-01 13:37:01, 2000-01-01 13:37:02</span>
-df</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">df =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">timestamp =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">946733820</span>, <span class="dv">946733821</span>, <span class="dv">946733822</span>), <span class="dt">x =</span> <span class="st">"some_data"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#corresponds to 2000-01-01 13:37, 2000-01-01 13:37:01, 2000-01-01 13:37:02</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">df</a></code></pre></div>
 <pre><code>##   timestamp         x
 ## 1 946733820 some_data
 ## 2 946733821 some_data
@@ -139,7 +139,7 @@ df</code></pre></div>
 <h2 class="hasAnchor">
 <a href="#add_date_time" class="anchor"></a>add_date_time</h2>
 <p>This function adds a date_time variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_date_time.html">add_date_time</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="../../reference/add_date_time.html">add_date_time</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</a></code></pre></div>
 <pre><code>##   timestamp         x           date_time
 ## 1 946733820 some_data 2000-01-01 13:37:00
 ## 2 946733821 some_data 2000-01-01 13:37:01
@@ -149,7 +149,7 @@ df</code></pre></div>
 <h2 class="hasAnchor">
 <a href="#add_date" class="anchor"></a>add_date</h2>
 <p>This function adds a date variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</a></code></pre></div>
 <pre><code>##   timestamp         x       date
 ## 1 946733820 some_data 2000-01-01
 ## 2 946733821 some_data 2000-01-01
@@ -159,7 +159,7 @@ df</code></pre></div>
 <h2 class="hasAnchor">
 <a href="#add_weekday" class="anchor"></a>add_weekday</h2>
 <p>This function adds an ordered weekday variable from the <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day">lubridate</a> package to your dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</a></code></pre></div>
 <pre><code>##   timestamp         x weekday
 ## 1 946733820 some_data     Sat
 ## 2 946733821 some_data     Sat
@@ -169,7 +169,7 @@ df</code></pre></div>
 <h2 class="hasAnchor">
 <a href="#add_time" class="anchor"></a>add_time</h2>
 <p>This function adds a time variable <a href="https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date">lubridate</a> package to your dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(<span class="dt">data =</span> df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</a></code></pre></div>
 <pre><code>##   timestamp         x     time
 ## 1 946733820 some_data 13:37:00
 ## 2 946733821 some_data 13:37:01

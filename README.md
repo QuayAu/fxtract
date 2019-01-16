@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/QuayAu/fxtract.svg?branch=master)](https://travis-ci.org/QuayAu/fxtract)
 [![codecov](https://codecov.io/gh/QuayAu/fxtract/branch/master/graph/badge.svg)](https://codecov.io/gh/QuayAu/fxtract)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/QuayAu/fxtract?branch=master&svg=true)](https://ci.appveyor.com/project/QuayAu/fxtract)
 
 # fxtract 
 See the [tutorial](https://quayau.github.io/fxtract/docs/index.html) for an introduction into the package.

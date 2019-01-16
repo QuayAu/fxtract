@@ -132,16 +132,16 @@
 <h1 class="hasAnchor">
 <a href="#filter_daytime" class="anchor"></a>filter_daytime</h1>
 <p>You can filter your dataset by time. You will get every day with times inside the interval:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df =<span class="st"> </span><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(studentlife_small, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)
-<span class="kw"><a href="../../reference/filter_daytime.html">filter_daytime</a></span>(df, <span class="dt">from_time =</span> <span class="st">"06:00:00"</span>, <span class="dt">until_time =</span> <span class="st">"09:00:00"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">df =<span class="st"> </span><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(studentlife_small, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="../../reference/filter_daytime.html">filter_daytime</a></span>(df, <span class="dt">from_time =</span> <span class="st">"06:00:00"</span>, <span class="dt">until_time =</span> <span class="st">"09:00:00"</span>)</a></code></pre></div>
 </div>
 <div id="filter_weekday" class="section level1">
 <h1 class="hasAnchor">
 <a href="#filter_weekday" class="anchor"></a>filter_weekday</h1>
 <p>You can filter your dataset by a given time frame (e.g. from Monday 6am to Friday 6pm):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df =<span class="st"> </span><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(studentlife_small, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)
-df =<span class="st"> </span><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)
-<span class="kw"><a href="../../reference/filter_weekday.html">filter_weekday</a></span>(df, <span class="dt">from_day =</span> <span class="st">"Mon"</span>, <span class="dt">from_time =</span> <span class="st">"06:00:00"</span>, <span class="dt">until_day =</span> <span class="st">"Fri"</span>, <span class="dt">until_time =</span> <span class="st">"18:00:00"</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">df =<span class="st"> </span><span class="kw"><a href="../../reference/add_time.html">add_time</a></span>(studentlife_small, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">df =<span class="st"> </span><span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(df, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="../../reference/filter_weekday.html">filter_weekday</a></span>(df, <span class="dt">from_day =</span> <span class="st">"Mon"</span>, <span class="dt">from_time =</span> <span class="st">"06:00:00"</span>, <span class="dt">until_day =</span> <span class="st">"Fri"</span>, <span class="dt">until_time =</span> <span class="st">"18:00:00"</span>)</a></code></pre></div>
 </div>
   </div>
 
