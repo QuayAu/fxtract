@@ -8,11 +8,11 @@ The dataset needs an ordered factor variable named 'time' (best added by the fun
 filter_daytime(data, from_time = "07:00:00", until_time = "18:00:00")
 }
 \arguments{
-\item{data}{dataframe.}
+\item{data}{(`dataframe`). Dataframe with a column named 'weekday'.}
 
-\item{from_time}{character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".}
+\item{from_time}{(`character(1)`). Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".}
 
-\item{until_time}{character. Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".}
+\item{until_time}{(`character(1)`). Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".}
 }
 \value{
 The dataset filtered according to the given time constraints.

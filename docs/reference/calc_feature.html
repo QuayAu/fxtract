@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fxtract</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -168,34 +168,34 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>dataframe.</p></td>
+      <td><p>( `dataframe`).</p></td>
     </tr>
     <tr>
       <th>group_by</th>
-      <td><p>character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.</p></td>
+      <td><p>(`character()`). Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.</p></td>
     </tr>
     <tr>
       <th>fun</th>
-      <td><p>function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.</p></td>
+      <td><p>(`function`). Must be a function, which has a dataframe as input and a (named) vector of desired length as output.</p></td>
     </tr>
     <tr>
       <th>check_fun</th>
-      <td><p>logical. If <code>TRUE</code>, fun(data) will be evaluated and checked if the outcome is of correct form. Set to <code>FALSE</code>
+      <td><p>(`logical(1)`). If <code>TRUE</code>, fun(data) will be evaluated and checked if the outcome is of correct form. Set to <code>FALSE</code>
 if evaluation on the whole dataset takes too long.</p></td>
     </tr>
     <tr>
       <th>summarize</th>
-      <td><p>function. If more than one value is returned for each ID of a grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.</p></td>
+      <td><p>(`function`). If more than one value is returned for each ID of a grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.</p></td>
     </tr>
     <tr>
       <th>colname</th>
-      <td><p>character. If one variable is returned for each ID of a grouping variable, you can specify a custom column name for this new column.</p></td>
+      <td><p>(`character()`). If one variable is returned for each ID of a grouping variable, you can specify a custom column name for this new column.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe</p>
+    <p>(`dataframe`)</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -224,7 +224,7 @@ if evaluation on the whole dataset takes too long.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann.</p>
+  <p>Developed by Quay Au.</p>
 </div>
 
 <div class="pkgdown">

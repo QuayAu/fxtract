@@ -9,15 +9,15 @@ filter_weekday(data, from_day = "Mon", from_time = "00:00:00",
   until_day = "Sun", until_time = "23:59:59")
 }
 \arguments{
-\item{data}{dataframe.}
+\item{data}{(`dataframe`). Dataframe with a column named 'weekday'.}
 
-\item{from_day}{character. Day of the week where filtering should start. Please check the machines locale for correct usage. Defaults to "Mon".}
+\item{from_day}{(`character(1)`). Day of the week where filtering should start. Please check the machines locale for correct usage. Defaults to "Mon".}
 
-\item{from_time}{character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".}
+\item{from_time}{(`character(1)`). Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".}
 
-\item{until_day}{character. Day of the week where filtering should end. Please check the machines locale for correct usage. Defaults to "Sun".}
+\item{until_day}{(`character(1)`). Day of the week where filtering should end. Please check the machines locale for correct usage. Defaults to "Sun".}
 
-\item{until_time}{character. Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".}
+\item{until_time}{(`character(1)`). Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".}
 }
 \value{
 filtered dataframe by weekday and time.

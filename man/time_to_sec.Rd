@@ -4,13 +4,13 @@
 \alias{time_to_sec}
 \title{Helper function. Converts "hh:mm:ss" into number of seconds.}
 \usage{
-time_to_sec(x)
+time_to_sec(time)
 }
 \arguments{
-\item{x}{character vector.}
+\item{time}{(`character()`). The character vector to be converted.}
 }
 \value{
-numeric vector. Number of seconds.
+(`numeric()`). Number of seconds.
 }
 \description{
 Helper function. Converts "hh:mm:ss" into number of seconds.

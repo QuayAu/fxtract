@@ -7,16 +7,16 @@
 add_date(data, utc_col = character(1), tz = "UTC", unit = "s")
 }
 \arguments{
-\item{data}{dataframe containing a UTC timestamp variable (in seconds or milliseconds).}
+\item{data}{(`dataframe`). A dataframe containing a UTC timestamp variable (in seconds or milliseconds).}
 
-\item{utc_col}{character. Column name of the UTC timestamp.}
+\item{utc_col}{(`character(1)`). Column name of the UTC timestamp.}
 
-\item{tz}{timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
+\item{tz}{(`character(1)`). The timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
 
-\item{unit}{unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).}
+\item{unit}{(`character(1)`). The unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).}
 }
 \value{
-dataframe with added variable 'date'.
+(`dataframe`) with added variable 'date'.
 }
 \description{
 Adds column 'date' to a dataframe containing a timestamp variable.

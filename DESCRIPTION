@@ -5,9 +5,9 @@ Description: This package helps with extracting features from raw data of many d
     Helpful preprocessing functions are supplied as well. Very large datasets are supported, since data is only read into RAM when needed.
     Individual features can be deleted or updated easily. Calculation of features can be done in parallel and the process can be monitored.
     Results are available in one final dataframe.
-Version: 0.9
+Version: 0.9.1
 Authors@R: c(person("Quay", "Au", email = "quayau@gmail.com", role = c("aut", "cre")),
-  person("Theresa", "Ullmann", email = "theresa_ullmann@gmx.de", role = "aut"),
+  person("Theresa", "Ullmann", email = "theresa_ullmann@gmx.de", role = "ctb"),
   person("Clemens", "Stachl", email = "clemens.stachl@psy.lmu.de", role = "ctb"),
   person("Ramona", "Schoedel", email = "ramona.schoedel@psy.lmu.de", role = "ctb"),
   person("Andreas", "Hofheinz", email = "andreas.hofheinz@outlook.com", role = "ctb")

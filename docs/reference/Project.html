@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fxtract</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -234,21 +234,20 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unlink'>unlink</a></span>(<span class='st'>"projects/my_project"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>my_project</span> <span class='kw'>=</span> <span class='no'>Project</span>$<span class='fu'>new</span>(<span class='st'>"my_project"</span>)</div><div class='output co'>#&gt; <span class='message'>No readable configuration file found</span></div><div class='output co'>#&gt; <span class='message'>Created registry in 'L:/Users/auj/Desktop/Git/fxtract/docs/reference/projects/my_project/reg' using cluster functions 'Interactive'</span></div><div class='input'><span class='no'>my_project</span>$<span class='fu'>add_data</span>(<span class='no'>iris</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: executing %dopar% sequentially: no parallel backend registered</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Paket 'dplyr' wurde unter R Version 3.5.2 erstellt</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attache Paket: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:testthat':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    matches</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file setosa.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file versicolor.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file virginica.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'setosa'</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'versicolor'</span></div><div class='output co'>#&gt; <span class='message'>Adding problem 'virginica'</span></div><div class='input'><span class='no'>my_project</span>$<span class='no'>datasets</span></div><div class='output co'>#&gt; [1] "setosa"     "versicolor" "virginica" </div><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>mean_sepal_length</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>data</span>$<span class='no'>Sepal.Length</span>))
-}
-<span class='no'>my_project</span>$<span class='fu'>add_feature</span>(<span class='no'>fun</span>)</div><div class='output co'>#&gt; <span class='message'>Saving raw RDS file fun.RDS on disk.</span></div><div class='output co'>#&gt; <span class='message'>Exporting new objects: 'fun' ...</span></div><div class='output co'>#&gt; <span class='message'>Adding algorithm 'fun'</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('setosa'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('versicolor'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='output co'>#&gt; <span class='message'>Adding 1 experiments ('virginica'[1] x 'fun'[1] x repls[1]) ...</span></div><div class='input'><span class='no'>my_project</span>$<span class='no'>features</span></div><div class='output co'>#&gt; [1] "fun"</div><div class='input'><span class='no'>my_project</span>$<span class='fu'>calc_features</span>()</div><div class='output co'>#&gt; <span class='message'>Submitting 3 jobs in 3 chunks using cluster functions 'Interactive' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'setosa' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'setosa' for job 1 (seed = 2647) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'versicolor' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'versicolor' for job 2 (seed = 2648) ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Generating problem instance for problem 'virginica' ...</span></div><div class='output co'>#&gt; <span class='message'>### [bt]: Applying algorithm 'fun' on problem 'virginica' for job 3 (seed = 2649) ...</span></div><div class='input'><span class='no'>my_project</span>$<span class='no'>results</span></div><div class='output co'>#&gt;      Species mean_sepal_length
-#&gt; 1     setosa             5.006
-#&gt; 2 versicolor             5.936
-#&gt; 3  virginica             6.588</div><div class='input'><span class='no'>my_project</span>$<span class='no'>perc_done</span></div><div class='output co'>#&gt; [1] 1</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unlink'>unlink</a></span>(<span class='st'>"projects/my_project"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+  <span class='no'>my_project</span> <span class='kw'>=</span> <span class='no'>Project</span>$<span class='fu'>new</span>(<span class='st'>"my_project"</span>)
+  <span class='no'>my_project</span>$<span class='fu'>add_data</span>(<span class='no'>iris</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)
+  <span class='no'>my_project</span>$<span class='no'>datasets</span>
+  <span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
+    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>mean_sepal_length</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>data</span>$<span class='no'>Sepal.Length</span>))
+  }
+  <span class='no'>my_project</span>$<span class='fu'>add_feature</span>(<span class='no'>fun</span>)
+  <span class='no'>my_project</span>$<span class='no'>features</span>
+  <span class='no'>my_project</span>$<span class='fu'>calc_features</span>()
+  <span class='no'>my_project</span>$<span class='no'>results</span>
+  <span class='no'>my_project</span>$<span class='no'>perc_done</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unlink'>unlink</a></span>(<span class='st'>"projects/my_project"</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -274,7 +273,7 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 
       <footer>
       <div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann.</p>
+  <p>Developed by Quay Au.</p>
 </div>
 
 <div class="pkgdown">

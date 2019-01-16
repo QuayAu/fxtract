@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">fxtract</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -145,25 +145,25 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>For the development version, use <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"QuayAu/fxtract"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"QuayAu/fxtract"</span>)</code></pre></div>
 </div>
 <div id="usage" class="section level1">
 <h1 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># user-defined function:</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">fun =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">}</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co"># R6 object:</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun)</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">my_project<span class="op">$</span><span class="kw">calc_features</span>()</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">my_project<span class="op">$</span>results</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
+
+<span class="co"># user-defined function:</span>
+fun =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),
+    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))
+}
+
+<span class="co"># R6 object:</span>
+my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)
+my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
+my_project<span class="op">$</span><span class="kw">add_feature</span>(fun)
+my_project<span class="op">$</span><span class="kw">calc_features</span>()
+my_project<span class="op">$</span>results</code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length
 ## 1     setosa             5.006       0.3524897
 ## 2 versicolor             5.936       0.5161711
@@ -232,7 +232,6 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Quay Au <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Theresa Ullmann <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -243,7 +242,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann.</p>
+  <p>Developed by Quay Au.</p>
 </div>
 
 <div class="pkgdown">

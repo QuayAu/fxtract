@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">fxtract</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -132,10 +132,10 @@
 <a href="#studentlife-data" class="anchor"></a>Studentlife Data</h2>
 <p>In thie example we cluster the gps points and add a new column with the clusters.</p>
 <p>For simplicity reasons, we only use the gps data of this dataset:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">gps_data =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(userId, latitude, longitude) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(latitude))</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(gps_data)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
+gps_data =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(userId, latitude, longitude) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(latitude))
+<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(gps_data)</code></pre></div>
 <pre><code>##   userId latitude longitude
 ## 1     00 43.75913 -72.32924
 ## 2     00 43.75950 -72.32902
@@ -143,29 +143,29 @@
 ## 4     00 43.75913 -72.32924
 ## 5     00 43.75913 -72.32924
 ## 6     00 43.75913 -72.32924</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">my_project<span class="op">$</span><span class="kw">add_data</span>(gps_data, <span class="dt">group_by =</span> <span class="st">"userId"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
+my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)
+my_project<span class="op">$</span><span class="kw">add_data</span>(gps_data, <span class="dt">group_by =</span> <span class="st">"userId"</span>)</code></pre></div>
 </div>
 <div id="define-a-function" class="section level2">
 <h2 class="hasAnchor">
 <a href="#define-a-function" class="anchor"></a>Define a Function</h2>
 <p>We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method <code>$preprocess_data</code> will then read the RDS files for each ID of the grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated. Parallelization is available via foreach.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fpc)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">fun =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  lat =<span class="st"> </span>data<span class="op">$</span>latitude</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">  lon =<span class="st"> </span>data<span class="op">$</span>longitude</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">  clust =<span class="st"> </span><span class="kw">dbscan</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(lat, lon), <span class="dt">eps =</span> <span class="fl">1.5</span>, <span class="dt">MinPts =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">  data<span class="op">$</span>cluster =<span class="st"> </span>clust<span class="op">$</span>cluster</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(data)</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">}</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fpc)
+fun =<span class="st"> </span><span class="cf">function</span>(data) {
+  lat =<span class="st"> </span>data<span class="op">$</span>latitude
+  lon =<span class="st"> </span>data<span class="op">$</span>longitude
+  clust =<span class="st"> </span><span class="kw">dbscan</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(lat, lon), <span class="dt">eps =</span> <span class="fl">1.5</span>, <span class="dt">MinPts =</span> <span class="dv">3</span>)
+  data<span class="op">$</span>cluster =<span class="st"> </span>clust<span class="op">$</span>cluster
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(data)
+}</code></pre></div>
 </div>
 <div id="perform-preprocessing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#perform-preprocessing" class="anchor"></a>Perform Preprocessing</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> fun)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> fun)</code></pre></div>
 <p>The data has successfully been preprocessed:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(my_project<span class="op">$</span><span class="kw">get_data</span>())</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(my_project<span class="op">$</span><span class="kw">get_data</span>())</code></pre></div>
 <pre><code>##   userId latitude longitude cluster
 ## 1     00 43.75913 -72.32924       1
 ## 2     00 43.75950 -72.32902       1
@@ -192,7 +192,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann.</p>
+  <p>Developed by Quay Au.</p>
 </div>
 
 <div class="pkgdown">

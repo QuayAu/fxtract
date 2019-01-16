@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">fxtract</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -132,25 +132,25 @@
 <li>We want to update the datasets.</li>
 </ul>
 <p>Click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html">here</a> on how to use the R6 class <code>Project</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">}</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">fun2 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">}</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">my_project<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
+my_project =<span class="st"> </span>Project<span class="op">$</span><span class="kw">new</span>(<span class="st">"my_project"</span>)
+my_project<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
+
+fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),
+    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))
+}
+
+fun2 =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),
+    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))
+}
+
+my_project<span class="op">$</span><span class="kw">add_feature</span>(fun1)
+my_project<span class="op">$</span><span class="kw">add_feature</span>(fun2)
+my_project<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
 <p>All features have been calculated:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">my_project<span class="op">$</span>results</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span>results</code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa             5.006       0.3524897             1.462
 ## 2 versicolor             5.936       0.5161711             4.260
@@ -160,29 +160,29 @@
 ## 2       0.4699110
 ## 3       0.5518947</code></pre>
 <p>Let’s change the dataset for the species <code>virginica</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">iris_vers =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(Species <span class="op">==</span><span class="st"> "virginica"</span>)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">iris_vers<span class="op">$</span>Sepal.Length =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/MathFun">abs</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(iris_vers)))</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
+iris_vers =<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(Species <span class="op">==</span><span class="st"> "virginica"</span>)
+iris_vers<span class="op">$</span>Sepal.Length =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/MathFun">abs</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(iris_vers)))</code></pre></div>
 <div id="delete-old-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#delete-old-data" class="anchor"></a>Delete Old Data</h2>
 <p>Datasets are saved as batchtools problems (one problem for each ID of the grouping variable). Single problems can be removed:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">remove_data</span>(<span class="st">"virginica"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">remove_data</span>(<span class="st">"virginica"</span>)</code></pre></div>
 </div>
 <div id="add-new-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#add-new-data" class="anchor"></a>Add New Data</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">add_data</span>(iris_vers, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">add_data</span>(iris_vers, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</code></pre></div>
 </div>
 <div id="calculate-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#calculate-features" class="anchor"></a>Calculate Features</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">my_project<span class="op">$</span><span class="kw">calc_features</span>()</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">my_project<span class="op">$</span>results</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span><span class="kw">calc_features</span>()
+my_project<span class="op">$</span>results</code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa         5.0060000       0.3524897             1.462
 ## 2 versicolor         5.9360000       0.5161711             4.260
-## 3  virginica         0.6932079       0.6316566             5.552
+## 3  virginica         0.9385539       0.6552364             5.552
 ##   sd_petal_length
 ## 1       0.1736640
 ## 2       0.4699110
@@ -206,7 +206,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Quay Au, Theresa Ullmann.</p>
+  <p>Developed by Quay Au.</p>
 </div>
 
 <div class="pkgdown">

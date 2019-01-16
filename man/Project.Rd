@@ -76,17 +76,18 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 }
 
 \examples{
-unlink("projects/my_project", recursive = TRUE)
-my_project = Project$new("my_project")
-my_project$add_data(iris, group_by = "Species")
-my_project$datasets
-fun = function(data) {
-  c(mean_sepal_length = mean(data$Sepal.Length))
+\dontrun{
+  my_project = Project$new("my_project")
+  my_project$add_data(iris, group_by = "Species")
+  my_project$datasets
+  fun = function(data) {
+    c(mean_sepal_length = mean(data$Sepal.Length))
+  }
+  my_project$add_feature(fun)
+  my_project$features
+  my_project$calc_features()
+  my_project$results
+  my_project$perc_done
+  unlink("projects/my_project", recursive = TRUE)
 }
-my_project$add_feature(fun)
-my_project$features
-my_project$calc_features()
-my_project$results
-my_project$perc_done
-unlink("projects/my_project", recursive = TRUE)
 }

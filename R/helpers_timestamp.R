@@ -1,19 +1,18 @@
 #' Helper function. Checks if character has correct time format 'hh:mm:ss'.
-#' @param x character vector.
-check_time_format = function(x) {
-  for (i in 1:length(x)) {
-    if (as.numeric(substr(x[i], 1, 2)) >= 24) stop("hours cannot exceed 23.")
-    if (!grepl(pattern = "[012][[:digit:]]:[012345][[:digit:]]:[012345][[:digit:]]", x = x[i])) stop("character must be a time format like '15:21:30'")
+#' @param time (`character()`). The character vector to be checked.
+check_time_format = function(time) {
+  for (i in 1:length(time)) {
+    if (as.numeric(substr(time[i], 1, 2)) >= 24) stop("hours cannot exceed 23.")
+    if (!grepl(pattern = "[012][[:digit:]]:[012345][[:digit:]]:[012345][[:digit:]]", x = time[i])) stop("character must be a time format like '15:21:30'")
   }
 }
 
 #' Helper function. Converts "hh:mm:ss" into number of seconds.
-#' @param x character vector.
-#' @return numeric vector. Number of seconds.
-#' @export
-time_to_sec = function(x) {
-  check_time_format(x)
-  y = strsplit(x, ":")
+#' @param time (`character()`). The character vector to be converted.
+#' @return (`numeric()`). Number of seconds.
+time_to_sec = function(time) {
+  check_time_format(time)
+  y = strsplit(time, ":")
   y = lapply(y, as.numeric)
   f = function(z) 3600*z[1] + 60*z[2] + z[3]
   res = unlist(lapply(y, f))
@@ -26,10 +25,10 @@ time_to_sec = function(x) {
 #' @template param_utc_col
 #' @template param_tz
 #' @template param_unit
-#' @param week_start day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default). See \code{\link[lubridate]{wday}}.
-#' @param locale locale to use for day names. Defaults to 'English_United States.1252'. See \code{\link[lubridate]{wday}}.
+#' @param week_start (`numeric(1)`). Day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default). See \code{\link[lubridate]{wday}}.
+#' @param locale (`character(1)`). Locale to use for day names. Defaults to 'English_United States.1252'. See \code{\link[lubridate]{wday}}.
 #' @family helper functions
-#' @return dataframe with added ordered factor variable 'weekday'.
+#' @return (`dataframe`) with added ordered factor variable 'weekday'.
 #' @importFrom lubridate wday as_datetime
 #' @export
 add_weekday = function(data, utc_col = character(1), tz = "UTC", unit = "s", week_start = 1, locale = "English_United States.1252") {
@@ -65,7 +64,7 @@ add_weekday = function(data, utc_col = character(1), tz = "UTC", unit = "s", wee
 #' @template param_tz
 #' @template param_unit
 #' @family helper functions
-#' @return dataframe with added variable 'time'.
+#' @return (`dataframe`) with added variable 'time'.
 #' @importFrom lubridate as_datetime
 #' @export
 add_time = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
@@ -96,7 +95,7 @@ add_time = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
 #' @template param_tz
 #' @template param_unit
 #' @family helper functions
-#' @return dataframe with added variable 'date'.
+#' @return (`dataframe`) with added variable 'date'.
 #' @importFrom lubridate as_datetime as_date
 #' @export
 add_date = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
@@ -127,7 +126,7 @@ add_date = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
 #' @template param_tz
 #' @template param_unit
 #' @family helper functions
-#' @return dataframe with added variable 'date_time'.
+#' @return (`dataframe`) with added variable 'date_time'.
 #' @importFrom lubridate as_datetime
 #' @export
 add_date_time = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
@@ -154,11 +153,11 @@ add_date_time = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
 #' Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between Monday and Friday.
 #' The dataset needs an ordered factor variable named 'weekday'.
 #'
-#' @template param_data
-#' @param from_day character. Day of the week where filtering should start. Please check the machines locale for correct usage. Defaults to "Mon".
-#' @param from_time character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".
-#' @param until_day character. Day of the week where filtering should end. Please check the machines locale for correct usage. Defaults to "Sun".
-#' @param until_time character. Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".
+#' @param data (`dataframe`). Dataframe with a column named 'weekday'.
+#' @param from_day (`character(1)`). Day of the week where filtering should start. Please check the machines locale for correct usage. Defaults to "Mon".
+#' @param from_time (`character(1)`). Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".
+#' @param until_day (`character(1)`). Day of the week where filtering should end. Please check the machines locale for correct usage. Defaults to "Sun".
+#' @param until_time (`character(1)`). Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".
 #' @family filter functions
 #' @return filtered dataframe by weekday and time.
 #' @importFrom dplyr filter select
@@ -207,9 +206,9 @@ filter_weekday = function(data, from_day = "Mon", from_time = "00:00:00", until_
 #' Filter function. Filters the data by daytime. The dataset can e.g. be filtered from "06:00:00" until "09:00:00".
 #' The dataset needs an ordered factor variable named 'time' (best added by the function add_time).
 #'
-#' @template param_data
-#' @param from_time character. Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".
-#' @param until_time character. Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".
+#' @param data (`dataframe`). Dataframe with a column named 'weekday'.
+#' @param from_time (`character(1)`). Time where filtering should start (on the day from_day). Must be a string with the format "hh:mm:ss". Defaults to "00:00:00".
+#' @param until_time (`character(1)`). Time where filtering should end (on the day until_day). Must be a string with the format "hh:mm:ss". Defaults to "23:59:59".
 #' @family filter functions
 #' @return The dataset filtered according to the given time constraints.
 #' @importFrom dplyr filter select

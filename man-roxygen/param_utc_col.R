@@ -1,1 +1,1 @@
-#' @param utc_col character. Column name of the UTC timestamp.
+#' @param utc_col (`character(1)`). Column name of the UTC timestamp.

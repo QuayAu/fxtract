@@ -1,12 +1,12 @@
 #' Calculates a given function for each ID of a grouping variable.
 #'
 #' @template param_data
-#' @param group_by character. Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.
-#' @param fun function. Must be a function, which has a dataframe as input and a (named) vector of desired length as output.
+#' @param group_by (`character()`). Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.
+#' @param fun (`function`). Must be a function, which has a dataframe as input and a (named) vector of desired length as output.
 #' @template param_check_fun
-#' @param summarize function. If more than one value is returned for each ID of a grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.
-#' @param colname character. If one variable is returned for each ID of a grouping variable, you can specify a custom column name for this new column.
-#' @return dataframe
+#' @param summarize (`function`). If more than one value is returned for each ID of a grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.
+#' @param colname (`character()`). If one variable is returned for each ID of a grouping variable, you can specify a custom column name for this new column.
+#' @return (`dataframe`)
 #' @importFrom dplyr group_by do one_of
 #' @importFrom magrittr "%>%"
 #' @importFrom data.table dcast setDT

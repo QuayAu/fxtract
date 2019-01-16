@@ -4,9 +4,9 @@
 ^man-roxygen
 ^docs$
 ^_pkgdown\.yml$
-^data_gitignore
-^ShinyApp
-^Projects
+^projects
 ^.*[.]sql$
 ^..Rcheck/
 ^appveyor\.yml$
+^README\.rmd$
+^tests/testthat/projects

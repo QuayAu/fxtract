@@ -4,10 +4,10 @@
 \alias{check_time_format}
 \title{Helper function. Checks if character has correct time format 'hh:mm:ss'.}
 \usage{
-check_time_format(x)
+check_time_format(time)
 }
 \arguments{
-\item{x}{character vector.}
+\item{time}{(`character()`). The character vector to be checked.}
 }
 \description{
 Helper function. Checks if character has correct time format 'hh:mm:ss'.

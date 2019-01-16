@@ -8,20 +8,20 @@ add_weekday(data, utc_col = character(1), tz = "UTC", unit = "s",
   week_start = 1, locale = "English_United States.1252")
 }
 \arguments{
-\item{data}{dataframe containing a UTC timestamp variable (in seconds or milliseconds).}
+\item{data}{(`dataframe`). A dataframe containing a UTC timestamp variable (in seconds or milliseconds).}
 
-\item{utc_col}{character. Column name of the UTC timestamp.}
+\item{utc_col}{(`character(1)`). Column name of the UTC timestamp.}
 
-\item{tz}{timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
+\item{tz}{(`character(1)`). The timezone. Defaults to using 'UTC'. See \code{\link[lubridate]{as_datetime}}.}
 
-\item{unit}{unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).}
+\item{unit}{(`character(1)`). The unit of the timestamps. Can be 's' or 'ms'. Defaults to 's' (seconds).}
 
-\item{week_start}{day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default). See \code{\link[lubridate]{wday}}.}
+\item{week_start}{(`numeric(1)`). Day on which week starts following ISO conventions - 1 means Monday, 7 means Sunday (default). See \code{\link[lubridate]{wday}}.}
 
-\item{locale}{locale to use for day names. Defaults to 'English_United States.1252'. See \code{\link[lubridate]{wday}}.}
+\item{locale}{(`character(1)`). Locale to use for day names. Defaults to 'English_United States.1252'. See \code{\link[lubridate]{wday}}.}
 }
 \value{
-dataframe with added ordered factor variable 'weekday'.
+(`dataframe`) with added ordered factor variable 'weekday'.
 }
 \description{
 Adds column 'weekday' to a dataframe containing a timestamp variable.
