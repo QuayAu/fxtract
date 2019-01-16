@@ -200,14 +200,14 @@ my_project<span class="op">$</span><span class="kw">add_feature</span>(total_dis
 <h2 class="hasAnchor">
 <a href="#bug-fixing" class="anchor"></a>Bug Fixing</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>(<span class="dt">reg =</span> my_project<span class="op">$</span>reg)</code></pre></div>
-<pre><code>## Status for 12 jobs at 2019-01-16 17:55:19:
+<pre><code>## Status for 12 jobs at 2019-01-16 23:04:52:
 ##   Submitted    : 12 (100.0%)
 ##   -- Queued    :  0 (  0.0%)
-##   -- Started   : 12 (100.0%)
-##   ---- Running :  0 (  0.0%)
-##   ---- Done    :  9 ( 75.0%)
+##   -- Started   : 11 ( 91.7%)
+##   ---- Running :  1 (  8.3%)
+##   ---- Done    :  7 ( 58.3%)
 ##   ---- Error   :  3 ( 25.0%)
-##   ---- Expired :  0 (  0.0%)</code></pre>
+##   ---- Expired :  1 (  8.3%)</code></pre>
 <p>Some jobs failed. Let’s debug this now.</p>
 <p>We can get the error messages:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span>error_messages</code></pre></div>
@@ -232,9 +232,9 @@ my_project<span class="op">$</span><span class="kw">add_feature</span>(total_dis
 <pre><code>## Submitting 3 jobs in 3 chunks using cluster functions 'Socket' ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_project<span class="op">$</span>results</code></pre></div>
 <pre><code>##   userId daily_number_diff_apps number_diff_apps number_diff_apps_weekday
-## 1     00               16.86905               93                       91
+## 1     00               16.86905               93                       NA
 ## 2     01                9.60000               43                       43
-## 3     02               18.14286               72                       66
+## 3     02               18.14286               72                       NA
 ##   total_dist
 ## 1  621719.25
 ## 2   44649.62

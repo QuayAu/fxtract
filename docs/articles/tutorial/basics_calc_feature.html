@@ -138,27 +138,27 @@ df<span class="op">$</span>task =<span class="st"> </span><span class="kw"><a hr
 df<span class="op">$</span>hour =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour1"</span>, <span class="dv">3</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour2"</span>, <span class="dv">2</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour1"</span>, <span class="dv">2</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour2"</span>, <span class="dv">3</span>)), <span class="dv">2</span>)
 df<span class="op">$</span>x =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">20</span>)
 df</code></pre></div>
-<pre><code>##    id  task  hour           x
-## 1   1 task1 hour1  0.92341745
-## 2   1 task1 hour1  0.02143874
-## 3   1 task1 hour1  0.15097693
-## 4   1 task1 hour2  0.10175083
-## 5   1 task1 hour2  0.88796515
-## 6   1 task2 hour1  1.15762567
-## 7   1 task2 hour1  0.36924699
-## 8   1 task2 hour2  1.42193854
-## 9   1 task2 hour2 -0.19842189
-## 10  1 task2 hour2 -2.69197051
-## 11  2 task1 hour1 -1.17903949
-## 12  2 task1 hour1  0.18320798
-## 13  2 task1 hour1 -0.87133063
-## 14  2 task1 hour2 -0.06509321
-## 15  2 task1 hour2  0.08816570
-## 16  2 task2 hour1  0.66551621
-## 17  2 task2 hour1 -1.58269038
-## 18  2 task2 hour2  0.88407034
-## 19  2 task2 hour2 -0.38998741
-## 20  2 task2 hour2 -0.12584542</code></pre>
+<pre><code>##    id  task  hour          x
+## 1   1 task1 hour1  0.6000212
+## 2   1 task1 hour1  0.5763945
+## 3   1 task1 hour1 -1.5815884
+## 4   1 task1 hour2  0.6024374
+## 5   1 task1 hour2  0.6387228
+## 6   1 task2 hour1  0.7558309
+## 7   1 task2 hour1 -1.3251313
+## 8   1 task2 hour2 -0.5793319
+## 9   1 task2 hour2 -1.2532953
+## 10  1 task2 hour2  0.2880661
+## 11  2 task1 hour1 -0.9042106
+## 12  2 task1 hour1  2.1389700
+## 13  2 task1 hour1  1.3343139
+## 14  2 task1 hour2 -1.0212638
+## 15  2 task1 hour2  0.4195327
+## 16  2 task2 hour1 -1.8083984
+## 17  2 task2 hour1  2.8922770
+## 18  2 task2 hour2  0.9125363
+## 19  2 task2 hour2  0.1494716
+## 20  2 task2 hour2 -1.0168549</code></pre>
 <div id="return-1-value-each" class="section level3">
 <h3 class="hasAnchor">
 <a href="#return-1-value-each" class="anchor"></a>Return 1 value each</h3>
@@ -169,8 +169,8 @@ df</code></pre></div>
 <p>Now we can calculate the desired outcome:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> fun)</code></pre></div>
 <pre><code>##   id     max_x
-## 1  1 1.4219385
-## 2  2 0.8840703</code></pre>
+## 1  1 0.7558309
+## 2  2 2.8922770</code></pre>
 </div>
 <div id="return-more-values-at-once" class="section level3">
 <h3 class="hasAnchor">
@@ -181,30 +181,30 @@ df</code></pre></div>
 }
 <span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id     max_x      sd_x
-## 1  1 1.4219385 1.1546791
-## 2  2 0.8840703 0.7831275</code></pre>
+## 1  1 0.7558309 0.9497303
+## 2  2 2.8922770 1.5259986</code></pre>
 </div>
 <div id="group-by-two-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#group-by-two-columns" class="anchor"></a>Group by two columns</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"id"</span>, <span class="st">"task"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1 max_x_task2 sd_x_task1 sd_x_task2
-## 1  1   0.9234175   1.4219385  0.4485771   1.641931
-## 2  2   0.1832080   0.8840703  0.6153847   0.979421</code></pre>
+## 1  1   0.6387228   0.7558309  0.9778548  0.9250578
+## 2  2   2.1389700   2.8922770  1.3800438  1.8213791</code></pre>
 </div>
 <div id="group-by-three-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#group-by-three-columns" class="anchor"></a>Group by three columns</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"id"</span>, <span class="st">"task"</span>, <span class="st">"hour"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1_hour1 max_x_task1_hour2 max_x_task2_hour1
-## 1  1         0.9234175         0.8879652         1.1576257
-## 2  2         0.1832080         0.0881657         0.6655162
+## 1  1         0.6000212         0.6387228         0.7558309
+## 2  2         2.1389700         0.4195327         2.8922770
 ##   max_x_task2_hour2 sd_x_task1_hour1 sd_x_task1_hour2 sd_x_task2_hour1
-## 1         1.4219385        0.4876833        0.5559375        0.5574679
-## 2         0.8840703        0.7144292        0.1083704        1.5897221
+## 1         0.2880661         1.252788       0.02565769         1.471462
+## 2         0.9125363         1.576886       1.01879699         3.323879
 ##   sd_x_task2_hour2
-## 1         2.072342
-## 2         0.672424</code></pre>
+## 1         0.772701
+## 2         0.971694</code></pre>
 </div>
 </div>
   </div>
