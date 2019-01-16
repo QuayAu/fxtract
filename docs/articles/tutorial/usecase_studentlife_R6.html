@@ -200,7 +200,7 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixing" class="anchor"></a>Bug Fixing</h2>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>(<span class="dt">reg =</span> my_project<span class="op">$</span>reg)</a></code></pre></div>
-<pre><code>## Status for 12 jobs at 2019-01-16 13:41:01:
+<pre><code>## Status for 12 jobs at 2019-01-16 16:55:55:
 ##   Submitted    : 12 (100.0%)
 ##   -- Queued    :  0 (  0.0%)
 ##   -- Started   : 12 (100.0%)
@@ -209,16 +209,20 @@
 ##   ---- Error   :  3 ( 25.0%)
 ##   ---- Expired :  0 (  0.0%)</code></pre>
 <p>Some jobs failed. Let’s debug this now.</p>
-<p>We can get the error messages by using the following batchtools function:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/getErrorMessages">getErrorMessages</a></span>(<span class="dt">reg =</span> my_project<span class="op">$</span>reg)</a></code></pre></div>
-<pre><code>##    job.id terminated error
-## 1:      4       TRUE  TRUE
-## 2:      5       TRUE  TRUE
-## 3:      6       TRUE  TRUE
-##                                                                                              message
+<p>We can get the error messages:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">my_project<span class="op">$</span>error_messages</a></code></pre></div>
+<pre><code>##    job.id
+## 1:      4
+## 2:      5
+## 3:      6
+##                                                                                                error
 ## 1: Error in data %&gt;% filter(weekday &gt;= "Mon" &amp; weekday &lt;= "Fri") : \n  could not find function "%&gt;%"
 ## 2: Error in data %&gt;% filter(weekday &gt;= "Mon" &amp; weekday &lt;= "Fri") : \n  could not find function "%&gt;%"
-## 3: Error in data %&gt;% filter(weekday &gt;= "Mon" &amp; weekday &lt;= "Fri") : \n  could not find function "%&gt;%"</code></pre>
+## 3: Error in data %&gt;% filter(weekday &gt;= "Mon" &amp; weekday &lt;= "Fri") : \n  could not find function "%&gt;%"
+##    problem                algorithm
+## 1:      00 number_diff_apps_weekday
+## 2:      01 number_diff_apps_weekday
+## 3:      02 number_diff_apps_weekday</code></pre>
 <p>Because we calculated the functions in parallel, we need to make sure the workers have access to functions and packages. In most of our feature functions we used <code><a href="https://www.rdocumentation.org/packages/base/topics/library">library()</a></code> inside the functions or directly used the <code>::</code> operator.</p>
 <p>Our function <code>number_diff_apps_weekday</code> uses <code>dplyr</code> functions without calling <code><a href="https://www.rdocumentation.org/packages/base/topics/library">library(dplyr)</a></code> within the function. We could update this feature function (see <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project_update_feature.html">here</a>), but we’d like to show a different way.</p>
 <p>You can set packages, which should be available by the workers by:</p>

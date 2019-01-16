@@ -17,18 +17,18 @@ See the [tutorial](https://quayau.github.io/fxtract/docs/index.html) for an intr
 
 # Introduction
 
-``fxtract`` helps you to extract user-defined features from raw data. For example, if you want to calculate features out of timeseries data of many IDs:
-![One dataset per ID](man/figures/fxtract_main.svg)
-So, if you have different datasets of many IDs and you want to calculate features (covariates) out of these datasets, then ``fxtract`` might be for you.
+``fxtract`` helps you to extract user-defined features from raw data. For example, if you want to calculate features (e.g. mean or sd of some columns) out of timeseries data of many IDs:
+![](man/figures/fxtract_main.svg)
+So, if you have different datasets of many IDs and you want to calculate features (covariates) for each ID out of these datasets, then ``fxtract`` might be for you.
 
 This package utilizes the functionality of the [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html)-package while keeping an easy to access API.
-The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the feature for each ID, possibly in parallel) is handled by `fxtract`.
+The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the features for each ID, possibly in parallel) is handled by `fxtract`.
 This package works for very large datasets with many different IDs and the main functionality is written in [R6](https://r6.r-lib.org/articles/Introduction.html).
 Some helpful functions for preprocessing (timestamped) data are also supplied.
 
-### Why Don't Just Use ``dplyr``?
+### Why don't just use ``dplyr``?
 At first glance it looks like we just rewrote the ``summarize()`` functionality of ``dplyr``.
-For small datasets and few (easy to calculate) features, using ``fxtract`` may indeed be a little overkill (and a lot slower too).
+For small datasets and few (easy to calculate) features, using ``fxtract`` may indeed be a little overkill (and slower too).
 
 However, this package was especially designed for projects with large datasets, many IDs, and many different feature functions.
 Once your dataset (with all IDs) becomes too big for memory, or if some feature functions fail on some IDs, using our package can save you many lines of code.
@@ -61,8 +61,10 @@ my_project$calc_features()
 my_project$results
 
 ```
-
-## Features
+```{r, echo = FALSE}
+unlink("projects", recursive = TRUE)
+```
+# Features
 
 * Unit-tested functions.
 * Extracting features from raw data of many different users/IDs/etc:

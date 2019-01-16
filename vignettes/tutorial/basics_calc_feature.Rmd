@@ -12,8 +12,6 @@ Given a **user-defined** function `fun`, `calc_features` calculates this functio
 The function `fun` needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length.
 The dataframe should contain a grouping variable with all the IDs:
 
-![](img/calc_feature.svg)
-
 This function works fine for small datasets and few features. But if your dataset is too big and you have many complicated features, then it's highly advised to use the R6 object ``Project`` (click [here](https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html)).
 
 ## Example data

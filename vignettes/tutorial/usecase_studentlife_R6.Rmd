@@ -90,9 +90,9 @@ batchtools::getStatus(reg = my_project$reg)
 
 Some jobs failed. Let's debug this now.
 
-We can get the error messages by using the following batchtools function:
+We can get the error messages:
 ```{r}
-batchtools::getErrorMessages(reg = my_project$reg)
+my_project$error_messages
 ```
 
 Because we calculated the functions in parallel, we need to make sure the workers have access to functions and packages.
