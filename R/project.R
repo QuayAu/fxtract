@@ -1,7 +1,7 @@
 #' R6 Object for Feature Extraction.
 #'
 #' @description
-#' \code{Project} calculates features from longitudinal data for each ID of a grouping variable individually with batchtools.
+#' \code{Project} calculates features from raw data for each ID of a grouping variable individually with batchtools.
 #'
 #' @format \code{\link{R6Class}} object.
 #' @name Project

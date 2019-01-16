@@ -74,7 +74,7 @@ unlink("projects", recursive = TRUE)
 Data will be saved as single RDS files for each ID and each dataset is added as one batchtools problem.
 Functions are added as batchtools algorithm. 
 
-Everytime a dataset or a function is added to the R6 object, batchtools experiments of all possible combinations (problems $\times$ algorithms) are added to the batchtools registry as well. 
+Every time a dataset or a function is added to the R6 object, batchtools experiments of all possible combinations (problems $\times$ algorithms) are added to the batchtools registry as well. 
 
 ![](img/batchtools.svg)
 

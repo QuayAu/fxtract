@@ -10,7 +10,7 @@ editor_options:
 ---
 <!-- write something about why it's useful to use our filters -->
 We included some preprocessing functions which help filtering a dataset by time and weekday.
-This is especially useful for analyzing behavioral data, since human behavior tends to differ between weekday and weekends and also between different times.
+This is especially useful for analyzing behavioral data, since behavior tends to differ between weekday and weekends and also between different times.
 
 # filter_daytime
 You can filter your dataset by time. You will get every day with times inside the interval:
@@ -20,7 +20,7 @@ filter_daytime(df, from_time = "06:00:00", until_time = "09:00:00")
 ```
 
 # filter_weekday
-You can filter your dataset by a given timeframe (e.g. from Monday 6am to Friday 6pm):
+You can filter your dataset by a given time frame (e.g. from Monday 6am to Friday 6pm):
 ```{r, eval = FALSE}
 df = add_time(studentlife_small, utc_col = "timestamp")
 df = add_weekday(df, utc_col = "timestamp")

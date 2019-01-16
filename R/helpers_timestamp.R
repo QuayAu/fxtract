@@ -151,7 +151,7 @@ add_date_time = function(data, utc_col = character(1), tz = "UTC", unit = "s") {
   return(data)
 }
 
-#' Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
+#' Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between Monday and Friday.
 #' The dataset needs an ordered factor variable named 'weekday'.
 #'
 #' @template param_data

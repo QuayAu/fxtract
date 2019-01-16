@@ -14,6 +14,7 @@ The dataframe should contain a grouping variable with all the IDs:
 
 ![](img/calc_feature.svg)
 
+This function works fine for small datasets and few features. But if your dataset is too big and you have many complicated features, then it's highly advised to use the R6 object ``Project`` (click [here](https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html)).
 
 ## Example data
 Let's simulate a simple (absolutely arbitrary!) example dataset.
@@ -57,7 +58,7 @@ calc_feature(df, group_by = "id", fun = more_features)
 calc_feature(df, group_by = c("id", "task"), fun = more_features)
 ```
 
-### Group by three colums
+### Group by three columns
 ```{r}
 calc_feature(df, group_by = c("id", "task", "hour"), fun = more_features)
 ```

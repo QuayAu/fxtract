@@ -34,13 +34,13 @@ add_date(data = df, utc_col = "timestamp")
 
 
 ## add_weekday
-This funciton adds an ordered weekday variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day) package to your dataset:
+This function adds an ordered weekday variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day) package to your dataset:
 ```{r, message = FALSE, warning = FALSE}
 add_weekday(data = df, utc_col = "timestamp")
 ```
 
 ## add_time
-This funciton adds a time variable [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package to your dataset:
+This function adds a time variable [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/as_date) package to your dataset:
 ```{r}
 add_time(data = df, utc_col = "timestamp")
 ```

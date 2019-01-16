@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers_timestamp.R
 \name{filter_weekday}
 \alias{filter_weekday}
-\title{Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
+\title{Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between Monday and Friday.
 The dataset needs an ordered factor variable named 'weekday'.}
 \usage{
 filter_weekday(data, from_day = "Mon", from_time = "00:00:00",
@@ -23,7 +23,7 @@ filter_weekday(data, from_day = "Mon", from_time = "00:00:00",
 filtered dataframe by weekday and time.
 }
 \description{
-Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between monday and friday.
+Filter function. Filters the data by weekdays. The dataset can e.g. be filtered by all days between Monday and Friday.
 The dataset needs an ordered factor variable named 'weekday'.
 }
 \seealso{
