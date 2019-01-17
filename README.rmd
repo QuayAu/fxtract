@@ -24,7 +24,7 @@ So, if you have different datasets of many IDs and you want to calculate feature
 This package utilizes the functionality of the [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html)-package while keeping an easy to access API.
 The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the features for each ID, possibly in parallel) is handled by `fxtract`.
 This package works for very large datasets with many different IDs and the main functionality is written in [R6](https://r6.r-lib.org/articles/Introduction.html).
-Some helpful functions for preprocessing (timestamped) data are also supplied.
+Some helpful functions for preprocessing timestamped data are also supplied.
 
 ### Why don't just use ``dplyr``?
 At first glance it looks like we just rewrote the ``summarize()`` functionality of ``dplyr``.
@@ -71,7 +71,7 @@ unlink("projects", recursive = TRUE)
     * Either with the function `calc_feature`.
         * Quick and easy calculation of features just by defining a function on the dataset which has a named vector as output.
         * Suitable for small projects.
-    * Or with the R6 Class `project`.
+    * Or with the R6 Class `Project`.
         * For larger projects (many participants, lots of data, many features), it is highly advised to use the R6 class and its methods.
         * Advantages:
             * No more code bloat thanks to R6.
