@@ -1,7 +1,8 @@
 Package: fxtract
-Title: Feature Extraction from Raw Data
 Type: Package
-Description: This package helps with extracting features from raw data of many different users/IDs/etc.
+Title: Feature Extraction from Raw Data
+Date: 2019-01-17
+Description: Extracting features from raw data of many different users/IDs/etc.
     Helpful preprocessing functions are supplied as well. Very large datasets are supported, since data is only read into RAM when needed.
     Individual features can be deleted or updated easily. Calculation of features can be done in parallel and the process can be monitored.
     Results are available in one final dataframe.
