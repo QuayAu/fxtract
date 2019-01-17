@@ -316,7 +316,7 @@ Project = R6Class("Project",
       results = foreach::foreach(feature = features) %dopar% {
         ids = lookup %>% dplyr::filter(algorithm %in% feature)
         res_feat = res[names(res) %in% ids$job.id]
-        dplyr::bind_rows(res_feat)
+        data.table::rbindlist(res_feat)
       }
       final_result = results[[1]]
       if (length(results) >= 2) {
