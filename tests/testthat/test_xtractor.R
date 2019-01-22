@@ -316,3 +316,97 @@ test_that("change backend", {
 
   unlink("fxtract_files", recursive = TRUE)
 })
+
+test_that("wrong function returns", {
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
+  expect_error(x$calc_features(), regexp = "Please add datasets with method")
+  x$add_data(iris, group_by = "Species")
+  expect_error(x$calc_features(), regexp = "Please add feature functions with method")
+
+  fun1 = function(data) {
+    data.frame(mean_sepal_length = mean(data$Sepal.Length),
+      sd_sepal_length = sd(data$Sepal.Length))
+  }
+
+  fun2 = function(data) {
+    data.frame(mean_petal_length = c(mean(data$Petal.Length), 2),
+      sd_petal_length = sd(data$Petal.Length))
+  }
+
+  x$add_feature(fun1, check_fun = FALSE)
+  x$add_feature(fun2, check_fun = FALSE)
+
+  # backend batchtools
+  x$calc_features()
+  expect_false(nrow(x$results) == 3)
+  x$remove_feature(fun1)
+  x$remove_feature("fun2")
+
+  x$add_feature(fun1, check_fun = TRUE)
+  x$add_feature(fun2, check_fun = TRUE)
+  x$calc_features()
+  expect_equal(nrow(x$error_messages), 6)
+
+  # backend dplyr
+  x$backend = "dplyr"
+  x$remove_feature(fun1)
+  x$remove_feature("fun2")
+  x$add_feature(fun1, check_fun = FALSE)
+  x$add_feature(fun2, check_fun = FALSE)
+  x$calc_features()
+  expect_false(nrow(x$results) == 3)
+  x$remove_feature(fun1)
+  x$remove_feature("fun2")
+  x$add_feature(fun1, check_fun = TRUE)
+  x$add_feature(fun2, check_fun = TRUE)
+  expect_error(x$calc_features(), "task 1 failed -")
+
+  unlink("fxtract_files", recursive = TRUE)
+})
+
+test_that("right function returns", {
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
+  expect_error(x$calc_features(), regexp = "Please add datasets with method")
+  x$add_data(iris, group_by = "Species")
+  expect_error(x$calc_features(), regexp = "Please add feature functions with method")
+
+  fun1 = function(data) {
+    c(mean_sepal_length = mean(data$Sepal.Length),
+      sd_sepal_length = sd(data$Sepal.Length))
+  }
+
+  fun2 = function(data) {
+    list(mean_petal_length = c(mean(data$Petal.Length), 1),
+      sd_petal_length = sd(data$Petal.Length))
+  }
+
+  x$add_feature(fun1, check_fun = TRUE)
+  x$add_feature(fun2, check_fun = TRUE)
+
+  # test wrong function
+  x$calc_features()
+  expect_true(nrow(x$error_messages) == 3)
+
+  x$backend = "dplyr"
+  expect_error(x$calc_features())
+
+  #test right function
+  x$backend = "batchtools"
+  x$remove_feature(fun2)
+  fun2 = function(data) {
+    list(mean_petal_length = mean(data$Petal.Length),
+      sd_petal_length = sd(data$Petal.Length))
+  }
+  x$add_feature(fun2)
+  x$calc_features()
+  expect_true(nrow(x$error_messages) == 0)
+  res_batchtools = x$results
+
+  x$backend = "dplyr"
+  x$calc_features()
+  expect_equal(x$results, res_batchtools)
+
+  unlink("fxtract_files", recursive = TRUE)
+})

@@ -30,6 +30,7 @@
 #' \item{\code{group_by}: }{(`character(1)`): The column on which to group by.}
 #' \item{\code{reg}: }{(`registry`): batchtools registry.}
 #' \item{\code{perc_done}: }{(`numeric(1)`): Active binding. Percentage of finished calculations.}
+#' \item{\code{backend}: }{(`character(1)`): Active binding. The calculation backend. Can be 'dplyr' or 'batchtools'.}
 #' \item{\code{error_messages}: }{(`data.frame()`): Active binding. A dataframe with information about error messages.}
 #' \item{\code{log_files}: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
 #' \item{\code{datasets}: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
@@ -212,15 +213,17 @@ Xtractor = R6Class("Xtractor",
       }
       dplyr::bind_rows(data)
     },
-    add_feature = function(fun) {
+    add_feature = function(fun, check_fun = TRUE) {
       private$.results = NULL
+      checkmate::assert_logical(check_fun)
+      private$.check_fun = check_fun
       checkmate::assert_function(fun)
       message(paste0("Saving raw RDS file ", deparse(substitute(fun)), ".RDS ", "on disk."))
       saveRDS(fun, file = paste0(self$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))), reg = self$reg)
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
-        fun = function(job, data, instance) fxtract::calc_feature(data, group_by = self$group_by, fun = fun),
+        fun = function(job, data, instance) fxtract::calc_feature(data, group_by = self$group_by, fun = fun, check_fun = private$.check_fun),
         reg = self$reg
       )
 
@@ -264,7 +267,7 @@ Xtractor = R6Class("Xtractor",
         features = self$features
         feature_list = foreach::foreach(feature = features) %dopar% {
           fun = self$get_feature(feature)
-          calc_feature(data_all, group_by = self$group_by, fun = fun, check_fun = FALSE)
+          calc_feature(data_all, group_by = self$group_by, fun = fun, check_fun = private$.check_fun)
         }
         for (i in 1:length(feature_list)) {
           if (i == 1) {
@@ -284,7 +287,8 @@ Xtractor = R6Class("Xtractor",
       return(invisible(self))
     },
     .backend = "batchtools",
-    .results = NULL
+    .results = NULL,
+    .check_fun = NULL
   ),
   active = list(
     backend = function(backend) {

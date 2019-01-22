@@ -39,6 +39,7 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 \item{\code{group_by}: }{(`character(1)`): The column on which to group by.}
 \item{\code{reg}: }{(`registry`): batchtools registry.}
 \item{\code{perc_done}: }{(`numeric(1)`): Active binding. Percentage of finished calculations.}
+\item{\code{backend}: }{(`character(1)`): Active binding. The calculation backend. Can be 'dplyr' or 'batchtools'.}
 \item{\code{error_messages}: }{(`data.frame()`): Active binding. A dataframe with information about error messages.}
 \item{\code{log_files}: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
 \item{\code{datasets}: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}

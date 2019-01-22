@@ -25,7 +25,22 @@ calc_feature = function(data, group_by, fun, check_fun = TRUE, summarize, colnam
   checkmate::assertDataFrame(data)
   checkmate::assertNames(names(data), must.include = group_by)
   checkmate::assertLogical(check_fun)
-  if (check_fun) checkmate::assertAtomicVector(fun(data))
+  if (check_fun) {
+    check_data = fun(data)
+    if (!is.atomic(check_data)) {
+      if (!inherits(check_data, "list")) stop("Your function must return a named vector or named list with atomic entries with 1 value each.")
+    }
+    if (is.atomic(check_data)) {
+      if (is.null(names(check_data))) stop("Your function returns an unnamed vector. Please give each entry a name.")
+      checkmate::assert_atomic_vector(check_data)
+    }
+    if (inherits(check_data, "list")) {
+      for (i in 1:length(check_data)) {
+        if (is.null(names(check_data[i]))) stop(paste0("List entry ", i, "is unnamed. Please name each list entry."))
+        checkmate::assert_atomic(check_data[[i]], len = 1L)
+      }
+    }
+  }
 
   if (!missing(summarize)) checkmate::assertFunction(summarize)
   if (!missing(colname)) checkmate::assertCharacter(colname)
@@ -39,6 +54,11 @@ calc_feature = function(data, group_by, fun, check_fun = TRUE, summarize, colnam
 
   if (!missing(colname) & ncol(res) == 2) colnames(res)[2] = ifelse(missing(colname), deparse(substitute(fun)), colname)
   res = data.frame(res)
+
+  list_entries = lapply(res, class)
+  for (i in 1:length(list_entries)) {
+    if (list_entries[i] == "list") res[i] = unlist(res[i])
+  }
 
   if (!missing(summarize)) {
     res0 = res %>% select(-one_of(group_by[1]))
