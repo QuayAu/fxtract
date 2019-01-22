@@ -1,50 +1,50 @@
-context("project")
+context("Xtractor")
 
 test_that("initialize", {
-  unlink("projects", recursive = TRUE)
-  x = Project$new(project_name = "my_project")
-  expect_true(dir.exists("projects"))
-  expect_true(dir.exists("projects/my_project"))
-  expect_true(dir.exists("projects/my_project/reg"))
-  expect_true(dir.exists("projects/my_project/rds_files"))
-  expect_true(dir.exists("projects/my_project/rds_files/data"))
-  expect_true(dir.exists("projects/my_project/rds_files/features"))
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
+  expect_true(dir.exists("fxtract_files"))
+  expect_true(dir.exists("fxtract_files/xtractor"))
+  expect_true(dir.exists("fxtract_files/xtractor/reg"))
+  expect_true(dir.exists("fxtract_files/xtractor/rds_files"))
+  expect_true(dir.exists("fxtract_files/xtractor/rds_files/data"))
+  expect_true(dir.exists("fxtract_files/xtractor/rds_files/features"))
 
-  #test second project
-  y = Project$new(project_name = "my_project2")
-  expect_true(dir.exists("projects"))
-  expect_true(dir.exists("projects/my_project2"))
-  expect_true(dir.exists("projects/my_project2/reg"))
-  expect_true(dir.exists("projects/my_project2/rds_files"))
-  expect_true(dir.exists("projects/my_project2/rds_files/data"))
-  expect_true(dir.exists("projects/my_project2/rds_files/features"))
+  #test second xtractor
+  y = Xtractor$new(name = "xtractor2")
+  expect_true(dir.exists("fxtract_files"))
+  expect_true(dir.exists("fxtract_files/xtractor2"))
+  expect_true(dir.exists("fxtract_files/xtractor2/reg"))
+  expect_true(dir.exists("fxtract_files/xtractor2/rds_files"))
+  expect_true(dir.exists("fxtract_files/xtractor2/rds_files/data"))
+  expect_true(dir.exists("fxtract_files/xtractor2/rds_files/features"))
 
-  #test same project name
-  expect_error(Project$new(project_name = "my_project"))
+  #test same xtractor name
+  expect_error(Xtractor$new(name = "xtractor"))
 
   #test wrong input
-  expect_error(Project$new(1), regexp = "Assertion on 'project_name' failed: Must be of type 'character', not 'double'.")
+  expect_error(Xtractor$new(1), regexp = "Assertion on 'name' failed: Must be of type 'character', not 'double'.")
 
   #check R6 slots
-  expect_equal(x$project_name, "my_project")
-  expect_equal(x$dir, "projects/my_project")
+  expect_equal(x$name, "xtractor")
+  expect_equal(x$dir, "fxtract_files/xtractor")
   expect_true(is.null(x$group_by))
 
-  #test loading project
-  z = Project$new("my_project", load = TRUE)
+  #test loading xtractor
+  z = Xtractor$new("xtractor", load = TRUE)
   expect_equal(z, x)
 
   #test print
   y = capture.output(x$print())
   expect_equal(y[6], "Percentage calculated: 0%")
 
-  unlink("projects", recursive = TRUE)
+  unlink("fxtract_files", recursive = TRUE)
 
 })
 
 test_that("add_data", {
-  unlink("projects", recursive = TRUE)
-  x = Project$new(project_name = "my_project")
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
 
   #test wrong inputs
   expect_error(x$add_data(iris))
@@ -52,15 +52,15 @@ test_that("add_data", {
 
   #test right data and get_data
   x$add_data(iris, group_by = "Species")
-  expect_true(file.exists("projects/my_project/rds_files/data/setosa.RDS"))
-  expect_true(file.exists("projects/my_project/rds_files/data/versicolor.RDS"))
-  expect_true(file.exists("projects/my_project/rds_files/data/virginica.RDS"))
+  expect_true(file.exists("fxtract_files/xtractor/rds_files/data/setosa.RDS"))
+  expect_true(file.exists("fxtract_files/xtractor/rds_files/data/versicolor.RDS"))
+  expect_true(file.exists("fxtract_files/xtractor/rds_files/data/virginica.RDS"))
   expect_equal(iris, x$get_data(x$datasets))
   expect_equal(x$group_by, "Species")
   expect_equal(x$datasets, c("setosa", "versicolor", "virginica"))
 
   #test second dataframe different group by error
-  expect_error(x$add_data(iris, group_by = "Petal.Length"), regexp = "The group_by variable was set to Species. Only one group_by variable is allowed per project!")
+  expect_error(x$add_data(iris, group_by = "Petal.Length"), regexp = "The group_by variable was set to Species.")
 
   #test active bindings
   expect_equal(x$datasets, c("setosa", "versicolor", "virginica"))
@@ -75,12 +75,12 @@ test_that("add_data", {
   expect_true(" ..." %in% strsplit(y[4], ",")[[1]])
   expect_false(" virginica7" %in% strsplit(y[4], ",")[[1]])
 
-  unlink("projects", recursive = TRUE)
+  unlink("fxtract_files", recursive = TRUE)
 })
 
 test_that("preprocess_data", {
-  unlink("projects", recursive = TRUE)
-  x = Project$new(project_name = "my_project")
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
   x$add_data(iris, group_by = "Species")
 
   fun2 = function(data) {
@@ -98,9 +98,9 @@ test_that("preprocess_data", {
   x$preprocess_data(fun = fun)
 
   #test right data and get_data
-  expect_true(file.exists("projects/my_project/rds_files/data/setosa.RDS"))
-  expect_true(file.exists("projects/my_project/rds_files/data/versicolor.RDS"))
-  expect_true(file.exists("projects/my_project/rds_files/data/virginica.RDS"))
+  expect_true(file.exists("fxtract_files/xtractor/rds_files/data/setosa.RDS"))
+  expect_true(file.exists("fxtract_files/xtractor/rds_files/data/versicolor.RDS"))
+  expect_true(file.exists("fxtract_files/xtractor/rds_files/data/virginica.RDS"))
   iris2 = x$get_data(datasets = x$datasets)
   iris3 = iris %>% dplyr::group_by(Species) %>% dplyr::mutate(new_col = max(Sepal.Length) + max(Petal.Length)) %>% data.frame()
   expect_equal(iris3, iris2)
@@ -112,12 +112,12 @@ test_that("preprocess_data", {
   x$calc_features()
   expect_equal(x$results$sum, c(7.7, 12.1, 14.8))
 
-  unlink("projects", recursive = TRUE)
+  unlink("fxtract_files", recursive = TRUE)
 })
 
 test_that("remove_data", {
-  unlink("projects", recursive = TRUE)
-  x = Project$new(project_name = "my_project")
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
   x$add_data(iris, group_by = "Species")
   x$remove_data("setosa")
   expect_equal(list.files(paste0(x$dir, "/rds_files/data/")), c("versicolor.RDS", "virginica.RDS"))
@@ -125,12 +125,12 @@ test_that("remove_data", {
   x$remove_data(c("versicolor", "virginica"))
   expect_equal(list.files(paste0(x$dir, "/rds_files/data/")), character(0))
   expect_equal(x$datasets, character(0))
-  unlink("projects", recursive = TRUE)
+  unlink("fxtract_files", recursive = TRUE)
 })
 
 test_that("add_feature", {
-  unlink("projects", recursive = TRUE)
-  x = Project$new(project_name = "my_project")
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
   x$add_data(iris, group_by = "Species")
 
   sepal_length_fun = function(data) {
@@ -148,8 +148,8 @@ test_that("add_feature", {
 
   x$add_feature(sepal_length_fun)
   x$add_feature(sepal_width_fun)
-  expect_true(file.exists("projects/my_project/rds_files/features/sepal_length_fun.RDS"))
-  expect_true(file.exists("projects/my_project/rds_files/features/sepal_width_fun.RDS"))
+  expect_true(file.exists("fxtract_files/xtractor/rds_files/features/sepal_length_fun.RDS"))
+  expect_true(file.exists("fxtract_files/xtractor/rds_files/features/sepal_width_fun.RDS"))
 
   expect_equal(x$features, c("sepal_length_fun", "sepal_width_fun"))
 
@@ -184,12 +184,12 @@ test_that("add_feature", {
   expect_true(" ..." %in% strsplit(y[5], ",")[[1]])
   expect_false(" fun19" %in% strsplit(y[4], ",")[[1]])
 
-  unlink("projects", recursive = TRUE)
+  unlink("fxtract_files", recursive = TRUE)
 })
 
 test_that("calculate features", {
-  unlink("projects", recursive = TRUE)
-  x = Project$new(project_name = "my_project")
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
   x$add_data(iris, group_by = "Species")
 
   sepal_length_fun = function(data) {
@@ -210,18 +210,18 @@ test_that("calculate features", {
 
   #test meaningful error message $results
   expect_error(x$results, regexp = "No features have been calculated yet.")
-  expect_error(x$project_status)
+  expect_error(x$status)
 
   #test submitting jobs by batchtools
   batchtools::submitJobs(1:2, reg = x$reg)
-  expect_equal(x$project_status$perc_done, 1/3)
+  expect_equal(x$status$perc_done, 1/3)
   expect_equal(x$perc_done, 1/3)
   y = capture.output(x)
   expect_equal(y[6], "Percentage calculated: 33%")
 
   #test submitting jobs by R6 method
   x$calc_features()
-  expect_equal(x$project_status$perc_done, 1)
+  expect_equal(x$status$perc_done, 1)
   res = x$results
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
@@ -230,20 +230,20 @@ test_that("calculate features", {
   #test load data and continue calculate
   x$remove_feature(sepal_length_fun)
   x$add_feature(sepal_length_fun)
-  y = Project$new("my_project", load = TRUE)
+  y = Xtractor$new("xtractor", load = TRUE)
   y$calc_features()
-  expect_equal(y$project_status$perc_done, 1)
+  expect_equal(y$status$perc_done, 1)
   res = y$results
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
   expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
 
-  unlink("projects", recursive = TRUE)
+  unlink("fxtract_files", recursive = TRUE)
 })
 
 test_that("error handling", {
-  unlink("projects", recursive = TRUE)
-  x = Project$new(project_name = "my_project")
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
   expect_error(x$calc_features(), regexp = "Please add datasets with method")
   x$add_data(iris, group_by = "Species")
   expect_error(x$calc_features(), regexp = "Please add feature functions with method")
@@ -269,5 +269,5 @@ test_that("error handling", {
   expect_equal(nrow(x$error_messages), 2)
   expect_equal(length(x$log_files), 2)
 
-  unlink("projects", recursive = TRUE)
+  unlink("fxtract_files", recursive = TRUE)
 })

@@ -1,32 +1,32 @@
 #' R6 Object for Feature Extraction.
 #'
 #' @description
-#' \code{Project} calculates features from raw data for each ID of a grouping variable individually with batchtools.
+#' \code{Xtractor} calculates features from raw data for each ID of a grouping variable individually with batchtools.
 #'
 #' @format \code{\link{R6Class}} object.
-#' @name Project
+#' @name Xtractor
 #'
 #' @section Usage:
 #' \preformatted{
-#' my_project = Project$new("my_project")
+#' xtractor = Xtractor$new("xtractor")
 #' }
 #'
 #' @section Arguments:
 #'
-#' For Project$new():
+#' For Xtractor$new():
 #' \describe{
-#' \item{\code{project_name}: }{('character(1)'): A user defined name of the project. All necessary data will be saved on the path: ./projects/project_name/}
-#' \item{\code{load}: }{(`logical(1)`): If TRUE, an existing project will be loaded.}
+#' \item{\code{name}: }{('character(1)'): A user defined name of the Xtractor. All necessary data will be saved on the path: ./fxtract_files/name/}
+#' \item{\code{load}: }{(`logical(1)`): If TRUE, an existing Xtractor will be loaded.}
 #' }
 #' @section Details:
-#' All datasets and feature functions are saved in this R6 object. \code{Project} heavily relies on the R-package batchtools.
+#' All datasets and feature functions are saved in this R6 object. \code{Xtractor} heavily relies on the R-package batchtools.
 #' Data will be saved as single RDS files (for each ID) and feature functions are calculated on each single dataset.
 #' A big advantage of this method is that it scales nicely for larger datasets. Data is only read into RAM, when needed.
 #'
 #' @section Fields:
 #' \describe{
-#' \item{\code{project_name}: }{(`character(1)`): The projects name.}
-#' \item{\code{dir}: }{(`character(1)`): The projects directory.}
+#' \item{\code{name}: }{(`character(1)`): The Xtractors name.}
+#' \item{\code{dir}: }{(`character(1)`): The directory where files are saved.}
 #' \item{\code{group_by}: }{(`character(1)`): The column on which to group by.}
 #' \item{\code{reg}: }{(`registry`): batchtools registry.}
 #' \item{\code{perc_done}: }{(`numeric(1)`): Active binding. Percentage of finished calculations.}
@@ -34,7 +34,7 @@
 #' \item{\code{log_files}: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
 #' \item{\code{datasets}: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
 #' \item{\code{features}: }{(`character()`): Active binding. A character vector with the feature functions which were added.}
-#' \item{\code{project_status}: }{(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.}
+#' \item{\code{status}: }{(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.}
 #' \item{\code{results}: }{(`data.frame()`): Active binding. A dataframe with all calculated features of all IDs.}
 #' }
 #'
@@ -56,7 +56,7 @@
 #' \item{\code{remove_feature(fun)}}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. \cr
 #'  This method removes the batchtools algorithms and experiments corresponding to the given function.} \cr
 #' \item{\code{get_feature(fun)}}{[fun: (`character(1)`)] The name of a function as character. \cr
-#'  This method reads the RDS file of the function. Useful for debugging after loading a project.} \cr
+#'  This method reads the RDS file of the function. Useful for debugging after loading an Xtractor.} \cr
 #' \item{\code{calc_features()}}{This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.} \cr
 #' \item{\code{plot()}}{[internal] method to print the R6 object.} \cr
 #' \item{\code{clone()}}{[internal] method to clone the R6 object.} \cr
@@ -65,18 +65,18 @@
 #'
 #' @examples
 #' \dontrun{
-#'   my_project = Project$new("my_project")
-#'   my_project$add_data(iris, group_by = "Species")
-#'   my_project$datasets
+#'   xtractor = Xtractor$new("xtractor")
+#'   xtractor$add_data(iris, group_by = "Species")
+#'   xtractor$datasets
 #'   fun = function(data) {
 #'     c(mean_sepal_length = mean(data$Sepal.Length))
 #'   }
-#'   my_project$add_feature(fun)
-#'   my_project$features
-#'   my_project$calc_features()
-#'   my_project$results
-#'   my_project$perc_done
-#'   unlink("projects/my_project", recursive = TRUE)
+#'   xtractor$add_feature(fun)
+#'   xtractor$features
+#'   xtractor$calc_features()
+#'   xtractor$results
+#'   xtractor$perc_done
+#'   unlink("fxtract_files/xtractor", recursive = TRUE)
 #' }
 #' @import R6
 #' @import dplyr
@@ -85,19 +85,19 @@
 NULL
 
 #' @export
-Project = R6Class("Project",
+Xtractor = R6Class("Xtractor",
   public = list(
-    project_name = NULL,
+    name = NULL,
     group_by = NULL,
     reg = NULL,
     dir = NULL,
-    initialize = function(project_name, load = FALSE) {
-      self$project_name = checkmate::assert_character(project_name)
-      newDirPath = paste0("projects/", project_name)
+    initialize = function(name, load = FALSE) {
+      self$name = checkmate::assert_character(name)
+      newDirPath = paste0("fxtract_files/", name)
       self$dir = newDirPath
       if (!load) {
-        if (!dir.exists("projects")) dir.create("projects")
-        if (dir.exists(newDirPath)) stop("The project name already exists. Please choose another name, delete the existing project, or set load = TRUE, if you want to load the old project.")
+        if (!dir.exists("fxtract_files")) dir.create("fxtract_files")
+        if (dir.exists(newDirPath)) stop("The Xtractor name already exists. Please choose another name, delete the existing Xtractor, or set load = TRUE, if you want to load the old Xtractor.")
         dir.create(newDirPath)
         dir.create(paste0(newDirPath, "/rds_files"))
         dir.create(paste0(newDirPath, "/rds_files/data"))
@@ -105,7 +105,7 @@ Project = R6Class("Project",
         saveRDS(NULL, file = paste0(self$dir, "/rds_files/group_by.RDS"))
         self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"))
       } else {
-        checkmate::assert_subset(project_name, list.files("projects/"))
+        checkmate::assert_subset(name, list.files("fxtract_files/"))
         self$reg = batchtools::loadRegistry(paste0(newDirPath, "/reg"), writeable = TRUE)
         self$group_by = readRDS(paste0(newDirPath, "/rds_files/group_by.RDS"))
       }
@@ -128,7 +128,7 @@ Project = R6Class("Project",
         algos = paste0(algos, ", ...")
       }
       cat("R6 Object \n")
-      cat(paste0("Project name: ", self$project_name, "\n"))
+      cat(paste0("Project name: ", self$name, "\n"))
       cat(paste0("Grouping variable: ", self$group_by, "\n"))
       cat(paste0("IDs: ", problems, "\n"))
       cat(paste0("Feature functions: ", algos, "\n"))
@@ -145,7 +145,7 @@ Project = R6Class("Project",
         saveRDS(group_by, file = paste0(self$dir, "/group_by.RDS"))
       }
       if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by,
-        ". Only one group_by variable is allowed per project!"))
+        ". Only one group_by variable is allowed per Xtractor!"))
       gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
       #save rds files
@@ -283,7 +283,7 @@ Project = R6Class("Project",
     features = function() {
       self$reg$algorithms
     },
-    project_status = function() {
+    status = function() {
       problem = vars = funs = NULL
       reg = self$reg
       if (nrow(batchtools::findDone(reg = reg)) == 0) stop("No features have been calculated yet or all functions resulted in errors. Start calculating with method $calc_features().")
@@ -311,7 +311,7 @@ Project = R6Class("Project",
 
       jt = batchtools::getJobTable(reg = reg)
       lookup = jt %>% select(job.id, problem, algorithm)
-      features = self$project_status$feature_wise
+      features = self$status$feature_wise
       features = names(features[features != 0])
       results = foreach::foreach(feature = features) %dopar% {
         ids = lookup %>% dplyr::filter(algorithm %in% feature)

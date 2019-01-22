@@ -1,5 +1,5 @@
 ---
-title: "R6 Class Project - How to Update Data"
+title: "R6 Class Xtractor - How to Update Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
@@ -11,12 +11,12 @@ Use case:
 - Data from some IDS changes.
 - We want to update the datasets.
 
-```{r test-main, child = 'project_setup_child.Rmd', message = FALSE}
+```{r test-main, child = 'xtractor_setup_child.Rmd', message = FALSE}
 ```
 
 All features have been calculated:
 ```{r, message = FALSE}
-my_project$results
+xtractor$results
 ```
 
 Let's change the dataset for the species `virginica`:
@@ -29,20 +29,20 @@ iris_vers$Sepal.Length = abs(rnorm(nrow(iris_vers)))
 ## Delete Old Data
 Datasets are saved as batchtools problems (one problem for each ID of the grouping variable). Single problems can be removed:
 ```{r, message = FALSE}
-my_project$remove_data("virginica")
+xtractor$remove_data("virginica")
 ```
 
 ## Add New Data
 ```{r, message = FALSE}
-my_project$add_data(iris_vers, group_by = "Species")
+xtractor$add_data(iris_vers, group_by = "Species")
 ```
 
 ## Calculate Features 
 ```{r, message = FALSE}
-my_project$calc_features()
-my_project$results
+xtractor$calc_features()
+xtractor$results
 ```
 
 ```{r, echo = FALSE}
-unlink("projects", recursive = TRUE)
+unlink("fxtract_files", recursive = TRUE)
 ```

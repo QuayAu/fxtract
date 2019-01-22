@@ -6,9 +6,9 @@
 ^man-roxygen
 ^docs$
 ^_pkgdown\.yml$
-^projects
+^fxtract_files
 ^.*[.]sql$
 ^..Rcheck/
 ^appveyor\.yml$
 ^README\.rmd$
-^tests/testthat/projects
+^tests/testthat/fxtract_files

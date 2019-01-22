@@ -1,5 +1,5 @@
 ---
-title: "R6 Class Project"
+title: "R6 Class Xtractor"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
@@ -8,7 +8,7 @@ vignette: >
 ---
 
 ```{r, echo = FALSE}
-unlink("projects", recursive = TRUE)
+unlink("fxtract_files", recursive = TRUE)
 ```
 
 - Designed for large projects.
@@ -18,7 +18,7 @@ unlink("projects", recursive = TRUE)
 
 ```{r, message = FALSE}
 library(fxtract)
-my_project = Project$new("my_project")
+xtractor = Xtractor$new("xtractor")
 ```
 
 ## Add Data
@@ -28,8 +28,8 @@ You can also add dataframes for each ID individually. This is especially helpful
 library(dplyr)
 iris1 = iris %>% filter(Species %in% c("setosa", "versicolor"))
 iris2 = iris %>% filter(Species == "virginica")
-my_project$add_data(iris1, group_by = "Species")
-my_project$add_data(iris2, group_by = "Species")
+xtractor$add_data(iris1, group_by = "Species")
+xtractor$add_data(iris2, group_by = "Species")
 ```
 
 ## Add Features
@@ -49,24 +49,24 @@ fun2 = function(data) {
 
 
 ```{r, message = FALSE}
-my_project$add_feature(fun1)
-my_project$add_feature(fun2)
+xtractor$add_feature(fun1)
+xtractor$add_feature(fun2)
 ```
 
 ## Calculate Features
 Features are calculated by the method `$calc_features()`:
 ```{r, message = FALSE}
-my_project$calc_features()
+xtractor$calc_features()
 ```
 
 ## Collect Results
 The desired final dataframe can be accessed by the slot `$results`:
 ```{r, message = FALSE}
-my_project$results
+xtractor$results
 ```
 
 ```{r, echo = FALSE}
-unlink("projects", recursive = TRUE)
+unlink("fxtract_files", recursive = TRUE)
 ```
 
 

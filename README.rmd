@@ -26,9 +26,10 @@ The user only needs to define functions which have a dataset as input and named 
 This package works for very large datasets with many different IDs and the main functionality is written in [R6](https://r6.r-lib.org/articles/Introduction.html).
 Some helpful functions for preprocessing timestamped data are also supplied.
 
-### Why don't just use ``dplyr``?
+### Why don't just use ``dplyr`` or other packages?
 At first glance it looks like we just rewrote the ``summarize()`` functionality of ``dplyr``.
 For small datasets and few (easy to calculate) features, using ``fxtract`` may indeed be a little overkill (and slower too).
+Another similar functionality is covered by the ``aggregate()``-function from the base ``stats`` package.
 
 However, this package was especially designed for projects with large datasets, many IDs, and many different feature functions.
 Once your dataset (with all IDs) becomes too big for memory, or if some feature functions fail on some IDs, using our package can save you many lines of code.
@@ -40,7 +41,7 @@ devtools::install_github("QuayAu/fxtract")
 ```
 
 ```{r, echo = FALSE}
-unlink("projects", recursive = TRUE)
+unlink("fxtract_files", recursive = TRUE)
 ```
 
 # Usage
@@ -54,25 +55,21 @@ fun = function(data) {
 }
 
 # R6 object:
-my_project = Project$new("my_project")
-my_project$add_data(iris, group_by = "Species")
-my_project$add_feature(fun)
-my_project$calc_features()
-my_project$results
+xtractor = Xtractor$new("xtractor")
+xtractor$add_data(iris, group_by = "Species")
+xtractor$add_feature(fun)
+xtractor$calc_features()
+xtractor$results
 
 ```
 ```{r, echo = FALSE}
-unlink("projects", recursive = TRUE)
+unlink("fxtract_files", recursive = TRUE)
 ```
 # Features
 
 * Unit-tested functions.
 * Extracting features from raw data of many different users/IDs/etc:
-    * Either with the function `calc_feature`.
-        * Quick and easy calculation of features just by defining a function on the dataset which has a named vector as output.
-        * Suitable for small projects.
-    * Or with the R6 Class `Project`.
-        * For larger projects (many participants, lots of data, many features), it is highly advised to use the R6 class and its methods.
+    * With the R6 Class `Xtractor`.
         * Advantages:
             * No more code bloat thanks to R6.
             * Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.

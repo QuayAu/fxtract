@@ -8,32 +8,30 @@ navbar:
   title:
   type: default
   left:
-  - text: Preprocessing Helpers
+  - text: Helper Functions
     menu:
     - text: add date information
-      href: articles/tutorial/helpers.html
+      href: articles/tutorial/helper_preproc.html
     - text: filters
-      href: articles/tutorial/filters.html
-  - text: Basics
-    menu:
+      href: articles/tutorial/helper_filters.html
     - text: calc_feature
-      href: articles/tutorial/basics_calc_feature.html
-    - text: project
-      href: articles/tutorial/basics_project.html
-    - text: project - preprocess data
-      href: articles/tutorial/basics_project_preprocess_data.html
-    - text: project - update data
-      href: articles/tutorial/basics_project_update_data.html
-    - text: project - update feature
-      href: articles/tutorial/basics_project_update_feature.html
-    - text: project - error handling
-      href: articles/tutorial/basics_project_error_handling.html
+      href: articles/tutorial/helper_calc_feature.html
+  - text: Xtractor
+    menu:
+    - text: xtractor
+      href: articles/tutorial/basics_xtractor.html
+    - text: xtractor - preprocess data
+      href: articles/tutorial/basics_xtractor_preprocess_data.html
+    - text: xtractor - update data
+      href: articles/tutorial/basics_xtractor_update_data.html
+    - text: xtractor - update feature
+      href: articles/tutorial/basics_xtractor_update_feature.html
+    - text: xtractor - error handling
+      href: articles/tutorial/basics_xtractor_error_handling.html
   - text: Use Cases
     menu:
     - text: StudentLife
       href: articles/tutorial/usecase_studentlife.html
-    - text: StudentLife with R6
-      href: articles/tutorial/usecase_studentlife_R6.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

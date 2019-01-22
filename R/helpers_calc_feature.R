@@ -1,4 +1,4 @@
-#' Calculates a given function for each ID of a grouping variable.
+#' Helper function. Calculates a given function for each ID of a grouping variable.
 #'
 #' @template param_data
 #' @param group_by (`character()`). Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.
@@ -7,6 +7,7 @@
 #' @param summarize (`function`). If more than one value is returned for each ID of a grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.
 #' @param colname (`character()`). If one variable is returned for each ID of a grouping variable, you can specify a custom column name for this new column.
 #' @return (`dataframe`)
+#' @family helper functions
 #' @importFrom dplyr group_by do one_of
 #' @importFrom magrittr "%>%"
 #' @importFrom data.table dcast setDT

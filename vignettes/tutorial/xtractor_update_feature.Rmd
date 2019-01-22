@@ -1,5 +1,5 @@
 ---
-title: "R6 Class Project - How to Update a Feature"
+title: "R6 Class Xtractor - How to Update a Feature"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
@@ -12,12 +12,12 @@ Use case:
 - Features have been added (or have already been calculated).
 - We want to edit a feature function.
 
-```{r test-main, child = 'project_setup_child.Rmd', message = FALSE}
+```{r test-main, child = 'xtractor_setup_child.Rmd', message = FALSE}
 ```
 
 All features have been calculated:
 ```{r, message = FALSE}
-my_project$results
+xtractor$results
 ```
 
 ## Write Updated Feature Functions
@@ -38,27 +38,27 @@ fun2_robust = function(data) {
 
 ## Delete Old Feature Functions
 ```{r, message = FALSE}
-my_project$remove_feature(fun1)
+xtractor$remove_feature(fun1)
 ```
 This deletes all calculated features corresponding to `fun1`.
 
 It's also possible to pass a character string:
 ```{r, message = FALSE}
-my_project$remove_feature("fun2")
+xtractor$remove_feature("fun2")
 ```
 
 ## Add New Feature Functions
 All there is left to do is to add the new feature functions and to execute the calculation process:
 
 ```{r, message = FALSE}
-my_project$add_feature(fun1_robust)
-my_project$add_feature(fun2_robust)
+xtractor$add_feature(fun1_robust)
+xtractor$add_feature(fun2_robust)
 ```
 ```{r, message = FALSE}
-my_project$calc_features()
-my_project$results
+xtractor$calc_features()
+xtractor$results
 ```
 
 ```{r, echo = FALSE}
-unlink("projects", recursive = TRUE)
+unlink("fxtract_files", recursive = TRUE)
 ```

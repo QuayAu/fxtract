@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculates a given function for each ID of a grouping variable. — calc_feature • fxtract</title>
+<title>Helper function. Calculates a given function for each ID of a grouping variable. — calc_feature • fxtract</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Calculates a given function for each ID of a grouping variable. — calc_feature" />
+<meta property="og:title" content="Helper function. Calculates a given function for each ID of a grouping variable. — calc_feature" />
 
-<meta property="og:description" content="Calculates a given function for each ID of a grouping variable." />
+<meta property="og:description" content="Helper function. Calculates a given function for each ID of a grouping variable." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,43 +71,43 @@
       <ul class="nav navbar-nav">
         <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Preprocessing Helpers
+    Helper Functions
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tutorial/helpers.html">add date information</a>
+      <a href="../articles/tutorial/helper_preproc.html">add date information</a>
     </li>
     <li>
-      <a href="../articles/tutorial/filters.html">filters</a>
+      <a href="../articles/tutorial/helper_filters.html">filters</a>
+    </li>
+    <li>
+      <a href="../articles/tutorial/helper_calc_feature.html">calc_feature</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Basics
+    Xtractor
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tutorial/basics_calc_feature.html">calc_feature</a>
+      <a href="../articles/tutorial/basics_xtractor.html">xtractor</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_project.html">project</a>
+      <a href="../articles/tutorial/basics_xtractor_preprocess_data.html">xtractor - preprocess data</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_project_preprocess_data.html">project - preprocess data</a>
+      <a href="../articles/tutorial/basics_xtractor_update_data.html">xtractor - update data</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_project_update_data.html">project - update data</a>
+      <a href="../articles/tutorial/basics_xtractor_update_feature.html">xtractor - update feature</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_project_update_feature.html">project - update feature</a>
-    </li>
-    <li>
-      <a href="../articles/tutorial/basics_project_error_handling.html">project - error handling</a>
+      <a href="../articles/tutorial/basics_xtractor_error_handling.html">xtractor - error handling</a>
     </li>
   </ul>
 </li>
@@ -120,9 +120,6 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/tutorial/usecase_studentlife.html">StudentLife</a>
-    </li>
-    <li>
-      <a href="../articles/tutorial/usecase_studentlife_R6.html">StudentLife with R6</a>
     </li>
   </ul>
 </li>
@@ -150,14 +147,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculates a given function for each ID of a grouping variable.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/calc_feature.R'><code>R/calc_feature.R</code></a></small>
+    <h1>Helper function. Calculates a given function for each ID of a grouping variable.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/helpers_calc_feature.R'><code>R/helpers_calc_feature.R</code></a></small>
     <div class="hidden name"><code>calc_feature.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculates a given function for each ID of a grouping variable.</p>
+    <p>Helper function. Calculates a given function for each ID of a grouping variable.</p>
     
     </div>
 
@@ -197,6 +194,12 @@ if evaluation on the whole dataset takes too long.</p></td>
 
     <p>(`dataframe`)</p>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other helper functions: <code><a href='add_date_time.html'>add_date_time</a></code>,
+  <code><a href='add_date.html'>add_date</a></code>, <code><a href='add_time.html'>add_time</a></code>,
+  <code><a href='add_weekday.html'>add_weekday</a></code></p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
@@ -215,6 +218,8 @@ if evaluation on the whole dataset takes too long.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

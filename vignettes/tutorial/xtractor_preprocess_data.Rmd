@@ -1,5 +1,5 @@
 ---
-title: "R6 Class Project - Preprocess Data"
+title: "R6 Class Xtractor - Preprocess Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fxtract}
@@ -23,13 +23,13 @@ head(gps_data)
 ```
 
 ```{r, echo = FALSE}
-unlink("projects", recursive = TRUE)
+unlink("fxtract_files", recursive = TRUE)
 ```
 
 ```{r, message = FALSE, warning = FALSE}
 library(fxtract)
-my_project = Project$new("my_project")
-my_project$add_data(gps_data, group_by = "userId")
+xtractor = Xtractor$new("xtractor")
+xtractor$add_data(gps_data, group_by = "userId")
 ```
 
 
@@ -49,14 +49,14 @@ fun = function(data) {
 
 ## Perform Preprocessing
 ```{r, message = FALSE}
-my_project$preprocess_data(fun = fun)
+xtractor$preprocess_data(fun = fun)
 ```
 
 The data has successfully been preprocessed:
 ```{r}
-head(my_project$get_data())
+head(xtractor$get_data())
 ```
 
 ```{r, echo = FALSE}
-unlink("projects", recursive = TRUE)
+unlink("fxtract_files", recursive = TRUE)
 ```

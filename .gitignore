@@ -6,5 +6,5 @@
 .project
 data_gitignore/
 *.sql
-projects/
+fxtract_files/
 ..Rcheck/

@@ -28,6 +28,7 @@ Adds column 'weekday' to a dataframe containing a timestamp variable.
 }
 \seealso{
 Other helper functions: \code{\link{add_date_time}},
-  \code{\link{add_date}}, \code{\link{add_time}}
+  \code{\link{add_date}}, \code{\link{add_time}},
+  \code{\link{calc_feature}}
 }
 \concept{helper functions}

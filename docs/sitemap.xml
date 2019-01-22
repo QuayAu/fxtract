@@ -28,48 +28,45 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filter_weekday.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/Project.html</loc>
-  </url>
-  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/studentlife_small.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/time_to_sec.html</loc>
   </url>
   <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/Xtractor.html</loc>
+  </url>
+  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/fxtract.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_calc_feature.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helper_calc_feature.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helper_filters.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_error_handling.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_preprocess_data.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_update_data.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/basics_project_update_feature.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/filters.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helpers.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/project_setup_child.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helper_preproc.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_studentlife.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_studentlife_R6.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_error_handling.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_preprocess_data.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_setup_child.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_update_data.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_update_feature.html</loc>
   </url>
 </urlset>
