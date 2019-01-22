@@ -19,15 +19,15 @@ navbar:
   - text: Xtractor
     menu:
     - text: xtractor
-      href: articles/tutorial/basics_xtractor.html
+      href: articles/tutorial/xtractor.html
     - text: xtractor - preprocess data
-      href: articles/tutorial/basics_xtractor_preprocess_data.html
+      href: articles/tutorial/xtractor_preprocess_data.html
     - text: xtractor - update data
-      href: articles/tutorial/basics_xtractor_update_data.html
+      href: articles/tutorial/xtractor_update_data.html
     - text: xtractor - update feature
-      href: articles/tutorial/basics_xtractor_update_feature.html
+      href: articles/tutorial/xtractor_update_feature.html
     - text: xtractor - error handling
-      href: articles/tutorial/basics_xtractor_error_handling.html
+      href: articles/tutorial/xtractor_error_handling.html
   - text: Use Cases
     menu:
     - text: StudentLife

@@ -62,19 +62,19 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/tutorial/basics_xtractor.html">xtractor</a>
+      <a href="../../articles/tutorial/xtractor.html">xtractor</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_xtractor_preprocess_data.html">xtractor - preprocess data</a>
+      <a href="../../articles/tutorial/xtractor_preprocess_data.html">xtractor - preprocess data</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_xtractor_update_data.html">xtractor - update data</a>
+      <a href="../../articles/tutorial/xtractor_update_data.html">xtractor - update data</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_xtractor_update_feature.html">xtractor - update feature</a>
+      <a href="../../articles/tutorial/xtractor_update_feature.html">xtractor - update feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/basics_xtractor_error_handling.html">xtractor - error handling</a>
+      <a href="../../articles/tutorial/xtractor_error_handling.html">xtractor - error handling</a>
     </li>
   </ul>
 </li>
@@ -179,10 +179,11 @@
 <a href="#get-an-overview" class="anchor"></a>Get an Overview</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(xtractor)</a></code></pre></div>
 <pre><code>## R6 Object 
-## Project name: xtractor
+## Name: xtractor
 ## Grouping variable: userId
 ## IDs: 00, 01, 02
 ## Feature functions: number_diff_apps, number_diff_apps_weekday, daily_number_diff_apps, total_dist
+## Backend: batchtools
 ## Percentage calculated: 0%</code></pre>
 </div>
 <div id="calculate-features" class="section level2">
@@ -197,7 +198,7 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixing" class="anchor"></a>Bug Fixing</h2>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>(<span class="dt">reg =</span> xtractor<span class="op">$</span>reg)</a></code></pre></div>
-<pre><code>## Status for 12 jobs at 2019-01-22 14:10:49:
+<pre><code>## Status for 12 jobs at 2019-01-22 18:36:41:
 ##   Submitted    : 12 (100.0%)
 ##   -- Queued    :  0 (  0.0%)
 ##   -- Started   : 12 (100.0%)
@@ -208,18 +209,18 @@
 <p>Some jobs failed. Let’s debug this now.</p>
 <p>We can get the error messages:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">xtractor<span class="op">$</span>error_messages</a></code></pre></div>
-<pre><code>##    job.id
-## 1:      4
-## 2:      5
-## 3:      6
+<pre><code>##    batchtools_job_id
+## 1:                 4
+## 2:                 5
+## 3:                 6
 ##                                                                                                error
 ## 1: Error in data %&gt;% filter(weekday &gt;= "Mon" &amp; weekday &lt;= "Fri") : \n  could not find function "%&gt;%"
 ## 2: Error in data %&gt;% filter(weekday &gt;= "Mon" &amp; weekday &lt;= "Fri") : \n  could not find function "%&gt;%"
 ## 3: Error in data %&gt;% filter(weekday &gt;= "Mon" &amp; weekday &lt;= "Fri") : \n  could not find function "%&gt;%"
-##    problem                algorithm
-## 1:      00 number_diff_apps_weekday
-## 2:      01 number_diff_apps_weekday
-## 3:      02 number_diff_apps_weekday</code></pre>
+##    data                  feature
+## 1:   00 number_diff_apps_weekday
+## 2:   01 number_diff_apps_weekday
+## 3:   02 number_diff_apps_weekday</code></pre>
 <p>Because we calculated the functions in parallel, we need to make sure the workers have access to functions and packages. In most of our feature functions we used <code><a href="https://www.rdocumentation.org/packages/base/topics/library">library()</a></code> inside the functions or directly used the <code>::</code> operator.</p>
 <p>Our function <code>number_diff_apps_weekday</code> uses <code>dplyr</code> functions without calling <code><a href="https://www.rdocumentation.org/packages/base/topics/library">library(dplyr)</a></code> within the function. We could update this feature function (see <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project_update_feature.html">here</a>), but we’d like to show a different way.</p>
 <p>You can set packages, which should be available by the workers by:</p>
@@ -228,6 +229,7 @@
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
 <pre><code>## Submitting 3 jobs in 3 chunks using cluster functions 'Socket' ...</code></pre>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">xtractor<span class="op">$</span>results</a></code></pre></div>
+<pre><code>## Calculating results from batchtools registry.</code></pre>
 <pre><code>##   userId daily_number_diff_apps number_diff_apps number_diff_apps_weekday
 ## 1     00               16.86905               93                       91
 ## 2     01                9.60000               43                       43

@@ -95,19 +95,19 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/tutorial/basics_xtractor.html">xtractor</a>
+      <a href="../articles/tutorial/xtractor.html">xtractor</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_xtractor_preprocess_data.html">xtractor - preprocess data</a>
+      <a href="../articles/tutorial/xtractor_preprocess_data.html">xtractor - preprocess data</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_xtractor_update_data.html">xtractor - update data</a>
+      <a href="../articles/tutorial/xtractor_update_data.html">xtractor - update data</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_xtractor_update_feature.html">xtractor - update feature</a>
+      <a href="../articles/tutorial/xtractor_update_feature.html">xtractor - update feature</a>
     </li>
     <li>
-      <a href="../articles/tutorial/basics_xtractor_error_handling.html">xtractor - error handling</a>
+      <a href="../articles/tutorial/xtractor_error_handling.html">xtractor - error handling</a>
     </li>
   </ul>
 </li>
@@ -194,6 +194,7 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 <dt><code>group_by</code>: </dt><dd><p>(`character(1)`): The column on which to group by.</p></dd>
 <dt><code>reg</code>: </dt><dd><p>(`registry`): batchtools registry.</p></dd>
 <dt><code>perc_done</code>: </dt><dd><p>(`numeric(1)`): Active binding. Percentage of finished calculations.</p></dd>
+<dt><code>backend</code>: </dt><dd><p>(`character(1)`): Active binding. The calculation backend. Can be 'dplyr' or 'batchtools'.</p></dd>
 <dt><code>error_messages</code>: </dt><dd><p>(`data.frame()`): Active binding. A dataframe with information about error messages.</p></dd>
 <dt><code>log_files</code>: </dt><dd><p>(`list()`): Active binding. A list with the log files which were created due to errors.</p></dd>
 <dt><code>datasets</code>: </dt><dd><p>(`character()`): Active binding. A character vector with the IDs of the grouping variable.</p></dd>
@@ -217,7 +218,8 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
  This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.</p></dd>
 <dt><code>get_data(data)</code></dt><dd><p>[data: (`character()`)] One ore many IDs of the grouping variable. <br />
  This method returns one dataframe with the chosen IDs.</p></dd> 
-<dt><code>add_feature(fun)</code></dt><dd><p>[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. <br />
+<dt><code>add_feature(fun, check_fun)</code></dt><dd><p>[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. <br />
+ [check_fun: (`logical(1)`)] The function will be checked if it returns a vector or a  list. Disable, if calculation takes too long. <br />
  This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.</p></dd> 
 <dt><code>remove_feature(fun)</code></dt><dd><p>[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. <br />
  This method removes the batchtools algorithms and experiments corresponding to the given function.</p></dd> 

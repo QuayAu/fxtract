@@ -52,7 +52,8 @@
 #'  This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.}
 #' \item{\code{get_data(data)}}{[data: (`character()`)] One ore many IDs of the grouping variable. \cr
 #'  This method returns one dataframe with the chosen IDs.} \cr
-#' \item{\code{add_feature(fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. \cr
+#' \item{\code{add_feature(fun, check_fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. \cr
+#'  [check_fun: (`logical(1)`)] The function will be checked if it returns a vector or a  list. Disable, if calculation takes too long. \cr
 #'  This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.} \cr
 #' \item{\code{remove_feature(fun)}}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. \cr
 #'  This method removes the batchtools algorithms and experiments corresponding to the given function.} \cr
