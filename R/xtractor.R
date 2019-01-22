@@ -128,14 +128,16 @@ Xtractor = R6Class("Xtractor",
         algos = paste0(algos, ", ...")
       }
       cat("R6 Object \n")
-      cat(paste0("Project name: ", self$name, "\n"))
+      cat(paste0("Name: ", self$name, "\n"))
       cat(paste0("Grouping variable: ", self$group_by, "\n"))
       cat(paste0("IDs: ", problems, "\n"))
       cat(paste0("Feature functions: ", algos, "\n"))
-      cat(paste0("Percentage calculated: ", round(self$perc_done, digits = 2) * 100, "%\n"))
+      cat(paste0("Backend: ", private$.backend, "\n"))
+      if (private$.backend == "batchtools") cat(paste0("Percentage calculated: ", round(self$perc_done, digits = 2) * 100, "%\n"))
       invisible(self)
     },
     add_data = function(dataframe, group_by) {
+      private$.results = NULL
       id = NULL
       checkmate::assert_data_frame(dataframe)
       checkmate::assert_subset(group_by, colnames(dataframe))
@@ -191,6 +193,7 @@ Xtractor = R6Class("Xtractor",
       return(invisible(self))
     },
     remove_data = function(datasets) {
+      private$.results = NULL
       checkmate::assert_character(datasets, min.len = 1L)
       checkmate::assert_subset(datasets, self$reg$problems)
       for (data in datasets) {
@@ -210,6 +213,7 @@ Xtractor = R6Class("Xtractor",
       dplyr::bind_rows(data)
     },
     add_feature = function(fun) {
+      private$.results = NULL
       checkmate::assert_function(fun)
       message(paste0("Saving raw RDS file ", deparse(substitute(fun)), ".RDS ", "on disk."))
       saveRDS(fun, file = paste0(self$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
@@ -228,6 +232,7 @@ Xtractor = R6Class("Xtractor",
       return(invisible(self))
     },
     remove_feature = function(fun) {
+      private$.results = NULL
       if (is.function(fun)) fun = as.character(substitute(fun))
       checkmate::assert_character(fun, min.len = 1L)
       jt = batchtools::getJobTable(reg = self$reg)
@@ -244,11 +249,32 @@ Xtractor = R6Class("Xtractor",
       readRDS(paste0(self$dir, "/rds_files/features/", fun, ".RDS"))
     },
     calc_features = function() {
+      private$.results = NULL
       if (length(self$datasets) == 0) stop("Please add datasets with method $add_data().")
       if (length(self$features) == 0) stop("Please add feature functions with method $add_feature().")
-      running = batchtools::findRunning(reg = self$reg)$job.id
-      not_done = batchtools::findNotDone(reg = self$reg)$job.id
-      batchtools::submitJobs(ids = base::setdiff(not_done, running), reg = self$reg)
+
+      if (private$.backend == "batchtools") {
+        running = batchtools::findRunning(reg = self$reg)$job.id
+        not_done = batchtools::findNotDone(reg = self$reg)$job.id
+        batchtools::submitJobs(ids = base::setdiff(not_done, running), reg = self$reg)
+      }
+
+      if (private$.backend == "dplyr") {
+        data_all = self$get_data()
+        features = self$features
+        feature_list = foreach::foreach(feature = features) %dopar% {
+          fun = self$get_feature(feature)
+          calc_feature(data_all, group_by = self$group_by, fun = fun, check_fun = FALSE)
+        }
+        for (i in 1:length(feature_list)) {
+          if (i == 1) {
+            res = feature_list[[1]]
+          } else {
+            res = dplyr::full_join(res, feature_list[[i]])
+          }
+        }
+        private$.results = res
+      }
       return(invisible(self))
     }
   ),
@@ -256,24 +282,41 @@ Xtractor = R6Class("Xtractor",
     add_experiments = function(prob.designs = NULL, algo.designs = NULL) {
       batchtools::addExperiments(reg = self$reg, prob.designs = prob.designs, algo.designs = algo.designs)
       return(invisible(self))
-    }
+    },
+    .backend = "batchtools",
+    .results = NULL
   ),
   active = list(
+    backend = function(backend) {
+      if (missing(backend)) {
+        private$.backend
+      } else {
+        checkmate::assert_character(backend)
+        checkmate::assert_subset(backend, c("dplyr", "batchtools"))
+        private$.backend = backend
+        backend
+      }
+    },
     perc_done = function() {
+      if (private$.backend != "batchtools") stop("This slot is only available if backend is set to 'batchtools'.")
       k = nrow(batchtools::getJobTable(reg = self$reg))
       n = nrow(batchtools::findDone(reg = self$reg)) / nrow(batchtools::getJobTable(reg = self$reg))
       ifelse(k == 0, 0, n)
     },
     error_messages = function() {
+      if (private$.backend != "batchtools") stop("This slot is only available if backend is set to 'batchtools'.")
       err = batchtools::getErrorMessages(reg = self$reg)
       jt = batchtools::getJobTable(ids = err, reg = self$reg)
-      jt[, c("job.id", "error", "problem", "algorithm")]
+      jt = jt[, c("job.id", "error", "problem", "algorithm")]
+      colnames(jt) = c("batchtools_job_id", "error", "data", "feature")
+      jt
     },
     log_files = function() {
+      if (private$.backend != "batchtools") stop("This slot is only available if backend is set to 'batchtools'.")
       err_table = self$error_messages
       if (nrow(err_table) >= 1) {
-        log_files = lapply(1:nrow(err_table), function(x) batchtools::getLog(self$error_messages$job.id[x]))
-        log_files = setNames(log_files, paste0("job.id ", err_table$job.id))
+        log_files = lapply(1:nrow(err_table), function(x) batchtools::getLog(self$error_messages$batchtools_job_id[x]))
+        log_files = setNames(log_files, paste0("batchtools_job_id ", err_table$batchtools_job_id))
         return(log_files)
       }
     },
@@ -284,6 +327,7 @@ Xtractor = R6Class("Xtractor",
       self$reg$algorithms
     },
     status = function() {
+      if (private$.backend != "batchtools") stop("This slot is only available if backend is set to 'batchtools'.")
       problem = vars = funs = NULL
       reg = self$reg
       if (nrow(batchtools::findDone(reg = reg)) == 0) stop("No features have been calculated yet or all functions resulted in errors. Start calculating with method $calc_features().")
@@ -302,29 +346,48 @@ Xtractor = R6Class("Xtractor",
       res2
     },
     results = function() {
-      feature = job.id = problem = algorithm = NULL
-      reg = self$reg
-      res = batchtools::reduceResultsDataTable(reg = reg)
-      if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $calc_features().")
-      done_id = res$job.id
-      res = setNames(res$result, done_id)
-
-      jt = batchtools::getJobTable(reg = reg)
-      lookup = jt %>% select(job.id, problem, algorithm)
-      features = self$status$feature_wise
-      features = names(features[features != 0])
-      results = foreach::foreach(feature = features) %dopar% {
-        ids = lookup %>% dplyr::filter(algorithm %in% feature)
-        res_feat = res[names(res) %in% ids$job.id]
-        data.table::rbindlist(res_feat)
-      }
-      final_result = results[[1]]
-      if (length(results) >= 2) {
-        for (i in 2:length(results)) {
-          final_result = final_result %>% dplyr::full_join(results[[i]], by = self$group_by)
+      if (self$backend == "batchtools") {
+        if (!is.null(private$.results)) {
+          message("No new results found. Returning last generated results:")
+          return(private$.results)
         }
+        message("Calculating results from batchtools registry.")
+        feature = job.id = problem = algorithm = NULL
+        reg = self$reg
+        res = batchtools::reduceResultsDataTable(reg = reg)
+        if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $calc_features().")
+        done_id = res$job.id
+        res = setNames(res$result, done_id)
+
+        jt = batchtools::getJobTable(reg = reg)
+        lookup = jt %>% select(job.id, problem, algorithm)
+        features = self$status$feature_wise
+        features = names(features[features != 0])
+        results = foreach::foreach(feature = features) %dopar% {
+          ids = lookup %>% dplyr::filter(algorithm %in% feature)
+          res_feat = res[names(res) %in% ids$job.id]
+          data.table::rbindlist(res_feat)
+        }
+        final_result = results[[1]]
+        if (length(results) >= 2) {
+          for (i in 2:length(results)) {
+            final_result = final_result %>% dplyr::full_join(results[[i]], by = self$group_by)
+          }
+        }
+        private$.results = final_result
+        return(final_result)
       }
-      final_result
+
+      if (self$backend == "dplyr") {
+        if (is.null(private$.results)) {
+          message("Calculation has not yet been started. Starting calculation with $calc_features() now...")
+          self$calc_features()
+        }
+        message("Retrieving results from dplyr backend:")
+        return(private$.results)
+      }
+
+
     }
   )
 )

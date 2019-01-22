@@ -36,10 +36,14 @@ test_that("initialize", {
 
   #test print
   y = capture.output(x$print())
-  expect_equal(y[6], "Percentage calculated: 0%")
+  expect_equal(y[6], "Backend: batchtools")
+  expect_equal(y[7], "Percentage calculated: 0%")
+  x$backend = "dplyr"
+  y = capture.output(x$print())
+  expect_equal(y[6], "Backend: dplyr")
+  expect_equal(length(y), 6)
 
   unlink("fxtract_files", recursive = TRUE)
-
 })
 
 test_that("add_data", {
@@ -217,7 +221,7 @@ test_that("calculate features", {
   expect_equal(x$status$perc_done, 1/3)
   expect_equal(x$perc_done, 1/3)
   y = capture.output(x)
-  expect_equal(y[6], "Percentage calculated: 33%")
+  expect_equal(y[7], "Percentage calculated: 33%")
 
   #test submitting jobs by R6 method
   x$calc_features()
@@ -268,6 +272,47 @@ test_that("error handling", {
   expect_equal(x$error_messages$error[2], "Error in fun(data) : fun2 not compatible on virginica")
   expect_equal(nrow(x$error_messages), 2)
   expect_equal(length(x$log_files), 2)
+
+  unlink("fxtract_files", recursive = TRUE)
+})
+
+test_that("change backend", {
+  unlink("fxtract_files", recursive = TRUE)
+  x = Xtractor$new(name = "xtractor")
+  expect_error(x$calc_features(), regexp = "Please add datasets with method")
+  x$add_data(iris, group_by = "Species")
+  expect_error(x$calc_features(), regexp = "Please add feature functions with method")
+
+  fun1 = function(data) {
+    c(mean_sepal_length = mean(data$Sepal.Length),
+      sd_sepal_length = sd(data$Sepal.Length))
+  }
+
+  fun2 = function(data) {
+    c(mean_petal_length = mean(data$Petal.Length),
+      sd_petal_length = sd(data$Petal.Length))
+  }
+
+  x$add_feature(fun1)
+  x$add_feature(fun2)
+
+  expect_error(x$backend <- "x", regexp = "Assertion on 'backend' failed.")
+  expect_error(x$backend <- 5, regexp = "Assertion on 'backend' failed: Must be of type")
+
+  x$backend = "dplyr"
+  expect_error(x$error_messages, regexp = "This slot is only available if backend is set to 'batchtools'.")
+  expect_error(x$status, regexp = "This slot is only available if backend is set to 'batchtools'.")
+  expect_error(x$log_files, regexp = "This slot is only available if backend is set to 'batchtools'.")
+  expect_error(x$perc_done, regexp = "This slot is only available if backend is set to 'batchtools'.")
+  res_dplyr = x$results
+
+
+  x$backend = "batchtools"
+  x$calc_features()
+  expect_message(x$results, "Calculating results from batchtools registry")
+  expect_message(x$results, "No new results found. Returning last generated results:")
+  res_batchtools = x$results
+  expect_equal(res_dplyr, res_batchtools)
 
   unlink("fxtract_files", recursive = TRUE)
 })
