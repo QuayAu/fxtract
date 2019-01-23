@@ -8,14 +8,6 @@ navbar:
   title:
   type: default
   left:
-  - text: Helper Functions
-    menu:
-    - text: Add Date Information
-      href: articles/tutorial/helper_preproc.html
-    - text: Filters
-      href: articles/tutorial/helper_filters.html
-    - text: calc_feature
-      href: articles/tutorial/helper_calc_feature.html
   - text: Xtractor
     menu:
     - text: Basics
@@ -30,10 +22,6 @@ navbar:
       href: articles/tutorial/xtractor_error_handling.html
     - text: Change Backend
       href: articles/tutorial/xtractor_change_backend.html
-  - text: Use Cases
-    menu:
-    - text: StudentLife
-      href: articles/tutorial/usecase_studentlife.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

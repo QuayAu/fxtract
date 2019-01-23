@@ -24,7 +24,6 @@ So, if you have different datasets of many IDs and you want to calculate feature
 This package utilizes the functionality of the [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html)-package while keeping an easy to access API.
 The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the features for each ID, possibly in parallel) is handled by `fxtract`.
 This package works for very large datasets with many different IDs and the main functionality is written in [R6](https://r6.r-lib.org/articles/Introduction.html).
-Some helpful functions for preprocessing timestamped data are also supplied.
 
 ### Why don't just use ``dplyr`` or other packages?
 At first glance it looks like we just rewrote the ``summarize()`` functionality of ``dplyr``.
@@ -68,16 +67,13 @@ unlink("fxtract_files", recursive = TRUE)
 # Features
 
 * Unit-tested functions.
-* Extracting features from raw data of many different users/IDs/etc:
-    * With the R6 Class `Xtractor`.
-        * Advantages:
-            * No more code bloat thanks to R6.
-            * Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.
-            * Internally, [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html) is used for parallelization and error handling.
-            * Features will be calculated for each participant individually.
-            * If one feature on one participant throws an error, this will not stop the whole process (like in a traditional R script). A log file with the error message is created (by batchtools), and the remaining features will still be calculated. 
-            * Individual features can be deleted or updated easily.
-            * Calculation of features can be done in parallel and the process can be monitored. It is also possible to stop and return the calculation at a later time.
-            * Results can be easily collected in one final dataframe.
-* Timestamp to date & time converters:
-    * This is useful for filtering datasets, e.g. if one is interested in filtering the morning hours from a dataset, or distinguishing working days from weekends.
+* Extracting features from raw data of many different IDs With the R6 Class `Xtractor`:
+    * Advantages:
+        * No more code bloat thanks to R6.
+        * Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.
+        * Internally, [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html) is used for parallelization and error handling.
+        * Features will be calculated for each participant individually.
+        * If one feature on one participant throws an error, this will not stop the whole process (like in a traditional R script). A log file with the error message is created (by batchtools), and the remaining features will still be calculated. 
+        * Individual features can be deleted or updated easily.
+        * Calculation of features can be done in parallel and the process can be monitored. It is also possible to stop and return the calculation at a later time.
+        * Results can be easily collected in one final dataframe.

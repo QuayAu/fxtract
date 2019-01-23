@@ -7,7 +7,7 @@
 calc_feature(data, group_by, fun, check_fun = TRUE, summarize, colname)
 }
 \arguments{
-\item{data}{( `dataframe`).}
+\item{data}{( `dataframe`). A dataframe with a grouping variable.}
 
 \item{group_by}{(`character()`). Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.}
 
@@ -33,10 +33,5 @@ fun = function(data) {
   )
 }
 calc_feature(data = studentlife_small, group_by = "userId", fun = fun)
-}
-\seealso{
-Other helper functions: \code{\link{add_date_time}},
-  \code{\link{add_date}}, \code{\link{add_time}},
-  \code{\link{add_weekday}}
 }
 \concept{helper functions}

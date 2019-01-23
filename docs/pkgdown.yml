@@ -4,9 +4,6 @@ pkgdown_sha: ~
 articles:
   fxtract: fxtract.html
   helper_calc_feature: tutorial/helper_calc_feature.html
-  helper_filters: tutorial/helper_filters.html
-  helper_preproc: tutorial/helper_preproc.html
-  usecase_studentlife: tutorial/usecase_studentlife.html
   xtractor_basics: tutorial/xtractor_basics.html
   xtractor_change_backend: tutorial/xtractor_change_backend.html
   xtractor_error_handling: tutorial/xtractor_error_handling.html

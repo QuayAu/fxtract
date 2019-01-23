@@ -1,9 +1,10 @@
 #' Helper function. Calculates a given function for each ID of a grouping variable.
 #'
-#' @template param_data
+#' @param data ( `dataframe`). A dataframe with a grouping variable.
 #' @param group_by (`character()`). Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.
 #' @param fun (`function`). Must be a function, which has a dataframe as input and a (named) vector of desired length as output.
-#' @template param_check_fun
+#' @param check_fun (`logical(1)`). If \code{TRUE}, fun(data) will be evaluated and checked if the outcome is of correct form. Set to \code{FALSE}
+#' if evaluation on the whole dataset takes too long.
 #' @param summarize (`function`). If more than one value is returned for each ID of a grouping variable, this function summarizes these values to one value or more values. E.g. mean or/and sd.
 #' @param colname (`character()`). If one variable is returned for each ID of a grouping variable, you can specify a custom column name for this new column.
 #' @return (`dataframe`)

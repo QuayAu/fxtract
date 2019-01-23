@@ -29,8 +29,7 @@ Imports: dplyr,
   data.table,
   batchtools,
   foreach,
-  R6,
-  lubridate
+  R6
 Suggests: testthat,
   knitr,
   covr,
