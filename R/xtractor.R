@@ -391,8 +391,6 @@ Xtractor = R6Class("Xtractor",
         message("Retrieving results from dplyr backend:")
         return(private$.results)
       }
-
-
     }
   )
 )
