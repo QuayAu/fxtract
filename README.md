@@ -6,7 +6,7 @@
 fxtract
 =======
 
-See the [tutorial](https://quayau.github.io/fxtract/docs/index.html) for an introduction into the package.
+See the [tutorial](https://quayau.github.io/fxtract/) for an introduction into the package.
 
 Introduction
 ============
