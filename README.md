@@ -19,7 +19,7 @@ This package utilizes the functionality of the [batchtools](https://mllg.github.
 
 At first glance it looks like we just rewrote the `summarize()` functionality of `dplyr`. For small datasets and few (easy to calculate) features, using `fxtract` may indeed be a little overkill (and slower too). Another similar functionality is covered by the `aggregate()`-function from the base `stats` package.
 
-However, this package was especially designed for projects with large datasets, many IDs, and many different feature functions. Once your dataset (with all IDs) becomes too big for memory, or if some feature functions fail on some IDs, using our package can save you many lines of code.
+However, this package was especially designed for projects with large datasets, many IDs, and many different feature functions. `fxtract` streamlines the process of loading datasets and adding feature functions. Once your dataset (with all IDs) becomes too big for memory, or if some feature functions fail on some IDs, using our package can save you many lines of code.
 
 Installation
 ============
