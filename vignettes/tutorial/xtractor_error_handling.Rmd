@@ -88,7 +88,7 @@ xtractor$add_feature(fun2_fixed)
 Parallelization is done by setting the cluster functions via batchtools. See [here](https://mllg.github.io/batchtools/articles/batchtools.html).
 
 E.g. on a windows machine:
-```{r}
+```{r, eval = FALSE}
 xtractor$reg$cluster.functions = batchtools::makeClusterFunctionsSocket(2)
 ```
 
