@@ -59,7 +59,7 @@ Features
 ========
 
 -   Unit-tested functions.
--   Extracting features from raw data of many different IDs With the R6 Class `Xtractor`:
+-   Extracting features from raw data of many different IDs with the R6 Class `Xtractor`:
     -   Advantages:
         -   No more code bloat thanks to R6.
         -   Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.
