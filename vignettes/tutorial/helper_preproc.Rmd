@@ -35,8 +35,11 @@ add_date(data = df, utc_col = "timestamp")
 
 ## add_weekday
 This function adds an ordered weekday variable from the [lubridate](https://www.rdocumentation.org/packages/lubridate/versions/1.7.4/topics/day) package to your dataset:
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
 add_weekday(data = df, utc_col = "timestamp")
+```
+```{r, echo = FALSE}
+data.frame(df, weekday = "Sat")
 ```
 
 ## add_time
