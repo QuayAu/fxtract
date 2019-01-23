@@ -47,10 +47,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/tutorial/helper_preproc.html">add date information</a>
+      <a href="articles/tutorial/helper_preproc.html">Add Date Information</a>
     </li>
     <li>
-      <a href="articles/tutorial/helper_filters.html">filters</a>
+      <a href="articles/tutorial/helper_filters.html">Filters</a>
     </li>
     <li>
       <a href="articles/tutorial/helper_calc_feature.html">calc_feature</a>
@@ -65,19 +65,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/tutorial/xtractor.html">xtractor</a>
+      <a href="articles/tutorial/xtractor_basics.html">Basics</a>
     </li>
     <li>
-      <a href="articles/tutorial/xtractor_preprocess_data.html">xtractor - preprocess data</a>
+      <a href="articles/tutorial/xtractor_preprocess_data.html">Preprocess Data</a>
     </li>
     <li>
-      <a href="articles/tutorial/xtractor_update_data.html">xtractor - update data</a>
+      <a href="articles/tutorial/xtractor_update_data.html">Update Data</a>
     </li>
     <li>
-      <a href="articles/tutorial/xtractor_update_feature.html">xtractor - update feature</a>
+      <a href="articles/tutorial/xtractor_update_feature.html">Update Feature</a>
     </li>
     <li>
-      <a href="articles/tutorial/xtractor_error_handling.html">xtractor - error handling</a>
+      <a href="articles/tutorial/xtractor_error_handling.html">Error Handling</a>
+    </li>
+    <li>
+      <a href="articles/tutorial/xtractor_change_backend.html">Change Backend</a>
     </li>
   </ul>
 </li>
@@ -142,25 +145,25 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>For the development version, use <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"QuayAu/fxtract"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"QuayAu/fxtract"</span>)</code></pre></div>
 </div>
 <div id="usage" class="section level1">
 <h1 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h1>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># user-defined function:</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">fun =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">}</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co"># R6 object:</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun)</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">xtractor<span class="op">$</span>results</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
+
+<span class="co"># user-defined function:</span>
+fun =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),
+    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))
+}
+
+<span class="co"># R6 object:</span>
+xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)
+xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
+xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun)
+xtractor<span class="op">$</span><span class="kw">calc_features</span>()
+xtractor<span class="op">$</span>results</code></pre></div>
 <pre><code>##       Species mean_sepal_length sd_sepal_length
 ## 1:     setosa             5.006       0.3524897
 ## 2: versicolor             5.936       0.5161711

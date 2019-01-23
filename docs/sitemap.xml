@@ -52,7 +52,10 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_studentlife.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_basics.html</loc>
+  </url>
+  <url>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_change_backend.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_error_handling.html</loc>

@@ -44,10 +44,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/tutorial/helper_preproc.html">add date information</a>
+      <a href="../../articles/tutorial/helper_preproc.html">Add Date Information</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/helper_filters.html">filters</a>
+      <a href="../../articles/tutorial/helper_filters.html">Filters</a>
     </li>
     <li>
       <a href="../../articles/tutorial/helper_calc_feature.html">calc_feature</a>
@@ -62,19 +62,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/tutorial/xtractor.html">xtractor</a>
+      <a href="../../articles/tutorial/xtractor_basics.html">Basics</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_preprocess_data.html">xtractor - preprocess data</a>
+      <a href="../../articles/tutorial/xtractor_preprocess_data.html">Preprocess Data</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_update_data.html">xtractor - update data</a>
+      <a href="../../articles/tutorial/xtractor_update_data.html">Update Data</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_update_feature.html">xtractor - update feature</a>
+      <a href="../../articles/tutorial/xtractor_update_feature.html">Update Feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_error_handling.html">xtractor - error handling</a>
+      <a href="../../articles/tutorial/xtractor_error_handling.html">Error Handling</a>
+    </li>
+    <li>
+      <a href="../../articles/tutorial/xtractor_change_backend.html">Change Backend</a>
     </li>
   </ul>
 </li>
@@ -129,79 +132,79 @@
 <h2 class="hasAnchor">
 <a href="#example-data" class="anchor"></a>Example data</h2>
 <p>Let’s simulate a simple (absolutely arbitrary!) example dataset. Two participants with the ID <em>1</em> or <em>2</em> were given two tasks. For each task they were given two hours of time. A value <em>x</em> was measured during this task.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">df =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="dv">2</span>, <span class="dv">10</span>)))</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">df<span class="op">$</span>task =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"task1"</span>, <span class="dv">5</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"task2"</span>, <span class="dv">5</span>)), <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">df<span class="op">$</span>hour =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour1"</span>, <span class="dv">3</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour2"</span>, <span class="dv">2</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour1"</span>, <span class="dv">2</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour2"</span>, <span class="dv">3</span>)), <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">df<span class="op">$</span>x =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">df</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
+df =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="dv">2</span>, <span class="dv">10</span>)))
+df<span class="op">$</span>task =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"task1"</span>, <span class="dv">5</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"task2"</span>, <span class="dv">5</span>)), <span class="dv">2</span>)
+df<span class="op">$</span>hour =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour1"</span>, <span class="dv">3</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour2"</span>, <span class="dv">2</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour1"</span>, <span class="dv">2</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"hour2"</span>, <span class="dv">3</span>)), <span class="dv">2</span>)
+df<span class="op">$</span>x =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/Normal">rnorm</a></span>(<span class="dv">20</span>)
+df</code></pre></div>
 <pre><code>##    id  task  hour           x
-## 1   1 task1 hour1 -1.62740262
-## 2   1 task1 hour1 -0.29533064
-## 3   1 task1 hour1  1.14828981
-## 4   1 task1 hour2  0.29255868
-## 5   1 task1 hour2 -1.47600842
-## 6   1 task2 hour1 -0.00641786
-## 7   1 task2 hour1  0.29515609
-## 8   1 task2 hour2 -0.02732521
-## 9   1 task2 hour2  0.77955749
-## 10  1 task2 hour2 -0.53047886
-## 11  2 task1 hour1 -0.15429704
-## 12  2 task1 hour1 -0.67436440
-## 13  2 task1 hour1  0.07541261
-## 14  2 task1 hour2  1.01148680
-## 15  2 task1 hour2  0.27902952
-## 16  2 task2 hour1 -1.64038486
-## 17  2 task2 hour1 -0.58222377
-## 18  2 task2 hour2  0.66233240
-## 19  2 task2 hour2  0.66578389
-## 20  2 task2 hour2 -1.14473888</code></pre>
+## 1   1 task1 hour1  0.45001357
+## 2   1 task1 hour1  1.65633183
+## 3   1 task1 hour1  0.45039325
+## 4   1 task1 hour2  0.70238245
+## 5   1 task1 hour2 -0.34484470
+## 6   1 task2 hour1 -0.39127996
+## 7   1 task2 hour1  0.87220976
+## 8   1 task2 hour2  0.34894173
+## 9   1 task2 hour2 -0.34141077
+## 10  1 task2 hour2  0.70510583
+## 11  2 task1 hour1 -0.23663140
+## 12  2 task1 hour1  0.10670549
+## 13  2 task1 hour1  0.08606079
+## 14  2 task1 hour2 -0.01060345
+## 15  2 task1 hour2 -0.58547207
+## 16  2 task2 hour1 -0.27282631
+## 17  2 task2 hour1 -0.18846487
+## 18  2 task2 hour2 -0.40411500
+## 19  2 task2 hour2 -0.43393312
+## 20  2 task2 hour2  0.25530460</code></pre>
 <div id="return-1-value-each" class="section level3">
 <h3 class="hasAnchor">
 <a href="#return-1-value-each" class="anchor"></a>Return 1 value each</h3>
 <p>Let’s say we are interested in the maximum value of <strong>x</strong> for each participant. We need to define a function, which has a dataframe as input and a named vector as output:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">fun =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">max_x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Extremes">max</a></span>(data<span class="op">$</span>x))</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">}</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">max_x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Extremes">max</a></span>(data<span class="op">$</span>x))
+}</code></pre></div>
 <p>Now we can calculate the desired outcome:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> fun)</a></code></pre></div>
-<pre><code>##   id    max_x
-## 1  1 1.148290
-## 2  2 1.011487</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> fun)</code></pre></div>
+<pre><code>##   id     max_x
+## 1  1 1.6563318
+## 2  2 0.2553046</code></pre>
 </div>
 <div id="return-more-values-at-once" class="section level3">
 <h3 class="hasAnchor">
 <a href="#return-more-values-at-once" class="anchor"></a>Return more values at once</h3>
 <p>Sometimes calculations can take a long time (e.g. clustering of GPS points) and we want to calculate more than one value (e.g. <code>mean</code> and <code>sd</code>). This can be achieved by returning a named vector:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">more_features =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">max_x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Extremes">max</a></span>(data<span class="op">$</span>x), <span class="dt">sd_x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>x))</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> more_features)</a></code></pre></div>
-<pre><code>##   id    max_x      sd_x
-## 1  1 1.148290 0.8873147
-## 2  2 1.011487 0.8551713</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">more_features =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">max_x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Extremes">max</a></span>(data<span class="op">$</span>x), <span class="dt">sd_x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>x))
+}
+<span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="st">"id"</span>, <span class="dt">fun =</span> more_features)</code></pre></div>
+<pre><code>##   id     max_x      sd_x
+## 1  1 1.6563318 0.6431665
+## 2  2 0.2553046 0.2709736</code></pre>
 </div>
 <div id="group-by-two-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#group-by-two-columns" class="anchor"></a>Group by two columns</h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"id"</span>, <span class="st">"task"</span>), <span class="dt">fun =</span> more_features)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"id"</span>, <span class="st">"task"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1 max_x_task2 sd_x_task1 sd_x_task2
-## 1  1    1.148290   0.7795575  1.1781077  0.4808592
-## 2  2    1.011487   0.6657839  0.6179591  1.0476800</code></pre>
+## 1  1   1.6563318   0.8722098  0.7180632  0.5840431
+## 2  2   0.1067055   0.2553046  0.2897292  0.2778214</code></pre>
 </div>
 <div id="group-by-three-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#group-by-three-columns" class="anchor"></a>Group by three columns</h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"id"</span>, <span class="st">"task"</span>, <span class="st">"hour"</span>), <span class="dt">fun =</span> more_features)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/calc_feature.html">calc_feature</a></span>(df, <span class="dt">group_by =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"id"</span>, <span class="st">"task"</span>, <span class="st">"hour"</span>), <span class="dt">fun =</span> more_features)</code></pre></div>
 <pre><code>##   id max_x_task1_hour1 max_x_task1_hour2 max_x_task2_hour1
-## 1  1        1.14828981         0.2925587         0.2951561
-## 2  2        0.07541261         1.0114868        -0.5822238
+## 1  1         1.6563318        0.70238245         0.8722098
+## 2  2         0.1067055       -0.01060345        -0.1884649
 ##   max_x_task2_hour2 sd_x_task1_hour1 sd_x_task1_hour2 sd_x_task2_hour1
-## 1         0.7795575        1.3882197        1.2505658        0.2132450
-## 2         0.6657839        0.3841445        0.5179255        0.7482329
+## 1         0.7051058        0.6963586        0.7405014       0.89342214
+## 2         0.2553046        0.1925429        0.4064935       0.05965254
 ##   sd_x_task2_hour2
-## 1        0.6608604
-## 2        1.0443109</code></pre>
+## 1        0.5320771
+## 2        0.3896092</code></pre>
 </div>
 </div>
   </div>

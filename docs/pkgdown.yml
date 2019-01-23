@@ -1,4 +1,4 @@
-pandoc: 2.2.1
+pandoc: 1.19.2.1
 pkgdown: 1.3.0
 pkgdown_sha: ~
 articles:
@@ -7,7 +7,8 @@ articles:
   helper_filters: tutorial/helper_filters.html
   helper_preproc: tutorial/helper_preproc.html
   usecase_studentlife: tutorial/usecase_studentlife.html
-  xtractor: tutorial/xtractor.html
+  xtractor_basics: tutorial/xtractor_basics.html
+  xtractor_change_backend: tutorial/xtractor_change_backend.html
   xtractor_error_handling: tutorial/xtractor_error_handling.html
   xtractor_preprocess_data: tutorial/xtractor_preprocess_data.html
   xtractor_setup_child: tutorial/xtractor_setup_child.html
