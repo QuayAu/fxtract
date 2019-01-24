@@ -6,7 +6,7 @@
 #' @param check_fun (`logical(1)`). If \code{TRUE}, fun(data) will be evaluated and checked if the outcome is of correct form. Set to \code{FALSE}
 #' if evaluation on the whole dataset takes too long.
 #' @return (`dataframe`)
-#' @importFrom dplyr group_by do one_of
+#' @importFrom dplyr group_by do
 #' @importFrom magrittr "%>%"
 #' @importFrom data.table dcast setDT
 #' @importFrom stats as.formula setNames
@@ -28,13 +28,21 @@ dplyr_wrapper = function(data, group_by, fun, check_fun = TRUE) {
     if (!is.atomic(check_data)) {
       if (!inherits(check_data, "list")) stop("Your function must return a named vector or named list with atomic entries with 1 value each.")
     }
+
+    #check vector return
     if (is.atomic(check_data)) {
       if (is.null(names(check_data))) stop("Your function returns an unnamed vector. Please give each entry a name.")
       checkmate::assert_atomic_vector(check_data)
     }
+
+    #check list return
     if (inherits(check_data, "list")) {
       for (i in 1:length(check_data)) {
-        if (is.null(names(check_data[i]))) stop(paste0("List entry ", i, "is unnamed. Please name each list entry."))
+        if (is.null(names(check_data[i]))) {
+          stop(paste0("List entry ", i, " is unnamed. Please name each list entry."))
+        } else {
+          if (names(check_data[i]) == "") stop(paste0("List entry ", i, " is unnamed. Please name each list entry."))
+        }
         checkmate::assert_atomic(check_data[[i]], len = 1L)
       }
     }

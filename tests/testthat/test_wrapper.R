@@ -50,4 +50,11 @@ test_that("dplyr_wrapper", {
   y = dplyr_wrapper(df, group_by = "id", fun)
   expect_equal(y$mean_x, c(mean(1:10), mean(11:20)))
   expect_equal(y$x2, c("test", "test"))
+
+  ##unnamed list
+  fun = function(data) list(mean(data$x), "test")
+  expect_error(dplyr_wrapper(data = df, group_by = "id", fun), regexp = "List entry 1 is unnamed")
+
+  fun = function(data) list(mean_x = mean(data$x), "test")
+  expect_error(dplyr_wrapper(data = df, group_by = "id", fun), regexp = "List entry 2 is unnamed")
 })
