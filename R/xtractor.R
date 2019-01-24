@@ -162,11 +162,11 @@ Xtractor = R6Class("Xtractor",
       #add batchtools problems
       for (id in gb) { #cannot be parallelized, because of batchtools
         data_id = dataframe %>% dplyr::filter(!!as.name(group_by) == id) %>% data.frame()
-        batchtools::addProblem(name = id, data = data_id, reg = self$reg)
+        batchtools::addProblem(name = as.character(id), data = data_id, reg = self$reg)
 
         #add experiments
         prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
-        names(prob.designs) = id
+        names(prob.designs) = as.character(id)
         private$add_experiments(prob.designs = prob.designs)
       }
       return(invisible(self))
