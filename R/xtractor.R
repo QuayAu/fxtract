@@ -186,10 +186,10 @@ Xtractor = R6Class("Xtractor",
       for (id in gb) { #cannot be parallelized, because of batchtools
         batchtools::removeProblems(id, reg = self$reg)
         data_id = readRDS(paste0(self$dir, "/rds_files/data/", id, ".RDS"))
-        batchtools::addProblem(name = id, data = data_id, reg = self$reg)
+        batchtools::addProblem(name = as.character(id), data = data_id, reg = self$reg)
         #add experiments
         prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
-        names(prob.designs) = id
+        names(prob.designs) = as.character(id)
         private$add_experiments(prob.designs = prob.designs)
       }
       return(invisible(self))
