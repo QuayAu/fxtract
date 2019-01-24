@@ -1,4 +1,4 @@
-#' Helper function. Calculates a given function for each ID of a grouping variable. Wraps dplyr's group_by functionality.
+#' Wraps dplyr's group_by functionality.
 #'
 #' @param data (`dataframe`). A dataframe with a grouping variable.
 #' @param group_by (`character()`). Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dplyr_wrapper.R
 \name{dplyr_wrapper}
 \alias{dplyr_wrapper}
-\title{Helper function. Calculates a given function for each ID of a grouping variable. Wraps dplyr's group_by functionality.}
+\title{Wraps dplyr's group_by functionality.}
 \usage{
 dplyr_wrapper(data, group_by, fun, check_fun = TRUE)
 }
@@ -20,7 +20,7 @@ if evaluation on the whole dataset takes too long.}
 (`dataframe`)
 }
 \description{
-Helper function. Calculates a given function for each ID of a grouping variable. Wraps dplyr's group_by functionality.
+Wraps dplyr's group_by functionality.
 }
 \examples{
 fun = function(data) {
