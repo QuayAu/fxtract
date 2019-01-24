@@ -224,7 +224,7 @@ Xtractor = R6Class("Xtractor",
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))), reg = self$reg)
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
-        fun = function(job, data, instance) fxtract::calc_feature(data, group_by = self$group_by, fun = fun, check_fun = private$.check_fun),
+        fun = function(job, data, instance) fxtract::dplyr_wrapper(data, group_by = self$group_by, fun = fun, check_fun = private$.check_fun),
         reg = self$reg
       )
 
@@ -268,7 +268,7 @@ Xtractor = R6Class("Xtractor",
         features = self$features
         feature_list = foreach::foreach(feature = features) %dopar% {
           fun = self$get_feature(feature)
-          calc_feature(data_all, group_by = self$group_by, fun = fun, check_fun = private$.check_fun)
+          dplyr_wrapper(data_all, group_by = self$group_by, fun = fun, check_fun = private$.check_fun)
         }
         for (i in 1:length(feature_list)) {
           if (i == 1) {
