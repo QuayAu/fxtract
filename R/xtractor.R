@@ -153,7 +153,7 @@ Xtractor = R6Class("Xtractor",
       gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
       #save rds files
-      foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
+      foreach::foreach(i = gb, .packages = c("dplyr", "R6"), .export = c("self")) %dopar% {
         dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
         saveRDS(dataframe_i, file = paste0(self$dir, "/rds_files/data/", i, ".RDS"))
         message(paste0("Saving raw RDS file ", i, ".RDS ", "on disk."))
@@ -162,7 +162,7 @@ Xtractor = R6Class("Xtractor",
       #add batchtools problems
       for (id in gb) { #cannot be parallelized, because of batchtools
         data_id = dataframe %>% dplyr::filter(!!as.name(group_by) == id) %>% data.frame()
-        batchtools::addProblem(name = as.character(id), data = data_id, reg = self$reg)
+        private$add_problem(name = as.character(id), data = data_id, reg = self$reg)
 
         #add experiments
         prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
@@ -286,6 +286,18 @@ Xtractor = R6Class("Xtractor",
     add_experiments = function(prob.designs = NULL, algo.designs = NULL) {
       batchtools::addExperiments(reg = self$reg, prob.designs = prob.designs, algo.designs = algo.designs)
       return(invisible(self))
+    },
+    add_problem = function(name, data, reg) {
+      errored = TRUE
+      while (errored) {
+        errored = FALSE
+        tryCatch(batchtools::addProblem(name = name, data = data, reg = reg),
+          error = function(e) {
+            message("adding batchtools problem failed. Retrying...")
+            errored = TRUE
+          }
+        )
+      }
     },
     .backend = "batchtools",
     .results = NULL,
