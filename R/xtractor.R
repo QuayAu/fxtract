@@ -157,7 +157,7 @@ Xtractor = R6Class("Xtractor",
         data_i = readRDS(paste0(private$dir, "/rds_files/data/", i, ".RDS"))
         data_preproc = fun(data_i)
         saveRDS(data_preproc, file = paste0(private$dir, "/rds_files/data/", i, ".RDS"))
-      })
+      }, future.seed = TRUE)
       return(invisible(self))
     },
     remove_data = function(ids) {
@@ -203,7 +203,7 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_subset(fun, self$features)
       readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))
     },
-    calc_features = function(features, restart_failed = FALSE) {
+    calc_features = function(features) {
       if (missing(features)) features = self$features
       checkmate::assert_subset(features, self$features)
       if (length(self$ids) == 0) stop("Please add datasets with method $add_data().")
@@ -227,7 +227,7 @@ Xtractor = R6Class("Xtractor",
           data = self$get_data(x)
           group_by = private$group_by
           future(fxtract::dplyr_wrapper(data, group_by, feat_fun))
-        })
+        }, future.seed = TRUE)
         res_value = setNames(lapply(res_feat, function(x) tryCatch(value(x), error = function(e) e$message)), ids_calc)
         is_error = sapply(res_value, is.character)
         if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
@@ -251,6 +251,51 @@ Xtractor = R6Class("Xtractor",
         res_error = data.table::rbindlist(res_error)
         done_error = paste0(private$dir, "/rds_files/results/failed/", feature, ".RDS")
         if (file.exists(done_error)) res_error = data.table::rbindlist(list(res_error, readRDS(done_error)))
+        saveRDS(res_error, done_error)
+      }
+      return(invisible(self))
+    },
+    retry_failed_features = function(features) {
+      message("This result in non reproducible results. Make sure your feature function is not stochastical. Remove and add feature function again (and add seed) for stochastical features.")
+      if (missing(features)) features = self$features
+      checkmate::assert_subset(features, self$features)
+      if (nrow(self$error_messages) == 0) stop("No failed features found!")
+      error_feats = as.character(unique(self$error_messages$feature_function))
+      features_new = intersect(features, error_feats)
+
+      #calculating features using futures
+      for (feature in features_new) {
+        message(paste0("Retrying feature function: ", feature))
+        feat_fun = self$get_feature(feature)
+        ids_calc = self$error_messages %>% dplyr::filter(feature_function == feature) %>% dplyr::pull(id) %>% as.character()
+        res_feat = future.apply::future_lapply(ids_calc, function(x) {
+          data = self$get_data(x)
+          group_by = private$group_by
+          future(fxtract::dplyr_wrapper(data, group_by, feat_fun))
+        }, future.seed = TRUE)
+        res_value = setNames(lapply(res_feat, function(x) tryCatch(value(x), error = function(e) e$message)), ids_calc)
+        is_error = sapply(res_value, is.character)
+        if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
+
+        #save done
+        res_data = data.table::rbindlist(res_value[!is_error])
+        done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
+        if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
+        saveRDS(res_data, done_exist)
+
+        #save status
+        #only resolved IDs were used. Status not changed.
+
+        #save error messages
+        res_error = res_value[is_error]
+        if (length(res_error) >= 1) for (i in 1:length(res_error)) res_error[[i]] = data.frame(feature_function = feature, id = names(res_error[i]), error_message = res_error[[i]])
+        res_error = data.table::rbindlist(res_error)
+        done_error = paste0(private$dir, "/rds_files/results/failed/", feature, ".RDS")
+        if (file.exists(done_error)) {
+          old_error = readRDS(done_error)
+          old_error = old_error %>% dplyr::filter(!id %in% ids_calc)
+          res_error = data.table::rbindlist(list(res_error, old_error))
+        }
         saveRDS(res_error, done_error)
       }
       return(invisible(self))
