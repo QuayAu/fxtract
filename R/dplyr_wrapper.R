@@ -25,6 +25,7 @@ dplyr_wrapper = function(data, group_by, fun, check_fun = TRUE) {
   checkmate::assertLogical(check_fun)
   if (check_fun) {
     check_data = fun(data)
+    if (is.null(check_data)) stop("fun(data) returns NULL. Please check your feature function.")
     if (!is.atomic(check_data)) {
       if (!inherits(check_data, "list")) stop("Your function must return a named vector or named list with atomic entries with 1 value each.")
     }
