@@ -27,7 +27,7 @@ test_that("initialize", {
   expect_error(Xtractor$new(1), regexp = "Assertion on 'name' failed: Must be of type 'character', not 'double'.")
 
   #test loading xtractor
-  z = Xtractor$new("xtractor", file.dir = dir, load = TRUE)
+  z = Xtractor$new(name = "xtractor", file.dir = dir, load = TRUE)
   expect_equal(z, x)
 
   #test print

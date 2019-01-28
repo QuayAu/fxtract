@@ -28,6 +28,7 @@ Imports: dplyr,
   utils,
   data.table,
   future,
+  future.apply,
   R6
 Suggests: testthat,
   knitr,

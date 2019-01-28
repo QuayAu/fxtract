@@ -106,7 +106,7 @@ Xtractor = R6Class("Xtractor",
         dir.create(paste0(newDirPath, "/rds_files/results/failed"))
         saveRDS(NULL, file = paste0(private$dir, "/rds_files/group_by.RDS"))
       } else {
-        checkmate::assert_subset(name, list.files("fxtract_files/"))
+        checkmate::assert_subset(name, list.files(paste0(file.dir, "/fxtract_files/")))
         private$group_by = readRDS(paste0(newDirPath, "/rds_files/group_by.RDS"))
       }
     },
@@ -114,7 +114,7 @@ Xtractor = R6Class("Xtractor",
       ids = self$ids
       feats = self$features
 
-      cat("R6 Object: Xtractor_future \n")
+      cat("R6 Object: Xtractor\n")
       cat(paste0("Name: ", private$name, "\n"))
       cat(paste0("Grouping variable: ", private$group_by, "\n"))
       if (length(ids) <= 10) {
@@ -259,7 +259,7 @@ Xtractor = R6Class("Xtractor",
         res_value = future.apply::future_lapply(ids_calc, function(x) {
           data = self$get_data(x)
           group_by = private$group_by
-          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun), error = function(e) e$message)
+          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$.check_fun), error = function(e) e$message)
         }, future.seed = TRUE)
         res_value = setNames(res_value, ids_calc)
         is_error = sapply(res_value, is.character)
@@ -289,7 +289,7 @@ Xtractor = R6Class("Xtractor",
       return(invisible(self))
     },
     retry_failed_features = function(features) {
-      message("The results may be non reproducible. Make sure your feature function is non-stochastical. Remove and add feature function again (and add seed) for stochastical features.")
+      warning("The results may be non reproducible. Make sure your feature function is non-stochastical (or add a seed inside the feature function).")
       if (missing(features)) features = self$features
       checkmate::assert_subset(features, self$features)
       if (nrow(self$error_messages) == 0) stop("No failed features found!")
@@ -301,12 +301,11 @@ Xtractor = R6Class("Xtractor",
         message(paste0("Retrying feature function: ", feature))
         feat_fun = self$get_feature(feature)
         ids_calc = self$error_messages %>% dplyr::filter(feature_function == feature) %>% dplyr::pull(id) %>% as.character()
-        res_feat = future.apply::future_lapply(ids_calc, function(x) {
+        res_value = future.apply::future_lapply(ids_calc, function(x) {
           data = self$get_data(x)
           group_by = private$group_by
-          future::future(fxtract::dplyr_wrapper(data, group_by, feat_fun))
+          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$.check_fun), error = function(e) e$message)
         }, future.seed = TRUE)
-        res_value = setNames(lapply(res_feat, function(x) tryCatch(future::value(x), error = function(e) e$message)), ids_calc)
         is_error = sapply(res_value, is.character)
         if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
 
