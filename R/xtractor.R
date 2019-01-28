@@ -141,7 +141,10 @@ Xtractor = R6Class("Xtractor",
     add_data = function(dataframe, group_by) {
       private$.results = NULL
       id = NULL
-      checkmate::assert_data_frame(dataframe)
+      checkmate::assert(
+        checkmate::checkClass(dataframe, "data.frame"),
+        checkmate::checkClass(dataframe, "data.table")
+      )
       checkmate::assert_subset(group_by, colnames(dataframe))
       checkmate::assert_character(group_by, len = 1)
       if (is.null(self$group_by)) {
