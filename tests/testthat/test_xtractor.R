@@ -207,8 +207,9 @@ test_that("add_feature", {
 })
 
 test_that("calculate features", {
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
-  x = Xtractor$new(name = "xtractor")
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
   x$add_data(iris, group_by = "Species")
 
   sepal_length_fun = function(data) {
@@ -229,18 +230,15 @@ test_that("calculate features", {
 
   #test meaningful error message $results
   expect_error(x$results, regexp = "No features have been calculated yet.")
-  expect_error(x$status)
+  expect_true(all(x$status[, -1] == 0))
 
-  #test submitting jobs by batchtools
-  batchtools::submitJobs(1:2, reg = x$reg)
-  expect_equal(x$status$perc_done, 1/3)
-  expect_equal(x$perc_done, 1/3)
-  y = capture.output(x)
-  expect_equal(y[7], "Percentage calculated: 33%")
+  #test submitting one feature function
+  x$calc_features("sepal_length_fun")
+  expect_equal(capture.output(x)[6], "Calculation process done: 50%")
 
-  #test submitting jobs by R6 method
+  #test submitting remaining jobs
   x$calc_features()
-  expect_equal(x$status$perc_done, 1)
+  expect_equal(capture.output(x)[6], "Calculation process done: 100%")
   res = x$results
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
@@ -249,20 +247,23 @@ test_that("calculate features", {
   #test load data and continue calculate
   x$remove_feature(sepal_length_fun)
   x$add_feature(sepal_length_fun)
-  y = Xtractor$new("xtractor", load = TRUE)
+  y = Xtractor$new("xtractor", load = TRUE, file.dir = dir)
+  expect_equal(capture.output(y)[6], "Calculation process done: 50%")
   y$calc_features()
-  expect_equal(y$status$perc_done, 1)
+  expect_equal(capture.output(y)[6], "Calculation process done: 100%")
+
   res = y$results
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
   expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
 
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
 })
 
 test_that("error handling", {
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
-  x = Xtractor$new(name = "xtractor")
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
   expect_error(x$calc_features(), regexp = "Please add datasets with method")
   x$add_data(iris, group_by = "Species")
   expect_error(x$calc_features(), regexp = "Please add feature functions with method")
@@ -283,58 +284,17 @@ test_that("error handling", {
   x$add_feature(fun2)
 
   x$calc_features()
-  expect_equal(x$error_messages$error[1], "Error in fun(data) : fun1 not compatible on versicolor")
-  expect_equal(x$error_messages$error[2], "Error in fun(data) : fun2 not compatible on virginica")
+  expect_equal(as.character(x$error_messages$error[1]), "fun1 not compatible on versicolor")
+  expect_equal(as.character(x$error_messages$error[2]), "fun2 not compatible on virginica")
   expect_equal(nrow(x$error_messages), 2)
-  expect_equal(length(x$log_files), 2)
 
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
-})
-
-test_that("change backend", {
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
-  x = Xtractor$new(name = "xtractor")
-  expect_error(x$calc_features(), regexp = "Please add datasets with method")
-  x$add_data(iris, group_by = "Species")
-  expect_error(x$calc_features(), regexp = "Please add feature functions with method")
-
-  fun1 = function(data) {
-    c(mean_sepal_length = mean(data$Sepal.Length),
-      sd_sepal_length = sd(data$Sepal.Length))
-  }
-
-  fun2 = function(data) {
-    c(mean_petal_length = mean(data$Petal.Length),
-      sd_petal_length = sd(data$Petal.Length))
-  }
-
-  x$add_feature(fun1)
-  x$add_feature(fun2)
-
-  expect_error(x$backend <- "x", regexp = "Assertion on 'backend' failed.")
-  expect_error(x$backend <- 5, regexp = "Assertion on 'backend' failed: Must be of type")
-
-  x$backend = "dplyr"
-  expect_error(x$error_messages, regexp = "This slot is only available if backend is set to 'batchtools'.")
-  expect_error(x$status, regexp = "This slot is only available if backend is set to 'batchtools'.")
-  expect_error(x$log_files, regexp = "This slot is only available if backend is set to 'batchtools'.")
-  expect_error(x$perc_done, regexp = "This slot is only available if backend is set to 'batchtools'.")
-  res_dplyr = x$results
-
-
-  x$backend = "batchtools"
-  x$calc_features()
-  expect_message(x$results, "Calculating results from batchtools registry")
-  expect_message(x$results, "No new results found. Returning last generated results:")
-  res_batchtools = x$results
-  expect_equal(res_dplyr, res_batchtools)
-
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
 })
 
 test_that("wrong function returns", {
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
-  x = Xtractor$new(name = "xtractor")
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
   expect_error(x$calc_features(), regexp = "Please add datasets with method")
   x$add_data(iris, group_by = "Species")
   expect_error(x$calc_features(), regexp = "Please add feature functions with method")
@@ -417,11 +377,6 @@ test_that("right function returns", {
   x$add_feature(fun2)
   x$calc_features()
   expect_true(nrow(x$error_messages) == 0)
-  res_batchtools = x$results
-
-  x$backend = "dplyr"
-  x$calc_features()
-  expect_equal(x$results, res_batchtools)
 
   unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
 })

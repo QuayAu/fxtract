@@ -127,7 +127,7 @@ Xtractor = R6Class("Xtractor",
       } else {
         cat(paste0("Number feature functions: ", length(feats), ". See $features for all feature functions.\n"))
       }
-      if (ncol(self$status[, -1, drop = FALSE]) >= 1) cat(paste0("Calculation process done: ", mean(as.matrix(self$status[, -1])) * 100, "% \n"))
+      if (ncol(self$status[, -1, drop = FALSE]) >= 1) cat(paste0("Calculation process done: ", mean(as.matrix(self$status[, -1])) * 100, "%\n"))
       cat(paste0("Errors during calculation: ", nrow(self$error_messages), " \n"))
       invisible(self)
     },
@@ -256,12 +256,12 @@ Xtractor = R6Class("Xtractor",
             ids_calc = setdiff(ids_calc, readRDS(feat_already_calc)$ids)
           }
         }
-        res_feat = future.apply::future_lapply(ids_calc, function(x) {
+        res_value = future.apply::future_lapply(ids_calc, function(x) {
           data = self$get_data(x)
           group_by = private$group_by
-          future::future(fxtract::dplyr_wrapper(data, group_by, feat_fun))
+          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun), error = function(e) e$message)
         }, future.seed = TRUE)
-        res_value = setNames(lapply(res_feat, function(x) tryCatch(future::value(x), error = function(e) e$message)), ids_calc)
+        res_value = setNames(res_value, ids_calc)
         is_error = sapply(res_value, is.character)
         if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
 
@@ -289,7 +289,7 @@ Xtractor = R6Class("Xtractor",
       return(invisible(self))
     },
     retry_failed_features = function(features) {
-      message("This result in non reproducible results. Make sure your feature function is not stochastical. Remove and add feature function again (and add seed) for stochastical features.")
+      message("The results may be non reproducible. Make sure your feature function is non-stochastical. Remove and add feature function again (and add seed) for stochastical features.")
       if (missing(features)) features = self$features
       checkmate::assert_subset(features, self$features)
       if (nrow(self$error_messages) == 0) stop("No failed features found!")
@@ -338,7 +338,6 @@ Xtractor = R6Class("Xtractor",
     name = NULL,
     group_by = NULL,
     dir = NULL,
-    .results = NULL,
     .check_fun = NULL
   ),
   active = list(
@@ -359,6 +358,7 @@ Xtractor = R6Class("Xtractor",
       dir_done = paste0(private$dir, "/rds_files/results/done/")
       done = list.files(dir_done)
       results = future.apply::future_lapply(done, function(x) readRDS(paste0(dir_done, "/", x)))
+      if (length(results) == 0) stop("No features have been calculated yet. Start with $calc_features().")
       final_result = results[[1]]
       if (length(results) >= 2) {
         for (i in 2:length(results)) {
