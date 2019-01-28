@@ -1,0 +1,68 @@
+---
+title: "R6 Class Xtractor - Change Calculation Backend"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE}
+unlink("fxtract_files", recursive = TRUE)
+```
+
+- For smaller projects.
+- Whole dataset with all IDs fit in memory.
+- Feature functions are easy to calculate and do not throw errors.
+- The calculation of features can be done on the whole dataset with `dplyr` (speed advantage).
+
+```{r, message = FALSE, warning = FALSE}
+library(fxtract)
+xtractor = Xtractor$new("xtractor")
+xtractor$add_data(iris, group_by = "Species")
+
+fun1 = function(data) {
+  c(mean_sepal_length = mean(data$Sepal.Length),
+    sd_sepal_length = sd(data$Sepal.Length))
+}
+
+fun2 = function(data) {
+  c(mean_petal_length = mean(data$Petal.Length),
+    sd_petal_length = sd(data$Petal.Length))
+}
+
+xtractor$add_feature(fun1)
+xtractor$add_feature(fun2)
+```
+
+## Change Backend
+On default, the calculation backend is set to `"batchtools"`. It can be changed to `"dplyr"` the following way:
+```{r}
+xtractor$backend = "dplyr"
+```
+
+This changes the internal calculation method. Instead of applying each feature function on each individual dataset (like in the batchtools backend), the feature functions are applied on a big dataset with all IDs. This is done with the `group_by` method of `dplyr`.
+
+## Advantage of Using the "dplyr"-Backend
+- Speed of calculating all features
+
+```{r, message = FALSE, warning = FALSE}
+#dplyr backend
+time_start = Sys.time()
+xtractor$calc_features()
+Sys.time() - time_start
+```
+```{r, message = FALSE, warning = FALSE}
+#batchtools backend
+xtractor$backend = "batchtools"
+time_start = Sys.time()
+xtractor$calc_features()
+Sys.time() - time_start
+```
+## Disadvantages
+- No error handling. Calculation of features will just stop if an error occurs.
+- The whole dataset (and applying functions on this dataset) must fit into the memory.
+- No progress monitoring.
+
+
+

@@ -162,11 +162,11 @@ Xtractor = R6Class("Xtractor",
       #add batchtools problems
       for (id in gb) { #cannot be parallelized, because of batchtools
         data_id = dataframe %>% dplyr::filter(!!as.name(group_by) == id) %>% data.frame()
-        batchtools::addProblem(name = id, data = data_id, reg = self$reg)
+        batchtools::addProblem(name = as.character(id), data = data_id, reg = self$reg)
 
         #add experiments
         prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
-        names(prob.designs) = id
+        names(prob.designs) = as.character(id)
         private$add_experiments(prob.designs = prob.designs)
       }
       return(invisible(self))
@@ -186,10 +186,10 @@ Xtractor = R6Class("Xtractor",
       for (id in gb) { #cannot be parallelized, because of batchtools
         batchtools::removeProblems(id, reg = self$reg)
         data_id = readRDS(paste0(self$dir, "/rds_files/data/", id, ".RDS"))
-        batchtools::addProblem(name = id, data = data_id, reg = self$reg)
+        batchtools::addProblem(name = as.character(id), data = data_id, reg = self$reg)
         #add experiments
         prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
-        names(prob.designs) = id
+        names(prob.designs) = as.character(id)
         private$add_experiments(prob.designs = prob.designs)
       }
       return(invisible(self))
@@ -224,7 +224,7 @@ Xtractor = R6Class("Xtractor",
       batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))), reg = self$reg)
       batchtools::addAlgorithm(
         name = deparse(substitute(fun)),
-        fun = function(job, data, instance) fxtract::calc_feature(data, group_by = self$group_by, fun = fun, check_fun = private$.check_fun),
+        fun = function(job, data, instance) fxtract::dplyr_wrapper(data, group_by = self$group_by, fun = fun, check_fun = private$.check_fun),
         reg = self$reg
       )
 
@@ -268,7 +268,7 @@ Xtractor = R6Class("Xtractor",
         features = self$features
         feature_list = foreach::foreach(feature = features) %dopar% {
           fun = self$get_feature(feature)
-          calc_feature(data_all, group_by = self$group_by, fun = fun, check_fun = private$.check_fun)
+          dplyr_wrapper(data_all, group_by = self$group_by, fun = fun, check_fun = private$.check_fun)
         }
         for (i in 1:length(feature_list)) {
           if (i == 1) {
@@ -391,8 +391,6 @@ Xtractor = R6Class("Xtractor",
         message("Retrieving results from dplyr backend:")
         return(private$.results)
       }
-
-
     }
   )
 )

@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R6 Class Xtractor - Preprocess Data • fxtract</title>
+<title>R6 Class Xtractor - Change Calculation Backend • fxtract</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../pkgdown.js"></script><meta property="og:title" content="R6 Class Xtractor - Preprocess Data">
+<script src="../../pkgdown.js"></script><meta property="og:title" content="R6 Class Xtractor - Change Calculation Backend">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -86,63 +86,71 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>R6 Class Xtractor - Preprocess Data</h1>
+      <h1>R6 Class Xtractor - Change Calculation Backend</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/xtractor_preprocess_data.Rmd"><code>vignettes/tutorial/xtractor_preprocess_data.Rmd</code></a></small>
-      <div class="hidden name"><code>xtractor_preprocess_data.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/xtractor_change_backend.Rmd"><code>vignettes/tutorial/xtractor_change_backend.Rmd</code></a></small>
+      <div class="hidden name"><code>xtractor_change_backend.Rmd</code></div>
 
     </div>
 
     
     
-<p>Although we can perform dataset preprocessing inside the feature functions (e.g. clustering GPS points), it can be useful to perform preprocessing on the dataset once. Especially, if this takes a long time and is done again and again for different feature functions. To make sure that this is done for each ID of a grouping variable individually, it is safer to use the method shown here.</p>
-<div id="studentlife-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#studentlife-data" class="anchor"></a>Studentlife Data</h2>
-<p>In thie example we cluster the gps points and add a new column with the clusters.</p>
-<p>For simplicity reasons, we only use the gps data of this dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)
-gps_data =<span class="st"> </span>studentlife_small <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(userId, latitude, longitude) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(latitude))
-<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(gps_data)</code></pre></div>
-<pre><code>##   userId latitude longitude
-## 1     00 43.75913 -72.32924
-## 2     00 43.75950 -72.32902
-## 3     00 43.75913 -72.32924
-## 4     00 43.75913 -72.32924
-## 5     00 43.75913 -72.32924
-## 6     00 43.75913 -72.32924</code></pre>
+<ul>
+<li>For smaller projects.</li>
+<li>Whole dataset with all IDs fit in memory.</li>
+<li>Feature functions are easy to calculate and do not throw errors.</li>
+<li>The calculation of features can be done on the whole dataset with <code>dplyr</code> (speed advantage).</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
 xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)
-xtractor<span class="op">$</span><span class="kw">add_data</span>(gps_data, <span class="dt">group_by =</span> <span class="st">"userId"</span>)</code></pre></div>
-</div>
-<div id="define-a-function" class="section level2">
+xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
+
+fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),
+    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))
+}
+
+fun2 =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),
+    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))
+}
+
+xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun1)
+xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2)</code></pre></div>
+<div id="change-backend" class="section level2">
 <h2 class="hasAnchor">
-<a href="#define-a-function" class="anchor"></a>Define a Function</h2>
-<p>We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method <code>$preprocess_data</code> will then read the RDS files for each ID of the grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated. Parallelization is available via foreach.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fpc)
-fun =<span class="st"> </span><span class="cf">function</span>(data) {
-  lat =<span class="st"> </span>data<span class="op">$</span>latitude
-  lon =<span class="st"> </span>data<span class="op">$</span>longitude
-  clust =<span class="st"> </span><span class="kw">dbscan</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(lat, lon), <span class="dt">eps =</span> <span class="fl">1.5</span>, <span class="dt">MinPts =</span> <span class="dv">3</span>)
-  data<span class="op">$</span>cluster =<span class="st"> </span>clust<span class="op">$</span>cluster
-  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(data)
-}</code></pre></div>
+<a href="#change-backend" class="anchor"></a>Change Backend</h2>
+<p>On default, the calculation backend is set to <code>"batchtools"</code>. It can be changed to <code>"dplyr"</code> the following way:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>backend =<span class="st"> "dplyr"</span></code></pre></div>
+<p>This changes the internal calculation method. Instead of applying each feature function on each individual dataset (like in the batchtools backend), the feature functions are applied on a big dataset with all IDs. This is done with the <code>group_by</code> method of <code>dplyr</code>.</p>
 </div>
-<div id="perform-preprocessing" class="section level2">
+<div id="advantage-of-using-the-dplyr-backend" class="section level2">
 <h2 class="hasAnchor">
-<a href="#perform-preprocessing" class="anchor"></a>Perform Preprocessing</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> fun)</code></pre></div>
-<p>The data has successfully been preprocessed:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(xtractor<span class="op">$</span><span class="kw">get_data</span>())</code></pre></div>
-<pre><code>##   userId latitude longitude cluster
-## 1     00 43.75913 -72.32924       1
-## 2     00 43.75950 -72.32902       1
-## 3     00 43.75913 -72.32924       1
-## 4     00 43.75913 -72.32924       1
-## 5     00 43.75913 -72.32924       1
-## 6     00 43.75913 -72.32924       1</code></pre>
+<a href="#advantage-of-using-the-dplyr-backend" class="anchor"></a>Advantage of Using the “dplyr”-Backend</h2>
+<ul>
+<li>Speed of calculating all features</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#dplyr backend</span>
+time_start =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>()
+xtractor<span class="op">$</span><span class="kw">calc_features</span>()
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>() <span class="op">-</span><span class="st"> </span>time_start</code></pre></div>
+<pre><code>## Time difference of 0.1367612 secs</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#batchtools backend</span>
+xtractor<span class="op">$</span>backend =<span class="st"> "batchtools"</span>
+time_start =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>()
+xtractor<span class="op">$</span><span class="kw">calc_features</span>()
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.time</a></span>() <span class="op">-</span><span class="st"> </span>time_start</code></pre></div>
+<pre><code>## Time difference of 0.8809209 secs</code></pre>
+</div>
+<div id="disadvantages" class="section level2">
+<h2 class="hasAnchor">
+<a href="#disadvantages" class="anchor"></a>Disadvantages</h2>
+<ul>
+<li>No error handling. Calculation of features will just stop if an error occurs.</li>
+<li>The whole dataset (and applying functions on this dataset) must fit into the memory.</li>
+<li>No progress monitoring.</li>
+</ul>
 </div>
   </div>
 
@@ -151,9 +159,9 @@ fun =<span class="st"> </span><span class="cf">function</span>(data) {
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#studentlife-data">Studentlife Data</a></li>
-      <li><a href="#define-a-function">Define a Function</a></li>
-      <li><a href="#perform-preprocessing">Perform Preprocessing</a></li>
+<li><a href="#change-backend">Change Backend</a></li>
+      <li><a href="#advantage-of-using-the-dplyr-backend">Advantage of Using the “dplyr”-Backend</a></li>
+      <li><a href="#disadvantages">Disadvantages</a></li>
       </ul>
 </div>
       </div>

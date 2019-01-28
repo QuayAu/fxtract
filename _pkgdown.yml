@@ -1,5 +1,5 @@
 title: fxtract
-url: https://quayau.github.io/fxtract/docs/index.html
+url: https://quayau.github.io/fxtract/
 template:
   params:
     bootswatch: sandstone
@@ -8,30 +8,20 @@ navbar:
   title:
   type: default
   left:
-  - text: Helper Functions
-    menu:
-    - text: add date information
-      href: articles/tutorial/helper_preproc.html
-    - text: filters
-      href: articles/tutorial/helper_filters.html
-    - text: calc_feature
-      href: articles/tutorial/helper_calc_feature.html
   - text: Xtractor
     menu:
-    - text: xtractor
-      href: articles/tutorial/xtractor.html
-    - text: xtractor - preprocess data
+    - text: Basics
+      href: articles/tutorial/xtractor_basics.html
+    - text: Preprocess Data
       href: articles/tutorial/xtractor_preprocess_data.html
-    - text: xtractor - update data
+    - text: Update Data
       href: articles/tutorial/xtractor_update_data.html
-    - text: xtractor - update feature
+    - text: Update Feature
       href: articles/tutorial/xtractor_update_feature.html
-    - text: xtractor - error handling
+    - text: Error Handling
       href: articles/tutorial/xtractor_error_handling.html
-  - text: Use Cases
-    menu:
-    - text: StudentLife
-      href: articles/tutorial/usecase_studentlife.html
+    - text: Change Backend
+      href: articles/tutorial/xtractor_change_backend.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

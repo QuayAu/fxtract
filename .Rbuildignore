@@ -3,7 +3,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
-^man-roxygen
 ^docs$
 ^_pkgdown\.yml$
 ^fxtract_files

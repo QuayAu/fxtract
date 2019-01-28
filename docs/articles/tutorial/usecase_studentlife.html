@@ -44,10 +44,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/tutorial/helper_preproc.html">add date information</a>
+      <a href="../../articles/tutorial/helper_preproc.html">Add Date Information</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/helper_filters.html">filters</a>
+      <a href="../../articles/tutorial/helper_filters.html">Filters</a>
     </li>
     <li>
       <a href="../../articles/tutorial/helper_calc_feature.html">calc_feature</a>
@@ -62,19 +62,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/tutorial/xtractor.html">xtractor</a>
+      <a href="../../articles/tutorial/xtractor_basics.html">Basics</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_preprocess_data.html">xtractor - preprocess data</a>
+      <a href="../../articles/tutorial/xtractor_preprocess_data.html">Preprocess Data</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_update_data.html">xtractor - update data</a>
+      <a href="../../articles/tutorial/xtractor_update_data.html">Update Data</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_update_feature.html">xtractor - update feature</a>
+      <a href="../../articles/tutorial/xtractor_update_feature.html">Update Feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_error_handling.html">xtractor - error handling</a>
+      <a href="../../articles/tutorial/xtractor_error_handling.html">Error Handling</a>
+    </li>
+    <li>
+      <a href="../../articles/tutorial/xtractor_change_backend.html">Change Backend</a>
     </li>
   </ul>
 </li>
@@ -127,57 +130,57 @@
 <div id="initialize-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#initialize-object" class="anchor"></a>Initialize Object</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
+xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)</code></pre></div>
 </div>
 <div id="load-data-into-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#load-data-into-object" class="anchor"></a>Load Data into Object</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">xtractor<span class="op">$</span><span class="kw">add_data</span>(studentlife_small, <span class="dt">group_by =</span> <span class="st">"userId"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span><span class="kw">add_data</span>(studentlife_small, <span class="dt">group_by =</span> <span class="st">"userId"</span>)</code></pre></div>
 </div>
 <div id="preprocess-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#preprocess-data" class="anchor"></a>Preprocess Data</h2>
 <p>Add weekday and date information to dataset:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">xtractor<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(x, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>))</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">xtractor<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(x, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>))</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../../reference/add_weekday.html">add_weekday</a></span>(x, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>))
+xtractor<span class="op">$</span><span class="kw">preprocess_data</span>(<span class="dt">fun =</span> <span class="cf">function</span>(x) <span class="kw"><a href="../../reference/add_date.html">add_date</a></span>(x, <span class="dt">utc_col =</span> <span class="st">"timestamp"</span>))</code></pre></div>
 </div>
 <div id="define-feature-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#define-feature-functions" class="anchor"></a>Define Feature Functions</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">number_diff_apps =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">number_diff_apps =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(data<span class="op">$</span>RUNNING_TASKS_topActivity_mPackage)))</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">number_diff_apps_weekday =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">  data_weekday =<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">number_diff_apps_weekday =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(data_weekday<span class="op">$</span>RUNNING_TASKS_topActivity_mPackage)))</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">}</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">daily_number_diff_apps =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">  x =<span class="st"> </span>fxtract<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/fxtract/topics/calc_feature">calc_feature</a></span>(data, <span class="dt">group_by =</span> <span class="st">"date"</span>, <span class="dt">fun =</span> number_diff_apps)</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">daily_number_diff_apps =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(x<span class="op">$</span>number_diff_apps))</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">}</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">total_dist =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(geosphere)</a>
-<a class="sourceLine" id="cb4-17" data-line-number="17">  long =<span class="st"> </span>data<span class="op">$</span>longitude</a>
-<a class="sourceLine" id="cb4-18" data-line-number="18">  lat =<span class="st"> </span>data<span class="op">$</span>latitude</a>
-<a class="sourceLine" id="cb4-19" data-line-number="19">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">total_dist =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(<span class="kw">distHaversine</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(long, lat)), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb4-20" data-line-number="20">}</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">number_diff_apps =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">number_diff_apps =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(data<span class="op">$</span>RUNNING_TASKS_topActivity_mPackage)))
+}
+
+number_diff_apps_weekday =<span class="st"> </span><span class="cf">function</span>(data) {
+  data_weekday =<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(weekday <span class="op">&gt;=</span><span class="st"> "Mon"</span> <span class="op">&amp;</span><span class="st"> </span>weekday <span class="op">&lt;=</span><span class="st"> "Fri"</span>)
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">number_diff_apps_weekday =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(data_weekday<span class="op">$</span>RUNNING_TASKS_topActivity_mPackage)))
+}
+
+daily_number_diff_apps =<span class="st"> </span><span class="cf">function</span>(data) {
+  x =<span class="st"> </span>fxtract<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/fxtract/topics/calc_feature">calc_feature</a></span>(data, <span class="dt">group_by =</span> <span class="st">"date"</span>, <span class="dt">fun =</span> number_diff_apps)
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">daily_number_diff_apps =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(x<span class="op">$</span>number_diff_apps))
+}
+
+total_dist =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(geosphere)
+  long =<span class="st"> </span>data<span class="op">$</span>longitude
+  lat =<span class="st"> </span>data<span class="op">$</span>latitude
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">total_dist =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(<span class="kw">distHaversine</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(long, lat)), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
+}</code></pre></div>
 </div>
 <div id="add-feature-functions-to-r6-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#add-feature-functions-to-r6-object" class="anchor"></a>Add Feature Functions to R6 Object</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">xtractor<span class="op">$</span><span class="kw">add_feature</span>(number_diff_apps)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">xtractor<span class="op">$</span><span class="kw">add_feature</span>(number_diff_apps_weekday)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">xtractor<span class="op">$</span><span class="kw">add_feature</span>(daily_number_diff_apps)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">xtractor<span class="op">$</span><span class="kw">add_feature</span>(total_dist)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span><span class="kw">add_feature</span>(number_diff_apps)
+xtractor<span class="op">$</span><span class="kw">add_feature</span>(number_diff_apps_weekday)
+xtractor<span class="op">$</span><span class="kw">add_feature</span>(daily_number_diff_apps)
+xtractor<span class="op">$</span><span class="kw">add_feature</span>(total_dist)</code></pre></div>
 </div>
 <div id="get-an-overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-an-overview" class="anchor"></a>Get an Overview</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(xtractor)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(xtractor)</code></pre></div>
 <pre><code>## R6 Object 
 ## Name: xtractor
 ## Grouping variable: userId
@@ -190,25 +193,25 @@
 <h2 class="hasAnchor">
 <a href="#calculate-features" class="anchor"></a>Calculate Features</h2>
 <p>Let’s calculate the features in parallel (here on a windows machine):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">xtractor<span class="op">$</span>reg<span class="op">$</span>cluster.functions =<span class="st"> </span>batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/makeClusterFunctionsSocket">makeClusterFunctionsSocket</a></span>(<span class="dv">4</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>reg<span class="op">$</span>cluster.functions =<span class="st"> </span>batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/makeClusterFunctionsSocket">makeClusterFunctionsSocket</a></span>(<span class="dv">4</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
 <pre><code>## Submitting 12 jobs in 12 chunks using cluster functions 'Socket' ...</code></pre>
 </div>
 <div id="bug-fixing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixing" class="anchor"></a>Bug Fixing</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>(<span class="dt">reg =</span> xtractor<span class="op">$</span>reg)</a></code></pre></div>
-<pre><code>## Status for 12 jobs at 2019-01-22 18:36:41:
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>(<span class="dt">reg =</span> xtractor<span class="op">$</span>reg)</code></pre></div>
+<pre><code>## Status for 12 jobs at 2019-01-23 13:28:07:
 ##   Submitted    : 12 (100.0%)
 ##   -- Queued    :  0 (  0.0%)
-##   -- Started   : 12 (100.0%)
+##   -- Started   : 11 ( 91.7%)
 ##   ---- Running :  0 (  0.0%)
-##   ---- Done    :  9 ( 75.0%)
+##   ---- Done    :  8 ( 66.7%)
 ##   ---- Error   :  3 ( 25.0%)
-##   ---- Expired :  0 (  0.0%)</code></pre>
+##   ---- Expired :  1 (  8.3%)</code></pre>
 <p>Some jobs failed. Let’s debug this now.</p>
 <p>We can get the error messages:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">xtractor<span class="op">$</span>error_messages</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>error_messages</code></pre></div>
 <pre><code>##    batchtools_job_id
 ## 1:                 4
 ## 2:                 5
@@ -224,11 +227,11 @@
 <p>Because we calculated the functions in parallel, we need to make sure the workers have access to functions and packages. In most of our feature functions we used <code><a href="https://www.rdocumentation.org/packages/base/topics/library">library()</a></code> inside the functions or directly used the <code>::</code> operator.</p>
 <p>Our function <code>number_diff_apps_weekday</code> uses <code>dplyr</code> functions without calling <code><a href="https://www.rdocumentation.org/packages/base/topics/library">library(dplyr)</a></code> within the function. We could update this feature function (see <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project_update_feature.html">here</a>), but we’d like to show a different way.</p>
 <p>You can set packages, which should be available by the workers by:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">xtractor<span class="op">$</span>reg<span class="op">$</span>packages =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"dplyr"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>reg<span class="op">$</span>packages =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"dplyr"</span>)</code></pre></div>
 <p>Now we calculate the remaining features:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
 <pre><code>## Submitting 3 jobs in 3 chunks using cluster functions 'Socket' ...</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">xtractor<span class="op">$</span>results</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>results</code></pre></div>
 <pre><code>## Calculating results from batchtools registry.</code></pre>
 <pre><code>##   userId daily_number_diff_apps number_diff_apps number_diff_apps_weekday
 ## 1     00               16.86905               93                       91

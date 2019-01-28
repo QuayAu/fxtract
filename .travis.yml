@@ -13,6 +13,16 @@ r_github_packages:
 
 after_success:
   - Rscript -e 'covr::codecov()'
+
+before_deploy:
+  - Rscript -e 'devtools::install(quick = TRUE); install.packages("fpc"); devtools::document(); devtools::build_vignettes(); pkgdown::build_site();'
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_PAT
+  local-dir: docs
+  on:
+    branch: master
 #  - Rscript -e 'pkgdown::build_site()'
 
 #deploy:
