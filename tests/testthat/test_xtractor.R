@@ -54,7 +54,7 @@ test_that("add_data", {
   expect_error(x$add_data(iris))
   expect_error(x$add_data(iris, group_by = "test"))
 
-  #test right data and get_data
+  #test right data and get_data (data.frame)
   x$add_data(iris, group_by = "Species")
   expect_true(file.exists("fxtract_files/xtractor/rds_files/data/setosa.RDS"))
   expect_true(file.exists("fxtract_files/xtractor/rds_files/data/versicolor.RDS"))
@@ -62,6 +62,17 @@ test_that("add_data", {
   expect_equal(iris, x$get_data(x$datasets))
   expect_equal(x$group_by, "Species")
   expect_equal(x$datasets, c("setosa", "versicolor", "virginica"))
+  #test right data and get_data (data.table)
+  x2 = Xtractor$new(name = "xtractorDT")
+  irisDt = data.table::copy(iris)
+  irisDt = data.table::setDT(irisDt)
+  x2$add_data(irisDt, group_by = "Species")
+  expect_true(file.exists("fxtract_files/xtractorDT/rds_files/data/setosa.RDS"))
+  expect_true(file.exists("fxtract_files/xtractorDT/rds_files/data/versicolor.RDS"))
+  expect_true(file.exists("fxtract_files/xtractorDT/rds_files/data/virginica.RDS"))
+  expect_equal(iris, x2$get_data(x2$datasets))
+  expect_equal(x2$group_by, "Species")
+  expect_equal(x2$datasets, c("setosa", "versicolor", "virginica"))
 
   #test second dataframe different group by error
   expect_error(x$add_data(iris, group_by = "Petal.Length"), regexp = "The group_by variable was set to Species.")
