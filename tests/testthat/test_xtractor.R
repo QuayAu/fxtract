@@ -90,6 +90,11 @@ test_that("add_data", {
   expect_true(" ..." %in% strsplit(y[4], ",")[[1]])
   expect_false(" virginica7" %in% strsplit(y[4], ",")[[1]])
 
+  #test adding numeric grouping variable
+  iris3 = iris
+  iris3$Species = as.numeric(iris3$Species)
+  x$add_data(iris3, group_by = "Species")
+
   unlink("fxtract_files", recursive = TRUE)
 })
 

@@ -65,6 +65,15 @@ We can also use the corresponding batchtools function:
 batchtools::getStatus(reg = xtractor$reg)
 ```
 
+## Debugging
+You can get the feature function and the dataset of the ID like this:
+
+```{r, message = TRUE}
+fun = xtractor$get_feature("fun1")
+df = xtractor$get_data("versicolor")
+```
+Now you can debug the function on the dataset on which the function failed.
+
 ## Fix Features
 ```{r, message = FALSE}
 fun1_fixed = function(data) {
@@ -88,13 +97,13 @@ xtractor$add_feature(fun2_fixed)
 Parallelization is done by setting the cluster functions via batchtools. See [here](https://mllg.github.io/batchtools/articles/batchtools.html).
 
 E.g. on a windows machine:
-```{r}
+```{r, eval = FALSE}
 xtractor$reg$cluster.functions = batchtools::makeClusterFunctionsSocket(2)
 ```
 
 ## Submit Jobs via batchtools
 It is also possible to submit jobs via batchtools:
-```{r}
+```{r, message = FALSE}
 batchtools::submitJobs(reg = xtractor$reg)
 ```
 

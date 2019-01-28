@@ -4,34 +4,10 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/index.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/add_date.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/add_date_time.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/add_time.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/add_weekday.html</loc>
-  </url>
-  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/calc_feature.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/check_time_format.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filter_daytime.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/filter_weekday.html</loc>
-  </url>
-  <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/studentlife_small.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/time_to_sec.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/reference/Xtractor.html</loc>
@@ -43,16 +19,10 @@
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helper_calc_feature.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helper_filters.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_basics.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helper_preproc.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/usecase_studentlife.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor.html</loc>
+    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_change_backend.html</loc>
   </url>
   <url>
     <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_error_handling.html</loc>

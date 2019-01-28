@@ -38,55 +38,28 @@
       <ul class="nav navbar-nav">
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Helper Functions
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../../articles/tutorial/helper_preproc.html">add date information</a>
-    </li>
-    <li>
-      <a href="../../articles/tutorial/helper_filters.html">filters</a>
-    </li>
-    <li>
-      <a href="../../articles/tutorial/helper_calc_feature.html">calc_feature</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Xtractor
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/tutorial/xtractor.html">xtractor</a>
+      <a href="../../articles/tutorial/xtractor_basics.html">Basics</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_preprocess_data.html">xtractor - preprocess data</a>
+      <a href="../../articles/tutorial/xtractor_preprocess_data.html">Preprocess Data</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_update_data.html">xtractor - update data</a>
+      <a href="../../articles/tutorial/xtractor_update_data.html">Update Data</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_update_feature.html">xtractor - update feature</a>
+      <a href="../../articles/tutorial/xtractor_update_feature.html">Update Feature</a>
     </li>
     <li>
-      <a href="../../articles/tutorial/xtractor_error_handling.html">xtractor - error handling</a>
+      <a href="../../articles/tutorial/xtractor_error_handling.html">Error Handling</a>
     </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Use Cases
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../../articles/tutorial/usecase_studentlife.html">StudentLife</a>
+    <li>
+      <a href="../../articles/tutorial/xtractor_change_backend.html">Change Backend</a>
     </li>
   </ul>
 </li>
@@ -124,23 +97,23 @@
     
     
 <p>Click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/xtractor.html">here</a> on how to use the R6 class <code>Xtractor</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">}</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">fun2 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">}</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun1)</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2)</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
+xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)
+xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
+
+fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),
+    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))
+}
+
+fun2 =<span class="st"> </span><span class="cf">function</span>(data) {
+  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),
+    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))
+}
+
+xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun1)
+xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2)
+xtractor<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
