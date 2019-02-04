@@ -11,7 +11,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Feature Extraction from Raw Data">
 <meta property="og:description" content="Extracting features from raw data of many different users/IDs/etc.
-    Helpful preprocessing functions are supplied as well. Very large datasets are supported, since data is only read into RAM when needed.
+    Very large datasets are supported, since data is only read into RAM when needed.
     Individual features can be deleted or updated easily. Calculation of features can be done in parallel and the process can be monitored.
     Results are available in one final dataframe.">
 <meta name="twitter:card" content="summary">
@@ -61,9 +61,6 @@
     <li>
       <a href="articles/tutorial/xtractor_error_handling.html">Error Handling</a>
     </li>
-    <li>
-      <a href="articles/tutorial/xtractor_change_backend.html">Change Backend</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -97,43 +94,43 @@
 <div id="fxtract" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#fxtract" class="anchor"></a>fxtract</h1></div>
-<p>See the <a href="https://quayau.github.io/fxtract/docs/index.html">tutorial</a> for an introduction into the package.</p>
+<p>See the <a href="https://quayau.github.io/fxtract/">tutorial</a> for an introduction into the package.</p>
 </div>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p><code>fxtract</code> helps you to extract user-defined features from raw data. For example, if you want to calculate features (e.g. mean or sd of some columns) out of timeseries data of many IDs: <img src="reference/figures/fxtract_main.svg"> So, if you have different datasets of many IDs and you want to calculate features (covariates) for each ID out of these datasets, then <code>fxtract</code> might be for you.</p>
-<p>This package utilizes the functionality of the <a href="https://mllg.github.io/batchtools/articles/batchtools.html">batchtools</a>-package while keeping an easy to access API. The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the features for each ID, possibly in parallel) is handled by <code>fxtract</code>. This package works for very large datasets with many different IDs and the main functionality is written in <a href="https://r6.r-lib.org/articles/Introduction.html">R6</a>.</p>
+<p>The user only needs to define functions which have a dataset as input and named vector (or list) with the desired features as output. The whole data wrangling (calculating the features for each ID, possibly in parallel) is handled by <code>fxtract</code>. This package works with very large datasets and many different IDs and the main functionality is written in <a href="https://r6.r-lib.org/articles/Introduction.html">R6</a>.</p>
 <div id="why-dont-just-use-dplyr-or-other-packages" class="section level3">
 <h3 class="hasAnchor">
 <a href="#why-dont-just-use-dplyr-or-other-packages" class="anchor"></a>Why don’t just use <code>dplyr</code> or other packages?</h3>
 <p>At first glance it looks like we just rewrote the <code>summarize()</code> functionality of <code>dplyr</code>. For small datasets and few (easy to calculate) features, using <code>fxtract</code> may indeed be a little overkill (and slower too). Another similar functionality is covered by the <code><a href="https://www.rdocumentation.org/packages/stats/topics/aggregate">aggregate()</a></code>-function from the base <code>stats</code> package.</p>
-<p>However, this package was especially designed for projects with large datasets, many IDs, and many different feature functions. Once your dataset (with all IDs) becomes too big for memory, or if some feature functions fail on some IDs, using our package can save you many lines of code.</p>
+<p>However, this package was especially designed for projects with large datasets, many IDs, and many different feature functions. <code>fxtract</code> streamlines the process of loading datasets and adding feature functions. Once your dataset (with all IDs) becomes too big for memory, or if some feature functions fail on some IDs, using our package can save you many lines of code.</p>
 </div>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>For the development version, use <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"QuayAu/fxtract"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"QuayAu/fxtract"</span>)</a></code></pre></div>
 </div>
 <div id="usage" class="section level1">
 <h1 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
-
-<span class="co"># user-defined function:</span>
-fun =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),
-    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))
-}
-
-<span class="co"># R6 object:</span>
-xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)
-xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)
-xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun)
-xtractor<span class="op">$</span><span class="kw">calc_features</span>()
-xtractor<span class="op">$</span>results</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># user-defined function:</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">fun =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">}</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co"># R6 object:</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun)</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">xtractor<span class="op">$</span>results</a></code></pre></div>
 <pre><code>##       Species mean_sepal_length sd_sepal_length
 ## 1:     setosa             5.006       0.3524897
 ## 2: versicolor             5.936       0.5161711
@@ -144,18 +141,17 @@ xtractor<span class="op">$</span>results</code></pre></div>
 <a href="#features" class="anchor"></a>Features</h1>
 <ul>
 <li>Unit-tested functions.</li>
-<li>Extracting features from raw data of many different IDs With the R6 Class <code>Xtractor</code>:
+<li>Extracting features from raw data of many different IDs with the R6 Class <code>Xtractor</code>:
 <ul>
 <li>Advantages:
 <ul>
 <li>No more code bloat thanks to R6.</li>
-<li>Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.</li>
-<li>Internally, <a href="https://mllg.github.io/batchtools/articles/batchtools.html">batchtools</a> is used for parallelization and error handling.</li>
-<li>Features will be calculated for each participant individually.</li>
-<li>If one feature on one participant throws an error, this will not stop the whole process (like in a traditional R script). A log file with the error message is created (by batchtools), and the remaining features will still be calculated.</li>
+<li>Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Individual datasets for each id must be small enough to be read into memory.</li>
+<li>Features will be calculated for each participant individually and can be parallelized with the <code>future</code>-package.</li>
+<li>If one feature on one ID throws an error, this will not stop the whole process (like in a traditional R script). The remaining features will still be calculated.</li>
 <li>Individual features can be deleted or updated easily.</li>
 <li>Calculation of features can be done in parallel and the process can be monitored. It is also possible to stop and return the calculation at a later time.</li>
-<li>Results can be easily collected in one final dataframe.</li>
+<li>Results can be easily retrieved in one final dataframe.</li>
 </ul>
 </li>
 </ul>

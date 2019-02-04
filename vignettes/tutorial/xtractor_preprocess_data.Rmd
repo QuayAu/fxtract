@@ -34,7 +34,7 @@ xtractor$add_data(gps_data, group_by = "userId")
 
 
 ## Define a Function
-We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method `$preprocess_data` will then read the RDS files for each ID of the grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated. Parallelization is available via foreach.
+We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method `$preprocess_data` will then read the RDS files for each ID of the grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated. Parallelization is available via `future`.
 
 ```{r, message = FALSE, warning = FALSE}
 library(fpc)
