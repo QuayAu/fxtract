@@ -255,7 +255,6 @@ test_that("calculate features", {
   res = y$results
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
-  expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
 
   unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
 })
@@ -312,7 +311,6 @@ test_that("wrong function returns", {
   x$add_feature(fun1, check_fun = FALSE)
   x$add_feature(fun2, check_fun = FALSE)
 
-  # backend batchtools
   x$calc_features()
   expect_false(nrow(x$results) == 3)
   x$remove_feature(fun1)
@@ -323,26 +321,13 @@ test_that("wrong function returns", {
   x$calc_features()
   expect_equal(nrow(x$error_messages), 6)
 
-  # backend dplyr
-  x$backend = "dplyr"
-  x$remove_feature(fun1)
-  x$remove_feature("fun2")
-  x$add_feature(fun1, check_fun = FALSE)
-  x$add_feature(fun2, check_fun = FALSE)
-  x$calc_features()
-  expect_false(nrow(x$results) == 3)
-  x$remove_feature(fun1)
-  x$remove_feature("fun2")
-  x$add_feature(fun1, check_fun = TRUE)
-  x$add_feature(fun2, check_fun = TRUE)
-  expect_error(x$calc_features(), "task 1 failed -")
-
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
 })
 
 test_that("right function returns", {
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
-  x = Xtractor$new(name = "xtractor")
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
   expect_error(x$calc_features(), regexp = "Please add datasets with method")
   x$add_data(iris, group_by = "Species")
   expect_error(x$calc_features(), regexp = "Please add feature functions with method")
@@ -364,11 +349,7 @@ test_that("right function returns", {
   x$calc_features()
   expect_true(nrow(x$error_messages) == 3)
 
-  x$backend = "dplyr"
-  expect_error(x$calc_features())
-
   #test right function
-  x$backend = "batchtools"
   x$remove_feature(fun2)
   fun2 = function(data) {
     list(mean_petal_length = mean(data$Petal.Length),
@@ -378,5 +359,5 @@ test_that("right function returns", {
   x$calc_features()
   expect_true(nrow(x$error_messages) == 0)
 
-  unlink(paste0(dir, "/fxtract_files", recursive = TRUE)
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
 })

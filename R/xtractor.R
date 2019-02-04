@@ -82,8 +82,7 @@
 #' }
 #' @import R6
 #' @import dplyr
-#' @import batchtools
-#' @importFrom foreach "%dopar%" "%do%"
+#' @import future.apply
 NULL
 
 #' @export
@@ -267,9 +266,11 @@ Xtractor = R6Class("Xtractor",
 
         #save done
         res_data = data.table::rbindlist(res_value[!is_error])
-        done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
-        if (!force) if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
-        saveRDS(res_data, done_exist)
+        if (nrow(res_data) > 0) {
+          done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
+          if (!force) if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
+          saveRDS(res_data, done_exist)
+        }
 
         #save status
         status_data = data.frame(ids = as.character(ids_calc), feature = 1, stringsAsFactors = FALSE)
@@ -311,10 +312,11 @@ Xtractor = R6Class("Xtractor",
 
         #save done
         res_data = data.table::rbindlist(res_value[!is_error])
-        done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
-        if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
-        saveRDS(res_data, done_exist)
-
+        if (nrow(res_data) > 0) {
+          done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
+          if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
+          saveRDS(res_data, done_exist)
+        }
         #save status
         #only resolved IDs were used. Status not changed.
 
@@ -358,6 +360,8 @@ Xtractor = R6Class("Xtractor",
       done = list.files(dir_done)
       results = future.apply::future_lapply(done, function(x) readRDS(paste0(dir_done, "/", x)))
       if (length(results) == 0) stop("No features have been calculated yet. Start with $calc_features().")
+
+      #collect final results
       final_result = results[[1]]
       if (length(results) >= 2) {
         for (i in 2:length(results)) {
