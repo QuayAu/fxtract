@@ -41,7 +41,7 @@
 #'
 #' @section Methods:
 #' \describe{
-#' \item{\code{add_data(dataframe, group_by)}}{[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. \cr
+#' \item{\code{add_data(data, group_by)}}{[data: (`data.frame` | `data.table`)] A dataframe or data.table which shall be added to the R6 object. \cr
 #'  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr
 #'  This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each ID of the grouping variable.
 #'  After that, batchtools experiments will be added too.} \cr
@@ -136,7 +136,7 @@ Xtractor = R6Class("Xtractor",
         checkmate::checkClass(data, "data.frame"),
         checkmate::checkClass(data, "data.table")
       )
-      checkmate::assert_subset(group_by, colnames(dataframe))
+      checkmate::assert_subset(group_by, colnames(data))
       checkmate::assert_character(group_by, len = 1)
       if (is.null(private$group_by)) {
         private$group_by = group_by
