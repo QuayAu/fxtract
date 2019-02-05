@@ -371,3 +371,77 @@ test_that("right function returns", {
 
   unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
 })
+
+test_that("add new dataset after features were already calculated", {
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
+  iris1 = iris %>% dplyr::filter(Species %in% c("virginica", "setosa"))
+  iris2 = iris %>% dplyr::filter(Species %in% c("versicolor"))
+  x$add_data(iris1, group_by = "Species")
+
+  fun1 = function(data) {
+    c(mean_sepal_length = mean(data$Sepal.Length),
+      sd_sepal_length = sd(data$Sepal.Length))
+  }
+
+  fun2 = function(data) {
+    list(mean_petal_length = mean(data$Petal.Length),
+      sd_petal_length = sd(data$Petal.Length))
+  }
+
+  x$add_feature(fun1, check_fun = TRUE)
+  x$add_feature(fun2, check_fun = TRUE)
+  x$calc_features()
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "100%")
+  x$add_data(iris2, group_by = "Species")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "66.6666666666667%")
+  expect_equal(nrow(x$results), 2)
+  x$calc_features("fun1")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "83.3333333333333%")
+  expect_equal(nrow(x$results), 3)
+  expect_true(anyNA(x$results))
+  expect_message(x$calc_features(), "Feature function 'fun1' was already applied on every ID and will be skipped. Set force = TRUE, if you want to re-calculate features.")
+  expect_true(!anyNA(x$results))
+})
+
+test_that("force recalculating features", {
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
+  x$add_data(iris, group_by = "Species")
+
+  fun1 = function(data) {
+    c(rnorm1 = rnorm(1))
+  }
+
+  x$add_feature(fun1, check_fun = TRUE)
+  x$calc_features()
+  res1 = x$results
+  x$calc_features()
+  expect_equal(res1, x$results)
+  x$calc_features(force = TRUE)
+  expect_true(is.character(all.equal(res1, x$results)))
+})
+
+test_that("test retry failed features", {
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
+  df = data.frame(ID = 1:100)
+  x$add_data(df, group_by = "ID")
+
+  fun1 = function(data) {
+    y = rnorm(1)
+    if (y >= 0) stop("retryable error")
+    c(rnorm1 = y)
+  }
+
+  x$add_feature(fun1, check_fun = TRUE)
+  x$calc_features()
+  expect_true(nrow(x$error_messages) > 0)
+  while (nrow(x$error_messages) > 0) {
+    x$retry_failed_features()
+  }
+  expect_true(nrow(x$error_messages) == 0)
+})

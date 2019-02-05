@@ -147,7 +147,7 @@ Xtractor = R6Class("Xtractor",
       gb = data %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
       #save rds files, we want this no matter the backend (because of preprocessing data per ID)
-      message("Saving raw RDS files. Speed up by calling future::plan(multiprocess) before adding data!")
+      message("Saving raw RDS files. Parallelize by calling future::plan(multiprocess) before adding data!")
       future.apply::future_lapply(gb, function(i) {
         data_i = data %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
         saveRDS(data_i, file = paste0(private$dir, "/rds_files/data/", i, ".RDS"))
@@ -155,7 +155,7 @@ Xtractor = R6Class("Xtractor",
       return(invisible(self))
     },
     preprocess_data = function(fun) {
-      message("Updating raw RDS files. Speed up by calling future::plan(multiprocess) before.")
+      message("Updating raw RDS files. Parallelize by calling future::plan(multiprocess) before.")
       future.apply::future_lapply(self$ids, function(i) {
         data_i = readRDS(paste0(private$dir, "/rds_files/data/", i, ".RDS"))
         data_preproc = fun(data_i)
@@ -234,6 +234,7 @@ Xtractor = R6Class("Xtractor",
       readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))
     },
     calc_features = function(features, force = FALSE) {
+      message("Parallelize by calling future::plan(multiprocess) before.")
       if (missing(features)) features = self$features
       checkmate::assert_subset(features, self$features)
       if (length(self$ids) == 0) stop("Please add datasets with method $add_data().")
@@ -311,6 +312,7 @@ Xtractor = R6Class("Xtractor",
           group_by = private$group_by
           tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$.check_fun), error = function(e) e$message)
         }, future.seed = TRUE)
+        res_value = setNames(res_value, ids_calc)
         is_error = sapply(res_value, is.character)
         if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
 
