@@ -402,6 +402,7 @@ test_that("add new dataset after features were already calculated", {
   expect_equal(nrow(x$results), 3)
   expect_true(anyNA(x$results))
   expect_message(x$calc_features(), "Feature function 'fun1' was already applied on every ID and will be skipped. Set force = TRUE, if you want to re-calculate features.")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "100%")
   expect_true(!anyNA(x$results))
 })
 
@@ -444,4 +445,5 @@ test_that("test retry failed features", {
     x$retry_failed_features()
   }
   expect_true(nrow(x$error_messages) == 0)
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "100%")
 })
