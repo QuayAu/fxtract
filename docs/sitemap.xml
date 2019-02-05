@@ -1,42 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/index.html</loc>
+    <loc>https://quayau.github.io/fxtract//index.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/calc_feature.html</loc>
+    <loc>https://quayau.github.io/fxtract//reference/dplyr_wrapper.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/studentlife_small.html</loc>
+    <loc>https://quayau.github.io/fxtract//reference/studentlife_small.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/reference/Xtractor.html</loc>
+    <loc>https://quayau.github.io/fxtract//reference/Xtractor.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/fxtract.html</loc>
+    <loc>https://quayau.github.io/fxtract//articles/fxtract.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/helper_calc_feature.html</loc>
+    <loc>https://quayau.github.io/fxtract//articles/tutorial/xtractor_basics.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_basics.html</loc>
+    <loc>https://quayau.github.io/fxtract//articles/tutorial/xtractor_error_handling.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_change_backend.html</loc>
+    <loc>https://quayau.github.io/fxtract//articles/tutorial/xtractor_preprocess_data.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_error_handling.html</loc>
+    <loc>https://quayau.github.io/fxtract//articles/tutorial/xtractor_setup_child.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_preprocess_data.html</loc>
+    <loc>https://quayau.github.io/fxtract//articles/tutorial/xtractor_update_data.html</loc>
   </url>
   <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_setup_child.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_update_data.html</loc>
-  </url>
-  <url>
-    <loc>https://quayau.github.io/fxtract/docs/index.html/articles/tutorial/xtractor_update_feature.html</loc>
+    <loc>https://quayau.github.io/fxtract//articles/tutorial/xtractor_update_feature.html</loc>
   </url>
 </urlset>

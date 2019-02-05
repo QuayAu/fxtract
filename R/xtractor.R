@@ -41,7 +41,7 @@
 #'
 #' @section Methods:
 #' \describe{
-#' \item{\code{add_data(dataframe, group_by)}}{[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. \cr
+#' \item{\code{add_data(data, group_by)}}{[data: (`data.frame` | `data.table`)] A dataframe or data.table which shall be added to the R6 object. \cr
 #'  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr
 #'  This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each ID of the grouping variable.
 #'  After that, batchtools experiments will be added too.} \cr
@@ -82,315 +82,308 @@
 #' }
 #' @import R6
 #' @import dplyr
-#' @import batchtools
-#' @importFrom foreach "%dopar%" "%do%"
+#' @import future.apply
 NULL
 
 #' @export
 Xtractor = R6Class("Xtractor",
   public = list(
-    name = NULL,
-    group_by = NULL,
-    reg = NULL,
-    dir = NULL,
-    initialize = function(name, load = FALSE) {
-      self$name = checkmate::assert_character(name)
-      newDirPath = paste0("fxtract_files/", name)
-      self$dir = newDirPath
+    initialize = function(name, file.dir = ".", load = FALSE) {
+      private$name = checkmate::assert_character(name)
+      newDirPath = paste0(file.dir, "/fxtract_files/", name)
+      private$dir = newDirPath
       if (!load) {
-        if (!dir.exists("fxtract_files")) dir.create("fxtract_files")
+        if (!dir.exists(paste0(file.dir, "/fxtract_files"))) dir.create(paste0(file.dir, "/fxtract_files"))
         if (dir.exists(newDirPath)) stop("The Xtractor name already exists. Please choose another name, delete the existing Xtractor, or set load = TRUE, if you want to load the old Xtractor.")
         dir.create(newDirPath)
         dir.create(paste0(newDirPath, "/rds_files"))
         dir.create(paste0(newDirPath, "/rds_files/data"))
         dir.create(paste0(newDirPath, "/rds_files/features"))
-        saveRDS(NULL, file = paste0(self$dir, "/rds_files/group_by.RDS"))
-        self$reg = batchtools::makeExperimentRegistry(paste0(newDirPath, "/reg"))
+        dir.create(paste0(newDirPath, "/rds_files/results"))
+        dir.create(paste0(newDirPath, "/rds_files/results/done"))
+        dir.create(paste0(newDirPath, "/rds_files/results/status"))
+        dir.create(paste0(newDirPath, "/rds_files/results/failed"))
+        saveRDS(NULL, file = paste0(private$dir, "/rds_files/group_by.RDS"))
       } else {
-        checkmate::assert_subset(name, list.files("fxtract_files/"))
-        self$reg = batchtools::loadRegistry(paste0(newDirPath, "/reg"), writeable = TRUE)
-        self$group_by = readRDS(paste0(newDirPath, "/rds_files/group_by.RDS"))
+        checkmate::assert_subset(name, list.files(paste0(file.dir, "/fxtract_files/")))
+        private$group_by = readRDS(paste0(newDirPath, "/rds_files/group_by.RDS"))
       }
     },
     print = function() {
-      problems = self$reg$problems
-      problems = problems[!is.na(problems)]
-      if (length(problems) <= 20) {
-        problems = paste0(problems, collapse = ", ")
+      ids = self$ids
+      feats = self$features
+
+      cat("R6 Object: Xtractor\n")
+      cat(paste0("Name: ", private$name, "\n"))
+      cat(paste0("Grouping variable: ", private$group_by, "\n"))
+      if (length(ids) <= 10) {
+        cat(paste0("IDs: ", paste0(ids, collapse = ", "), "\n"))
       } else {
-        problems = paste0(problems[1:20], collapse = ", ")
-        problems = paste0(problems, ", ...")
+        cat(paste0("Number IDs: ", length(ids), ". See $ids for all ids.\n"))
       }
-      algos = self$reg$algorithms
-      algos = algos[!is.na(algos)]
-      if (length(algos) <= 20) {
-        algos = paste0(algos, collapse = ", ")
+      if (length(feats) <= 10) {
+        cat(paste0("Feature functions: ", paste0(feats, collapse = ", "), "\n"))
       } else {
-        algos = paste0(algos[1:20], collapse = ", ")
-        algos = paste0(algos, ", ...")
+        cat(paste0("Number feature functions: ", length(feats), ". See $features for all feature functions.\n"))
       }
-      cat("R6 Object \n")
-      cat(paste0("Name: ", self$name, "\n"))
-      cat(paste0("Grouping variable: ", self$group_by, "\n"))
-      cat(paste0("IDs: ", problems, "\n"))
-      cat(paste0("Feature functions: ", algos, "\n"))
-      cat(paste0("Backend: ", private$.backend, "\n"))
-      if (private$.backend == "batchtools") cat(paste0("Percentage calculated: ", round(self$perc_done, digits = 2) * 100, "%\n"))
+      if (ncol(self$status[, -1, drop = FALSE]) >= 1) cat(paste0("Calculation process done: ", mean(as.matrix(self$status[, -1])) * 100, "%\n"))
+      cat(paste0("Errors during calculation: ", nrow(self$error_messages), " \n"))
       invisible(self)
     },
-    add_data = function(dataframe, group_by) {
-      private$.results = NULL
-      id = NULL
-      checkmate::assert_data_frame(dataframe)
-      checkmate::assert_subset(group_by, colnames(dataframe))
+    add_data = function(data, group_by) {
+      checkmate::assert_subset(group_by, colnames(data))
+      checkmate::assert(
+        checkmate::checkClass(data, "data.frame"),
+        checkmate::checkClass(data, "data.table")
+      )
+      checkmate::assert_subset(group_by, colnames(data))
       checkmate::assert_character(group_by, len = 1)
-      if (is.null(self$group_by)) {
-        self$group_by = group_by
-        saveRDS(group_by, file = paste0(self$dir, "/group_by.RDS"))
+      if (is.null(private$group_by)) {
+        private$group_by = group_by
+        saveRDS(group_by, file = paste0(private$dir, "/rds_files/group_by.RDS"))
       }
-      if (group_by != self$group_by) stop(paste0("The group_by variable was set to ", self$group_by,
+      if (group_by != private$group_by) stop(paste0("The group_by variable was set to ", private$group_by,
         ". Only one group_by variable is allowed per Xtractor!"))
-      gb = dataframe %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
+      gb = data %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
-      #save rds files
-      foreach::foreach(i = gb, .packages = c("dplyr")) %dopar% {
-        dataframe_i = dataframe %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(dataframe_i, file = paste0(self$dir, "/rds_files/data/", i, ".RDS"))
-        message(paste0("Saving raw RDS file ", i, ".RDS ", "on disk."))
-      }
-
-      #add batchtools problems
-      for (id in gb) { #cannot be parallelized, because of batchtools
-        data_id = dataframe %>% dplyr::filter(!!as.name(group_by) == id) %>% data.frame()
-        batchtools::addProblem(name = as.character(id), data = data_id, reg = self$reg)
-
-        #add experiments
-        prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
-        names(prob.designs) = as.character(id)
-        private$add_experiments(prob.designs = prob.designs)
-      }
+      #save rds files, we want this no matter the backend (because of preprocessing data per ID)
+      message("Saving raw RDS files. Speed up by calling future::plan(multiprocess) before adding data!")
+      future.apply::future_lapply(gb, function(i) {
+        data_i = data %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
+        saveRDS(data_i, file = paste0(private$dir, "/rds_files/data/", i, ".RDS"))
+      })
       return(invisible(self))
     },
     preprocess_data = function(fun) {
-      datasets = list.files(paste0(self$dir, "/rds_files/data"))
-      #update RDS files
-      foreach::foreach(i = datasets, .packages = c("dplyr")) %dopar% {
-        dataframe_i = readRDS(paste0(self$dir, "/rds_files/data/", i))
-        data_preproc = fun(dataframe_i)
-        saveRDS(data_preproc, file = paste0(self$dir, "/rds_files/data/", i))
-        message(paste0("Updating raw RDS file " , i))
+      message("Updating raw RDS files. Speed up by calling future::plan(multiprocess) before.")
+      future.apply::future_lapply(self$ids, function(i) {
+        data_i = readRDS(paste0(private$dir, "/rds_files/data/", i, ".RDS"))
+        data_preproc = fun(data_i)
+        saveRDS(data_preproc, file = paste0(private$dir, "/rds_files/data/", i, ".RDS"))
+      }, future.seed = TRUE)
+      return(invisible(self))
+    },
+    remove_data = function(ids) {
+      checkmate::assert_character(ids, min.len = 1L)
+      checkmate::assert_subset(ids, self$ids)
+      for (id in ids) {
+        message("Deleting RDS file ", id, ".RDS")
+        unlink(paste0(paste0(private$dir, "/rds_files/data/", id, ".RDS")))
       }
 
-      #update batchtools problems
-      gb = gsub(".RDS", "", datasets)
-      for (id in gb) { #cannot be parallelized, because of batchtools
-        batchtools::removeProblems(id, reg = self$reg)
-        data_id = readRDS(paste0(self$dir, "/rds_files/data/", id, ".RDS"))
-        batchtools::addProblem(name = as.character(id), data = data_id, reg = self$reg)
-        #add experiments
-        prob.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
-        names(prob.designs) = as.character(id)
-        private$add_experiments(prob.designs = prob.designs)
+      #delete done
+      done_dir = paste0(private$dir, "/rds_files/results/done/")
+      done_features = list.files(done_dir)
+      for (feature in done_features) {
+        done_data = readRDS(paste0(done_dir, feature))
+        done_data = done_data[!done_data[[private$group_by]] %in% ids, ]
+        message(paste0("Deleting '", paste0(ids, collapse = "', "), "' from results."))
+        saveRDS(done_data, paste0(done_dir, feature))
+      }
+      #delete status
+      status_dir = paste0(private$dir, "/rds_files/results/status/")
+      status_features = list.files(status_dir)
+      for (feature in status_features) {
+        status_data = readRDS(paste0(status_dir, feature))
+        status_data = status_data[!status_data[["ids"]] %in% ids, ]
+        saveRDS(status_data, paste0(status_dir, feature))
+      }
+      #delete error
+      failed_dir = paste0(private$dir, "/rds_files/results/failed/")
+      failed_features = list.files(failed_dir)
+      for (feature in failed_features) {
+        failed_data = readRDS(paste0(failed_dir, feature))
+        failed_data = failed_data[!failed_data[["id"]] %in% ids, ]
+        saveRDS(failed_data, paste0(failed_dir, feature))
       }
       return(invisible(self))
     },
-    remove_data = function(datasets) {
-      private$.results = NULL
-      checkmate::assert_character(datasets, min.len = 1L)
-      checkmate::assert_subset(datasets, self$reg$problems)
-      for (data in datasets) {
-        message("Deleting RDS file ", data, ".RDS")
-        unlink(paste0(paste0(self$dir, "/rds_files/data/", data, ".RDS")))
-        batchtools::removeProblems(data, reg = self$reg)
-      }
-      return(invisible(self))
-    },
-    get_data = function(datasets) {
-      if (missing(datasets)) datasets = self$datasets
-      checkmate::assert_character(datasets, min.len = 1L)
-      checkmate::assert_subset(datasets, self$datasets)
-      data = foreach::foreach(data = datasets) %dopar% {
-        readRDS(paste0(self$dir, "/rds_files/data/", data, ".RDS"))
-      }
+    get_data = function(ids) {
+      if (missing(ids)) ids = self$ids
+      checkmate::assert_character(ids, min.len = 1L)
+      checkmate::assert_subset(ids, self$ids)
+      data = future.apply::future_lapply(ids, function(i) {
+        readRDS(paste0(private$dir, "/rds_files/data/", i, ".RDS"))
+      })
       dplyr::bind_rows(data)
     },
     add_feature = function(fun, check_fun = TRUE) {
-      private$.results = NULL
       checkmate::assert_logical(check_fun)
       private$.check_fun = check_fun
       checkmate::assert_function(fun)
+      if (deparse(substitute(fun)) %in% self$features) stop(paste0("Feature function '", deparse(substitute(fun)), "' was already added."))
       message(paste0("Saving raw RDS file ", deparse(substitute(fun)), ".RDS ", "on disk."))
-      saveRDS(fun, file = paste0(self$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
-      batchtools::batchExport(export = setNames(list(fun), deparse(substitute(fun))), reg = self$reg)
-      batchtools::addAlgorithm(
-        name = deparse(substitute(fun)),
-        fun = function(job, data, instance) fxtract::dplyr_wrapper(data, group_by = self$group_by, fun = fun, check_fun = private$.check_fun),
-        reg = self$reg
-      )
-
-      #add experiments
-      algo.designs = replicate(1L, data.table::data.table(), simplify = FALSE)
-      names(algo.designs) = deparse(substitute(fun))
-      private$add_experiments(algo.designs = algo.designs)
-
+      saveRDS(fun, file = paste0(private$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
       return(invisible(self))
     },
     remove_feature = function(fun) {
-      private$.results = NULL
       if (is.function(fun)) fun = as.character(substitute(fun))
       checkmate::assert_character(fun, min.len = 1L)
-      jt = batchtools::getJobTable(reg = self$reg)
-      checkmate::assert_subset(fun, unique(jt$algorithm))
+      checkmate::assert_subset(fun, self$features)
       for (f in fun) {
-        batchtools::removeAlgorithms(f, reg = self$reg)
-        unlink(paste0(self$dir, "/rds_files/features/", f, ".RDS"))
+        unlink(paste0(private$dir, "/rds_files/features/", f, ".RDS"))
+        unlink(paste0(private$dir, "/rds_files/results/done/", f, ".RDS"))
+        unlink(paste0(private$dir, "/rds_files/results/failed/", f, ".RDS"))
+        unlink(paste0(private$dir, "/rds_files/results/status/", f, ".RDS"))
       }
       return(invisible(self))
     },
     get_feature = function(fun) {
       checkmate::assert_character(fun, len = 1L)
       checkmate::assert_subset(fun, self$features)
-      readRDS(paste0(self$dir, "/rds_files/features/", fun, ".RDS"))
+      readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))
     },
-    calc_features = function() {
-      private$.results = NULL
-      if (length(self$datasets) == 0) stop("Please add datasets with method $add_data().")
+    calc_features = function(features, force = FALSE) {
+      if (missing(features)) features = self$features
+      checkmate::assert_subset(features, self$features)
+      if (length(self$ids) == 0) stop("Please add datasets with method $add_data().")
       if (length(self$features) == 0) stop("Please add feature functions with method $add_feature().")
 
-      if (private$.backend == "batchtools") {
-        running = batchtools::findRunning(reg = self$reg)$job.id
-        not_done = batchtools::findNotDone(reg = self$reg)$job.id
-        batchtools::submitJobs(ids = base::setdiff(not_done, running), reg = self$reg)
-      }
-
-      if (private$.backend == "dplyr") {
-        data_all = self$get_data()
-        features = self$features
-        feature_list = foreach::foreach(feature = features) %dopar% {
-          fun = self$get_feature(feature)
-          dplyr_wrapper(data_all, group_by = self$group_by, fun = fun, check_fun = private$.check_fun)
-        }
-        for (i in 1:length(feature_list)) {
-          if (i == 1) {
-            res = feature_list[[1]]
-          } else {
-            res = dplyr::full_join(res, feature_list[[i]])
+      #skip features, which have already been calculated
+      features_new = features
+      if (!force) {
+        for (feature in features) {
+          if (all(self$status[[feature]] == 1)) {
+            features_new = setdiff(features_new, feature)
+            message(paste0("Feature function '", feature, "' was already applied on every ID and will be skipped. Set force = TRUE, if you want to re-calculate features."))
           }
         }
-        private$.results = res
+      }
+      #calculating features using futures
+      for (feature in features_new) {
+        feat_fun = self$get_feature(feature)
+        ids_calc = self$ids
+        if (!force) {
+          feat_already_calc = paste0(private$dir, "/rds_files/results/status/", feature, ".RDS")
+          if (file.exists(feat_already_calc)) {
+            ids_calc = setdiff(ids_calc, readRDS(feat_already_calc)$ids)
+          }
+        }
+        res_value = future.apply::future_lapply(ids_calc, function(x) {
+          data = self$get_data(x)
+          group_by = private$group_by
+          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$.check_fun), error = function(e) e$message)
+        }, future.seed = TRUE)
+        res_value = setNames(res_value, ids_calc)
+        is_error = sapply(res_value, is.character)
+        if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
+
+        #save done
+        res_data = data.table::rbindlist(res_value[!is_error])
+        if (nrow(res_data) > 0) {
+          done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
+          if (!force) if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
+          saveRDS(res_data, done_exist)
+        }
+
+        #save status
+        status_data = data.frame(ids = as.character(ids_calc), feature = 1, stringsAsFactors = FALSE)
+        colnames(status_data)[2] = feature
+        done_status = paste0(private$dir, "/rds_files/results/status/", feature, ".RDS")
+        if (!force) if (file.exists(done_status)) status_data = data.table::rbindlist(list(status_data, readRDS(done_status)))
+        saveRDS(status_data, done_status)
+
+        #save error messages
+        res_error = res_value[is_error]
+        if (length(res_error) >= 1) for (i in 1:length(res_error)) res_error[[i]] = data.frame(feature_function = feature, id = names(res_error[i]), error_message = res_error[[i]])
+        res_error = data.table::rbindlist(res_error)
+        done_error = paste0(private$dir, "/rds_files/results/failed/", feature, ".RDS")
+        if (!force) if (file.exists(done_error)) res_error = data.table::rbindlist(list(res_error, readRDS(done_error)))
+        saveRDS(res_error, done_error)
+      }
+      return(invisible(self))
+    },
+    retry_failed_features = function(features) {
+      warning("The results may be non reproducible. Make sure your feature function is non-stochastical (or add a seed inside the feature function).")
+      if (missing(features)) features = self$features
+      checkmate::assert_subset(features, self$features)
+      if (nrow(self$error_messages) == 0) stop("No failed features found!")
+      error_feats = as.character(unique(self$error_messages$feature_function))
+      features_new = intersect(features, error_feats)
+
+      #calculating features using futures
+      for (feature in features_new) {
+        message(paste0("Retrying feature function: ", feature))
+        feat_fun = self$get_feature(feature)
+        ids_calc = self$error_messages %>% dplyr::filter(feature_function == feature) %>% dplyr::pull(id) %>% as.character()
+        res_value = future.apply::future_lapply(ids_calc, function(x) {
+          data = self$get_data(x)
+          group_by = private$group_by
+          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$.check_fun), error = function(e) e$message)
+        }, future.seed = TRUE)
+        is_error = sapply(res_value, is.character)
+        if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
+
+        #save done
+        res_data = data.table::rbindlist(res_value[!is_error])
+        if (nrow(res_data) > 0) {
+          done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
+          if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
+          saveRDS(res_data, done_exist)
+        }
+        #save status
+        #only resolved IDs were used. Status not changed.
+
+        #save error messages
+        res_error = res_value[is_error]
+        if (length(res_error) >= 1) for (i in 1:length(res_error)) res_error[[i]] = data.frame(feature_function = feature, id = names(res_error[i]), error_message = res_error[[i]])
+        res_error = data.table::rbindlist(res_error)
+        done_error = paste0(private$dir, "/rds_files/results/failed/", feature, ".RDS")
+        if (file.exists(done_error)) {
+          old_error = readRDS(done_error)
+          old_error = old_error %>% dplyr::filter(!id %in% ids_calc)
+          res_error = data.table::rbindlist(list(res_error, old_error))
+        }
+        saveRDS(res_error, done_error)
       }
       return(invisible(self))
     }
   ),
   private = list(
-    add_experiments = function(prob.designs = NULL, algo.designs = NULL) {
-      batchtools::addExperiments(reg = self$reg, prob.designs = prob.designs, algo.designs = algo.designs)
-      return(invisible(self))
-    },
-    .backend = "batchtools",
-    .results = NULL,
+    name = NULL,
+    group_by = NULL,
+    dir = NULL,
     .check_fun = NULL
   ),
   active = list(
-    backend = function(backend) {
-      if (missing(backend)) {
-        private$.backend
-      } else {
-        checkmate::assert_character(backend)
-        checkmate::assert_subset(backend, c("dplyr", "batchtools"))
-        private$.backend = backend
-        backend
-      }
-    },
-    perc_done = function() {
-      if (private$.backend != "batchtools") stop("This slot is only available if backend is set to 'batchtools'.")
-      k = nrow(batchtools::getJobTable(reg = self$reg))
-      n = nrow(batchtools::findDone(reg = self$reg)) / nrow(batchtools::getJobTable(reg = self$reg))
-      ifelse(k == 0, 0, n)
-    },
     error_messages = function() {
-      if (private$.backend != "batchtools") stop("This slot is only available if backend is set to 'batchtools'.")
-      err = batchtools::getErrorMessages(reg = self$reg)
-      jt = batchtools::getJobTable(ids = err, reg = self$reg)
-      jt = jt[, c("job.id", "error", "problem", "algorithm")]
-      colnames(jt) = c("batchtools_job_id", "error", "data", "feature")
-      jt
+      dir_failed = paste0(private$dir, "/rds_files/results/failed/")
+      failed = list.files(dir_failed)
+      errors = future.apply::future_lapply(failed, function(x) readRDS(paste0(dir_failed, "/", x)))
+      error_table = data.table::rbindlist(errors)
+      error_table
     },
-    log_files = function() {
-      if (private$.backend != "batchtools") stop("This slot is only available if backend is set to 'batchtools'.")
-      err_table = self$error_messages
-      if (nrow(err_table) >= 1) {
-        log_files = lapply(1:nrow(err_table), function(x) batchtools::getLog(self$error_messages$batchtools_job_id[x]))
-        log_files = setNames(log_files, paste0("batchtools_job_id ", err_table$batchtools_job_id))
-        return(log_files)
-      }
-    },
-    datasets = function() {
-      self$reg$problems
+    ids = function() {
+      gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/data")))
     },
     features = function() {
-      self$reg$algorithms
-    },
-    status = function() {
-      if (private$.backend != "batchtools") stop("This slot is only available if backend is set to 'batchtools'.")
-      problem = vars = funs = NULL
-      reg = self$reg
-      if (nrow(batchtools::findDone(reg = reg)) == 0) stop("No features have been calculated yet or all functions resulted in errors. Start calculating with method $calc_features().")
-      jt = batchtools::getJobTable(reg = reg)
-      jt = data.frame(jt)
-      jt = jt %>% dplyr::left_join(data.frame(job.id = batchtools::findDone(), really_done = "DONE"), by = "job.id")
-      dcast_formula = as.formula("problem ~ algorithm")
-      res = data.table::dcast(data.table::setDT(jt), dcast_formula, value.var = "really_done")
-      doneFun = function(x) ifelse(!is.na(x), 1, 0)
-      res = res %>% dplyr::mutate_at(dplyr::vars(-problem), dplyr::funs(doneFun))
-      res2 = list(detailed = res)
-      res2[["problem_wise"]] = data.frame(problem = res$problem,
-        finished = res %>% dplyr::select(-problem) %>% rowMeans())
-      res2[["feature_wise"]] = res %>% dplyr::select(-problem) %>% colMeans()
-      res2[["perc_done"]] = mean(unlist(res2$detailed %>% dplyr::select(-problem)))
-      res2
+      gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/features")))
     },
     results = function() {
-      if (self$backend == "batchtools") {
-        if (!is.null(private$.results)) {
-          message("No new results found. Returning last generated results:")
-          return(private$.results)
-        }
-        message("Calculating results from batchtools registry.")
-        feature = job.id = problem = algorithm = NULL
-        reg = self$reg
-        res = batchtools::reduceResultsDataTable(reg = reg)
-        if (nrow(res) == 0) stop("No features have been calculated yet. Start calculating with method $calc_features().")
-        done_id = res$job.id
-        res = setNames(res$result, done_id)
+      dir_done = paste0(private$dir, "/rds_files/results/done/")
+      done = list.files(dir_done)
+      results = future.apply::future_lapply(done, function(x) readRDS(paste0(dir_done, "/", x)))
+      if (length(results) == 0) stop("No features have been calculated yet. Start with $calc_features().")
 
-        jt = batchtools::getJobTable(reg = reg)
-        lookup = jt %>% select(job.id, problem, algorithm)
-        features = self$status$feature_wise
-        features = names(features[features != 0])
-        results = foreach::foreach(feature = features) %dopar% {
-          ids = lookup %>% dplyr::filter(algorithm %in% feature)
-          res_feat = res[names(res) %in% ids$job.id]
-          data.table::rbindlist(res_feat)
+      #collect final results
+      final_result = results[[1]]
+      if (length(results) >= 2) {
+        for (i in 2:length(results)) {
+          final_result = final_result %>% dplyr::full_join(results[[i]], by = private$group_by)
         }
-        final_result = results[[1]]
-        if (length(results) >= 2) {
-          for (i in 2:length(results)) {
-            final_result = final_result %>% dplyr::full_join(results[[i]], by = self$group_by)
-          }
-        }
-        private$.results = final_result
-        return(final_result)
       }
-
-      if (self$backend == "dplyr") {
-        if (is.null(private$.results)) {
-          message("Calculation has not yet been started. Starting calculation with $calc_features() now...")
-          self$calc_features()
-        }
-        message("Retrieving results from dplyr backend:")
-        return(private$.results)
-      }
+      final_result
+    },
+    status = function() {
+      todo_data = gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/data/")))
+      todo_feats = gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/features/")))
+      done_feats = list.files(paste0(private$dir, "/rds_files/results/status/"))
+      done_feats_list = future.apply::future_lapply(done_feats, function(x) readRDS(paste0(private$dir, "/rds_files/results/status/", x)))
+      status = data.frame(ids = todo_data, stringsAsFactors = FALSE)
+      if (length(done_feats_list) >= 1) for (i in 1:length(done_feats_list)) status = status %>% dplyr::left_join(done_feats_list[[i]], by = "ids")
+      status[is.na(status)] = 0
+      for (feat in todo_feats) if (!feat %in% colnames(status)) eval(parse(text = paste0("status$", feat, " = 0")))
+      status
     }
   )
 )

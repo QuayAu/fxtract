@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • fxtract</title>
+<title>Wraps dplyr's group_by functionality. — dplyr_wrapper • fxtract</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Wraps dplyr's group_by functionality. — dplyr_wrapper" />
+
+<meta property="og:description" content="Wraps dplyr's group_by functionality." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -47,7 +50,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -114,28 +117,68 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/QuayAu/fxtract/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Wraps dplyr's group_by functionality.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/QuayAu/fxtract/blob/master/R/dplyr_wrapper.R'><code>R/dplyr_wrapper.R</code></a></small>
+    <div class="hidden name"><code>dplyr_wrapper.Rd</code></div>
     </div>
 
-    <div id="fxtract-0-9-1" class="section level1">
-<h1 class="page-header">
-<a href="#fxtract-0-9-1" class="anchor"></a>fxtract 0.9.1</h1>
-<ul>
-<li>Initial release to CRAN</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Wraps dplyr's group_by functionality.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>dplyr_wrapper</span>(<span class='no'>data</span>, <span class='no'>group_by</span>, <span class='no'>fun</span>, <span class='kw'>check_fun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>(`dataframe`). A dataframe with a grouping variable.</p></td>
+    </tr>
+    <tr>
+      <th>group_by</th>
+      <td><p>(`character()`). Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.</p></td>
+    </tr>
+    <tr>
+      <th>fun</th>
+      <td><p>(`function`). Must be a function, which has a dataframe as input and a (named) vector of desired length as output.</p></td>
+    </tr>
+    <tr>
+      <th>check_fun</th>
+      <td><p>(`logical(1)`). If <code>TRUE</code>, fun(data) will be evaluated and checked if the outcome is of correct form. Set to <code>FALSE</code>
+if evaluation on the whole dataset takes too long.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>(`dataframe`)</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>fun</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>data</span>) {
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='kw'>uses_chrome</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(
+    <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>data</span>, <span class='no'>RUNNING_TASKS_baseActivity_mPackage</span> <span class='kw'>==</span> <span class='st'>"com.android.chrome"</span>))
+  )
+}
+<span class='fu'>dplyr_wrapper</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>studentlife_small</span>, <span class='kw'>group_by</span> <span class='kw'>=</span> <span class='st'>"userId"</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='no'>fun</span>)</div><div class='output co'>#&gt;   userId uses_chrome
+#&gt; 1     00        3104
+#&gt; 2     01        1635
+#&gt; 3     02        2811</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#fxtract-0-9-1">0.9.1</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
+  </div>
 </div>
 
       <footer>

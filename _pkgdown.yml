@@ -20,8 +20,6 @@ navbar:
       href: articles/tutorial/xtractor_update_feature.html
     - text: Error Handling
       href: articles/tutorial/xtractor_error_handling.html
-    - text: Change Backend
-      href: articles/tutorial/xtractor_change_backend.html
   - text: "Reference"
     href: "reference/index.html"
     contents:

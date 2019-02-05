@@ -1,4 +1,4 @@
-context("Helpers")
+context("Wrapper")
 
 test_that("dplyr_wrapper", {
   df = data.frame(id = c(rep(1, 10), rep(2, 10)))

@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> • fxtract</title>
+<title>Function dplyr_wrapper • fxtract</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../pkgdown.js"></script><meta property="og:title" content="">
+<script src="../../pkgdown.js"></script><meta property="og:title" content="Function dplyr_wrapper">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -58,6 +58,9 @@
     <li>
       <a href="../../articles/tutorial/xtractor_error_handling.html">Error Handling</a>
     </li>
+    <li>
+      <a href="../../articles/tutorial/xtractor_change_backend.html">Change Backend</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -83,34 +86,63 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1></h1>
+      <h1>Function dplyr_wrapper</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/xtractor_setup_child.Rmd"><code>vignettes/tutorial/xtractor_setup_child.Rmd</code></a></small>
-      <div class="hidden name"><code>xtractor_setup_child.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/QuayAu/fxtract/blob/master/vignettes/tutorial/dplyr_wrapper.Rmd"><code>vignettes/tutorial/dplyr_wrapper.Rmd</code></a></small>
+      <div class="hidden name"><code>dplyr_wrapper.Rmd</code></div>
 
     </div>
 
     
     
-<p>Click <a href="https://quayau.github.io/fxtract/docs/articles/tutorial/xtractor.html">here</a> on how to use the R6 class <code>Xtractor</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">}</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">fun2 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">}</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun1)</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2)</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
+<p>This needs a rewrite.</p>
+<!-- This function wraps the `group_by` functionality of `dplyr`. -->
+<!-- Given a **user-defined** function `fun`, `dplyr_wrapper` calculates this function for each ID of a grouping variable. -->
+<!-- The function `fun` needs to be defined on the given dataset and is allowed to return a named vector of arbitrary length. -->
+<!-- The dataframe should contain a grouping variable with all the IDs: -->
+<!-- This function works fine for small datasets and few features. But if your dataset is too big and you have many complicated features, then it's highly advised to use the R6 object ``Xtractor`` (click [here](https://quayau.github.io/fxtract/docs/articles/tutorial/basics_project.html)). -->
+<!-- ## Example data -->
+<!-- Let's simulate a simple (absolutely arbitrary!) example dataset. -->
+<!-- Two participants with the ID *1* or *2* were given two tasks. -->
+<!-- For each task they were given two hours of time.  -->
+<!-- A value *x* was measured during this task. -->
+<!-- ```{r, message = FALSE, warning = FALSE} -->
+<!-- library(fxtract) -->
+<!-- df = data.frame(id = c(rep(1, 10), rep(2, 10))) -->
+<!-- df$task = rep(c(rep("task1", 5), rep("task2", 5)), 2) -->
+<!-- df$hour = rep(c(rep("hour1", 3), rep("hour2", 2), rep("hour1", 2), rep("hour2", 3)), 2) -->
+<!-- df$x = rnorm(20) -->
+<!-- df -->
+<!-- ``` -->
+<!-- ### Return 1 value each -->
+<!-- Let's say we are interested in the maximum value of **x** for each participant.  -->
+<!-- We need to define a function, which has a dataframe as input and a named vector as output: -->
+<!-- ```{r} -->
+<!-- fun = function(data) { -->
+<!--   c(max_x = max(data$x)) -->
+<!-- } -->
+<!-- ``` -->
+<!-- Now we can calculate the desired outcome: -->
+<!-- ```{r} -->
+<!-- dplyr_wrapper(df, group_by = "id", fun = fun) -->
+<!-- ``` -->
+<!-- ### Return more values at once -->
+<!-- Sometimes calculations can take a long time (e.g. clustering of GPS points) and we want to calculate more than one value (e.g. `mean` and `sd`). This can be achieved by returning a named vector: -->
+<!-- ```{r} -->
+<!-- more_features = function(data) { -->
+<!--   c(max_x = max(data$x), sd_x = sd(data$x)) -->
+<!-- } -->
+<!-- dplyr_wrapper(df, group_by = "id", fun = more_features) -->
+<!-- ``` -->
+<!-- ### Group by two columns -->
+<!-- ```{r} -->
+<!-- dplyr_wrapper(df, group_by = c("id", "task"), fun = more_features) -->
+<!-- ``` -->
+<!-- ### Group by three columns -->
+<!-- ```{r} -->
+<!-- dplyr_wrapper(df, group_by = c("id", "task", "hour"), fun = more_features) -->
+<!-- ``` -->
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
