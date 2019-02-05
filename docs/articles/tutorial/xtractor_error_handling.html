@@ -58,9 +58,6 @@
     <li>
       <a href="../../articles/tutorial/xtractor_error_handling.html">Error Handling</a>
     </li>
-    <li>
-      <a href="../../articles/tutorial/xtractor_change_backend.html">Change Backend</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -101,28 +98,27 @@
 <li>When some features fail on some datasets, we can get individual error messages and fix the problem.</li>
 </ul>
 <p>Setup script:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)
-xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)
-xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxtract)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">xtractor =<span class="st"> </span>Xtractor<span class="op">$</span><span class="kw">new</span>(<span class="st">"xtractor"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">xtractor<span class="op">$</span><span class="kw">add_data</span>(iris, <span class="dt">group_by =</span> <span class="st">"Species"</span>)</a></code></pre></div>
 <p>Let’s write functions, which fail on different datasets:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="cf">if</span> (<span class="st">"versicolor"</span> <span class="op">%in%</span><span class="st"> </span>data<span class="op">$</span>Species) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"fun1 not compatible on versicolor"</span>)
-  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),
-    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))
-}
-
-fun2 =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="cf">if</span> (<span class="st">"virginica"</span> <span class="op">%in%</span><span class="st"> </span>data<span class="op">$</span>Species) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"fun2 not compatible on virginica"</span>)
-  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),
-    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))
-}
-
-xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun1)
-xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2)
-xtractor<span class="op">$</span><span class="kw">calc_features</span>()</code></pre></div>
-<p>We can still get the resulting dataframe:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>results</code></pre></div>
-<pre><code>## Calculating results from batchtools registry.</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">fun1 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="cf">if</span> (<span class="st">"versicolor"</span> <span class="op">%in%</span><span class="st"> </span>data<span class="op">$</span>Species) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"fun1 not compatible on versicolor"</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">}</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">fun2 =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">  <span class="cf">if</span> (<span class="st">"virginica"</span> <span class="op">%in%</span><span class="st"> </span>data<span class="op">$</span>Species) <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stop">stop</a></span>(<span class="st">"fun2 not compatible on virginica"</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">}</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun1)</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2)</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a></code></pre></div>
+<p>We can still get the resulting dataframe with missing values for failed calculations:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">xtractor<span class="op">$</span>results</a></code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa             5.006       0.3524897             1.462
 ## 2  virginica             6.588       0.6358796                NA
@@ -134,84 +130,42 @@ xtractor<span class="op">$</span><span class="kw">calc_features</span>()</code><
 <div id="get-error-messages" class="section level2">
 <h2 class="hasAnchor">
 <a href="#get-error-messages" class="anchor"></a>Get Error Messages</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>error_messages</code></pre></div>
-<pre><code>##    batchtools_job_id
-## 1:                 2
-## 2:                 6
-##                                                     error       data
-## 1: Error in fun(data) : fun1 not compatible on versicolor versicolor
-## 2:  Error in fun(data) : fun2 not compatible on virginica  virginica
-##    feature
-## 1:    fun1
-## 2:    fun2</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">xtractor<span class="op">$</span>error_messages</a></code></pre></div>
+<pre><code>##    feature_function         id                     error_message
+## 1:             fun1 versicolor fun1 not compatible on versicolor
+## 2:             fun2  virginica  fun2 not compatible on virginica</code></pre>
 </div>
-<div id="status" class="section level2">
+<div id="debugging" class="section level2">
 <h2 class="hasAnchor">
-<a href="#status" class="anchor"></a>Status</h2>
-<p>The slot <code>$status</code> gives an overview over which features have already been calculated on which datasets (1 done, 0 not done):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>status</code></pre></div>
-<pre><code>## $detailed
-##      problem fun1 fun2
-## 1     setosa    1    1
-## 2 versicolor    0    1
-## 3  virginica    1    0
-## 
-## $problem_wise
-##      problem finished
-## 1     setosa      1.0
-## 2 versicolor      0.5
-## 3  virginica      0.5
-## 
-## $feature_wise
-##      fun1      fun2 
-## 0.6666667 0.6666667 
-## 
-## $perc_done
-## [1] 0.6666667</code></pre>
-<p>We can also use the corresponding batchtools function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/getStatus">getStatus</a></span>(<span class="dt">reg =</span> xtractor<span class="op">$</span>reg)</code></pre></div>
-<pre><code>## Status for 6 jobs at 2019-01-23 14:24:43:
-##   Submitted    : 6 (100.0%)
-##   -- Queued    : 0 (  0.0%)
-##   -- Started   : 6 (100.0%)
-##   ---- Running : 0 (  0.0%)
-##   ---- Done    : 4 ( 66.7%)
-##   ---- Error   : 2 ( 33.3%)
-##   ---- Expired : 0 (  0.0%)</code></pre>
+<a href="#debugging" class="anchor"></a>Debugging</h2>
+<p>You can get the feature function and the dataset of the ID like this:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">fun =<span class="st"> </span>xtractor<span class="op">$</span><span class="kw">get_feature</span>(<span class="st">"fun1"</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">df =<span class="st"> </span>xtractor<span class="op">$</span><span class="kw">get_data</span>(<span class="st">"versicolor"</span>)</a></code></pre></div>
+<p>Now you can debug the function on the dataset on which the function failed.</p>
 </div>
 <div id="fix-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fix-features" class="anchor"></a>Fix Features</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fun1_fixed =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),
-    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))
-}
-
-fun2_fixed =<span class="st"> </span><span class="cf">function</span>(data) {
-  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),
-    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))
-}
-
-xtractor<span class="op">$</span><span class="kw">remove_feature</span>(fun1)
-xtractor<span class="op">$</span><span class="kw">remove_feature</span>(fun2)
-xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun1_fixed)
-xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2_fixed)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">fun1_fixed =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Sepal.Length),</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">    <span class="dt">sd_sepal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Sepal.Length))</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">fun2_fixed =<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dt">mean_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(data<span class="op">$</span>Petal.Length),</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">    <span class="dt">sd_petal_length =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/sd">sd</a></span>(data<span class="op">$</span>Petal.Length))</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">xtractor<span class="op">$</span><span class="kw">remove_feature</span>(fun1)</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12">xtractor<span class="op">$</span><span class="kw">remove_feature</span>(fun2)</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun1_fixed)</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2_fixed)</a></code></pre></div>
 </div>
-<div id="parallelization" class="section level2">
+<div id="calculate-again" class="section level2">
 <h2 class="hasAnchor">
-<a href="#parallelization" class="anchor"></a>Parallelization</h2>
-<p>Parallelization is done by setting the cluster functions via batchtools. See <a href="https://mllg.github.io/batchtools/articles/batchtools.html">here</a>.</p>
-<p>E.g. on a windows machine:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>reg<span class="op">$</span>cluster.functions =<span class="st"> </span>batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/makeClusterFunctionsSocket">makeClusterFunctionsSocket</a></span>(<span class="dv">2</span>)</code></pre></div>
-</div>
-<div id="submit-jobs-via-batchtools" class="section level2">
-<h2 class="hasAnchor">
-<a href="#submit-jobs-via-batchtools" class="anchor"></a>Submit Jobs via batchtools</h2>
-<p>It is also possible to submit jobs via batchtools:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batchtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/batchtools/topics/submitJobs">submitJobs</a></span>(<span class="dt">reg =</span> xtractor<span class="op">$</span>reg)</code></pre></div>
-<pre><code>## Submitting 6 jobs in 6 chunks using cluster functions 'Socket' ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xtractor<span class="op">$</span>results</code></pre></div>
-<pre><code>## Calculating results from batchtools registry.</code></pre>
+<a href="#calculate-again" class="anchor"></a>Calculate Again</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">xtractor<span class="op">$</span><span class="kw">calc_features</span>()</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">xtractor<span class="op">$</span>results</a></code></pre></div>
 <pre><code>##      Species mean_sepal_length sd_sepal_length mean_petal_length
 ## 1     setosa             5.006       0.3524897             1.462
 ## 2 versicolor             5.936       0.5161711             4.260
@@ -229,10 +183,9 @@ xtractor<span class="op">$</span><span class="kw">add_feature</span>(fun2_fixed)
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#get-error-messages">Get Error Messages</a></li>
-      <li><a href="#status">Status</a></li>
+      <li><a href="#debugging">Debugging</a></li>
       <li><a href="#fix-features">Fix Features</a></li>
-      <li><a href="#parallelization">Parallelization</a></li>
-      <li><a href="#submit-jobs-via-batchtools">Submit Jobs via batchtools</a></li>
+      <li><a href="#calculate-again">Calculate Again</a></li>
       </ul>
 </div>
       </div>

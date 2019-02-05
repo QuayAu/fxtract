@@ -21,9 +21,8 @@ See the [tutorial](https://quayau.github.io/fxtract/) for an introduction into t
 ![](man/figures/fxtract_main.svg)
 So, if you have different datasets of many IDs and you want to calculate features (covariates) for each ID out of these datasets, then ``fxtract`` might be for you.
 
-This package utilizes the functionality of the [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html)-package while keeping an easy to access API.
-The user only needs to define functions which have a dataset as input and named vector with the desired features as output. The whole data wrangling (calculating the features for each ID, possibly in parallel) is handled by `fxtract`.
-This package works for very large datasets with many different IDs and the main functionality is written in [R6](https://r6.r-lib.org/articles/Introduction.html).
+The user only needs to define functions which have a dataset as input and named vector (or list) with the desired features as output. The whole data wrangling (calculating the features for each ID, possibly in parallel) is handled by `fxtract`.
+This package works with very large datasets and many different IDs and the main functionality is written in [R6](https://r6.r-lib.org/articles/Introduction.html).
 
 ### Why don't just use ``dplyr`` or other packages?
 At first glance it looks like we just rewrote the ``summarize()`` functionality of ``dplyr``.
@@ -69,10 +68,9 @@ unlink("fxtract_files", recursive = TRUE)
 * Extracting features from raw data of many different IDs with the R6 Class `Xtractor`:
     * Advantages:
         * No more code bloat thanks to R6.
-        * Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Datasets for each participant individually must be small enough to be read into memory.
-        * Internally, [batchtools](https://mllg.github.io/batchtools/articles/batchtools.html) is used for parallelization and error handling.
-        * Features will be calculated for each participant individually.
-        * If one feature on one participant throws an error, this will not stop the whole process (like in a traditional R script). A log file with the error message is created (by batchtools), and the remaining features will still be calculated. 
+        * Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Individual datasets for each id must be small enough to be read into memory.
+        * Features will be calculated for each participant individually and can be parallelized with the `future`-package.
+        * If one feature on one ID throws an error, this will not stop the whole process (like in a traditional R script). The remaining features will still be calculated.
         * Individual features can be deleted or updated easily.
         * Calculation of features can be done in parallel and the process can be monitored. It is also possible to stop and return the calculation at a later time.
-        * Results can be easily collected in one final dataframe.
+        * Results can be easily retrieved in one final dataframe.
