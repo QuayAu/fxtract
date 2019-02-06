@@ -9,7 +9,7 @@ Status](https://ci.appveyor.com/api/projects/status/github/QuayAu/fxtract?branch
 
 # fxtract
 
-The feature extraction is a crucial step for tackling machine learning
+Feature extraction is a crucial step for tackling machine learning
 problems. Many machine learning problems start with complex (often
 timestamped) raw data many grouped variables (e.g. heart rate
 measurements of many patients, gps data for analysis of movements of
