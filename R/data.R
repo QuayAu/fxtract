@@ -1,4 +1,4 @@
-#' studentlife_small
+#' Exemplary logging data from smartphones.
 #'
 #' Contains exemplary gps and app data from the studentlife dataset (users: u00, u01, u02)
 #'
