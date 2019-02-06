@@ -1,10 +1,12 @@
 Package: fxtract
 Type: Package
-Title: Feature Extraction from Raw Data
+Title: Feature Extraction from Grouped Data
 Date: 2019-01-17
-Description: Extracting features from raw data of many different users/IDs/etc.
+Description: Similar to the summarize functionality of dplyr, this package is used on grouped data. 
+    The output must have one row for each group. 
+    In some machine learning contexts this functionality plays a big part in the feature extraction process.
     Very large datasets are supported, since data is only read into RAM when needed.
-    Individual features can be deleted or updated easily. Calculation of features can be done in parallel and the process can be monitored.
+    Calculation can be done in parallel and the process can be monitored.
     Results are available in one final dataframe.
 Version: 0.9.1
 Authors@R: c(person("Quay", "Au", email = "quayau@gmail.com", role = c("aut", "cre")),
