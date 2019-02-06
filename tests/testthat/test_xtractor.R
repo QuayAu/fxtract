@@ -446,4 +446,5 @@ test_that("test retry failed features", {
   }
   expect_true(nrow(x$error_messages) == 0)
   expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "100%")
+  expect_error(x$retry_failed_features())
 })
