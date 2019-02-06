@@ -9,7 +9,7 @@ Status](https://ci.appveyor.com/api/projects/status/github/QuayAu/fxtract?branch
 
 # fxtract
 
-The feature extraction is a crucial step tackling machine learning
+The feature extraction is a crucial step for tackling machine learning
 problems. Many machine learning problems start with complex (often
 timestamped) raw data many grouped variables (e.g. heart rate
 measurements of many patients, gps data for analysis of movements of
@@ -95,7 +95,7 @@ xtractor$results
       - No more code bloat thanks to R6.
       - Very large datasets are supported, since data is only read into
         RAM when needed. Minimum requirement: Individual datasets for
-        each id must be small enough to be read into memory.
+        each ID must be small enough to be read into memory.
       - Features will be calculated for each ID individually and can be
         parallelized with the `future`-package.
       - If one feature on one ID throws an error, this will not stop the
