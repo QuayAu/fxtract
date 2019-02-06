@@ -69,8 +69,8 @@ unlink("fxtract_files", recursive = TRUE)
 * Unit-tested functions.
 * Extracting features from raw data of many different IDs with the R6 Class `Xtractor`:
     * No more code bloat thanks to R6.
-    * Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Individual datasets for each id must be small enough to be read into memory.
-    * Features will be calculated for each participant individually and can be parallelized with the `future`-package.
+    * Very large datasets are supported, since data is only read into RAM when needed. Minimum requirement: Individual datasets for each ID must be small enough to be read into memory.
+    * Features will be calculated for each ID individually and can be parallelized with the `future`-package.
     * If one feature on one ID throws an error, this will not stop the whole process (like in a traditional R script). The remaining features will still be calculated.
     * Individual features can be deleted or updated easily.
     * Calculation of features can be done in parallel and the process can be monitored. It is also possible to stop and return the calculation at a later time.
