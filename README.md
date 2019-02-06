@@ -11,18 +11,18 @@ Status](https://ci.appveyor.com/api/projects/status/github/QuayAu/fxtract?branch
 
 Feature extraction is a crucial step for tackling machine learning
 problems. Many machine learning problems start with complex (often
-timestamped) raw data many grouped variables (e.g. heart rate
+timestamped) raw data with many grouped variables (e.g. heart rate
 measurements of many patients, gps data for analysis of movements of
-many participants of a study, etc.). This raw data often times cannot be
-directly used for machine learning algorithms. User-defined features
+many participants of a study, etc.). Often times, this raw data cannot
+directly be used for machine learning algorithms. User-defined features
 must be extracted for this purpose. Examples could be the heart rate
-variability of a patient, or the maximum distance traveled for a
+variability of a patient, or the maximum distance traveled by a
 participant of a gps study. Since there are many different machine
-learning applications and therefore many inherently different datasets
-and features which need to be calculated, we do not supply any automated
-features. `fxtract` assists you in the feature extraction process by
-helping with the data wrangling needed, but still allows you to extract
-your own defined features.
+learning applications and therefore many inherently different raw
+datasets and features which need to be calculated, we do not supply any
+automated features. `fxtract` assists you in the feature extraction
+process by helping with the data wrangling needed, but still allows you
+to extract your own defined features.
 
 ![](man/figures/fxtract_main.svg)
 
@@ -35,6 +35,9 @@ the main functionality is written in
 [R6](https://r6.r-lib.org/articles/Introduction.html). Parallelization
 is available via
 [future](https://cran.r-project.org/web/packages/future/index.html).
+
+See the [tutorial](https://quayau.github.io/fxtract/) on how to use this
+package.
 
 # Installation
 
@@ -59,9 +62,6 @@ streamlines the process of loading datasets and adding feature
 functions. Once your dataset (with all IDs) becomes too big for memory,
 or if some feature functions fail on some IDs, using our package can
 save you many lines of code.
-
-See the [tutorial](https://quayau.github.io/fxtract/) on how to use this
-package.
 
 # Usage
 
