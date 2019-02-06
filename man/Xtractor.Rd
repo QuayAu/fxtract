@@ -19,32 +19,26 @@ xtractor = Xtractor$new("xtractor")
 
 For Xtractor$new():
 \describe{
-\item{\code{name}: }{('character(1)'): A user defined name of the Xtractor. All necessary data will be saved on the path: ./fxtract_files/name/}
+\item{\code{name}: }{(`character(1)`): A user defined name of the Xtractor. All necessary data will be saved on the path: ./fxtract_files/name/}
 \item{\code{load}: }{(`logical(1)`): If TRUE, an existing Xtractor will be loaded.}
+\item{\code{file.dir}: }{(`character(1)`): Path where all files of the Xtractor are saved. Default is the current working directory.}
 }
 }
 
 \section{Details}{
 
-All datasets and feature functions are saved in this R6 object. \code{Xtractor} heavily relies on the R-package batchtools.
-Data will be saved as single RDS files (for each ID) and feature functions are calculated on each single dataset.
+All datasets and feature functions are saved in this R6 object.
+Datasets will be saved as single RDS files (for each ID) and feature functions are calculated on each single dataset.
 A big advantage of this method is that it scales nicely for larger datasets. Data is only read into RAM, when needed.
 }
 
 \section{Fields}{
 
 \describe{
-\item{\code{name}: }{(`character(1)`): The Xtractors name.}
-\item{\code{dir}: }{(`character(1)`): The directory where files are saved.}
-\item{\code{group_by}: }{(`character(1)`): The column on which to group by.}
-\item{\code{reg}: }{(`registry`): batchtools registry.}
-\item{\code{perc_done}: }{(`numeric(1)`): Active binding. Percentage of finished calculations.}
-\item{\code{backend}: }{(`character(1)`): Active binding. The calculation backend. Can be 'dplyr' or 'batchtools'.}
 \item{\code{error_messages}: }{(`data.frame()`): Active binding. A dataframe with information about error messages.}
-\item{\code{log_files}: }{(`list()`): Active binding. A list with the log files which were created due to errors.}
-\item{\code{datasets}: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
+\item{\code{ids}: }{(`character()`): Active binding. A character vector with the IDs of the grouping variable.}
 \item{\code{features}: }{(`character()`): Active binding. A character vector with the feature functions which were added.}
-\item{\code{status}: }{(`data.frame()`): Active binding. A dataframe with an overview over which features are done on which datasets.}
+\item{\code{status}: }{(`data.frame()`): Active binding. A dataframe with an overview over which features are calculated on which datasets.}
 \item{\code{results}: }{(`data.frame()`): Active binding. A dataframe with all calculated features of all IDs.}
 }
 }
@@ -52,25 +46,25 @@ A big advantage of this method is that it scales nicely for larger datasets. Dat
 \section{Methods}{
 
 \describe{
-\item{\code{add_data(dataframe, group_by)}}{[dataframe: (`data.frame`)] A dataframe which shall be added to the R6 object. \cr
+\item{\code{add_data(data, group_by)}}{[data: (`data.frame` | `data.table`)] A dataframe or data.table which shall be added to the R6 object. \cr
  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr
- This method writes single RDS files (this can be parallelized with foreach) and adds them as batchtools problems for each ID of the grouping variable.
- After that, batchtools experiments will be added too.} \cr
+ This method writes single RDS files (this can be parallelized with future)} \cr
 \item{\code{preprocess_data(fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. \cr
- This method loads the RDS files and applies this function on them. The old RDS files are overwritten and the batchtools
- problems and experiments are updated.}
-\item{\code{remove_data(data)}}{[data: (`character(1)`)] An ID of the grouping variable. \cr
+ This method loads the RDS files and applies this function on them. The old RDS files are overwritten.}
+\item{\code{remove_data(ids)}}{[ids: (`character(1)`)] An ID of the grouping variable. \cr
  This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.}
-\item{\code{get_data(data)}}{[data: (`character()`)] One ore many IDs of the grouping variable. \cr
+\item{\code{get_data(ids)}}{[ids: (`character()`)] One or many IDs of the grouping variable. \cr
  This method returns one dataframe with the chosen IDs.} \cr
 \item{\code{add_feature(fun, check_fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. \cr
- [check_fun: (`logical(1)`)] The function will be checked if it returns a vector or a  list. Disable, if calculation takes too long. \cr
- This method adds a function as batchtools algorithm. After that, batchtools experiments are added too.} \cr
-\item{\code{remove_feature(fun)}}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. \cr
- This method removes the batchtools algorithms and experiments corresponding to the given function.} \cr
+ [check_fun: (`logical(1)`)] The function will be checked if it returns a vector or a  list. Disable, if calculation takes too long.} \cr \cr
+\item{\code{remove_feature(fun)}}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed.} \cr \cr
 \item{\code{get_feature(fun)}}{[fun: (`character(1)`)] The name of a function as character. \cr
  This method reads the RDS file of the function. Useful for debugging after loading an Xtractor.} \cr
-\item{\code{calc_features()}}{This method calculates all features on all datasets. Internally, it submits all batchtools jobs, which are not done yet.} \cr
+\item{\code{calc_features(features, force)}}{[features: (`character()`)] A character vector of the names of the features which shall be calculated. Defaults to all features. \cr
+[force: (`logical(1)`)] The default action is to skip feature functions, which already have been calculated once. Set to \code{TRUE} for forcing re-calculation.
+This method calculates all features on all datasets.} \cr
+\item{\code{retry_failed_features(features)}}{[features: (`character()`)] A character vector of the names of the features which shall be calculated. Defaults to all features. \cr
+This method retries calculation of failed features. Useful if calculation failed because of memory problems.} \cr
 \item{\code{plot()}}{[internal] method to print the R6 object.} \cr
 \item{\code{clone()}}{[internal] method to clone the R6 object.} \cr
 \item{\code{initialize()}}{[internal] method to initialize the R6 object.}
