@@ -1,7 +1,7 @@
 Package: fxtract
 Type: Package
 Title: Feature Extraction from Grouped Data
-Date: 2019-02-06
+Date: 2019-02-07
 Description: Similar to the summarize functionality of dplyr, this package is used on grouped data.
     The user can simply add functions which have an output of a named vector.
     In some machine learning contexts this functionality plays a big part in the feature extraction process.
