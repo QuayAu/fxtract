@@ -36,26 +36,28 @@
 #' @section Methods:
 #' \describe{
 #' \item{\code{add_data(data, group_by)}}{[data: (`data.frame` | `data.table`)] A dataframe or data.table which shall be added to the R6 object. \cr
-#'  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr
-#'  This method writes single RDS files (this can be parallelized with future)} \cr
-#' \item{\code{preprocess_data(fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. \cr
+#'  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr \cr
+#'  This method writes single RDS files (this can be parallelized with future)}
+#' \item{\code{preprocess_data(fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. \cr \cr
 #'  This method loads the RDS files and applies this function on them. The old RDS files are overwritten.}
-#' \item{\code{remove_data(ids)}}{[ids: (`character(1)`)] An ID of the grouping variable. \cr
-#'  This method deletes the RDS file and batchtools problem of one single ID of the grouping variable.}
-#' \item{\code{get_data(ids)}}{[ids: (`character()`)] One or many IDs of the grouping variable. \cr
-#'  This method returns one dataframe with the chosen IDs.} \cr
-#' \item{\code{add_feature(fun, check_fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a named vector as output. \cr
-#'  [check_fun: (`logical(1)`)] The function will be checked if it returns a vector or a  list. Disable, if calculation takes too long.} \cr \cr
-#' \item{\code{remove_feature(fun)}}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed.} \cr \cr
-#' \item{\code{get_feature(fun)}}{[fun: (`character(1)`)] The name of a function as character. \cr
-#'  This method reads the RDS file of the function. Useful for debugging after loading an Xtractor.} \cr
+#' \item{\code{remove_data(ids)}}{[ids: (`character()`)] One or many IDs of the grouping variable. \cr \cr
+#'  This method deletes the RDS files of the given IDs.}
+#' \item{\code{get_data(ids)}}{[ids: (`character()`)] One or many IDs of the grouping variable. \cr \cr
+#'  This method returns one dataframe with the chosen IDs.}
+#' \item{\code{add_feature(fun, check_fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a named vector or list as output. \cr
+#'  [check_fun: (`logical(1)`)] The function will be checked if it returns a vector or a  list. Defaults to \code{TRUE}. Disable, if calculation takes too long. \cr \cr
+#'  This method adds the feature function to the R6 object. It writes an RDS file of the function which can be retrieved later.}
+#' \item{\code{remove_feature(fun)}}{[fun: (`function | character(1)`)] A function (or the name of the function as character) which shall be removed. \cr \cr
+#'  This method removes the function from the object and deletes all corresponding files and results.}
+#' \item{\code{get_feature(fun)}}{[fun: (`character(1)`)] The name of a function as character. \cr \cr
+#'  This method reads the RDS file of the function. Useful for debugging after loading an Xtractor.}
 #' \item{\code{calc_features(features, force)}}{[features: (`character()`)] A character vector of the names of the features which shall be calculated. Defaults to all features. \cr
-#' [force: (`logical(1)`)] The default action is to skip feature functions, which already have been calculated once. Set to \code{TRUE} for forcing re-calculation.
-#' This method calculates all features on all datasets.} \cr
-#' \item{\code{retry_failed_features(features)}}{[features: (`character()`)] A character vector of the names of the features which shall be calculated. Defaults to all features. \cr
-#' This method retries calculation of failed features. Useful if calculation failed because of memory problems.} \cr
-#' \item{\code{plot()}}{[internal] method to print the R6 object.} \cr
-#' \item{\code{clone()}}{[internal] method to clone the R6 object.} \cr
+#' [force: (`logical(1)`)] The default action is to skip feature functions, which already have been calculated once. Set to \code{TRUE} for forcing re-calculation. \cr \cr
+#' This method calculates all features on all datasets.}
+#' \item{\code{retry_failed_features(features)}}{[features: (`character()`)] A character vector of the names of the features which shall be calculated. Defaults to all features. \cr \cr
+#' This method retries calculation of failed features. Useful if calculation failed because of memory problems.}
+#' \item{\code{plot()}}{[internal] method to print the R6 object.}
+#' \item{\code{clone()}}{[internal] method to clone the R6 object.}
 #' \item{\code{initialize()}}{[internal] method to initialize the R6 object.}
 #' }
 #'

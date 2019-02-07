@@ -2,7 +2,7 @@
 % Please edit documentation in R/dplyr_wrapper.R
 \name{dplyr_wrapper}
 \alias{dplyr_wrapper}
-\title{Wraps dplyr's group_by functionality.}
+\title{Wrapper for dplyr's summarize}
 \usage{
 dplyr_wrapper(data, group_by, fun, check_fun = TRUE)
 }
@@ -20,7 +20,7 @@ if evaluation on the whole dataset takes too long.}
 (`dataframe`)
 }
 \description{
-Wraps dplyr's group_by functionality.
+This function wraps dplyr's \code{summarize()} function in a convenient way. The user only needs to define functions on the dataset with a named vector or list (with atomic entries of length 1) as return.
 }
 \examples{
 # Number of used chrome apps

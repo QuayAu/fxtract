@@ -1,4 +1,6 @@
-#' Wraps dplyr's group_by functionality.
+#' Wrapper for dplyr's summarize
+#'
+#' This function wraps dplyr's \code{summarize()} function in a convenient way. The user only needs to define functions on the dataset with a named vector or list (with atomic entries of length 1) as return.
 #'
 #' @param data (`dataframe`). A dataframe with a grouping variable.
 #' @param group_by (`character()`). Name of column, which contains identifiers on which the dataset should be grouped by. E.g. different user IDs.
