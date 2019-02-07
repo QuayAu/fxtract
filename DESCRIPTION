@@ -2,8 +2,9 @@ Package: fxtract
 Type: Package
 Title: Feature Extraction from Grouped Data
 Date: 2019-02-07
-Description: Similar to the summarize function of dplyr, this package requires grouped data and returns one row of data for each grouped variable.
-    This functionality is often times needed in the feature extraction process of machine learning problems.
+Description:  An R6 implementation for calculating features from grouped data.
+    The output will be one row for each group.
+    This functionality is often needed in the feature extraction process of machine learning problems.
     Very large datasets are supported, since data is only read into RAM when needed.
     Calculation can be done in parallel and the process can be monitored. 
     Global error handling is supported.
