@@ -11,3 +11,4 @@
 ^appveyor\.yml$
 ^README\.rmd$
 ^tests/testthat/fxtract_files
+^paper
