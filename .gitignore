@@ -2,7 +2,7 @@
 .Rhistory
 .RData
 *.Rproj
-#docs/*
+docs/*
 .project
 data_gitignore/
 *.sql

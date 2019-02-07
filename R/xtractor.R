@@ -1,7 +1,7 @@
 #' R6 Object for Feature Extraction.
 #'
 #' @description
-#' \code{Xtractor} calculates features from raw data for each ID of a grouping variable individually with batchtools.
+#' \code{Xtractor} calculates features from raw data for each ID of a grouping variable individually. This process can be parallelized with the package future.
 #'
 #' @format \code{\link{R6Class}} object.
 #' @name Xtractor
