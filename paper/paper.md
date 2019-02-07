@@ -11,13 +11,13 @@ authors:
     orcid: 0000-0002-5252-8902
     affiliation: 1
   - name: Clemens Stachl
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-4498-3067
     affiliation: 2
   - name: Ramona Schoedel
     orcid: 0000-0000-0000-0000
     affiliation: 2
   - name: Theresa Ullmann
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0003-1215-8561
     affiliation: 1
   - name: Andreas Hofheinz
     orcid: 0000-0000-0000-0000
