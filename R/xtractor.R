@@ -294,10 +294,10 @@ Xtractor = R6Class("Xtractor",
         if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
 
         #save done
-        res_data = data.table::rbindlist(res_value[!is_error])
+        res_data = data.table::rbindlist(res_value[!is_error], fill = TRUE)
         if (nrow(res_data) > 0) {
           done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
-          if (!force) if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
+          if (!force) if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)), fill = TRUE)
           saveRDS(res_data, done_exist)
         }
 
@@ -341,10 +341,10 @@ Xtractor = R6Class("Xtractor",
         if (any(is_error)) for (error in which(is_error)) message(paste0("Feature ", feature, " failed on ID ", names(is_error)[error], ". See $error_messages for more details."))
 
         #save done
-        res_data = data.table::rbindlist(res_value[!is_error])
+        res_data = data.table::rbindlist(res_value[!is_error], fill = TRUE)
         if (nrow(res_data) > 0) {
           done_exist = paste0(private$dir, "/rds_files/results/done/", feature, ".RDS")
-          if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)))
+          if (file.exists(done_exist)) res_data = data.table::rbindlist(list(res_data, readRDS(done_exist)), fill = TRUE)
           saveRDS(res_data, done_exist)
         }
         #save status
