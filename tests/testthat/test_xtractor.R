@@ -448,3 +448,64 @@ test_that("test retry failed features", {
   expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "100%")
   expect_error(x$retry_failed_features())
 })
+
+test_that("check fun", {
+  #check one function, but not the other
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
+  df = data.frame(ID = 1:3)
+  x$add_data(df, group_by = "ID")
+
+  fun1 = function(data) {
+    data.frame(x = 1:2)
+  }
+  fun2 = function(data) {
+    data.frame(x = 2:3)
+  }
+  x$add_feature(fun1, check_fun = TRUE)
+  x$add_feature(fun2, check_fun = FALSE)
+
+  x$calc_features()
+  expect_equal(nrow(x$error_messages), 3)
+
+  #load xtractor
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
+  df = data.frame(ID = 1:3)
+  x$add_data(df, group_by = "ID")
+
+  fun1 = function(data) {
+    data.frame(x = 1:2)
+  }
+  fun2 = function(data) {
+    data.frame(x = 2:3)
+  }
+  x$add_feature(fun1, check_fun = TRUE)
+  x$add_feature(fun2, check_fun = FALSE)
+
+  y = Xtractor$new("xtractor", file.dir = dir, load = TRUE)
+  y$calc_features()
+  expect_equal(nrow(y$error_messages), 3)
+})
+
+test_that("function returns different number of features", {
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
+  df = data.frame(ID = 1:3)
+  x$add_data(df, group_by = "ID")
+
+  fun1 = function(data) {
+    if (data$ID == 1) {
+      return(c(x = 1, y = 2))
+    } else {
+      return(c(x = 1))
+    }
+  }
+
+  x$add_feature(fun1)
+  x$calc_features()
+  expect_equal(data.frame(x$results[, c("x", "y")]), data.frame(x = c(1, 1, 1), y = c(2, NA, NA)))
+})

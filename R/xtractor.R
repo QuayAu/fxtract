@@ -171,8 +171,8 @@ Xtractor = R6Class("Xtractor",
       gb = data %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
 
       #save rds files, we want this no matter the backend (because of preprocessing data per ID)
-      message("Saving raw RDS files. Parallelize by calling future::plan(multiprocess) before adding data!")
-      future.apply::future_lapply(gb, function(i) {
+      message("Saving raw RDS files.")
+      lapply(gb, function(i) {
         data_i = data %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
         saveRDS(data_i, file = paste0(private$dir, "/rds_files/data/", i, ".RDS"))
       })
@@ -233,11 +233,10 @@ Xtractor = R6Class("Xtractor",
     },
     add_feature = function(fun, check_fun = TRUE) {
       checkmate::assert_logical(check_fun)
-      private$.check_fun = check_fun
       checkmate::assert_function(fun)
       if (deparse(substitute(fun)) %in% self$features) stop(paste0("Feature function '", deparse(substitute(fun)), "' was already added."))
       message(paste0("Saving raw RDS file ", deparse(substitute(fun)), ".RDS ", "on disk."))
-      saveRDS(fun, file = paste0(private$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
+      saveRDS(list(fun = fun, check_fun = check_fun), file = paste0(private$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
       return(invisible(self))
     },
     remove_feature = function(fun) {
@@ -255,7 +254,7 @@ Xtractor = R6Class("Xtractor",
     get_feature = function(fun) {
       checkmate::assert_character(fun, len = 1L)
       checkmate::assert_subset(fun, self$features)
-      readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))
+      readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))$fun
     },
     calc_features = function(features, force = FALSE) {
       message("Parallelize by calling future::plan(multiprocess) before.")
@@ -287,7 +286,7 @@ Xtractor = R6Class("Xtractor",
         res_value = future.apply::future_lapply(ids_calc, function(x) {
           data = self$get_data(x)
           group_by = private$group_by
-          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$.check_fun), error = function(e) e$message)
+          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$get_check_fun(feature)), error = function(e) e$message)
         }, future.seed = TRUE)
         res_value = setNames(res_value, ids_calc)
         is_error = sapply(res_value, is.character)
@@ -334,7 +333,7 @@ Xtractor = R6Class("Xtractor",
         res_value = future.apply::future_lapply(ids_calc, function(x) {
           data = self$get_data(x)
           group_by = private$group_by
-          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$.check_fun), error = function(e) e$message)
+          tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$get_check_fun(feature)), error = function(e) e$message)
         }, future.seed = TRUE)
         res_value = setNames(res_value, ids_calc)
         is_error = sapply(res_value, is.character)
@@ -369,7 +368,11 @@ Xtractor = R6Class("Xtractor",
     name = NULL,
     group_by = NULL,
     dir = NULL,
-    .check_fun = NULL
+    get_check_fun = function(fun) {
+      checkmate::assert_character(fun, len = 1L)
+      checkmate::assert_subset(fun, self$features)
+      readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))$check_fun
+    }
   ),
   active = list(
     error_messages = function() {

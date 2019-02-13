@@ -12,3 +12,6 @@
 ^README\.rmd$
 ^tests/testthat/fxtract_files
 ^paper
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
+^CONTRIBUTORS\.md$
