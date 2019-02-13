@@ -30,7 +30,7 @@ affiliations:
    index: 1
  - name: Department of Psychology, Methods and Assessment, Ludwigs-Maximilians-University München
    index: 2
-date: 13 February 2019
+date:  February 2019
 bibliography: paper.bib
 ---
 
@@ -46,7 +46,7 @@ This makes a feature engineering and extracting step indispensable [@James2013; 
 ``fxtract`` provides an easy to use API to facilitate the extraction of user-defined features from grouped data.
 Feature calculation for each group and collection of the features in a single dataset is handled by ``fxtract``.
 Large datasets are supported, since each individual dataset for each group is only read into memory, when needed. If functions throw exceptions on single datasets, calculation on the remaining datasets will still continue while error messages are made available for debugging purposes. 
-The user only needs to define functions, which calculate the features from their data, without worrying about how to apply this function on each group and how to collect the results. We do not provide any predefined feature functions, because we wanted to give the user the freedom to extract their own defined features.
+The user only needs to define functions, which calculate the features from their data, without worrying about how to apply this function on each group and how to collect the results.
 
 This package is written in ``R6``[@R6], which means that data, features, and methods for adding data and features, calculation, error handling, monitoring and retrieving results, are tidily kept in one object. Parallelization is possible by using the R-Package ``future``[@future].
 
