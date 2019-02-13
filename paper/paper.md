@@ -14,13 +14,13 @@ authors:
     orcid: 0000-0002-4498-3067
     affiliation: 2
   - name: Ramona Schoedel
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0001-7275-0626
     affiliation: 2
   - name: Theresa Ullmann
     orcid: 0000-0003-1215-8561
     affiliation: 1
   - name: Andreas Hofheinz
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0003-1798-0589
     affiliation: 1
   - name: Bernd Bischl
     orcid: 0000-0001-6002-6980
@@ -28,28 +28,26 @@ authors:
 affiliations:
  - name: Institute of Statistics, Ludwigs-Maximilians-University München
    index: 1
- - name: Department of Psychology, Methods and Assessment, Ludwig-Maximilians-Universität München
+ - name: Department of Psychology, Methods and Assessment, Ludwigs-Maximilians-University München
    index: 2
-date: 07 February 2019
+date: 13 February 2019
 bibliography: paper.bib
 ---
 
 # Summary
+Unlike some years ago, researchers and practitioners nowadays have access to large, longitudinal, fine-grained, and distributed datasets. Very often these datasets include timestamp-coded events that are hard to interpret on their own and are difficult to model in the raw form. Examples are system logs, data from sensors, technical machinery, and websites.
+Often, these datasets need to be aggregated by groups (e.g. by each system, participant, machine, or website) in order to utilize them in statistical analyses and to make them understandable for users. However, this process can be difficult and is often prone to errors. Furthermore, with large datasets and little personal computing-power, custom-made aggregation functions often cause memory to overflow and lead to a frustrating user experience. 
 
-Features which are created with domain-specific knowledge often play an important role in a successful machine learning project.
+Another area of application is machine learning, where covariates are called **features** (hence the name ``fxtract``). 
+User-defined features with domain-specific knowledge often play a decisive role in machine learning applications [@Domingos2012].
 However, raw data is not always in the right form for machine learning models.
-This makes a feature engineering step indispensable (see [@James2013; @Guyon2006]).
+This makes a feature engineering and extracting step indispensable [@James2013; @Guyon2006].
+
 ``fxtract`` provides an easy to use API to facilitate the extraction of user-defined features from grouped data.
+Feature calculation for each group and collection of the features in a single dataset is handled by ``fxtract``.
+Large datasets are supported, since each individual dataset for each group is only read into memory, when needed. If functions throw exceptions on single datasets, calculation on the remaining datasets will still continue while error messages are made available for debugging purposes. 
+The user only needs to define functions, which calculate the features from their data, without worrying about how to apply this function on each group and how to collect the results. We do not provide any predefined feature functions, because we wanted to give the user the freedom to extract their own defined features.
 
-Suppose there are $n$ instances with datasets $D_i$, $i = 1,...,n$. 
-These datasets can differ in the number of rows or even in the number of columns.
-``fxtract`` helps in the process of extracting $m$ features (covariates) $x_{i, 1}, ..., x_{i, m}$ for each instance $i = 1, ..., n$.
-
-With growing numbers $n$ and $m$, the process of extracting features can become burdonsome very quickly. 
-The whole dataset $\{D_1, ..., D_n\}$ could be too big to be read into memory. Or a function $f_j$, which calculates a feature $x_{i, j}$ for each dataset $D_i, i = 1,..., n$ could throw an exception just for one dataset $D_k$, $k \in \{1, ..., n\}$. 
-
-This whole data wrangling process of calculating features for each instance and collecting the features in one dataset is handled by ``fxtract``. Large datasets are supported, since each individual dataset $D_i$ is only read into memory, when needed. If functions throw exceptions on single datasets, calculation on the remaining datasets will still continue while the error messages are made available for debugging purposes. The user only needs to define functions, which calculate the features $x_{1}, ..., x_{m}$ from their data. We do not provide any automated features. This was a deliberate design choice, because we wanted to give the user the freedom to extract their own features.
-
-This package is written in ``R6``[@R6], which means that data, features, and methods (adding data and features, calculation, error handling, monitoring, retrieving results) are tidily kept in one object. Parallelization is possible by using the R-Package ``future``[@future].
+This package is written in ``R6``[@R6], which means that data, features, and methods for adding data and features, calculation, error handling, monitoring and retrieving results, are tidily kept in one object. Parallelization is possible by using the R-Package ``future``[@future].
 
 # References
