@@ -9,8 +9,7 @@ Status](https://ci.appveyor.com/api/projects/status/github/QuayAu/fxtract?branch
 [![CRAN](https://www.r-pkg.org/badges/version/fxtract)](https://cran.r-project.org/package=fxtract)
 [![cran
 checks](https://cranchecks.info/badges/worst/fxtract)](https://cran.r-project.org/web/checks/check_results_fxtract.html)
-[![CRAN
-Downloads](https://cranlogs.r-pkg.org/badges/fxtract)](https://cran.rstudio.com/web/packages/fxtract/index.html)
+[![Downloads](http://cranlogs.r-pkg.org/badges/grand-total/fxtract)](https://cran.rstudio.com/web/packages/fxtract/index.html)
 
 # fxtract
 
