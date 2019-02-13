@@ -11,6 +11,9 @@ output: github_document
 [![Build Status](https://travis-ci.org/QuayAu/fxtract.svg?branch=master)](https://travis-ci.org/QuayAu/fxtract)
 [![codecov](https://codecov.io/gh/QuayAu/fxtract/branch/master/graph/badge.svg)](https://codecov.io/gh/QuayAu/fxtract)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/QuayAu/fxtract?branch=master&svg=true)](https://ci.appveyor.com/project/QuayAu/fxtract)
+[![CRAN](https://www.r-pkg.org/badges/version/fxtract)](https://cran.r-project.org/package=fxtract)
+[![cran checks](https://cranchecks.info/badges/worst/fxtract)](https://cran.r-project.org/web/checks/check_results_fxtract.html)
+[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/fxtract)](https://cran.rstudio.com/web/packages/fxtract/index.html)
 
 # fxtract 
 Feature extraction is a crucial step for tackling machine learning problems.
@@ -27,7 +30,12 @@ This package works with very large datasets and many different IDs and the main 
 See the [tutorial](https://quayau.github.io/fxtract/) on how to use this package.
 
 # Installation
-For the development version, use [devtools](https://cran.r-project.org/package=devtools):
+For the release version use:
+```{r, eval = FALSE}
+install.packages("fxtract")
+```
+
+For the development version use [devtools](https://cran.r-project.org/package=devtools):
 ```{r, eval = FALSE}
 devtools::install_github("QuayAu/fxtract")
 ```
