@@ -6,6 +6,7 @@ tags:
   - feature extraction
   - feature engineering
   - big data
+  - repeated measures
 authors:
   - name: Quay Au
     orcid: 0000-0002-5252-8902
@@ -30,13 +31,13 @@ affiliations:
    index: 1
  - name: Department of Psychology, Methods and Assessment, Ludwigs-Maximilians-University München
    index: 2
-date:  February 2019
+date: 13 February 2019
 bibliography: paper.bib
 ---
 
 # Summary
 Unlike some years ago, researchers and practitioners nowadays have access to large, longitudinal, fine-grained, and distributed datasets. Very often these datasets include timestamp-coded events that are hard to interpret on their own and are difficult to model in the raw form. Examples are system logs, data from sensors, technical machinery, and websites.
-Often, these datasets need to be aggregated by groups (e.g. by each system, participant, machine, or website) in order to utilize them in statistical analyses and to make them understandable for users. However, this process can be difficult and is often prone to errors. Furthermore, with large datasets and little personal computing-power, custom-made aggregation functions often cause memory to overflow and lead to a frustrating user experience. 
+Often, these datasets need to be aggregated by groups (e.g. by each system, user, machine, or website) in order to utilize them in statistical analyses and to make them understandable for users. However, this process can be difficult and is often prone to errors. Furthermore, with large datasets and little personal computing-power, custom-made aggregation functions often cause memory to overflow leading to a frustrating user experience. 
 
 Another area of application is machine learning, where covariates are called **features** (hence the name ``fxtract``). 
 User-defined features with domain-specific knowledge often play a decisive role in machine learning applications [@Domingos2012].
