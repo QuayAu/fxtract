@@ -81,6 +81,12 @@ test_that("add_data", {
   iris3$Species = as.numeric(iris3$Species)
   x$add_data(iris3, group_by = "Species")
 
+  #check get data
+  expect_message(x$get_data(), "Different vector types detected")
+
+  #add same ID - error
+  expect_error(x$add_data(iris, group_by = "Species"), regexp = "Adding data multiple times is not allowed!")
+
   unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
 })
 
@@ -115,10 +121,8 @@ test_that("preprocess_data", {
   iris2 = x$get_data()
   expect_equal(iris3, iris2)
 
-  #test force calc features
+  #test calc features
   x$calc_features()
-  expect_equal(nrow(x$error_messages), 3)
-  x$calc_features(force = TRUE)
   expect_equal(x$results$sum, c(7.7, 12.1, 14.8))
   expect_equal(nrow(x$error_messages), 0)
   unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
@@ -140,9 +144,18 @@ test_that("remove_data", {
   x$calc_features()
   expect_equal(nrow(x$results), 3)
   expect_equal(nrow(x$error_messages), 1)
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done/fun")), c("setosa.RDS", "versicolor.RDS", "virginica.RDS"))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done/fun2")), c("versicolor.RDS", "virginica.RDS"))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed/fun1")), character(0))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed/fun2")), c("setosa.RDS"))
 
   x$remove_data("setosa")
   expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/data/")), c("versicolor.RDS", "virginica.RDS"))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done/fun")), c("versicolor.RDS", "virginica.RDS"))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done/fun2")), c("versicolor.RDS", "virginica.RDS"))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed/fun")), character(0))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed/fun2")), character(0))
+
   expect_equal(x$ids, c("versicolor", "virginica"))
   expect_equal(nrow(x$results), 2)
   expect_equal(nrow(x$error_messages), 0)
@@ -150,6 +163,10 @@ test_that("remove_data", {
 
   x$remove_data(c("versicolor", "virginica"))
   expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/data/")), character(0))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done/fun")), character(0))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done/fun2")), character(0))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed/fun")), character(0))
+  expect_equal(list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed/fun2")), character(0))
   expect_equal(x$ids, character(0))
   expect_equal(nrow(x$results), 0)
   unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
@@ -180,17 +197,25 @@ test_that("add_feature", {
   expect_error(x$add_feature(sepal_width_fun), regexp = "Feature function 'sepal_width_fun' was already added.")
   expect_true(file.exists(paste0(dir, "/fxtract_files/xtractor/rds_files/features/sepal_length_fun.RDS")))
   expect_true(file.exists(paste0(dir, "/fxtract_files/xtractor/rds_files/features/sepal_width_fun.RDS")))
+  expect_true("sepal_length_fun" %in% list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done")))
+  expect_true("sepal_length_fun" %in% list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed")))
+  expect_true("sepal_width_fun" %in% list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done")))
+  expect_true("sepal_width_fun" %in% list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed")))
 
   expect_equal(x$features, c("sepal_length_fun", "sepal_width_fun"))
 
   #test remove features as function
   x$remove_feature(sepal_length_fun)
   expect_equal(x$features, c("sepal_width_fun"))
+  expect_false("sepal_length_fun" %in% list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done")))
+  expect_false("sepal_length_fun" %in% list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed")))
 
   #test remove features as character
   x$add_feature(sepal_length_fun)
   x$remove_feature("sepal_length_fun")
   expect_equal(x$features, c("sepal_width_fun"))
+  expect_false("sepal_length_fun" %in% list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/done")))
+  expect_false("sepal_length_fun" %in% list.files(paste0(dir, "/fxtract_files/xtractor/rds_files/results/failed")))
 
   #test remove wrong feature
   expect_error(x$remove_feature("sepal_width_fun2"), regexp = "Assertion on 'fun' failed: Must be a subset of")
@@ -506,6 +531,29 @@ test_that("function returns different number of features", {
   }
 
   x$add_feature(fun1)
+  x$calc_features()
+  expect_equal(data.frame(x$results[, c("x", "y")]), data.frame(x = c(1, 1, 1), y = c(2, NA, NA)))
+})
+
+test_that("extract single features from single IDs", {
+  dir = tempdir()
+  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
+  x = Xtractor$new(name = "xtractor", file.dir = dir)
+  df = data.frame(ID = 1:3)
+  x$add_data(df, group_by = "ID")
+
+  fun1 = function(data) {
+    c(x = 1)
+  }
+
+  fun2 = function(data) {
+    if (3 %in% data$ID) stop("error")
+    c(y = 2)
+  }
+
+  x$add_feature(fun1)
+  x$add_feature(fun2)
+
   x$calc_features()
   expect_equal(data.frame(x$results[, c("x", "y")]), data.frame(x = c(1, 1, 1), y = c(2, NA, NA)))
 })
