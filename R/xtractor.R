@@ -172,14 +172,16 @@ Xtractor = R6Class("Xtractor",
       if (any(gb %in% self$ids)) stop(paste0("Adding data multiple times is not allowed! Following ID(s) are already added to the R6 object: ", paste0(gb[which(gb %in% self$ids)], collapse = ", ")))
       #save rds files, we want this no matter the backend (because of preprocessing data per ID)
       message("Saving raw RDS files.")
-      lapply(gb, function(i) {
-        data_i = data %>% dplyr::filter(!!as.name(group_by) == i) %>% data.frame()
-        saveRDS(data_i, file = paste0(private$dir, "/rds_files/data/", i, ".RDS"))
-      })
+      pb = utils::txtProgressBar(min = 0, max = length(gb), style = 3)
+      for (i in 1:length(gb)) {
+        data_i = data %>% dplyr::filter(!!as.name(group_by) == gb[i]) %>% data.frame()
+        saveRDS(data_i, file = paste0(private$dir, "/rds_files/data/", gb[i], ".RDS"))
+        utils::setTxtProgressBar(pb, i)
+      }
       return(invisible(self))
     },
     preprocess_data = function(fun) {
-      message("Updating raw RDS files. Parallelize by calling future::plan(multiprocess) before.")
+      message("Updating raw RDS files. Parallelize with active binding $parallel_backend.")
       future.apply::future_lapply(self$ids, function(i) {
         data_i = readRDS(paste0(private$dir, "/rds_files/data/", i, ".RDS"))
         data_preproc = fun(data_i)
@@ -236,7 +238,6 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_logical(check_fun)
       checkmate::assert_function(fun)
       if (deparse(substitute(fun)) %in% self$features) stop(paste0("Feature function '", deparse(substitute(fun)), "' was already added."))
-      message(paste0("Saving raw RDS file ", deparse(substitute(fun)), ".RDS ", "on disk."))
       saveRDS(list(fun = fun, check_fun = check_fun), file = paste0(private$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
       dir.create(paste0(private$dir, "/rds_files/results/done/", deparse(substitute(fun))))
       dir.create(paste0(private$dir, "/rds_files/results/failed/", deparse(substitute(fun))))
@@ -258,39 +259,48 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_subset(fun, self$features)
       readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))$fun
     },
-    calc_features = function(features, ids) {
-      message("Parallelize by calling future::plan(multiprocess) before.")
+    calc_features = function(features, ids, retry_failed = TRUE) {
       if (missing(features)) features = self$features
+      checkmate::assert_character(features)
       checkmate::assert_subset(features, self$features)
-
+      checkmate::assert_logical(retry_failed)
       if (!missing(ids)) checkmate::assert_character(ids)
       if (!missing(ids)) checkmate::assert_subset(ids, self$ids)
 
       if (length(self$ids) == 0) stop("Please add datasets with method $add_data().")
       if (length(self$features) == 0) stop("Please add feature functions with method $add_feature().")
 
-      #skip features, which have already been calculated
-      #FIXME: rewrite this
       features_new = features
-
+      status = self$status
       for (feature in features) {
-        if (all(self$status[[feature]] == 1)) {
+        if (all(self$status[[feature]] == "done")) {
           features_new = setdiff(features_new, feature)
           message(paste0("Feature function '", feature, "' was already applied on every ID and will be skipped."))
         }
       }
 
       #calculating features using futures
+      #FIXME add message for parallelization or serial
       for (feature in features_new) {
-        message(paste0("Calculating feature function: ", feature))
+        idm = ifelse(missing(ids), "", paste0(" on IDs: ", paste0(ids, collapse = ", ")))
+        message(paste0("Calculating feature function: ", feature, idm))
         feat_fun = self$get_feature(feature)
+
         if (missing(ids)) {
-          ids_calc = self$ids
+          ids_calc = status[which(status[, feature] == "not_done"), private$group_by]
         } else {
           ids_calc = ids
         }
 
-        res_value = future.apply::future_lapply(ids_calc, function(x) {
+        if (retry_failed) {
+          ids_failed = status[which(status[, feature] == "failed"), private$group_by]
+          if (length(ids_failed) > 0) message("Failed features will be calculated again. For stochastical features set a seed inside your function!")
+          ids_calc = unique(c(ids_calc, ids_failed))
+        }
+
+        if (length(ids_calc) == 0) message("Nothing to calculate.")
+
+        future.apply::future_lapply(ids_calc, function(x) {
           data = self$get_data(x)
           group_by = private$group_by
           res_id = tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$get_check_fun(feature)), error = function(e) e$message)
@@ -344,7 +354,8 @@ Xtractor = R6Class("Xtractor",
 
       for (feat in self$features) {
         results_feat = future.apply::future_lapply(list.files(paste0(private$dir, "/rds_files/results/done/", "/", feat), full.names = TRUE), readRDS)
-        results_feat = data.table::rbindlist(results_feat) %>% data.frame()
+        results_feat = data.table::rbindlist(results_feat, fill = TRUE) %>% data.frame()
+        if (nrow(results_feat) == 0) next
         results_feat[, private$group_by] = as.character(results_feat[, private$group_by])
         final_result = dplyr::full_join(final_result, results_feat, by = private$group_by)
       }

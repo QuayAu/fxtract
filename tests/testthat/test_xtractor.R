@@ -264,17 +264,18 @@ test_that("calculate features", {
   x$add_feature(sepal_width_fun)
 
   #test meaningful error message $results
-  expect_error(x$results, regexp = "No features have been calculated yet.")
-  expect_true(all(x$status[, -1] == 0))
+  expect_equal(ncol(x$results), 1)
+  expect_true(all(x$status[, -1] == "not_done"))
 
   #test submitting one feature function
+  expect_error(x$calc_features(features = sepal_length_fun), regexp = "Assertion on 'features' failed")
   x$calc_features("sepal_length_fun")
-  expect_equal(capture.output(x)[6], "Calculation process done: 50%")
+  expect_equal(capture.output(x)[6], "Extraction done: 50%")
 
   #test submitting remaining jobs
   x$calc_features()
-  expect_equal(capture.output(x)[6], "Calculation process done: 100%")
-  res = x$results
+  expect_equal(capture.output(x)[6], "Extraction done: 100%")
+  res = data.frame(x$results)
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
   expect_equal(colnames(res[, -which(colnames(res) == "Species")]), cn)
@@ -283,9 +284,9 @@ test_that("calculate features", {
   x$remove_feature(sepal_length_fun)
   x$add_feature(sepal_length_fun)
   y = Xtractor$new("xtractor", load = TRUE, file.dir = dir)
-  expect_equal(capture.output(y)[6], "Calculation process done: 50%")
+  expect_equal(capture.output(y)[6], "Extraction done: 50%")
   y$calc_features()
-  expect_equal(capture.output(y)[6], "Calculation process done: 100%")
+  expect_equal(capture.output(y)[6], "Extraction done: 100%")
 
   res = y$results
   expect_true(!anyNA(res))
@@ -321,7 +322,7 @@ test_that("error handling", {
   expect_equal(as.character(x$error_messages$error[1]), "fun1 not compatible on versicolor")
   expect_equal(as.character(x$error_messages$error[2]), "fun2 not compatible on virginica")
   expect_equal(nrow(x$error_messages), 2)
-
+  expect_equal(sum(is.na(x$results)), 4)
   unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
 })
 
@@ -418,43 +419,24 @@ test_that("add new dataset after features were already calculated", {
   x$add_feature(fun1, check_fun = TRUE)
   x$add_feature(fun2, check_fun = TRUE)
   x$calc_features()
-  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "100%")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "100%")
   x$add_data(iris2, group_by = "Species")
-  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "66.6666666666667%")
-  expect_equal(nrow(x$results), 2)
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "66.6666666666667%")
+  expect_true(all(is.na(x$results[x$results$Species == "versicolor", -1])))
   x$calc_features("fun1")
-  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "83.3333333333333%")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "83.3333333333333%")
   expect_equal(nrow(x$results), 3)
   expect_true(anyNA(x$results))
-  expect_message(x$calc_features(), "Feature function 'fun1' was already applied on every ID and will be skipped. Set force = TRUE, if you want to re-calculate features.")
-  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "100%")
+  expect_message(x$calc_features(), "Feature function 'fun1' was already applied on every ID and will be skipped.")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "100%")
   expect_true(!anyNA(x$results))
-})
-
-test_that("force recalculating features", {
-  dir = tempdir()
-  unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
-  x = Xtractor$new(name = "xtractor", file.dir = dir)
-  x$add_data(iris, group_by = "Species")
-
-  fun1 = function(data) {
-    c(rnorm1 = rnorm(1))
-  }
-
-  x$add_feature(fun1, check_fun = TRUE)
-  x$calc_features()
-  res1 = x$results
-  x$calc_features()
-  expect_equal(res1, x$results)
-  x$calc_features(force = TRUE)
-  expect_true(is.character(all.equal(res1, x$results)))
 })
 
 test_that("test retry failed features", {
   dir = tempdir()
   unlink(paste0(dir, "/fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
-  df = data.frame(ID = 1:100)
+  df = data.frame(ID = 1:30)
   x$add_data(df, group_by = "ID")
 
   fun1 = function(data) {
@@ -466,12 +448,19 @@ test_that("test retry failed features", {
   x$add_feature(fun1, check_fun = TRUE)
   x$calc_features()
   expect_true(nrow(x$error_messages) > 0)
+  res = x$results
+
+  #test skipping failed features
+  for (i in 1:10) {
+    x$calc_features(retry_failed = FALSE)
+    expect_equal(x$results, res)
+  }
+
   while (nrow(x$error_messages) > 0) {
-    x$retry_failed_features()
+    x$calc_features(retry_failed = TRUE)
   }
   expect_true(nrow(x$error_messages) == 0)
-  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][4], "100%")
-  expect_error(x$retry_failed_features())
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "100%")
 })
 
 test_that("check fun", {
@@ -547,13 +536,30 @@ test_that("extract single features from single IDs", {
   }
 
   fun2 = function(data) {
-    if (3 %in% data$ID) stop("error")
     c(y = 2)
   }
 
   x$add_feature(fun1)
   x$add_feature(fun2)
 
+  x$calc_features(features = "fun1", ids = "1")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "16.6666666666667%")
+  expect_equal(data.frame(x$results)$x, c(1, NA, NA))
+
+  x$calc_features(features = "fun1", ids = "2")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "33.3333333333333%")
+  expect_equal(data.frame(x$results)$x, c(1, 1, NA))
+
+  x$calc_features(features = "fun1", ids = "3")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "50%")
+  expect_equal(data.frame(x$results)$x, c(1, 1, 1))
+
+  x$calc_features(features = "fun2", ids = "1")
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "66.6666666666667%")
+  expect_equal(data.frame(x$results)$y, c(2, NA, NA))
+
+  #submitting remaining:
   x$calc_features()
-  expect_equal(data.frame(x$results[, c("x", "y")]), data.frame(x = c(1, 1, 1), y = c(2, NA, NA)))
+  expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "100%")
+  expect_true(!any(is.na(x$results)))
 })
