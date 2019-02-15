@@ -113,6 +113,7 @@ NULL
 Xtractor = R6Class("Xtractor",
   public = list(
     initialize = function(name, file.dir = ".", load = FALSE) {
+      future::plan(future::sequential)
       private$name = checkmate::assert_character(name)
       newDirPath = paste0(file.dir, "/fxtract_files/", name)
       private$dir = newDirPath
@@ -279,8 +280,8 @@ Xtractor = R6Class("Xtractor",
         }
       }
 
-      #calculating features using futures
-      #FIXME add message for parallelization or serial
+      #calculating features using future.apply
+      message(paste0("Calculating features on ", self$n_cores, " core(s)."))
       for (feature in features_new) {
         idm = ifelse(missing(ids), "", paste0(" on IDs: ", paste0(ids, collapse = ", ")))
         message(paste0("Calculating feature function: ", feature, idm))
@@ -392,6 +393,18 @@ Xtractor = R6Class("Xtractor",
         status = dplyr::left_join(status, status_feat, by = private$group_by)
       }
       status
+    },
+    n_cores = function(cores) {
+      if (missing(cores)) {
+        return(future::nbrOfWorkers())
+      } else {
+        checkmate::assert_integerish(cores, upper = future::availableCores(), lower = 1L)
+        if (cores == 1) {
+          future::plan(future::sequential)
+        } else {
+          future::plan(future::multiprocess, workers = cores)
+        }
+      }
     }
   )
 )
