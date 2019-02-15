@@ -33,7 +33,7 @@ xtractor$remove_data("virginica")
 ```
 
 ## Add New Data
-```{r, message = FALSE}
+```{r, message = FALSE, results = "hide"}
 xtractor$add_data(iris_vers, group_by = "Species")
 ```
 

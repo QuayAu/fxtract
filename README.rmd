@@ -53,7 +53,7 @@ unlink("fxtract_files", recursive = TRUE)
 ```
 
 # Usage
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, results = "hide"}
 library(fxtract)
 
 # user-defined function:
@@ -70,6 +70,10 @@ xtractor$calc_features()
 xtractor$results
 
 ```
+```{r, echo = FALSE}
+xtractor$results
+```
+
 ```{r, echo = FALSE}
 unlink("fxtract_files", recursive = TRUE)
 ```

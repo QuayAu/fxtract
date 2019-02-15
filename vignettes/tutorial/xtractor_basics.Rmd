@@ -28,12 +28,12 @@ Data must be added as dataframes with `$add_data`, where the grouping variable m
 You can also add dataframes for each ID individually. This is especially helpful for large datasets.
 
 - Add all data at once:
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
 xtractor$add_data(iris, group_by = "Species")
 ```
 
 - Add datasets individually:
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, results = "hide"}
 library(dplyr)
 for (i in unique(iris$Species)) {
   iris_i = iris %>% filter(Species == i)
