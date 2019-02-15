@@ -11,24 +11,39 @@ vignette: >
 
 ### How can I parallelize calculation? What is parallelized? 
 
-### How do I handle exported objects and packages for parallelization?
+### How are exported objects and packages for parallelization handled?
 Thanks to the [`future`](https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html) package, global variables and functions are automatically identified and exported as needed.
 Make sure to have these variables and functions in your global environment, especially after loading an xtractor.
 
 ### How can I monitor the progress of calculation?
+Because of parallelization, a simple progress bar is not supported. However, you can see the progress by diving into the files, which are saved during the calculation process.
 
 ### What happens behind the scenes?
+
+#### Adding Datasets
+Datasets are saved as single RDS files for each ID of the grouping variable.
+
+#### Adding Feature Functions
+Feature functions are also saved as RDS files.
+
+#### Calculating Features
+Every feature function is applied on every single dataset. This step can be parallelized.
+
+Successfull calculations are saved in the folder *fxtract_files/YOUR_XTRACTORS_NAME/rds_files/results/done*.
+
+Failed calculations are saved in the folder *fxtract_files/YOUR_XTRACTORS_NAME/rds_files/results/failed*.
 
 ### Where are the files saved?
 The default file directory is your current working directory. Files are saved in the newly created folder *fxtract_files/YOUR_XTRACTORS_NAME*.
 
 ### My feature function is stochastical. Does your package handle seeding?
-
+We support seeding with L'Ecuyer's RngStreams via the future package. 
+However, restarting failed functions on single IDs are not properly seeded. You can add a seed inside a feature function.
 ```{r}
 unlink("fxtract_files", recursive = TRUE)
 ```
 
-```{r, results = "hide"}
+```{r, results = "hide", message = FALSE}
 library(fxtract)
 set.seed(1)
 x = Xtractor$new("x")
@@ -39,7 +54,7 @@ x$n_cores = 4
 x$calc_features()
 ```
 
-```{r, results = "hide"}
+```{r, results = "hide", message = FALSE}
 set.seed(1)
 y = Xtractor$new("y")
 y$add_data(data.frame(ID = 1:10), group_by = "ID")
@@ -55,4 +70,18 @@ all.equal(x$results, y$results)
 
 ### What are pros and contras of your package?
 
+#### Pro
+  - Streamlined process of adding data and feature functions
+  - If the whole dataset with all IDs becomes to big for memory, your code does not need to adapt, like in traditional R scripts.
+  - Global error handling. The process does not stop, when single feature functions fail on single IDs. 
+  Easy debugging of failed features. Sometimes it's ok to let the function fail and just report a missing in the final dataset. 
+  - Easy parallelization
+  - R6. Everything is kept in one object.
+  
+#### Contra
+  - R6. For many R users this may be a small hurdle to overcome.
+  - Overengineered for small datasets and easy to calculate features.
+  - Takes longer to calculate.
+  
 ### How large can my dataset be?
+You can add datasets for each ID individually. So the limits are the size of the single datasets and the functions which are applied on them.
