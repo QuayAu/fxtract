@@ -1,0 +1,58 @@
+---
+title: "Frequently Asked Questions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fxtract}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+### My R session crashed. Can I continue extracting features or do I have to start from the beginning?
+
+### How can I parallelize calculation? What is parallelized? 
+
+### How do I handle exported objects and packages for parallelization?
+Thanks to the [`future`](https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html) package, global variables and functions are automatically identified and exported as needed.
+Make sure to have these variables and functions in your global environment, especially after loading an xtractor.
+
+### How can I monitor the progress of calculation?
+
+### What happens behind the scenes?
+
+### Where are the files saved?
+The default file directory is your current working directory. Files are saved in the newly created folder *fxtract_files/YOUR_XTRACTORS_NAME*.
+
+### My feature function is stochastical. Does your package handle seeding?
+
+```{r}
+unlink("fxtract_files", recursive = TRUE)
+```
+
+```{r, results = "hide"}
+library(fxtract)
+set.seed(1)
+x = Xtractor$new("x")
+x$add_data(data.frame(ID = as.character(1:10)), group_by = "ID")
+fun = function(data) c(random_number = rnorm(1))
+x$add_feature(fun)
+x$n_cores = 4
+x$calc_features()
+```
+
+```{r, results = "hide"}
+set.seed(1)
+y = Xtractor$new("y")
+y$add_data(data.frame(ID = 1:10), group_by = "ID")
+fun = function(data) c(random_number = rnorm(1))
+y$add_feature(fun)
+y$n_cores = 4
+y$calc_features()
+```
+```{r}
+all.equal(x$results, y$results)
+```
+
+
+### What are pros and contras of your package?
+
+### How large can my dataset be?
