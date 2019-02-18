@@ -41,7 +41,7 @@ Often, these datasets need to be aggregated by groups (e.g. by each system, user
 
 One key application of those aggregation functions is in the field of machine learning. In this context, user-defined variables based on domain-specific knowledge, which are called *features* in the machine learning community, play a decisive role [@Domingos2012]. Before modeling, features have to be engineered and extracted, which means that the raw data has to be transformed to an appropriate format. 
 At best, these features should be interpretable in themselves in order to make models easier to understand [@molnar].
-This indispensable process [@James2013; @Guyon2006] of extracting features from raw data led us to the name `fxtract`. 
+This indispensable process [@James2013; @Guyon2006] of extracting features from raw data led us to the name ``fxtract``. 
 However, this package is not limited to applications in the machine learning context. It can be used for any kind of datasets that need to be aggregated by groups. 
 
 ``fxtract`` provides an easy to use API to facilitate the extraction of user-defined features from grouped data.
