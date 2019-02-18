@@ -36,13 +36,11 @@ bibliography: paper.bib
 ---
 
 # Summary
-Unlike some years ago, researchers and practitioners nowadays have access to large, longitudinal, fine-grained, and distributed datasets. Very often these datasets include timestamp-coded events that are hard to interpret on their own and are difficult to model in the raw form. Examples are system logs, data from sensors, technical machinery, and websites.
-Often, these datasets need to be aggregated by groups (e.g. by each system, user, machine, or website) in order to utilize them in statistical analyses and to make them understandable for users. However, this process can be difficult and is often prone to errors. Furthermore, with large datasets and little personal computing-power, custom-made aggregation functions often cause memory to overflow leading to a frustrating user experience. 
+Unlike some years ago, researchers and practitioners nowadays have access to large, longitudinal, fine-grained, and distributed datasets. Very often these datasets include timestamp-coded events that are hard to interpret on their own and are difficult to model in the raw form. Examples are system logs, data from sensors, or time series.
+Often, these datasets need to be aggregated by groups (e.g. by each system, user [@Hoppe2018; @Stachl2017; @Schoedel2018], or month [@Romilly2005]) in order to utilize them in statistical analyses and to make them understandable for users. However, this process can be difficult and is often prone to errors. Furthermore, with large datasets and little personal computing-power, custom-made aggregation functions often cause memory to overflow which leads to a frustrating user experience. 
 
-Another area of application is machine learning, where covariates are called **features** (hence the name ``fxtract``). 
-User-defined features with domain-specific knowledge often play a decisive role in machine learning applications [@Domingos2012].
-However, raw data is not always in the right form for machine learning models.
-This makes a feature engineering and extracting step indispensable [@James2013; @Guyon2006].
+One key application of those aggregation functions is in the field of machine learning. In this context, user-defined variables based on domain-specific knowledge, which are called *features* in the machine learning community, play a decisive role [@Domingos2012]. Before modeling, features have to be engineered and extracted, which means that the raw data has to be transformed to an appropriate format. This indispensable process [@James2013; @Guyon2006] of extracting features from raw data led us to the name `fxtract`. 
+However, this package is not limited to applications in the machine learning context. It can be used for any kind of datasets that need to be aggregated by groups. 
 
 ``fxtract`` provides an easy to use API to facilitate the extraction of user-defined features from grouped data.
 Feature calculation for each group and collection of the features in a single dataset is handled by ``fxtract``.
