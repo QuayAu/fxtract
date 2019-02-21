@@ -32,7 +32,8 @@ Imports: dplyr,
   data.table,
   future,
   future.apply,
-  R6
+  R6,
+  fs
 Suggests: testthat,
   knitr,
   covr,
