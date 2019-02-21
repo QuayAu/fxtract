@@ -107,6 +107,7 @@
 #' @import R6
 #' @import dplyr
 #' @import future.apply
+#' @import fs
 NULL
 
 #' @export
@@ -118,15 +119,15 @@ Xtractor = R6Class("Xtractor",
       newDirPath = paste0(file.dir, "/fxtract_files/", name)
       private$dir = newDirPath
       if (!load) {
-        if (!dir.exists(paste0(file.dir, "/fxtract_files"))) dir.create(paste0(file.dir, "/fxtract_files"))
-        if (dir.exists(newDirPath)) stop("The Xtractor name already exists. Please choose another name, delete the existing Xtractor, or set load = TRUE, if you want to load the old Xtractor.")
-        dir.create(newDirPath)
-        dir.create(paste0(newDirPath, "/rds_files"))
-        dir.create(paste0(newDirPath, "/rds_files/data"))
-        dir.create(paste0(newDirPath, "/rds_files/features"))
-        dir.create(paste0(newDirPath, "/rds_files/results"))
-        dir.create(paste0(newDirPath, "/rds_files/results/done"))
-        dir.create(paste0(newDirPath, "/rds_files/results/failed"))
+        if (!fs::dir_exists(paste0(file.dir, "/fxtract_files"))) fs::dir_create(paste0(file.dir, "/fxtract_files"))
+        if (fs::dir_exists(newDirPath)) stop("The Xtractor name already exists. Please choose another name, delete the existing Xtractor, or set load = TRUE, if you want to load the old Xtractor.")
+        fs::dir_create(newDirPath)
+        fs::dir_create(paste0(newDirPath, "/rds_files"))
+        fs::dir_create(paste0(newDirPath, "/rds_files/data"))
+        fs::dir_create(paste0(newDirPath, "/rds_files/features"))
+        fs::dir_create(paste0(newDirPath, "/rds_files/results"))
+        fs::dir_create(paste0(newDirPath, "/rds_files/results/done"))
+        fs::dir_create(paste0(newDirPath, "/rds_files/results/failed"))
         saveRDS(NULL, file = paste0(private$dir, "/rds_files/group_by.RDS"))
       } else {
         checkmate::assert_subset(name, list.files(paste0(file.dir, "/fxtract_files/")))
@@ -182,7 +183,7 @@ Xtractor = R6Class("Xtractor",
       return(invisible(self))
     },
     preprocess_data = function(fun) {
-      message("Updating raw RDS files. Parallelize with active binding $parallel_backend.")
+      message("Updating raw RDS files. Parallelize by setting active binding $n_cores")
       future.apply::future_lapply(self$ids, function(i) {
         data_i = readRDS(paste0(private$dir, "/rds_files/data/", i, ".RDS"))
         data_preproc = fun(data_i)
@@ -195,7 +196,7 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_subset(ids, self$ids)
       for (id in ids) {
         message("Deleting RDS file ", id, ".RDS")
-        unlink(paste0(paste0(private$dir, "/rds_files/data/", id, ".RDS")))
+        fs::file_delete(paste0(paste0(private$dir, "/rds_files/data/", id, ".RDS")))
       }
 
       #delete done
@@ -203,9 +204,11 @@ Xtractor = R6Class("Xtractor",
       done_features = list.files(done_dir)
       for (feature in done_features) {
         for (id in ids) {
-          if (file.exists(paste0(private$dir, "/rds_files/results/done/", feature, "/", id, ".RDS")))
+          done_feat_path = paste0(private$dir, "/rds_files/results/done/", feature, "/", id, ".RDS")
+          if (file.exists(done_feat_path)) {
             message(paste0("Deleting results from id: ", id))
-          unlink(paste0(private$dir, "/rds_files/results/done/", feature, "/", id, ".RDS"))
+            fs::file_delete(done_feat_path)
+          }
         }
       }
       #delete error
@@ -213,9 +216,11 @@ Xtractor = R6Class("Xtractor",
       failed_features = list.files(failed_dir)
       for (feature in failed_features) {
         for (id in ids) {
-          if (file.exists(paste0(private$dir, "/rds_files/results/failed/", feature, "/", id, ".RDS")))
+          failed_feat_path = paste0(private$dir, "/rds_files/results/failed/", feature, "/", id, ".RDS")
+          if (file.exists(failed_feat_path)) {
             message(paste0("Deleting error messages from id: ", id))
-          unlink(paste0(private$dir, "/rds_files/results/failed/", feature, "/", id, ".RDS"))
+            fs::file_delete(failed_feat_path)
+          }
         }
       }
       return(invisible(self))
@@ -240,8 +245,8 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_function(fun)
       if (deparse(substitute(fun)) %in% self$features) stop(paste0("Feature function '", deparse(substitute(fun)), "' was already added."))
       saveRDS(list(fun = fun, check_fun = check_fun), file = paste0(private$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
-      dir.create(paste0(private$dir, "/rds_files/results/done/", deparse(substitute(fun))))
-      dir.create(paste0(private$dir, "/rds_files/results/failed/", deparse(substitute(fun))))
+      fs::dir_create(paste0(private$dir, "/rds_files/results/done/", deparse(substitute(fun))))
+      fs::dir_create(paste0(private$dir, "/rds_files/results/failed/", deparse(substitute(fun))))
       return(invisible(self))
     },
     remove_feature = function(fun) {
@@ -249,9 +254,9 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_character(fun, min.len = 1L)
       checkmate::assert_subset(fun, self$features)
       for (f in fun) {
-        unlink(paste0(private$dir, "/rds_files/features/", f, ".RDS"))
-        unlink(paste0(private$dir, "/rds_files/results/done/", f), recursive = TRUE)
-        unlink(paste0(private$dir, "/rds_files/results/failed/", f), recursive = TRUE)
+        fs::file_delete(paste0(private$dir, "/rds_files/features/", f, ".RDS"))
+        fs::dir_delete(paste0(private$dir, "/rds_files/results/done/", f))
+        fs::dir_delete(paste0(private$dir, "/rds_files/results/failed/", f))
       }
       return(invisible(self))
     },
@@ -307,10 +312,11 @@ Xtractor = R6Class("Xtractor",
           res_id = tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$get_check_fun(feature)), error = function(e) e$message)
 
           #if error, save as error, else save result
+          feat_fail_path = paste0(private$dir, "/rds_files/results/failed/", feature, "/", x, ".RDS")
           if (is.character(res_id)) {
-            saveRDS(res_id, file = paste0(private$dir, "/rds_files/results/failed/", feature, "/", x, ".RDS"))
+            saveRDS(res_id, file = feat_fail_path)
           } else {
-            unlink(paste0(private$dir, "/rds_files/results/failed/", feature, "/", x, ".RDS"))
+            if (fs::file_exists(feat_fail_path)) fs::file_delete(feat_fail_path)
             saveRDS(res_id, file = paste0(private$dir, "/rds_files/results/done/", feature, "/", x, ".RDS"))
           }
         }, future.seed = TRUE)
