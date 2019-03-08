@@ -1,0 +1,111 @@
+---
+title: "Analysis of the global temperature development"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For this analysis we are using the Climate Change: Earth Surface Temperature Data from kaggle.
+This data set can be found here: 
+https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data#GlobalTemperatures.csv
+
+### Load required packages
+```{r, message=FALSE}
+library(fxtract)
+library(lubridate)
+library(tidyverse)
+```
+
+
+### Read in data
+```{r}
+df_glob_temp = read.csv("data/GlobalTemperatures.csv")
+# Use data from 1850 onwards
+df_glob_temp$dt = as.Date(df_glob_temp$dt)
+df_glob_temp = df_glob_temp[df_glob_temp$dt >= "1850-01-01",]
+str(df_glob_temp)
+```
+
+For an annual view we would like to have the year in a separate column.
+```{r}
+df_glob_temp$year = year(df_glob_temp$dt)
+```
+
+
+
+### Create our user defined-functions
+```{r, message=FALSE}
+land = function(data) {
+ c(mean_temp_land = mean(data$LandAverageTemperature),
+    sd_temp_land = sd(data$LandAverageTemperature),
+    min_temp_land = min(data$LandAverageTemperature),
+    max_temp_land = max(data$LandAverageTemperature))
+}
+
+land_ocean = function(data) {
+ c(mean_temp_land_ocean = mean(data$LandAndOceanAverageTemperature),
+    sd_temp_land_ocean = sd(data$LandAndOceanAverageTemperature),
+    min_temp_land_ocean = min(data$LandAndOceanAverageTemperature),
+    max_temp_land_ocean = max(data$LandAndOceanAverageTemperature))
+}
+```
+
+
+## fxtract
+
+#### Setup
+```{r, message=FALSE, results='hide'}
+xtractor = Xtractor$new("xtractor")
+xtractor$n_cores = 2
+xtractor$add_data(df_glob_temp, group_by = "year")
+xtractor$add_feature(land)
+xtractor$add_feature(land_ocean)
+```
+
+#### Calculation
+```{r, message=FALSE, results='hide'}
+xtractor$calc_features()
+```
+
+#### Results
+```{r, results='asis', message=FALSE, warning=FALSE}
+library(knitr)
+library(kableExtra)
+
+xtractor$results %>%
+  kable(col.names = c("year",
+    "mean", "sd", "min", "max",
+    "mean", "sd", "min", "max")) %>%
+  kable_styling(position = "center") %>%
+  add_header_above(c(" " = 1, "Temp on land" = 4, "Temp on land and ocean" = 4)) %>%
+  scroll_box(width = "100%", height = "400px")
+```
+
+
+```{r}
+df = xtractor$results
+df$year = as.numeric(df$year)
+g = ggplot(df, aes(x = year, y = mean_temp_land)) + geom_point() + geom_smooth(method = "loess", color = "red")
+g = g + scale_x_continuous(breaks = seq(1850, 2015, by = 20)) + 
+  ggtitle("Development of average global temperature on land") + 
+  labs(x = "Year", y = "Average temperature [in °C]")
+g + theme_bw()
+```
+
+
+```{r}
+g = ggplot(df, aes(x = year, y = mean_temp_land_ocean)) + geom_point() + geom_smooth(method = "loess", color = "red")
+g = g + scale_x_continuous(breaks = seq(1850, 2015, by = 20)) + 
+  ggtitle("Development of average global temperature for land and ocean") + 
+  labs(x = "Year", y = "Average temperature [in °C]")
+g + theme_bw()
+```
+
+
+
+```{r, echo = FALSE}
+unlink("fxtract_files", recursive = TRUE)
+```
+
