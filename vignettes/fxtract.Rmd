@@ -14,7 +14,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# devtools::install()
 library(fxtract)
 ```
 
+Information on fxtract is available here:
+
+* [Project Page](https://github.com/quayau/fxtract/)
+* [Tutorial](https://quayau.github.io/fxtract/)

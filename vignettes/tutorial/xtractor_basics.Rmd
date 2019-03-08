@@ -14,7 +14,9 @@ unlink("fxtract_files", recursive = TRUE)
 - Designed for large projects.
 - Data and features can be updated easily.
 - Data can be preprocessed.
-- Features are calculated on each ID of a grouping variable individually with batchtools.
+- Features are calculated on each ID of a grouping variable individually.
+- Easy parallelization with `future`.
+- Scales nicely for larger datasets. Data is only read into RAM, when needed.
 
 ```{r, message = FALSE}
 library(fxtract)
@@ -24,16 +26,25 @@ xtractor = Xtractor$new("xtractor")
 ## Add Data
 Data must be added as dataframes with `$add_data`, where the grouping variable must be specified.
 You can also add dataframes for each ID individually. This is especially helpful for large datasets.
-```{r, message = FALSE, warning = FALSE}
-library(dplyr)
-iris1 = iris %>% filter(Species %in% c("setosa", "versicolor"))
-iris2 = iris %>% filter(Species == "virginica")
-xtractor$add_data(iris1, group_by = "Species")
-xtractor$add_data(iris2, group_by = "Species")
+
+- Add all data at once:
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
+xtractor$add_data(iris, group_by = "Species")
 ```
+
+- Add datasets individually:
+```{r, message = FALSE, warning = FALSE, results = "hide"}
+library(dplyr)
+for (i in unique(iris$Species)) {
+  iris_i = iris %>% filter(Species == i)
+  xtractor$add_data(iris_i, group_by = "Species")
+}  
+```
+
 
 ## Add Features
 Features must be added as functions which have a dataframe as input and a named vector as output.
+A named list with atomic entries of length 1 is also allowed as output (useful for numerical and categorical outputs).
 This function will be calculated for each ID of a grouping variable individually.
 ```{r, message = FALSE}
 fun1 = function(data) {
@@ -42,7 +53,7 @@ fun1 = function(data) {
 }
 
 fun2 = function(data) {
-  c(mean_petal_length = mean(data$Petal.Length),
+  list(mean_petal_length = mean(data$Petal.Length),
     sd_petal_length = sd(data$Petal.Length))
 }
 ```
@@ -68,14 +79,3 @@ xtractor$results
 ```{r, echo = FALSE}
 unlink("fxtract_files", recursive = TRUE)
 ```
-
-
-## What Happens Behind the Scenes
-Data will be saved as single RDS files for each ID and each dataset is added as one batchtools problem.
-Functions are added as batchtools algorithm. 
-
-Every time a dataset or a function is added to the R6 object, batchtools experiments of all possible combinations (problems $\times$ algorithms) are added to the batchtools registry as well. 
-
-![](img/batchtools.svg)
-
-A big advantage of this method is that it scales nicely for larger datasets. Data is only read into RAM, when needed.

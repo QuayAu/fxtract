@@ -16,7 +16,7 @@ Setup script:
 ```{r, echo = FALSE}
 unlink("fxtract_files", recursive = TRUE)
 ```
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, results = "hide"}
 library(fxtract)
 xtractor = Xtractor$new("xtractor")
 xtractor$add_data(iris, group_by = "Species")
@@ -42,7 +42,7 @@ xtractor$add_feature(fun2)
 xtractor$calc_features()
 ```
 
-We can still get the resulting dataframe:
+We can still get the resulting dataframe with missing values for failed calculations:
 ```{r}
 xtractor$results
 ```
@@ -51,18 +51,6 @@ xtractor$results
 
 ```{r, message = FALSE, warning = FALSE}
 xtractor$error_messages
-```
-
-## Status
-The slot `$status` gives an overview over which features have already been calculated on which datasets (1 done, 0 not done):
-
-```{r, message = FALSE}
-xtractor$status
-```
-We can also use the corresponding batchtools function:
-
-```{r}
-batchtools::getStatus(reg = xtractor$reg)
 ```
 
 ## Debugging
@@ -74,7 +62,7 @@ df = xtractor$get_data("versicolor")
 ```
 Now you can debug the function on the dataset on which the function failed.
 
-## Fix Features
+## Fix Features 
 ```{r, message = FALSE}
 fun1_fixed = function(data) {
   c(mean_sepal_length = mean(data$Sepal.Length),
@@ -93,25 +81,9 @@ xtractor$add_feature(fun2_fixed)
 ```
 
 
-## Parallelization
-Parallelization is done by setting the cluster functions via batchtools. See [here](https://mllg.github.io/batchtools/articles/batchtools.html).
-
-E.g. on a windows machine:
-```{r, eval = FALSE}
-xtractor$reg$cluster.functions = batchtools::makeClusterFunctionsSocket(2)
-```
-
-## Submit Jobs via batchtools
-It is also possible to submit jobs via batchtools:
+## Calculate Again
 ```{r, message = FALSE}
-batchtools::submitJobs(reg = xtractor$reg)
-```
-
-```{r, echo = FALSE}
-Sys.sleep(1)
-```
-
-```{r}
+xtractor$calc_features()
 xtractor$results
 ```
 

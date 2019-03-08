@@ -1,16 +1,19 @@
 Package: fxtract
 Type: Package
-Title: Feature Extraction from Raw Data
-Date: 2019-01-17
-Description: Extracting features from raw data of many different users/IDs/etc.
-    Helpful preprocessing functions are supplied as well. Very large datasets are supported, since data is only read into RAM when needed.
-    Individual features can be deleted or updated easily. Calculation of features can be done in parallel and the process can be monitored.
+Title: Feature Extraction from Grouped Data
+Date: 2019-02-07
+Description:  An R6 implementation for calculating features from grouped data.
+    The output will be one row for each group.
+    This functionality is often needed in the feature extraction process of machine learning problems.
+    Very large datasets are supported, since data is only read into RAM when needed.
+    Calculation can be done in parallel and the process can be monitored. 
+    Global error handling is supported.
     Results are available in one final dataframe.
 Version: 0.9.1
 Authors@R: c(person("Quay", "Au", email = "quayau@gmail.com", role = c("aut", "cre")),
+  person("Clemens", "Stachl", email = "clemensstachl@gmail.com", role = "ctb"),
+  person("Ramona", "Schoedel", email = "ramonaschoedel90@gmail.com", role = "ctb"),
   person("Theresa", "Ullmann", email = "theresa_ullmann@gmx.de", role = "ctb"),
-  person("Clemens", "Stachl", email = "clemens.stachl@psy.lmu.de", role = "ctb"),
-  person("Ramona", "Schoedel", email = "ramona.schoedel@psy.lmu.de", role = "ctb"),
   person("Andreas", "Hofheinz", email = "andreas.hofheinz@outlook.com", role = "ctb")
   )
 URL: https://github.com/QuayAu/fxtract
@@ -27,9 +30,10 @@ Imports: dplyr,
   checkmate,
   utils,
   data.table,
-  batchtools,
-  foreach,
-  R6
+  future,
+  future.apply,
+  R6,
+  fs
 Suggests: testthat,
   knitr,
   covr,

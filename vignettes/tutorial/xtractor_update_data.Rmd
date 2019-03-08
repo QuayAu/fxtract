@@ -27,13 +27,13 @@ iris_vers$Sepal.Length = abs(rnorm(nrow(iris_vers)))
 ```
 
 ## Delete Old Data
-Datasets are saved as batchtools problems (one problem for each ID of the grouping variable). Single problems can be removed:
+Datasets are saved as RDS files (one file for each ID of the grouping variable). Single RDS files can be removed:
 ```{r, message = FALSE}
 xtractor$remove_data("virginica")
 ```
 
 ## Add New Data
-```{r, message = FALSE}
+```{r, message = FALSE, results = "hide"}
 xtractor$add_data(iris_vers, group_by = "Species")
 ```
 

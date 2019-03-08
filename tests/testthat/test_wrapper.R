@@ -1,4 +1,4 @@
-context("Helpers")
+context("Wrapper")
 
 test_that("dplyr_wrapper", {
   df = data.frame(id = c(rep(1, 10), rep(2, 10)))
@@ -8,7 +8,9 @@ test_that("dplyr_wrapper", {
 
   #test checks
   fun = function(data) data.frame(x = data$x, x2 = data$x * 2)
-  expect_error(dplyr_wrapper(data = df, group_by = "id", fun = fun))
+  expect_error(dplyr_wrapper(data = df, group_by = "id", fun = fun), regexp = "Your function must return a named vector or named list")
+  fun = function(data) c(mean(data$x))
+  expect_error(dplyr_wrapper(data = df, group_by = "id", fun = fun), regexp = "Your function returns an unnamed vector")
 
   #return 1 value
   fun = function(data) c(mean_x = mean(data$x))
@@ -42,8 +44,6 @@ test_that("dplyr_wrapper", {
   df$task = rep(c(rep("task1", 5), rep("task2", 5)), 2)
   df$hour = rep(c(rep("hour1", 3), rep("hour2", 2), rep("hour1", 2), rep("hour2", 3)), 2)
   df$x = 1:20
-
-  #test checks
   fun = function(data) list(x = c(mean(data$x), sd(data$x)), x2 = "test")
   expect_error(dplyr_wrapper(data = df, group_by = "id", fun = fun))
   fun = function(data) list(mean_x = mean(data$x), x2 = "test")

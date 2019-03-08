@@ -11,8 +11,8 @@ Although we can perform dataset preprocessing inside the feature functions (e.g.
 Especially, if this takes a long time and is done again and again for different feature functions.
 To make sure that this is done for each ID of a grouping variable individually, it is safer to use the method shown here.
 
-## Studentlife Data
-In thie example we cluster the gps points and add a new column with the clusters.
+## StudentLife Data
+In this example we cluster the gps points and add a new column with the clusters.
 
 For simplicity reasons, we only use the gps data of this dataset:
 ```{r, message = FALSE, warning = FALSE}
@@ -26,7 +26,7 @@ head(gps_data)
 unlink("fxtract_files", recursive = TRUE)
 ```
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, results = "hide"}
 library(fxtract)
 xtractor = Xtractor$new("xtractor")
 xtractor$add_data(gps_data, group_by = "userId")
@@ -34,7 +34,7 @@ xtractor$add_data(gps_data, group_by = "userId")
 
 
 ## Define a Function
-We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method `$preprocess_data` will then read the RDS files for each ID of the grouping variable, apply the function on each dataframe individually and save those as RDS files again. The corresponding batchtools problems will also be updated. Parallelization is available via foreach.
+We need to define a function which has a dataframe as input and the preprocessed dataframe as output. The method `$preprocess_data` will then read the RDS files for each ID of the grouping variable, apply the function on each dataframe individually and save those as RDS files again. Parallelization is available via `future`.
 
 ```{r, message = FALSE, warning = FALSE}
 library(fpc)

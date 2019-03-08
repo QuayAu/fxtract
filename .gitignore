@@ -2,9 +2,11 @@
 .Rhistory
 .RData
 *.Rproj
-#docs/*
+docs/*
 .project
 data_gitignore/
 *.sql
 fxtract_files/
 ..Rcheck/
+paper/paper.html
+paper/paper.pdf
