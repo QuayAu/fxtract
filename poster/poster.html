@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Feature Extraction with fxtract</title>
+
+
+
+
+
+
+<!--
+Font-awesome icons ie github or twitter
+-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/brands.css" integrity="sha384-n9+6/aSqa9lBidZMRCQHTHKJscPq6NW4pCQBiMmHdUCvPN8ZOg2zJJTkC7WIezWv" crossorigin="anonymous">
+
+<!--
+Google fonts api stuff
+-->
+<link href='https://fonts.googleapis.com/css?family=Rasa' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Rasa' rel='stylesheet'>
+
+<!--
+Here are the required style attributes for css to make this poster work :)
+-->
+<style>
+@page {
+size: 36in 48in;
+margin: 0;
+padding: 0;
+}
+body {
+margin: 0px;
+padding: 0px;
+width: 36in;
+height: 48in;
+text-align: justify;
+font-size: 45px;
+}
+/* RMarkdown Class Styles */
+/* center align leaflet map,
+from https://stackoverflow.com/questions/52112119/center-leaflet-in-a-rmarkdown-document */
+.html-widget {
+margin: auto;
+position: sticky;
+margin-top: 2cm;
+margin-bottom: 2cm;
+}
+.leaflet.html-widget.html-widget-static-bound.leaflet-container.leaflet-touch.leaflet-fade-anim.leaflet-grab.leaflet-touch-drag.leaflet-touch-zoom {
+position: sticky;
+width: 100%;
+}
+pre.sourceCode.r {
+background-color: #dddddd40;
+border-radius: 4mm;
+padding: 4mm;
+width: 75%;
+margin: auto;
+margin-top: 1em;
+margin-bottom: 1em;
+/* align-items: center; */
+padding-left: 2cm;
+}
+code.sourceCode.r{
+background-color: transparent;
+font-size: 20pt;
+border-radius: 2mm;
+}
+code {
+font-size: 25pt;
+font-family: monospace;
+background-color: #15000124;
+color: #7D0000;
+padding: 1.2mm;
+border-radius: 2mm;
+}
+caption {
+margin-bottom: 10px;
+font-size: 20pt;
+font-style: italic;
+}
+tbody tr:nth-child(odd) {
+    background-color: #7D000020;
+}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+  border-spacing: 0;
+  border-style: none;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 20px;
+  padding-left: 20px;
+  line-height: 1.42857143;
+}
+.caption {
+font-size: 20pt;
+font-style: italic;
+}
+.references {
+font-size: 23px;
+line-height: 90%;
+}
+/* Create three unequal columns that floats next to each other */
+.column {
+float: left;
+padding: 0px;
+}
+.outer {
+width: 36in;
+height: calc(48in * 0.6325);
+-webkit-column-count: 3; /* Chrome, Safari, Opera */
+-moz-column-count: 3; /* Firefox */
+column-count: 3;
+-webkit-column-fill: auto;
+-moz-column-fill: auto;
+column-fill: auto;
+column-gap: 0;
+padding-left: 0cm;
+padding-right: 0cm;
+/* -webkit-column-rule-width: 50%;
+-moz-column-rule-width: 50%;
+column-rule-width: 50%; */
+-webkit-column-rule-style: none;
+-moz-column-rule-style: none;
+column-rule-style: none;
+-webkit-column-rule-color: black;
+-moz-column-rule-color: black;
+column-rule-color: black;
+background-color: #ffffff;
+font-family: Rasa;
+margin-top: calc(48in * 0.25);
+padding-top: 1em;
+padding-bottom: 1em;
+}
+span.citation {
+  color: #150001;
+  font-weight: bold;
+}
+a {
+text-decoration: none;
+color: #150001;
+}
+#title {
+font-size: 125pt;
+text-align: left;
+padding-right: 5%;
+padding-left: 5%;
+margin: 0;
+line-height: 98%;
+border-bottom: 0;
+font-weight: normal;
+}
+#author {
+padding-right: 5%;
+padding-left: 5%;
+color: #7D0000;
+margin: 0;
+line-height: 85%;
+font-size: 1.17em;
+}
+#affiliation {
+padding-right: 5%;
+padding-left: 5%;
+padding-top: 1em;
+color: #00000080;
+font-style: italic;
+font-size: 25px;
+margin: 0;
+}
+sup {
+color: #cc0000;
+}
+.affiliation sup {
+font-size: 20px;
+}
+table {
+  padding-left: 5%;
+  padding-right:; 5%;
+}
+.author {
+text-align: left;
+}
+.author sup {
+font-size: 30px;
+}
+.author_extra {
+padding-right: 5%;
+padding-left: 5%;
+color: #150001;
+margin: 0;
+line-height: 85%;
+font-size: 35px;
+text-align: left;
+}
+.outer h1, h2, h3, h4, h5, h6 {
+text-align: center;
+margin-top: 0.5in;
+margin-bottom: 0.5in;
+font-weight: normal;
+}
+.outer h2 {
+text-align: center;
+}
+.outer p, .level2 {
+padding-right: 5%;
+padding-left: 5%;
+color: #000000;
+}
+.outer ol {
+padding-left: 8%;
+padding-right: 8%;
+text-align: left;
+}
+.middle {
+width: 36in;
+height: calc(48in * 0.25);
+position: absolute;
+background-color: #7D0000;
+color: #FFFFFF;
+font-family: Rasa;
+background-image: linear-gradient(#7D0000 50%, #150001);
+}
+.middle strong {
+color: #FFFFFF;
+}
+.middle strong > sup {
+color: #FFFFFF;
+}
+.middle sup {
+color: #FFFFFF;
+}
+#middle-img-left {
+width: 10%;
+left: 0.5in;
+bottom: 0.2in;
+position: absolute;
+opacity: 0.5
+}
+#middle-img-center {
+width: 10%;
+left: calc(36in * 0.45);
+bottom: 0.5in;
+position: absolute;
+opacity: 0.5
+}
+#middle-img-right {
+width: 10%;
+right: 0.5in;
+bottom: 0.2in;
+position: absolute;
+opacity: 0.6
+}
+.middle p {
+padding-left: 7%;
+padding-right: 7%;
+font-size: 170px;
+text-align: left;
+}
+.fab {
+color: #00000030;
+font-size: 25px;
+}
+.twitter, i {
+color: #00000030;
+font-size: 35px;
+text-decoration: none;
+}
+a.email {
+text-decoration: none;
+color: #00000030;
+font-size: 35px;
+}
+.envelope {
+color: #00000030;
+font-size: 5px;
+text-decoration: none;
+}
+.poster_wrap {
+width: 36in;
+height: 48in;
+padding: 0cm;
+}
+.emphasis_bottom {
+width: 36in;
+height: calc(48in * 0.1);
+margin-top: calc(48in * 0.9);
+position: absolute;
+background-color: #7D0000;
+background-image: linear-gradient(#150001 10%, #7D0000);
+}
+
+span > #tab:mytable {
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+
+<div class="poster_wrap">
+
+<div class="column outer">
+<h1 id="title"><strong>Feature Extraction with fxtract</strong></h1><br>
+<h3 id="author" class="author">
+
+<strong>Quay Au</strong><sup> 1</sup><br>
+
+<a class='envelope'><i class="fas fa-envelope"></i></a> <a href="mailto:quay.au@stat.uni-muenchen.de">quay.au@stat.uni-muenchen.de</a> <br>
+     </h3>
+
+<h5 id="author_extra", class="author_extra">
+ Clemens Stachl<sup>2</sup>
+ Ramona Schoedel<sup>2</sup>
+ Theresa Ullmann<sup>1</sup>
+ Andreas Hofheinz<sup>1</sup>
+ Bernd Bischl<sup>1</sup>
+</h5>
+
+<p id="affiliation" class="affiliation">
+<sup>1</sup> Institute of Statistics, Ludwigs-Maximilians-University München<br> <sup>2</sup> Department of Psychology, Methods and Assessment, Ludwigs-Maximilians-University München
+</p>
+
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>Feature extraction is a crucial step for tackling machine learning problems. Many machine learning problems start with complex (often timestamped) raw data with many grouped variables (e.g. heart rate measurements of many patients, gps data for analysis of movements of many participants of a study, etc.). Often times, this raw data cannot directly be used for machine learning algorithms. User-defined features must be extracted for this purpose. Examples could be the heart rate variability of a patient, or the maximum distance traveled by a participant of a gps study. Since there are many different machine learning applications and therefore many inherently different raw datasets and features which need to be calculated, we do not supply any automated features. fxtract assists you in the feature extraction process by helping with the data wrangling needed, but still allows you to extract your own defined features.</p>
+<div class="figure" style="text-align: center"><span id="fig:pressure"></span>
+<img src="../man/figures/fxtract_main.svg" alt="A caption" width="100%" />
+<p class="caption">
+Figure 1.1: A caption
+</p>
+</div>
+</div>
+<div id="usage" class="section level1">
+<h1><span class="header-section-number">2</span> Usage</h1>
+<div id="design-principles" class="section level2">
+<h2><span class="header-section-number">2.1</span> Design Principles</h2>
+</div>
+<div id="error-handling" class="section level2">
+<h2><span class="header-section-number">2.2</span> Error Handling</h2>
+</div>
+<div id="parallelization" class="section level2">
+<h2><span class="header-section-number">2.3</span> Parallelization</h2>
+</div>
+</div>
+
+</div>
+<div class="column middle">
+<p>Feature Extraction with <strong>fxtract</strong><br><br> An R-Package for Extracting <strong>User-defined</strong> Features from Grouped Data</p>
+</div>
+<div class="emphasis_bottom">
+<img id="middle-img-left" src=../man/figures/hexagon.svg>
+<img id="middle-img-center" src=Figures/qr-code-black.png>
+<img id="middle-img-right" src="../man/figures/hexagon.svg">
+</div>
+</div>
+
+
+
+</body>
+</html>
