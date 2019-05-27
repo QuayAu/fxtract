@@ -37,7 +37,7 @@
 #' \describe{
 #' \item{\code{add_data(data, group_by)}}{[data: (`data.frame` | `data.table`)] A dataframe or data.table which shall be added to the R6 object. \cr
 #'  [group_by: (`character(1)`)] The grouping variable's name of the dataframe. \cr \cr
-#'  This method writes single RDS files (this can be parallelized with future)}
+#'  This method writes single RDS files for each group.}
 #' \item{\code{preprocess_data(fun)}}{[fun: (`function`)] A function, which has a dataframe as input and a dataframe as output. \cr \cr
 #'  This method loads the RDS files and applies this function on them. The old RDS files are overwritten.}
 #' \item{\code{remove_data(ids)}}{[ids: (`character()`)] One or many IDs of the grouping variable. \cr \cr
@@ -170,9 +170,10 @@ Xtractor = R6Class("Xtractor",
       if (group_by != private$group_by) stop(paste0("The group_by variable was set to ", private$group_by,
         ". Only one group_by variable is allowed per Xtractor!"))
       gb = data %>% dplyr::distinct_(.dots = group_by) %>% data.frame() %>% unlist()
+      if (any(gb %in% self$ids)) stop(paste0("Adding data multiple times is not allowed! Following ID(s) are already added to the R6 object: ",
+        paste0(gb[which(gb %in% self$ids)], collapse = ", ")))
 
-      if (any(gb %in% self$ids)) stop(paste0("Adding data multiple times is not allowed! Following ID(s) are already added to the R6 object: ", paste0(gb[which(gb %in% self$ids)], collapse = ", ")))
-      #save rds files, we want this no matter the backend (because of preprocessing data per ID)
+      #save rds files
       message("Saving raw RDS files.")
       pb = utils::txtProgressBar(min = 0, max = length(gb), style = 3)
       for (i in 1:length(gb)) {
