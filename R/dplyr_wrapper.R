@@ -68,7 +68,7 @@ dplyr_wrapper = function(data, group_by, fun, check_fun = TRUE) {
 
     #check list return
     if (inherits(check_data, "list")) {
-      for (i in 1:length(check_data)) {
+      for (i in seq_along(check_data)) {
         if (is.null(names(check_data[i]))) {
           stop(paste0("List entry ", i, " is unnamed. Please name each list entry."))
         } else {
@@ -88,7 +88,7 @@ dplyr_wrapper = function(data, group_by, fun, check_fun = TRUE) {
   res = data.frame(res)
 
   list_entries = lapply(res, class)
-  for (i in 1:length(list_entries)) {
+  for (i in seq_along(list_entries)) {
     if (list_entries[i] == "list") res[i] = unlist(res[i])
   }
 

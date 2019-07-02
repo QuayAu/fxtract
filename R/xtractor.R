@@ -176,7 +176,7 @@ Xtractor = R6Class("Xtractor",
       #save rds files
       message("Saving raw RDS files.")
       pb = utils::txtProgressBar(min = 0, max = length(gb), style = 3)
-      for (i in 1:length(gb)) {
+      for (i in seq_along(gb)) {
         data_i = data %>% dplyr::filter(!!as.name(group_by) == gb[i]) %>% data.frame()
         saveRDS(data_i, file = paste0(private$dir, "/rds_files/data/", gb[i], ".RDS"))
         utils::setTxtProgressBar(pb, i)
@@ -235,7 +235,7 @@ Xtractor = R6Class("Xtractor",
       })
       if (length(unique(lapply(data, function(df) typeof(df[, private$group_by])))) > 1) {
         message("Different vector types detected. Converting group column to character.")
-        for (i in 1:length(data)) {
+        for (i in seq_along(data)) {
           data[[i]][, private$group_by] = as.character(data[[i]][, private$group_by])
         }
       }
