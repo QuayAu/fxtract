@@ -116,22 +116,22 @@ Xtractor = R6Class("Xtractor",
     initialize = function(name, file.dir = ".", load = FALSE) {
       future::plan(future::sequential)
       private$name = checkmate::assert_character(name)
-      newDirPath = paste0(file.dir, "/fxtract_files/", name)
+      newDirPath = file.path(file.dir, "fxtract_files", name)
       private$dir = newDirPath
       if (!load) {
-        if (!fs::dir_exists(paste0(file.dir, "/fxtract_files"))) fs::dir_create(paste0(file.dir, "/fxtract_files"))
+        if (!fs::dir_exists(file.path(file.dir, "fxtract_files"))) fs::dir_create(file.path(file.dir, "fxtract_files"))
         if (fs::dir_exists(newDirPath)) stop("The Xtractor name already exists. Please choose another name, delete the existing Xtractor, or set load = TRUE, if you want to load the old Xtractor.")
         fs::dir_create(newDirPath)
-        fs::dir_create(paste0(newDirPath, "/rds_files"))
-        fs::dir_create(paste0(newDirPath, "/rds_files/data"))
-        fs::dir_create(paste0(newDirPath, "/rds_files/features"))
-        fs::dir_create(paste0(newDirPath, "/rds_files/results"))
-        fs::dir_create(paste0(newDirPath, "/rds_files/results/done"))
-        fs::dir_create(paste0(newDirPath, "/rds_files/results/failed"))
-        saveRDS(NULL, file = paste0(private$dir, "/rds_files/group_by.RDS"))
+        fs::dir_create(file.path(newDirPath, "rds_files"))
+        fs::dir_create(file.path(newDirPath, "rds_files", "data"))
+        fs::dir_create(file.path(newDirPath, "rds_files", "features"))
+        fs::dir_create(file.path(newDirPath, "rds_files", "results"))
+        fs::dir_create(file.path(newDirPath, "rds_files", "results", "done"))
+        fs::dir_create(file.path(newDirPath, "rds_files", "results", "failed"))
+        saveRDS(NULL, file = file.path(private$dir, "rds_files", "group_by.RDS"))
       } else {
-        checkmate::assert_subset(name, list.files(paste0(file.dir, "/fxtract_files/")))
-        private$group_by = readRDS(paste0(newDirPath, "/rds_files/group_by.RDS"))
+        checkmate::assert_subset(name, list.files(file.path(file.dir, "fxtract_files")))
+        private$group_by = readRDS(file.path(newDirPath, "rds_files", "group_by.RDS"))
       }
     },
     print = function() {
@@ -165,7 +165,7 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_character(group_by, len = 1)
       if (is.null(private$group_by)) {
         private$group_by = group_by
-        saveRDS(group_by, file = paste0(private$dir, "/rds_files/group_by.RDS"))
+        saveRDS(group_by, file = file.path(private$dir, "rds_files", "group_by.RDS"))
       }
       if (group_by != private$group_by) stop(paste0("The group_by variable was set to ", private$group_by,
         ". Only one group_by variable is allowed per Xtractor!"))
@@ -178,7 +178,7 @@ Xtractor = R6Class("Xtractor",
       pb = utils::txtProgressBar(min = 0, max = length(gb), style = 3)
       for (i in seq_along(gb)) {
         data_i = data %>% dplyr::filter(!!as.name(group_by) == gb[i]) %>% data.frame()
-        saveRDS(data_i, file = paste0(private$dir, "/rds_files/data/", gb[i], ".RDS"))
+        saveRDS(data_i, file = file.path(private$dir, "rds_files", "data", paste0(gb[i], ".RDS")))
         utils::setTxtProgressBar(pb, i)
       }
       return(invisible(self))
@@ -186,9 +186,9 @@ Xtractor = R6Class("Xtractor",
     preprocess_data = function(fun) {
       message("Updating raw RDS files. Parallelize by setting active binding $n_cores")
       future.apply::future_lapply(self$ids, function(i) {
-        data_i = readRDS(paste0(private$dir, "/rds_files/data/", i, ".RDS"))
+        data_i = readRDS(file.path(private$dir, "rds_files", "data", paste0(i, ".RDS")))
         data_preproc = fun(data_i)
-        saveRDS(data_preproc, file = paste0(private$dir, "/rds_files/data/", i, ".RDS"))
+        saveRDS(data_preproc, file = file.path(private$dir, "rds_files", "data", paste0(i, ".RDS")))
       }, future.seed = TRUE)
       return(invisible(self))
     },
@@ -197,15 +197,15 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_subset(ids, self$ids)
       for (id in ids) {
         message("Deleting RDS file ", id, ".RDS")
-        fs::file_delete(paste0(paste0(private$dir, "/rds_files/data/", id, ".RDS")))
+        fs::file_delete(file.path(file.path(private$dir, "rds_files", "data", paste0(id, ".RDS"))))
       }
 
       #delete done
-      done_dir = paste0(private$dir, "/rds_files/results/done/")
+      done_dir = file.path(private$dir, "rds_files", "results", "done")
       done_features = list.files(done_dir)
       for (feature in done_features) {
         for (id in ids) {
-          done_feat_path = paste0(private$dir, "/rds_files/results/done/", feature, "/", id, ".RDS")
+          done_feat_path = file.path(private$dir, "rds_files", "results", "done", feature, paste0(id, ".RDS"))
           if (file.exists(done_feat_path)) {
             message(paste0("Deleting results from id: ", id))
             fs::file_delete(done_feat_path)
@@ -213,11 +213,11 @@ Xtractor = R6Class("Xtractor",
         }
       }
       #delete error
-      failed_dir = paste0(private$dir, "/rds_files/results/failed/")
+      failed_dir = file.path(private$dir, "rds_files", "results", "failed")
       failed_features = list.files(failed_dir)
       for (feature in failed_features) {
         for (id in ids) {
-          failed_feat_path = paste0(private$dir, "/rds_files/results/failed/", feature, "/", id, ".RDS")
+          failed_feat_path = file.path(private$dir, "rds_files", "results", "failed", feature, paste0(id, ".RDS"))
           if (file.exists(failed_feat_path)) {
             message(paste0("Deleting error messages from id: ", id))
             fs::file_delete(failed_feat_path)
@@ -231,7 +231,7 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_character(ids, min.len = 1L)
       checkmate::assert_subset(ids, self$ids)
       data = future.apply::future_lapply(ids, function(i) {
-        readRDS(paste0(private$dir, "/rds_files/data/", i, ".RDS"))
+        readRDS(file.path(private$dir, "rds_files", "data", paste0(i, ".RDS")))
       })
       if (length(unique(lapply(data, function(df) typeof(df[, private$group_by])))) > 1) {
         message("Different vector types detected. Converting group column to character.")
@@ -245,9 +245,9 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_logical(check_fun)
       checkmate::assert_function(fun)
       if (deparse(substitute(fun)) %in% self$features) stop(paste0("Feature function '", deparse(substitute(fun)), "' was already added."))
-      saveRDS(list(fun = fun, check_fun = check_fun), file = paste0(private$dir, "/rds_files/features/", deparse(substitute(fun)), ".RDS"))
-      fs::dir_create(paste0(private$dir, "/rds_files/results/done/", deparse(substitute(fun))))
-      fs::dir_create(paste0(private$dir, "/rds_files/results/failed/", deparse(substitute(fun))))
+      saveRDS(list(fun = fun, check_fun = check_fun), file = file.path(private$dir, "rds_files", "features", paste0(deparse(substitute(fun)), ".RDS")))
+      fs::dir_create(file.path(private$dir, "rds_files", "results", "done", deparse(substitute(fun))))
+      fs::dir_create(file.path(private$dir, "rds_files", "results", "failed", deparse(substitute(fun))))
       return(invisible(self))
     },
     remove_feature = function(fun) {
@@ -255,16 +255,16 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_character(fun, min.len = 1L)
       checkmate::assert_subset(fun, self$features)
       for (f in fun) {
-        fs::file_delete(paste0(private$dir, "/rds_files/features/", f, ".RDS"))
-        fs::dir_delete(paste0(private$dir, "/rds_files/results/done/", f))
-        fs::dir_delete(paste0(private$dir, "/rds_files/results/failed/", f))
+        fs::file_delete(file.path(private$dir, "rds_files", "features", paste0(f, ".RDS")))
+        fs::dir_delete(file.path(private$dir, "rds_files", "results", "done", f))
+        fs::dir_delete(file.path(private$dir, "rds_files", "results", "failed", f))
       }
       return(invisible(self))
     },
     get_feature = function(fun) {
       checkmate::assert_character(fun, len = 1L)
       checkmate::assert_subset(fun, self$features)
-      readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))$fun
+      readRDS(file.path(private$dir, "rds_files", "features", paste0(fun, ".RDS")))$fun
     },
     calc_features = function(features, ids, retry_failed = TRUE) {
       if (missing(features)) features = self$features
@@ -313,12 +313,12 @@ Xtractor = R6Class("Xtractor",
           res_id = tryCatch(fxtract::dplyr_wrapper(data, group_by, feat_fun, check_fun = private$get_check_fun(feature)), error = function(e) e$message)
 
           #if error, save as error, else save result
-          feat_fail_path = paste0(private$dir, "/rds_files/results/failed/", feature, "/", x, ".RDS")
+          feat_fail_path = file.path(private$dir, "rds_files", "results", "failed", feature, paste0(x, ".RDS"))
           if (is.character(res_id)) {
             saveRDS(res_id, file = feat_fail_path)
           } else {
             if (fs::file_exists(feat_fail_path)) fs::file_delete(feat_fail_path)
-            saveRDS(res_id, file = paste0(private$dir, "/rds_files/results/done/", feature, "/", x, ".RDS"))
+            saveRDS(res_id, file = file.path(private$dir, "rds_files", "results", "done", feature,  paste0(x, ".RDS")))
           }
         }, future.seed = TRUE)
       }
@@ -332,17 +332,17 @@ Xtractor = R6Class("Xtractor",
     get_check_fun = function(fun) {
       checkmate::assert_character(fun, len = 1L)
       checkmate::assert_subset(fun, self$features)
-      readRDS(paste0(private$dir, "/rds_files/features/", fun, ".RDS"))$check_fun
+      readRDS(file.path(private$dir, "rds_files", "features", paste0(fun, ".RDS")))$check_fun
     }
   ),
   active = list(
     error_messages = function() {
       error_df = setNames(data.frame(matrix(ncol = 3, nrow = 0), stringsAsFactors = FALSE), c("feature_function", "id", "error_message"))
       for (feat in self$features) {
-        error_feats = list.files(paste0(private$dir, "/rds_files/results/failed/", feat))
+        error_feats = list.files(file.path(private$dir, "rds_files", "results", "failed", feat))
         if (length(error_feats) == 0) next
         for (file in error_feats) {
-          error_message = readRDS(paste0(private$dir, "/rds_files/results/failed/", feat, "/", file))
+          error_message = readRDS(file.path(private$dir, "rds_files", "results", "failed", feat, file))
           error_df = dplyr::bind_rows(error_df, data.frame(feature_function = feat,
             id = gsub(".RDS", "", file), error_message = error_message, stringsAsFactors = FALSE))
         }
@@ -350,18 +350,18 @@ Xtractor = R6Class("Xtractor",
       data.table::data.table(error_df)
     },
     ids = function() {
-      gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/data")))
+      gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "data")))
     },
     features = function() {
-      gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/features")))
+      gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "features")))
     },
     results = function() {
-      todo_data = gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/data/")))
+      todo_data = gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "data")))
       final_result = setNames(data.frame(todo_data, stringsAsFactors = FALSE), private$group_by)
       if (nrow(final_result) == 0) return(final_result)
 
       for (feat in self$features) {
-        results_feat = future.apply::future_lapply(list.files(paste0(private$dir, "/rds_files/results/done/", "/", feat), full.names = TRUE), readRDS)
+        results_feat = future.apply::future_lapply(list.files(file.path(private$dir, "rds_files", "results", "done", feat), full.names = TRUE), readRDS)
         results_feat = data.table::rbindlist(results_feat, fill = TRUE) %>% data.frame()
         if (nrow(results_feat) == 0) next
         results_feat[, private$group_by] = as.character(results_feat[, private$group_by])
@@ -370,20 +370,20 @@ Xtractor = R6Class("Xtractor",
       data.table::data.table(final_result)
     },
     status = function() {
-      todo_data = gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/data/")))
-      todo_feats = gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/features/")))
+      todo_data = gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "data")))
+      todo_feats = gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "features")))
       status = setNames(data.frame(todo_data, stringsAsFactors = FALSE), private$group_by)
       if (nrow(status) == 0) return(status)
       for (feat in todo_feats) {
         #make done df
-        done_feat = gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/results/done/", feat)))
+        done_feat = gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "results", "done", feat)))
         if (length(done_feat) >= 1) {
           done_df = setNames(data.frame(done_feat, "done", stringsAsFactors = FALSE), c(private$group_by, feat))
         } else {
           done_df = setNames(data.frame(matrix(ncol = 2, nrow = 0), stringsAsFactors = FALSE), c(private$group_by, feat))
         }
         #make error df
-        error_feat = gsub(".RDS", "", list.files(paste0(private$dir, "/rds_files/results/failed/", feat)))
+        error_feat = gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "results", "failed", feat)))
         if (length(error_feat) >= 1) {
           error_df = setNames(data.frame(error_feat, "failed", stringsAsFactors = FALSE), c(private$group_by, feat))
         } else {
