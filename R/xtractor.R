@@ -347,7 +347,7 @@ Xtractor = R6Class("Xtractor",
             id = gsub(".RDS", "", file), error_message = error_message, stringsAsFactors = FALSE))
         }
       }
-      data.table::data.table(error_df)
+      data.table::setDF(error_df)
     },
     ids = function() {
       gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "data")))
@@ -367,7 +367,7 @@ Xtractor = R6Class("Xtractor",
         results_feat[, private$group_by] = as.character(results_feat[, private$group_by])
         final_result = dplyr::full_join(final_result, results_feat, by = private$group_by)
       }
-      data.table::data.table(final_result)
+      data.table::setDF(final_result)
     },
     status = function() {
       todo_data = gsub(".RDS", "", list.files(file.path(private$dir, "rds_files", "data")))
