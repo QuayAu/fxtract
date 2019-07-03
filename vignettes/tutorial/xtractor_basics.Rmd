@@ -79,3 +79,27 @@ xtractor$results
 ```{r, echo = FALSE}
 unlink("fxtract_files", recursive = TRUE)
 ```
+
+## Parallelization
+Parallelization is realized with the package [future](https://CRAN.R-project.org/package=future)
+Feature calculation and preprocessing data will be parallelized.
+For Windows and Linux machines you can parallelize like the following:
+
+### Use all cores
+```{r}
+library(future)
+plan(multisession)
+future::nbrOfWorkers()
+```
+
+### Set number of cores
+```{r}
+plan(multisession, workers = 4)
+future::nbrOfWorkers()
+```
+
+### Stop parallelization
+```{r}
+plan(sequential)
+future::nbrOfWorkers()
+```
