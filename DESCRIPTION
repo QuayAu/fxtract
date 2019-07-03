@@ -9,7 +9,7 @@ Description:  An R6 implementation for calculating features from grouped data.
     Calculation can be done in parallel and the process can be monitored. 
     Global error handling is supported.
     Results are available in one final dataframe.
-Version: 0.9.1
+Version: 0.9.2
 Authors@R: c(person("Quay", "Au", email = "quayau@gmail.com", role = c("aut", "cre")),
   person("Clemens", "Stachl", email = "clemensstachl@gmail.com", role = "ctb"),
   person("Ramona", "Schoedel", email = "ramonaschoedel90@gmail.com", role = "ctb"),
@@ -28,14 +28,14 @@ RoxygenNote: 6.1.1
 Imports: dplyr,
   magrittr,
   checkmate,
-  utils,
   data.table,
-  future,
   future.apply,
   R6,
   fs
 Suggests: testthat,
   knitr,
   covr,
+  utils,
+  future,
   pkgdown
 VignetteBuilder: knitr
