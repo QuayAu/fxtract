@@ -114,7 +114,6 @@ NULL
 Xtractor = R6Class("Xtractor",
   public = list(
     initialize = function(name, file.dir = ".", load = FALSE) {
-      future::plan(future::sequential)
       private$name = checkmate::assert_character(name)
       newDirPath = file.path(file.dir, "fxtract_files", name)
       private$dir = newDirPath
@@ -181,10 +180,11 @@ Xtractor = R6Class("Xtractor",
         saveRDS(data_i, file = file.path(private$dir, "rds_files", "data", paste0(gb[i], ".RDS")))
         utils::setTxtProgressBar(pb, i)
       }
+      close(pb)
       return(invisible(self))
     },
     preprocess_data = function(fun) {
-      message("Updating raw RDS files. Parallelize by setting active binding $n_cores")
+      message("Updating raw RDS files.")
       future.apply::future_lapply(self$ids, function(i) {
         data_i = readRDS(file.path(private$dir, "rds_files", "data", paste0(i, ".RDS")))
         data_preproc = fun(data_i)
@@ -287,7 +287,7 @@ Xtractor = R6Class("Xtractor",
       }
 
       #calculating features using future.apply
-      message(paste0("Calculating features on ", self$n_cores, " core(s)."))
+      message(paste0("Calculating features on ", future::nbrOfWorkers(), " core(s)."))
       for (feature in features_new) {
         idm = ifelse(missing(ids), "", paste0(" on IDs: ", paste0(ids, collapse = ", ")))
         message(paste0("Calculating feature function: ", feature, idm))
@@ -400,18 +400,6 @@ Xtractor = R6Class("Xtractor",
         status = dplyr::left_join(status, status_feat, by = private$group_by)
       }
       status
-    },
-    n_cores = function(cores) {
-      if (missing(cores)) {
-        return(future::nbrOfWorkers())
-      } else {
-        checkmate::assert_integerish(cores, upper = future::availableCores(), lower = 1L)
-        if (cores == 1) {
-          future::plan(future::sequential)
-        } else {
-          future::plan(future::multiprocess, workers = cores)
-        }
-      }
     }
   )
 )
