@@ -4,7 +4,9 @@
 \name{studentlife_small}
 \alias{studentlife_small}
 \title{Exemplary logging data from smartphones.}
-\format{An object of class \code{data.frame} with 162154 rows and 19 columns.}
+\format{
+An object of class \code{data.frame} with 162154 rows and 19 columns.
+}
 \usage{
 studentlife_small
 }

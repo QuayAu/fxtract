@@ -78,7 +78,7 @@ dplyr_wrapper = function(data, group_by, fun, check_fun = TRUE) {
       }
     }
   }
-  if (length(group_by) == 1) res = data %>% dplyr::group_by_(.dots = group_by) %>% dplyr::do(data.frame(t(fun(.))))
+  if (length(group_by) == 1) res = data %>% dplyr::group_by(.dots = group_by) %>% dplyr::do(data.frame(t(fun(.))))
   if (length(group_by) >= 2) {
     res = data %>% dplyr::group_by_(.dots = group_by) %>% dplyr::do(data.frame(t(fun(.))))
     dcast_formula = as.formula(paste(group_by[1], "~", paste(group_by[-1], collapse = "+")))

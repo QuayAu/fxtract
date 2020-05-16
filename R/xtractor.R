@@ -343,7 +343,7 @@ Xtractor = R6Class("Xtractor",
         if (length(error_feats) == 0) next
         for (file in error_feats) {
           error_message = readRDS(file.path(private$dir, "rds_files", "results", "failed", feat, file))
-          error_df = dplyr::bind_rows(error_df, data.frame(feature_function = feat,
+          error_df = rbind(error_df, data.frame(feature_function = feat,
             id = gsub(".RDS", "", file), error_message = error_message, stringsAsFactors = FALSE))
         }
       }
@@ -396,7 +396,7 @@ Xtractor = R6Class("Xtractor",
         } else {
           not_done_df = setNames(data.frame(matrix(ncol = 2, nrow = 0), stringsAsFactors = FALSE), c(private$group_by, feat))
         }
-        status_feat = dplyr::bind_rows(done_df, error_df, not_done_df)
+        status_feat = rbind(done_df, error_df, not_done_df)
         status = dplyr::left_join(status, status_feat, by = private$group_by)
       }
       status
