@@ -107,6 +107,7 @@
 #' @import R6
 #' @import dplyr
 #' @import future.apply
+#' @importFrom data.table setDF rbindlist
 NULL
 
 #' @export

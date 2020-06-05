@@ -1,3 +1,6 @@
+# fxtract 0.9.4
+* Drop dependency on fs
+
 # fxtract 0.9.3
 * Now compatible with dplyr 1.0.0
 
