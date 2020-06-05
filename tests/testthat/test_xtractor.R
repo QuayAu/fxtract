@@ -2,23 +2,23 @@ context("Xtractor")
 
 test_that("initialize", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor", "rds_files")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor", "rds_files", "data")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor", "rds_files", "features")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor", "rds_files", "results")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor", "rds_files")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor", "rds_files", "data")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor", "rds_files", "features")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor", "rds_files", "results")))
 
   #test second xtractor
   y = Xtractor$new(name = "xtractor2", file.dir = dir)
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor2")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor2", "rds_files")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor2", "rds_files", "data")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor2", "rds_files", "features")))
-  expect_true(fs::dir_exists(file.path(dir, "fxtract_files", "xtractor2", "rds_files", "results")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor2")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor2", "rds_files")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor2", "rds_files", "data")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor2", "rds_files", "features")))
+  expect_true(dir.exists(file.path(dir, "fxtract_files", "xtractor2", "rds_files", "results")))
 
   #test same xtractor name
   expect_error(Xtractor$new(name = "xtractor", file.dir = dir))
@@ -32,12 +32,12 @@ test_that("initialize", {
 
   #test print
   y = capture.output(x$print())
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("add_data", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
 
   #test wrong inputs
@@ -87,12 +87,12 @@ test_that("add_data", {
   #add same ID - error
   expect_error(x$add_data(iris, group_by = "Species"), regexp = "Adding data multiple times is not allowed!")
 
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("preprocess_data", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   x$add_data(iris, group_by = "Species")
 
@@ -125,12 +125,12 @@ test_that("preprocess_data", {
   x$calc_features()
   expect_equal(x$results$sum, c(7.7, 12.1, 14.8))
   expect_equal(nrow(x$error_messages), 0)
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("remove_data", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   x$add_data(iris, group_by = "Species")
   fun = function(data) c(m_sp = mean(data$Sepal.Length))
@@ -169,12 +169,12 @@ test_that("remove_data", {
   expect_equal(list.files(file.path(dir, "fxtract_files", "xtractor", "rds_files", "results", "failed", "fun2")), character(0))
   expect_equal(x$ids, character(0))
   expect_equal(nrow(x$results), 0)
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("add_feature", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   x$add_data(iris, group_by = "Species")
 
@@ -238,12 +238,12 @@ test_that("add_feature", {
   y = capture.output(x$print())
   expect_equal(y[5], "Number feature functions: 22. See $features for all feature functions.")
 
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("calculate features", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   x$add_data(iris, group_by = "Species")
 
@@ -292,12 +292,12 @@ test_that("calculate features", {
   expect_true(!anyNA(res))
   cn = c(names(sepal_length_fun(iris)), names(sepal_width_fun(iris)))
 
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("error handling", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   expect_error(x$calc_features(), regexp = "Please add datasets with method")
   x$add_data(iris, group_by = "Species")
@@ -323,12 +323,12 @@ test_that("error handling", {
   expect_equal(as.character(x$error_messages$error[2]), "fun2 not compatible on virginica")
   expect_equal(nrow(x$error_messages), 2)
   expect_equal(sum(is.na(x$results)), 4)
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("wrong function returns", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   expect_error(x$calc_features(), regexp = "Please add datasets with method")
   x$add_data(iris, group_by = "Species")
@@ -357,12 +357,12 @@ test_that("wrong function returns", {
   x$calc_features()
   expect_equal(nrow(x$error_messages), 6)
 
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("right function returns", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   expect_error(x$calc_features(), regexp = "Please add datasets with method")
   x$add_data(iris, group_by = "Species")
@@ -395,12 +395,12 @@ test_that("right function returns", {
   x$calc_features()
   expect_true(nrow(x$error_messages) == 0)
 
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("add new dataset after features were already calculated", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   iris1 = iris %>% dplyr::filter(Species %in% c("virginica", "setosa"))
   iris2 = iris %>% dplyr::filter(Species %in% c("versicolor"))
@@ -430,12 +430,12 @@ test_that("add new dataset after features were already calculated", {
   expect_message(x$calc_features(), "Feature function 'fun1' was already applied on every ID and will be skipped.")
   expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "100%")
   expect_true(!anyNA(x$results))
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("test retry failed features", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   df = data.frame(ID = 1:30)
   x$add_data(df, group_by = "ID")
@@ -462,13 +462,13 @@ test_that("test retry failed features", {
   }
   expect_true(nrow(x$error_messages) == 0)
   expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "100%")
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("check fun", {
   #check one function, but not the other
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   df = data.frame(ID = 1:3)
   x$add_data(df, group_by = "ID")
@@ -487,7 +487,7 @@ test_that("check fun", {
 
   #load xtractor
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   df = data.frame(ID = 1:3)
   x$add_data(df, group_by = "ID")
@@ -504,12 +504,12 @@ test_that("check fun", {
   y = Xtractor$new("xtractor", file.dir = dir, load = TRUE)
   y$calc_features()
   expect_equal(nrow(y$error_messages), 3)
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("function returns different number of features", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   df = data.frame(ID = 1:3)
   x$add_data(df, group_by = "ID")
@@ -525,12 +525,12 @@ test_that("function returns different number of features", {
   x$add_feature(fun1)
   x$calc_features()
   expect_equal(data.frame(x$results[, c("x", "y")]), data.frame(x = c(1, 1, 1), y = c(2, NA, NA)))
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
 
 test_that("extract single features from single IDs", {
   dir = tempdir()
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
   x = Xtractor$new(name = "xtractor", file.dir = dir)
   df = data.frame(ID = 1:3)
   x$add_data(df, group_by = "ID")
@@ -567,5 +567,6 @@ test_that("extract single features from single IDs", {
   expect_equal(strsplit(capture.output(x)[6], split = " ")[[1]][3], "100%")
   expect_true(!any(is.na(x$results)))
 
-  if (fs::dir_exists(file.path(dir, "fxtract_files"))) fs::dir_delete(file.path(dir, "fxtract_files"))
+  if (dir.exists(file.path(dir, "fxtract_files"))) unlink(file.path(dir, "fxtract_files"), recursive = TRUE)
 })
+

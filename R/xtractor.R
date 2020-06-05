@@ -107,7 +107,6 @@
 #' @import R6
 #' @import dplyr
 #' @import future.apply
-#' @import fs
 NULL
 
 #' @export
@@ -118,15 +117,15 @@ Xtractor = R6Class("Xtractor",
       newDirPath = file.path(file.dir, "fxtract_files", name)
       private$dir = newDirPath
       if (!load) {
-        if (!fs::dir_exists(file.path(file.dir, "fxtract_files"))) fs::dir_create(file.path(file.dir, "fxtract_files"))
-        if (fs::dir_exists(newDirPath)) stop("The Xtractor name already exists. Please choose another name, delete the existing Xtractor, or set load = TRUE, if you want to load the old Xtractor.")
-        fs::dir_create(newDirPath)
-        fs::dir_create(file.path(newDirPath, "rds_files"))
-        fs::dir_create(file.path(newDirPath, "rds_files", "data"))
-        fs::dir_create(file.path(newDirPath, "rds_files", "features"))
-        fs::dir_create(file.path(newDirPath, "rds_files", "results"))
-        fs::dir_create(file.path(newDirPath, "rds_files", "results", "done"))
-        fs::dir_create(file.path(newDirPath, "rds_files", "results", "failed"))
+        if (!dir.exists(file.path(file.dir, "fxtract_files"))) dir.create(file.path(file.dir, "fxtract_files"))
+        if (dir.exists(newDirPath)) stop("The Xtractor name already exists. Please choose another name, delete the existing Xtractor, or set load = TRUE, if you want to load the old Xtractor.")
+        dir.create(newDirPath)
+        dir.create(file.path(newDirPath, "rds_files"))
+        dir.create(file.path(newDirPath, "rds_files", "data"))
+        dir.create(file.path(newDirPath, "rds_files", "features"))
+        dir.create(file.path(newDirPath, "rds_files", "results"))
+        dir.create(file.path(newDirPath, "rds_files", "results", "done"))
+        dir.create(file.path(newDirPath, "rds_files", "results", "failed"))
         saveRDS(NULL, file = file.path(private$dir, "rds_files", "group_by.RDS"))
       } else {
         checkmate::assert_subset(name, list.files(file.path(file.dir, "fxtract_files")))
@@ -197,7 +196,7 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_subset(ids, self$ids)
       for (id in ids) {
         message("Deleting RDS file ", id, ".RDS")
-        fs::file_delete(file.path(file.path(private$dir, "rds_files", "data", paste0(id, ".RDS"))))
+        unlink(file.path(file.path(private$dir, "rds_files", "data", paste0(id, ".RDS"))), recursive = TRUE)
       }
 
       #delete done
@@ -208,7 +207,7 @@ Xtractor = R6Class("Xtractor",
           done_feat_path = file.path(private$dir, "rds_files", "results", "done", feature, paste0(id, ".RDS"))
           if (file.exists(done_feat_path)) {
             message(paste0("Deleting results from id: ", id))
-            fs::file_delete(done_feat_path)
+            unlink(done_feat_path, recursive = TRUE)
           }
         }
       }
@@ -220,7 +219,7 @@ Xtractor = R6Class("Xtractor",
           failed_feat_path = file.path(private$dir, "rds_files", "results", "failed", feature, paste0(id, ".RDS"))
           if (file.exists(failed_feat_path)) {
             message(paste0("Deleting error messages from id: ", id))
-            fs::file_delete(failed_feat_path)
+            unlink(failed_feat_path, recursive = TRUE)
           }
         }
       }
@@ -246,8 +245,8 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_function(fun)
       if (deparse(substitute(fun)) %in% self$features) stop(paste0("Feature function '", deparse(substitute(fun)), "' was already added."))
       saveRDS(list(fun = fun, check_fun = check_fun), file = file.path(private$dir, "rds_files", "features", paste0(deparse(substitute(fun)), ".RDS")))
-      fs::dir_create(file.path(private$dir, "rds_files", "results", "done", deparse(substitute(fun))))
-      fs::dir_create(file.path(private$dir, "rds_files", "results", "failed", deparse(substitute(fun))))
+      dir.create(file.path(private$dir, "rds_files", "results", "done", deparse(substitute(fun))))
+      dir.create(file.path(private$dir, "rds_files", "results", "failed", deparse(substitute(fun))))
       return(invisible(self))
     },
     remove_feature = function(fun) {
@@ -255,9 +254,9 @@ Xtractor = R6Class("Xtractor",
       checkmate::assert_character(fun, min.len = 1L)
       checkmate::assert_subset(fun, self$features)
       for (f in fun) {
-        fs::file_delete(file.path(private$dir, "rds_files", "features", paste0(f, ".RDS")))
-        fs::dir_delete(file.path(private$dir, "rds_files", "results", "done", f))
-        fs::dir_delete(file.path(private$dir, "rds_files", "results", "failed", f))
+        unlink(file.path(private$dir, "rds_files", "features", paste0(f, ".RDS")), recursive = TRUE)
+        unlink(file.path(private$dir, "rds_files", "results", "done", f), recursive = TRUE)
+        unlink(file.path(private$dir, "rds_files", "results", "failed", f), recursive = TRUE)
       }
       return(invisible(self))
     },
@@ -317,7 +316,7 @@ Xtractor = R6Class("Xtractor",
           if (is.character(res_id)) {
             saveRDS(res_id, file = feat_fail_path)
           } else {
-            if (fs::file_exists(feat_fail_path)) fs::file_delete(feat_fail_path)
+            if (file.exists(feat_fail_path)) unlink(feat_fail_path, recursive = TRUE)
             saveRDS(res_id, file = file.path(private$dir, "rds_files", "results", "done", feature,  paste0(x, ".RDS")))
           }
         }, future.seed = TRUE)

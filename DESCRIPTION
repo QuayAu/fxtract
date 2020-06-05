@@ -30,8 +30,7 @@ Imports: dplyr,
   checkmate,
   data.table,
   future.apply,
-  R6,
-  fs
+  R6
 Suggests: testthat,
   knitr,
   covr,
