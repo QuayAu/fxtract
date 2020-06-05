@@ -1,0 +1,16 @@
+pandoc: '2.2'
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  fxtract: fxtract.html
+  xtractor_basics: tutorial/xtractor_basics.html
+  xtractor_error_handling: tutorial/xtractor_error_handling.html
+  xtractor_preprocess_data: tutorial/xtractor_preprocess_data.html
+  xtractor_setup_child: tutorial/xtractor_setup_child.html
+  xtractor_update_data: tutorial/xtractor_update_data.html
+  xtractor_update_feature: tutorial/xtractor_update_feature.html
+last_built: 2020-06-05T13:54Z
+urls:
+  reference: https://quayau.github.io/fxtract//reference
+  article: https://quayau.github.io/fxtract//articles
+
