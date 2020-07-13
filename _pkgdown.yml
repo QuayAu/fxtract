@@ -20,6 +20,10 @@ navbar:
       href: articles/tutorial/xtractor_update_feature.html
     - text: Error Handling
       href: articles/tutorial/xtractor_error_handling.html
+  - text: Use Cases
+    menu:
+    - text: Global Annual Temperature
+      href: articles/tutorial/global_annual_temp.html
   - text: "Reference"
     href: "reference/index.html"
     contents:
